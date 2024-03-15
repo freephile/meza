@@ -3,6 +3,13 @@
 # cd /opt/meza/ansible
 # sudo -u meza-ansible ansible-playbook site.yml
 
+- hosts: localhost
+  become: true
+  tasks:
+      # install geerlingguy.kibana
+    - name: run ansible galaxy to install our 3rd-party roles from requirements
+      local_action: command ansible-galaxy install -r ../requirements.yml --ignore-errors
+
 # FIXME #729: Move this into a role
 - hosts: localhost
   become: true
