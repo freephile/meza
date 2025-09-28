@@ -136,6 +136,8 @@ list:
   # FIXME: Comment streams is incompatible with REL1_43 at this time (2025-09)
   # ref. https://phabricator.wikimedia.org/T388462
   # On-wiki, we see that nothing happens when adding <comment-streams /> to a page
+  # ref. https://phabricator.wikimedia.org/T404113 which is a regression for
+  # usage of $wgCommentStreamsAllowedNamespaces = -1
   - name: CommentStreams
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CommentStreams
     version: "{{ mediawiki_default_branch }}"
@@ -148,7 +150,7 @@ list:
       $wgCommentStreamsEnableVoting = true;
       $wgCommentStreamsModeratorFastDelete = true;
       # By setting to -1, comments are allowed ONLY when <comment-streams /> is used on the page.
-      $wgCommentStreamsAllowedNamespaces = -1;
+      # $wgCommentStreamsAllowedNamespaces = -1;
 
   # ConfirmEdit - Provides CAPTCHA support to help prevent spam and abuse from automated bots
   # You can override the config in override.php if needed, like all other settings
