@@ -20,7 +20,7 @@
 # [1] This should only be run the first time (on the first app server) since on
 # subsequent passes the controller is gauranteed to have a local config.
 - name: Does controller have local config
-  stat:
+  ansible.builtin.stat:
     path: "{{ m_local_public }}"
   register: controller_local_config
 
@@ -31,7 +31,7 @@
   # Ref #1149 for TMPDIR environment var
   environment:
     TMPDIR: "{{ m_tmp }}"
-  git:
+  ansible.builtin.git:
     repo: "{{ local_config_repo.repo }}"
     dest: "{{ m_local_public }}"
     version: "{{ local_config_repo.version | default('master') }}"
@@ -43,15 +43,19 @@
 
 # After all that, now check if controller has a local config
 # (not sure if I should reuse controller_local_config here)
+# @TODO: refactor. The registered variable is never used. The comment indicates
+# some other code should be used. The whole thing is a bit messy.
+# Also, the role name should be refactored because it runs on every play and
+# every server, not just the controller.
 - name: Does controller have local config
-  stat:
+  ansible.builtin.stat:
     path: "{{ m_local_public }}"
   register: recheck_controller
 
 # At this point, whether a m_local directory exists on the controller or not,
 # ensure the directory exists and is configured properly
 - name: Ensure m_local_public configured on controller
-  file:
+  ansible.builtin.file:
     path: "{{ m_local_public }}"
     state: directory
     owner: "{{ m_config_public_owner }}"
@@ -62,12 +66,12 @@
     - file-perms
 
 
-# Ensure that the 'wikis' directory exists within m_local_public; owned by 
+# Ensure that the 'wikis' directory exists within m_local_public; owned by
 # apache since .smw.json needs to be writable by apache for the SMW Admin
 # Special page interface; but also group-owned by apache so that meza-ansible
 # (which is in group apache) can write to it during maintenance tasks.
-- name: "Ensure m_local_public/wikis exists"
-  file:
+- name: "Ensure wikis directories properly owned/moded in: {{ m_local_public }}"
+  ansible.builtin.file:
     path: "{{ m_local_public }}/wikis"
     state: directory
     owner: "{{ user_apache }}"
@@ -76,7 +80,7 @@
     recurse: true
 
 - name: Ensure pre/post/saml settings directories exists in config
-  file:
+  ansible.builtin.file:
     path: "{{ m_local_public }}/{{ item }}"
     state: directory
     owner: "{{ m_config_public_owner }}"
@@ -89,7 +93,7 @@
 
 
 - name: "Ensure base files present, do NOT overwrite"
-  template:
+  ansible.builtin.template:
     src: "templates/{{ item }}.j2"
     dest: "{{ m_local_public }}/{{ item }}"
     owner: "{{ m_config_public_owner }}"
@@ -101,8 +105,8 @@
     - MezaLocalSkins.yml
     - public.yml
 
-- name: "Ensure {{ m_meza }} properly owned"
-  file:
+- name: "Ensure meza directory properly owned: {{ m_meza }}"
+  ansible.builtin.file:
     path: "{{ m_meza }}"
     owner: "{{ ansible_user | default('meza-ansible') }}"
     group: "{{ m_group }}"
@@ -111,8 +115,8 @@
   tags:
     - file-perms
 
-- name: "Ensure {{ m_local_secret }} directories properly owned/moded"
-  file:
+- name: "Ensure secret directories properly owned/moded: {{ m_local_secret }}"
+  ansible.builtin.file:
     path: "{{ item }}"
     owner: "{{ m_config_secret_owner }}"
     group: "{{ m_config_secret_group }}"
@@ -124,8 +128,8 @@
     - "{{ m_local_secret }}"
     - "{{ m_local_secret }}/{{ env }}"
 
-- name: "Ensure {{ m_local_secret }} files properly owned/moded"
-  file:
+- name: "Ensure secret files properly owned/moded: {{ m_local_secret }}"
+  ansible.builtin.file:
     path: "{{ item }}"
     owner: "{{ m_config_secret_owner }}"
     group: "{{ m_config_secret_group }}"
