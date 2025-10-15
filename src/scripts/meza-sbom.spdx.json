@@ -3,9 +3,9 @@
     "dataLicense": "CC0-1.0",
     "SPDXID": "SPDXRef-DOCUMENT",
     "name": "Meza SBOM",
-    "documentNamespace": "https://meza.org/sbom/689de40e41f0a",
+    "documentNamespace": "https://meza.org/sbom/68e7c6fe8337d",
     "creationInfo": {
-        "created": "2025-08-14T13:26:38+00:00",
+        "created": "2025-10-09T14:30:22+00:00",
         "creators": [
             "Tool: Meza SBOM Generator"
         ],
@@ -15,7 +15,7 @@
         "SPDXRef-Package-Meza"
     ],
     "packageVerificationCode": {
-        "packageVerificationCodeValue": "161bbb07a1531593c5310847c18acb3549cf2aff"
+        "packageVerificationCodeValue": "3d123b9542b0c71d47424772ab4bed2c1051eaa8"
     },
     "packages": [
         {
@@ -122,7 +122,7 @@
         {
             "SPDXID": "SPDXRef-Package-dasprid_enum",
             "name": "dasprid/enum",
-            "versionInfo": "1.0.6",
+            "versionInfo": "1.0.7",
             "downloadLocation": "https://github.com/DASPRiD/Enum.git",
             "filesAnalyzed": false,
             "licenseConcluded": "BSD-2-Clause",
@@ -173,7 +173,7 @@
         {
             "SPDXID": "SPDXRef-Package-data_values_geo",
             "name": "data-values/geo",
-            "versionInfo": "4.5.1",
+            "versionInfo": "4.6.0",
             "downloadLocation": "https://github.com/DataValues/Geo.git",
             "filesAnalyzed": false,
             "licenseConcluded": "GPL-2.0-or-later",
@@ -326,7 +326,7 @@
         {
             "SPDXID": "SPDXRef-Package-guzzlehttp_promises",
             "name": "guzzlehttp/promises",
-            "versionInfo": "2.2.0",
+            "versionInfo": "2.3.0",
             "downloadLocation": "https://github.com/guzzle/promises.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -339,7 +339,7 @@
         {
             "SPDXID": "SPDXRef-Package-guzzlehttp_psr7",
             "name": "guzzlehttp/psr7",
-            "versionInfo": "2.7.1",
+            "versionInfo": "2.8.0",
             "downloadLocation": "https://github.com/guzzle/psr7.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -662,6 +662,25 @@
             "description": "Provides a parser function to generate diagrams and charts with the help of the mermaid script language"
         },
         {
+            "SPDXID": "SPDXRef-Package-mediawiki_page_forms",
+            "name": "mediawiki/page-forms",
+            "versionInfo": "6.0.3",
+            "downloadLocation": "https://github.com/wikimedia/mediawiki-extensions-PageForms.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-2.0-or-later",
+            "licenseDeclared": "GPL-2.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Extension:Page_Forms"
+                }
+            ],
+            "description": "Forms for creating and editing wiki pages."
+        },
+        {
             "SPDXID": "SPDXRef-Package-mediawiki_parser_hooks",
             "name": "mediawiki/parser-hooks",
             "versionInfo": "1.6.1",
@@ -740,7 +759,7 @@
         {
             "SPDXID": "SPDXRef-Package-mediawiki_semantic_media_wiki",
             "name": "mediawiki/semantic-media-wiki",
-            "versionInfo": "dev-master",
+            "versionInfo": "6.0.1",
             "downloadLocation": "https://github.com/SemanticMediaWiki/SemanticMediaWiki.git",
             "filesAnalyzed": false,
             "licenseConcluded": "GPL-2.0-or-later",
@@ -759,7 +778,7 @@
         {
             "SPDXID": "SPDXRef-Package-mediawiki_semantic_result_formats",
             "name": "mediawiki/semantic-result-formats",
-            "versionInfo": "5.0.0",
+            "versionInfo": "5.1.0",
             "downloadLocation": "https://github.com/SemanticMediaWiki/SemanticResultFormats.git",
             "filesAnalyzed": false,
             "licenseConcluded": "GPL-2.0-or-later",
@@ -1045,7 +1064,7 @@
         {
             "SPDXID": "SPDXRef-Package-paragonie_constant_time_encoding",
             "name": "paragonie/constant_time_encoding",
-            "versionInfo": "v3.0.0",
+            "versionInfo": "v3.1.3",
             "downloadLocation": "https://github.com/paragonie/constant_time_encoding.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -1224,7 +1243,7 @@
         {
             "SPDXID": "SPDXRef-Package-phpseclib_phpseclib",
             "name": "phpseclib/phpseclib",
-            "versionInfo": "3.0.46",
+            "versionInfo": "3.0.47",
             "downloadLocation": "https://github.com/phpseclib/phpseclib.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -1434,7 +1453,7 @@
         {
             "SPDXID": "SPDXRef-Package-react_promise",
             "name": "react/promise",
-            "versionInfo": "v3.2.0",
+            "versionInfo": "v3.3.0",
             "downloadLocation": "https://github.com/reactphp/promise.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -1517,7 +1536,7 @@
         {
             "SPDXID": "SPDXRef-Package-smarty_smarty",
             "name": "smarty/smarty",
-            "versionInfo": "v4.5.5",
+            "versionInfo": "v4.5.6",
             "downloadLocation": "https://github.com/smarty-php/smarty.git",
             "filesAnalyzed": false,
             "licenseConcluded": "LGPL-3.0",
@@ -1574,7 +1593,7 @@
         {
             "SPDXID": "SPDXRef-Package-symfony_polyfill_php73",
             "name": "symfony/polyfill-php73",
-            "versionInfo": "v1.32.0",
+            "versionInfo": "v1.33.0",
             "downloadLocation": "https://github.com/symfony/polyfill-php73.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -1589,44 +1608,6 @@
                 }
             ],
             "description": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions"
-        },
-        {
-            "SPDXID": "SPDXRef-Package-symfony_polyfill_php80",
-            "name": "symfony/polyfill-php80",
-            "versionInfo": "v1.31.0",
-            "downloadLocation": "https://github.com/symfony/polyfill-php80.git",
-            "filesAnalyzed": false,
-            "licenseConcluded": "MIT",
-            "licenseDeclared": "MIT",
-            "copyrightText": "NOASSERTION",
-            "comment": "Source: composer.lock",
-            "externalRefs": [
-                {
-                    "referenceCategory": "OTHER",
-                    "referenceType": "website",
-                    "referenceLocator": "https://symfony.com"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions"
-        },
-        {
-            "SPDXID": "SPDXRef-Package-symfony_polyfill_php81",
-            "name": "symfony/polyfill-php81",
-            "versionInfo": "v1.31.0",
-            "downloadLocation": "https://github.com/symfony/polyfill-php81.git",
-            "filesAnalyzed": false,
-            "licenseConcluded": "MIT",
-            "licenseDeclared": "MIT",
-            "copyrightText": "NOASSERTION",
-            "comment": "Source: composer.lock",
-            "externalRefs": [
-                {
-                    "referenceCategory": "OTHER",
-                    "referenceType": "website",
-                    "referenceLocator": "https://symfony.com"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 8.1+ features to lower PHP versions"
         },
         {
             "SPDXID": "SPDXRef-Package-symfony_polyfill_php82",
@@ -1684,6 +1665,25 @@
                 }
             ],
             "description": "Loads and dumps YAML files"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-universal_omega_dynamic_page_list3",
+            "name": "universal-omega/dynamic-page-list3",
+            "versionInfo": "3.6.4",
+            "downloadLocation": "https://github.com/Universal-Omega/DynamicPageList3.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "GPL-3.0-or-later",
+            "licenseDeclared": "GPL-3.0-or-later",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://www.mediawiki.org/wiki/Extension:DynamicPageList3"
+                }
+            ],
+            "description": "The DynamicPageList3 extension allows creating lists\u00a0of other articles based on their\u00a0category, namespace, title, references\u00a0or\u00a0template usage\u00a0and\u00a0include contents\u00a0or arguments of template calls of those articles into your page."
         },
         {
             "SPDXID": "SPDXRef-Package-wikimedia_assert",
@@ -2024,7 +2024,7 @@
         {
             "SPDXID": "SPDXRef-Package-wikimedia_parsoid",
             "name": "wikimedia/parsoid",
-            "versionInfo": "v0.20.2",
+            "versionInfo": "v0.20.3",
             "downloadLocation": "https://github.com/wikimedia/mediawiki-services-parsoid.git",
             "filesAnalyzed": false,
             "licenseConcluded": "GPL-2.0-or-later",
@@ -2731,7 +2731,7 @@
         {
             "SPDXID": "SPDXRef-Package-nikic_php_parser",
             "name": "nikic/php-parser",
-            "versionInfo": "v4.19.4",
+            "versionInfo": "v5.6.1",
             "downloadLocation": "https://github.com/nikic/PHP-Parser.git",
             "filesAnalyzed": false,
             "licenseConcluded": "BSD-3-Clause",
@@ -2879,7 +2879,7 @@
         {
             "SPDXID": "SPDXRef-Package-phpdocumentor_reflection_docblock",
             "name": "phpdocumentor/reflection-docblock",
-            "versionInfo": "5.6.2",
+            "versionInfo": "5.6.3",
             "downloadLocation": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -2905,7 +2905,7 @@
         {
             "SPDXID": "SPDXRef-Package-phpstan_phpdoc_parser",
             "name": "phpstan/phpdoc-parser",
-            "versionInfo": "2.2.0",
+            "versionInfo": "2.3.0",
             "downloadLocation": "https://github.com/phpstan/phpdoc-parser.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -3045,7 +3045,7 @@
         {
             "SPDXID": "SPDXRef-Package-psy_psysh",
             "name": "psy/psysh",
-            "versionInfo": "v0.12.10",
+            "versionInfo": "v0.12.12",
             "downloadLocation": "https://github.com/bobthecow/psysh.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -3216,7 +3216,7 @@
         {
             "SPDXID": "SPDXRef-Package-sebastian_exporter",
             "name": "sebastian/exporter",
-            "versionInfo": "4.0.6",
+            "versionInfo": "4.0.8",
             "downloadLocation": "https://github.com/sebastianbergmann/exporter.git",
             "filesAnalyzed": false,
             "licenseConcluded": "BSD-3-Clause",
@@ -3406,7 +3406,7 @@
         {
             "SPDXID": "SPDXRef-Package-symfony_console",
             "name": "symfony/console",
-            "versionInfo": "v6.4.24",
+            "versionInfo": "v6.4.26",
             "downloadLocation": "https://github.com/symfony/console.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -3444,7 +3444,7 @@
         {
             "SPDXID": "SPDXRef-Package-symfony_string",
             "name": "symfony/string",
-            "versionInfo": "v6.4.24",
+            "versionInfo": "v6.4.26",
             "downloadLocation": "https://github.com/symfony/string.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -3463,7 +3463,7 @@
         {
             "SPDXID": "SPDXRef-Package-symfony_var_dumper",
             "name": "symfony/var-dumper",
-            "versionInfo": "v6.4.24",
+            "versionInfo": "v6.4.26",
             "downloadLocation": "https://github.com/symfony/var-dumper.git",
             "filesAnalyzed": false,
             "licenseConcluded": "MIT",
@@ -3625,6 +3625,25 @@
                 }
             ],
             "description": "MediaWiki wrapper for the ParamProcessor library"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-symfony_polyfill_php80",
+            "name": "symfony/polyfill-php80",
+            "versionInfo": "v1.31.0",
+            "downloadLocation": "https://github.com/symfony/polyfill-php80.git",
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "copyrightText": "NOASSERTION",
+            "comment": "Source: composer.local.lock",
+            "externalRefs": [
+                {
+                    "referenceCategory": "OTHER",
+                    "referenceType": "website",
+                    "referenceLocator": "https://symfony.com"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions"
         },
         {
             "SPDXID": "SPDXRef-Package-ext_calendar",
