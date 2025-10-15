@@ -34,6 +34,16 @@ m_mediawiki="{{ m_mediawiki }}"
 # app locations
 m_apache="{{ m_apache }}"
 
+# List of configured wikis (from declarative configuration)
+MEZA_WIKIS="{{ list_of_wikis | join(' ') }}"
+
+# Primary wiki ID (if configured)
+{% if primary_wiki_id is defined and primary_wiki_id != '' %}
+MEZA_PRIMARY_WIKI="{{ primary_wiki_id }}"
+{% else %}
+MEZA_PRIMARY_WIKI=""
+{% endif %}
+
 ### DATABASE DATA AND CREDENTIALS ###
 db_master="{{ groups['db_master'][0] }}"
 wiki_app_db_user_name='{{ wiki_app_db_user.name }}'

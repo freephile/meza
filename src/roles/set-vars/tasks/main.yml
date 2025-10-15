@@ -1,19 +1,29 @@
 ---
 
 #
-# Retrieve Meza install path by finding realpath of Meza.py from /user/bin/meza
+# Retrieve Meza install path by finding the path of meza.py from /usr/bin/meza
 #
 - name: Get Meza install path
-  shell: "dirname $(dirname $(dirname $(dirname $(realpath $(which meza)))))"
+  shell: |
+    if command -v meza >/dev/null 2>&1; then
+      dirname "$(dirname "$(dirname "$(dirname "$(realpath "$(which meza)")")")")"
+    else
+      # Fallback for check mode or when meza command not available
+      echo "/opt"
+    fi
   register: register_install_path
-  # In --check mode, the shell command will not run, which means there will be no .stdout to pass to set_fact:
   # Since we know THIS shell command has no side-effects, we need to force it to run ALWAYS, even in --check mode.
-  # To force a task to run (which could make changes to the system), even when the playbook is called with --check,
-  # set check_mode: false.
+  # Setting check_mode: false forces it to run even when the playbook is called with --check
   check_mode: false
+  changed_when: false
+  tags:
+    - always
 
-- set_fact:
-    m_install: "{{ register_install_path.stdout }}"
+- name: Set install path with fallback
+  set_fact:
+    m_install: "{{ register_install_path.stdout | default('/opt', true) }}"
+  tags:
+    - always
 
 #
 # OS-Family vars
@@ -21,21 +31,31 @@
 #
 - name: Set OS-family specific variables
   include_vars:
-    file: "{{ m_install }}/meza/config/{{ ansible_distribution_file_variety }}.yml"
+    file: "{{ m_install }}/meza/config/{{ ansible_distribution_file_variety | default('RedHat') }}.yml"
+  failed_when: false
+  tags:
+    - always
 
 #
-# Meza-core variables
+# Meza-core variables - Load paths.yml BEFORE defaults.yml since defaults.yml depends on paths
 #
 - name: Set meza-core path variables
   include_vars:
     file: "{{ m_install }}/meza/config/paths.yml"
+  failed_when: false
 
 - name: Set meza-core default variables
   include_vars:
     file: "{{ m_install }}/meza/config/defaults.yml"
+  failed_when: false
 
-#FIXME remove this
-# - ansible.builtin.debug: {msg: "{{ m_i18n }} TEST {{ m_db_replication_log_pos }} "}
+# Add safety check for critical variables (always ensure they're defined)
+- name: Ensure critical path variables are defined
+  set_fact:
+    m_config_core: "{{ m_config_core | default(m_install + '/meza/config') }}"
+    m_local_public: "{{ m_local_public | default(m_install + '/conf-meza/public') }}"
+    m_local_secret: "{{ m_local_secret | default(m_install + '/conf-meza/secret') }}"
+    m_meza: "{{ m_meza | default(m_install + '/meza') }}"
 
 #
 # Gluster mods
@@ -51,32 +71,74 @@
 - name: Set meza local public variables
   include_vars:
     file: "{{ m_local_public }}/public.yml"
-  # Ingore errors so this file is not required to be included
+  # Ignore errors so this file is not required to be included
   failed_when: false
 
-- name: Get individual wikis dirs from localhost
+# Process declarative wiki configuration
+- name: Set wiki variables from declarative config (if wikis defined)
+  set_fact:
+    list_of_wikis_unordered: "{{ wikis | map(attribute='id') | list }}"
+    primary_wiki_id: "{{ (wikis | selectattr('primary', 'defined') | selectattr('primary', 'equalto', true) | map(attribute='id') | list)[0] | default('') }}"
+  when: wikis is defined and wikis | length > 0
+
+# Sort list of wikis so primary wiki is first (needed for shared user tables)
+- name: Order wiki list with primary wiki first (if primary_wiki_id set)
+  set_fact:
+    list_of_wikis: "{{ [primary_wiki_id] + (list_of_wikis_unordered | difference([primary_wiki_id])) }}"
+  when: wikis is defined and wikis | length > 0 and primary_wiki_id != ''
+
+- name: Use unordered wiki list (no primary wiki defined)
+  set_fact:
+    list_of_wikis: "{{ list_of_wikis_unordered }}"
+  when: wikis is defined and wikis | length > 0 and primary_wiki_id == ''
+
+# Process wiki redirects from declarative config
+- name: Build wiki redirects from declarative config
+  set_fact:
+    wiki_redirects_from_declarative: "{{ wiki_redirects_from_declarative | default({}) | combine({item: wiki.id}) }}"
+  loop: "{{ wikis | selectattr('redirects', 'defined') | map('dict2items') | flatten | selectattr('value', 'defined') | list }}"
+  vars:
+    wiki: "{{ wikis | selectattr('id', 'equalto', item.key) | first }}"
+  when: wikis is defined and wikis | length > 0
+
+# Fallback to directory-based wiki discovery (legacy)
+- name: Get individual wikis dirs from localhost (legacy fallback)
   find:
-    paths: "{{ m_local_public }}/wikis/"
+    paths: "{{ m_local_public }}/wikis"
     file_type: directory
-  register: wikis_dirs
+  register: wiki_dirs
   delegate_to: localhost
   run_once: true
+  when: wikis is not defined or wikis | length == 0
+  failed_when: false
 
-- set_fact:
-    list_of_wikis: "{{ wikis_dirs.files | map(attribute='path') | map('basename') | list }}"
+- name: Set wiki list from directory discovery (legacy fallback)
+  set_fact:
+    list_of_wikis: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | sort }}"
+  when: wikis is not defined or wikis | length == 0 and wiki_dirs is defined and wiki_dirs.files is defined
 
-- name: "Set meza environment-specific public variables for env={{ env }}"
+# Merge wiki redirects from declarative config with legacy config
+- name: Merge wiki redirects
+  set_fact:
+    wiki_id_redirects: "{{ wiki_id_redirects | default({}) | combine(wiki_redirects_from_declarative | default({})) }}"
+
+- name: Set meza environment-specific public variables for env={{ env }}
   include_vars:
-    file: "{{ m_local_public }}/env/{{ env }}.yml"
-  # Ingore errors so this file is not required to be included
+    file: "{{ m_local_public }}/{{ env }}/public.yml"
+  # Ignore errors so this file is not required to be included
   failed_when: false
 
 #
 # Secret config
 #
-- name: Set meza local secret variables
+- name: Set meza-core secret default variables
+  include_vars:
+    file: "{{ m_local_secret }}/secret.yml"
+  # Ignore errors so this file is not required to be included
+  failed_when: false
+
+- name: Set meza environment-specific secret variables for env={{ env }}
   include_vars:
     file: "{{ m_local_secret }}/{{ env }}/secret.yml"
-  # Can't load secret.yml when it doesn't exist yet, so skip this while setting
-  # up an environment
-  when: not allow_missing_secret_config|default(false)
+  # Ignore errors so this file is not required to be included
+  failed_when: false

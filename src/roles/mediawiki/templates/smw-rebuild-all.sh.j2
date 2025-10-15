@@ -2,27 +2,32 @@
 
 source "{{ m_install }}/.deploy-meza/config.sh"
 
+# Use declarative wiki configuration (from config.sh MEZA_WIKIS variable)
 if [ -z "$1" ]; then
-	do_wikis="*/"
+	# Process all configured wikis
+	for wiki_id in $MEZA_WIKIS; do
+		if [ ! -d "{{ m_htdocs }}/wikis/$wiki_id" ]; then
+			echo "\"$wiki_id\" not a valid wiki ID (directory missing)"
+			continue
+		fi
+		# Process this wiki (rest of script logic follows)
+		_process_wiki_smw_rebuild "$wiki_id"
+	done
+	exit 0
 else
-	do_wikis="$1"
+	# Process single specified wiki
+	wiki_id="$1"
+	if [ ! -d "{{ m_htdocs }}/wikis/$wiki_id" ]; then
+		echo "\"$wiki_id\" not a valid wiki ID (directory missing)"
+		exit 1
+	fi
+	_process_wiki_smw_rebuild "$wiki_id"
+	exit 0
 fi
 
-wiki_dir="{{ m_htdocs }}/wikis"
-
-cd "$wiki_dir"
-for d in $do_wikis; do
-
-	if [ -z "$1" ]; then
-		wiki_id=${d%/}
-	else
-		wiki_id="$d"
-	fi
-
-	if [ ! -d "$wiki_dir/$wiki_id" ]; then
-		echo "\"$wiki_id\" not a valid wiki ID"
-		continue
-	fi
+# Function to process SMW rebuild for a single wiki
+_process_wiki_smw_rebuild() {
+	local wiki_id="$1"
 
 	timestamp=$(date +"%F_%T")
 	exception_log="{{ m_logs }}/smw-rebuilddata-exceptions-$wiki_id-$timestamp.log"
@@ -95,4 +100,4 @@ for d in $do_wikis; do
 		echo "rebuildData completed for \"$wiki_id\" at $endtimestamp"
 	fi
 
-done
+}

@@ -494,27 +494,10 @@
 #
 # VERIFY WIKIS
 #
-- name: Get individual wikis dirs from localhost
-  find:
-    paths: "{{ m_local_public }}/wikis/"
-    file_type: directory
-  register: wikis_dirs
-  delegate_to: localhost
-  run_once: true
+# Note: Wiki list and primary_wiki_id are now set by set-vars role
+# from declarative configuration in defaults.yml or environment config
 
-- name: Set fact - list of wikis
-  set_fact:
-    list_of_wikis: "{{ wikis_dirs.files | map(attribute='path') | map('basename') | list }}"
-
-# Sort list of wikis so primary wiki is first. Need to have primary wiki's
-# `user` table in place before other wikis are imported, otherwise will get
-# errors when running update.php and such
-- name: Set fact - list of wikis ordered with primary wiki first (if primary_wiki_id set)
-  set_fact:
-    list_of_wikis: "['{{ primary_wiki_id }}'] + {{ list_of_wikis | difference([primary_wiki_id]) }}"
-  when: primary_wiki_id is defined
-
-- name: Check list of wikis
+- name: Check list of wikis (from declarative configuration)
   ansible.builtin.debug:
     var: list_of_wikis
   debugger: on_failed

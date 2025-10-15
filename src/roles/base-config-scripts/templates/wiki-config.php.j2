@@ -1,0 +1,37 @@
+<?php
+// {{ ansible_managed }}
+// Configuration file for wiki discovery from declarative config
+// Generated from config/defaults.yml wikis: section
+
+// List of all configured wikis
+$mezaConfiguredWikis = array(
+{% for wiki_id in list_of_wikis %}
+	'{{ wiki_id }}',
+{% endfor %}
+);
+
+// Primary wiki ID (if configured)
+{% if primary_wiki_id is defined and primary_wiki_id != '' %}
+$mezaPrimaryWikiId = '{{ primary_wiki_id }}';
+{% else %}
+$mezaPrimaryWikiId = null;
+{% endif %}
+
+// Wiki redirects from declarative config
+$mezaWikiRedirects = array(
+{% for from_id, to_id in wiki_id_redirects.items() %}
+	'{{ from_id }}' => '{{ to_id }}',
+{% endfor %}
+);
+
+// Function to get configured wikis (replacement for scandir approach)
+function getMezaConfiguredWikis() {
+	global $mezaConfiguredWikis;
+	return $mezaConfiguredWikis;
+}
+
+// Function to get primary wiki ID
+function getMezaPrimaryWikiId() {
+	global $mezaPrimaryWikiId;
+	return $mezaPrimaryWikiId;
+}

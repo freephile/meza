@@ -10,3 +10,11 @@
   with_items:
     - "php"
     - "sh"
+
+- name: Create wiki configuration file for PHP scripts
+  template:
+    src: "wiki-config.php.j2"
+    dest: "{{ m_deploy }}/wiki-config.php"
+    owner: root
+    group: root
+    mode: '0644'

@@ -211,14 +211,21 @@ class MezaUnifyUserTables extends Maintenance {
 	}
 
 	public function getWikiIDs () {
-		global $m_htdocs;
+		global $m_deploy, $m_htdocs;
 
-		// all other wiki IDs
-		$wikisDirectory = array_slice( scandir( "$m_htdocs/wikis" ), 2 );
-		$this->wikiIDs = array();
-		foreach( $wikisDirectory as $fileOrDir ) {
-			if ( is_dir( "$m_htdocs/wikis/$fileOrDir" ) ) {
-				$this->wikiIDs[] = $fileOrDir;
+		// Try to use declarative wiki configuration first
+		$wikiConfigFile = "$m_deploy/wiki-config.php";
+		if ( file_exists( $wikiConfigFile ) ) {
+			require_once $wikiConfigFile;
+			$this->wikiIDs = getMezaConfiguredWikis();
+		} else {
+			// Fallback to directory-based discovery (legacy)
+			$wikisDirectory = array_slice( scandir( "$m_htdocs/wikis" ), 2 );
+			$this->wikiIDs = array();
+			foreach( $wikisDirectory as $fileOrDir ) {
+				if ( is_dir( "$m_htdocs/wikis/$fileOrDir" ) ) {
+					$this->wikiIDs[] = $fileOrDir;
+				}
 			}
 		}
 

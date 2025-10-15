@@ -54,8 +54,27 @@ allow_backup_downloads: false
 #   - yourwiki
 wikis_to_skip_overwrite: []
 
-# Allow redirecting wiki IDs to other wikis.
-# This is useful if if wikis are renamed or merged.
+# Declarative wiki configuration See https://github.com/freephile/meza/issues/101 for details.
+# This replaces directory-based wiki discovery with explicit declarations
+# Copy and modify this section in your local public.yml
+# to define your wikis.
+#
+# wikis:
+#   - id: demo
+#     name: Demo Wiki
+#     primary: true
+#     database: wiki_demo  # defaults to wiki_{id}
+#     redirects: []        # aliases that redirect to this wiki
+#   - id: testwiki
+#     name: Test Wiki
+#     primary: false
+#     redirects:
+#       - oldwiki
+#       - legacywiki
+
+# Legacy support: Allow redirecting wiki IDs to other wikis.
+# This is useful if wikis are renamed or merged.
+# DEPRECATED: Use wikis[].redirects instead for new configurations
 # Example:
 # wiki_id_redirects:
 #   eva: iss

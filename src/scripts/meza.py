@@ -1028,6 +1028,39 @@ def meza_command_setup_docker(argv):  # pylint: disable=unused-argument
     sys.exit(0)
 
 
+def meza_command_migrate_wikis(argv):
+    """
+    Migrate existing directory-based wikis to declarative configuration.
+    
+    Scans existing wiki directories and extracts wiki names from base.php files
+    to populate the wikis: section in public.yml.
+
+    Args:
+        argv (list): The command line arguments. First argument should be environment name.
+
+    Returns:
+        None
+
+    Raises:
+        SystemExit: If the environment is not provided or invalid.
+
+    """
+    if len(argv) < 1:
+        print("You must specify an environment: 'meza migrate-wikis ENV'")
+        sys.exit(1)
+
+    env = argv[0]
+
+    rc = check_environment(env)
+    if rc > 0:
+        meza_shell_exec_exit(rc)
+
+    print("Migrating existing wikis to declarative configuration...")
+    shell_cmd = playbook_cmd("migrate-wikis", env)
+    rc = meza_shell_exec(shell_cmd)
+    meza_shell_exec_exit(rc)
+
+
 def meza_command_create(argv):
     """
     Create a wiki using prompts else use wiki-promptless. So the 'form' of the

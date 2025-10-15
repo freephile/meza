@@ -88,8 +88,12 @@ if ( isset( $wikiIdRedirects[ $wikiId ] ) ) {
 
 
 
-// get all directory names in /wikis, minus the first two: . and ..
-$wikis = array_slice( scandir( "$m_htdocs/wikis" ), 2 );
+// Get wiki list from Ansible configuration (declarative approach)
+$wikis = array(
+{% for wiki_id in list_of_wikis %}
+	'{{ wiki_id }}',
+{% endfor %}
+);
 
 
 if ( ! in_array( $wikiId, $wikis ) && empty ( $wikiId ) ) {

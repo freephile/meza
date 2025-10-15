@@ -97,3 +97,81 @@
     - samlAuthorizations.d/base.php
   delegate_to: localhost
   run_once: true
+
+# Auto-add to declarative wiki configuration
+- name: Check if using declarative wiki configuration
+  stat:
+    path: "{{ m_local_public }}/public.yml"
+  register: public_yml_exists
+  delegate_to: localhost
+  run_once: true
+
+- name: Create public.yml if it doesn't exist (to support declarative wikis)
+  copy:
+    content: |
+      ---
+      # Auto-created public.yml for declarative wiki configuration
+      # Add environment-specific configuration here
+    dest: "{{ m_local_public }}/public.yml"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: '0644'
+    force: false
+  when: not public_yml_exists.stat.exists
+  delegate_to: localhost
+  run_once: true
+
+- name: Read current public.yml configuration
+  slurp:
+    src: "{{ m_local_public }}/public.yml"
+  register: public_yml_content
+  delegate_to: localhost
+  run_once: true
+
+- name: Parse and update public.yml with new wiki
+  block:
+    - name: Parse existing YAML configuration
+      set_fact:
+        current_config: "{{ public_yml_content['content'] | b64decode | from_yaml }}"
+      when: public_yml_content is defined
+
+    - name: Initialize wikis list if not present
+      set_fact:
+        updated_wikis: "{{ current_config.wikis | default([]) }}"
+      when: current_config is defined
+
+    - name: Add new wiki to configuration (if not already present)
+      set_fact:
+        updated_wikis: "{{ updated_wikis + [{'id': wiki_id, 'name': wiki_name, 'primary': false}] }}"
+      when: 
+        - current_config is defined
+        - updated_wikis | selectattr('id', 'equalto', wiki_id) | list | length == 0
+
+    - name: Update configuration with new wiki
+      set_fact:
+        updated_config: "{{ current_config | combine({'wikis': updated_wikis}, recursive=true) }}"
+      when: current_config is defined and updated_wikis is defined
+
+    - name: Write updated public.yml configuration
+      copy:
+        content: "{{ updated_config | to_nice_yaml(indent=2) }}"
+        dest: "{{ m_local_public }}/public.yml"
+        owner: "{{ user_apache }}"
+        group: "{{ group_apache }}"
+        mode: '0644'
+        backup: true
+      when: updated_config is defined
+      delegate_to: localhost
+      run_once: true
+      
+    - name: Display wiki addition notice
+      debug:
+        msg: |
+          Wiki '{{ wiki_id }}' has been automatically added to declarative configuration.
+          If you want to make it the primary wiki, edit {{ m_local_public }}/public.yml
+          and set 'primary: true' for this wiki.
+      when: current_config is defined
+      
+  # Always run this block now since we ensure public.yml exists above
+  delegate_to: localhost
+  run_once: true
