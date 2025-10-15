@@ -1247,12 +1247,20 @@ def meza_command_maint(argv):
 
 def meza_command_maint_run_jobs(argv):
     """
-    Run maintenance jobs for available wikis.
+    Run maintenance jobs (mediawiki/maintenance/runJobs.php) for available wikis.
 
-    This function runs maintenance jobs for the available wikis in the `wikis_dir`.
-    It selects the first wiki found and executes the `runAllJobs.php` script using
-    the `php` command. If a specific wiki is provided as a command-line argument,
+    This function executes the meza `runAllJobs.php` script. 
+    
+    By default, it will run jobs for ALL wikis. The wiki id used is just to get
+	meza to run. If a specific wiki is provided as a command-line argument,
     the function runs maintenance jobs only for that wiki.
+
+    Usage:
+    Run jobs for all wikis:
+	sudo meza maint run_jobs
+    
+    Run jobs for a specific wiki (e.g., 'demo'):
+    sudo meza maint run_jobs -- demo
 
     Args:
         argv (list): List of command-line arguments.
@@ -1260,23 +1268,36 @@ def meza_command_maint_run_jobs(argv):
     Returns:
         None
     """
-    # FIXME #711: THIS FUNCTION SHOULD STILL WORK ON MONOLITHS, BUT HAS NOT BE
-    #             RE-TESTED SINCE MOVING TO ANSIBLE. FOR NON-MONOLITHS IT WILL
-    #             NOT WORK AND NEEDS TO BE ANSIBLE-IZED.
+    # FIXME This has not been made to work on a distributed app-server setup.
 
-    wikis_dir = f"{install_dir}/htdocs/wikis"
-    wikis = os.listdir(wikis_dir)
-    for i in wikis:
-        if os.path.isdir(os.path.join(wikis_dir, i)):
-            anywiki = i
-            break
+    # Get wiki list from declarative configuration
+    anywiki = None
+    try:
+        with open(f"{install_dir}/.deploy-meza/wiki-config.php", 'r') as config_file:
+            # Parse PHP config file to extract wiki list
+            # This is a simple approach - a more robust solution would use a proper PHP parser
+            # The wiki-config.php file is created during deploy and contains the
+            # list of wikis as the only quoted strings, so the simple regex works.
+            content = config_file.read()
+            import re
+            matches = re.findall(r"'([^']+)',", content)
+            if matches:
+                anywiki = matches[0]  # Use first configured wiki
+    except (FileNotFoundError, IndexError):
+        # Fallback to directory-based discovery (legacy)
+        wikis_dir = f"{install_dir}/htdocs/wikis"
+        wikis = os.listdir(wikis_dir)
+        for i in wikis:
+            if os.path.isdir(os.path.join(wikis_dir, i)):
+                anywiki = i
+                break
 
     if not anywiki:
         print("No wikis available to run jobs")
         sys.exit(1)
 
     shell_cmd = ["WIKI=" + anywiki, "php",
-                 f"{install_dir}/meza/src/scripts/runAllJobs.php"]
+                 f"{install_dir}/.deploy-meza/runAllJobs.php"]
     if len(argv) > 0:
         shell_cmd = shell_cmd + ["--wikis=" + argv[1]]
     rc = meza_shell_exec(shell_cmd)
