@@ -43,11 +43,15 @@
   include_vars:
     file: "{{ m_install }}/meza/config/paths.yml"
   failed_when: false
+  tags:
+    - always
 
 - name: Set meza-core default variables
   include_vars:
     file: "{{ m_install }}/meza/config/defaults.yml"
   failed_when: false
+  tags:
+    - always
 
 # Add safety check for critical variables (always ensure they're defined)
 - name: Ensure critical path variables are defined
