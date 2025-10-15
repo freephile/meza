@@ -137,8 +137,9 @@
 
 - name: Set variable holding list of core extensions
   include_vars:
-    file: "{{ m_config_core }}/MezaCoreExtensions.yml"
+    file: "{{ m_config_core | default('/opt/meza/config') }}/MezaCoreExtensions.yml"
     name: meza_core_extensions
+  when: m_config_core is defined or ansible_check_mode | default(false)
   tags:
     - always
 
@@ -165,8 +166,9 @@
 
 - name: Set variable holding list of local extensions
   include_vars:
-    file: "{{ m_local_public }}/MezaLocalExtensions.yml"
+    file: "{{ m_local_public | default('/opt/conf-meza/public') }}/MezaLocalExtensions.yml"
     name: meza_local_extensions
+  when: m_local_public is defined or ansible_check_mode | default(false)
   tags:
     - always
 
