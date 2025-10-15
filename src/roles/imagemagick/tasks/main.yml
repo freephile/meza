@@ -6,12 +6,11 @@
     state: absent
   when: ansible_distribution_file_variety == 'RedHat'
 
-- name: Ensure Imagemagick and ghostscript installed
-  package:
-    name: "{{ package_imagemagick }}"
-    state: present
-  tags:
-    - latest
+- include_tasks: setup-RedHat.yml
+  when: ansible_distribution_file_variety == 'RedHat'
+
+- include_tasks: setup-Debian.yml
+  when: ansible_distribution_file_variety == 'Debian'
 
 - name: Copy xpdf bin64 files to /usr/local/bin
   copy:

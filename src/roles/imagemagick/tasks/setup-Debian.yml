@@ -1,0 +1,9 @@
+---
+- name: Ensure Imagemagick and ghostscript installed (Debian)
+  package:
+    name:
+      - imagemagick
+      - ghostscript
+    state: present
+  tags:
+    - latest

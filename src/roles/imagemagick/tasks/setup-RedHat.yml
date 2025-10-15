@@ -1,0 +1,9 @@
+---
+- name: Ensure Imagemagick and ghostscript installed (RedHat)
+  package:
+    name:
+      - ImageMagick
+      - ghostscript
+    state: present
+  tags:
+    - latest
