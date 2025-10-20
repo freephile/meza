@@ -97,17 +97,20 @@
         - name: Set default primary wiki when no existing configuration  
           set_fact:
             discovered_wikis: >-
-              {{
-                discovered_wikis | map('combine', {'primary': (item.id == 'demo')}) | list
-                if (discovered_wikis | selectattr('id', 'equalto', 'demo') | list | length > 0)
-                else (
-                  discovered_wikis[:1] | map('combine', {'primary': true}) | list +
-                  discovered_wikis[1:] | map('combine', {'primary': false}) | list
-                ) if discovered_wikis | length > 0
-                else []
-              }}
+              {%- set updated_wikis = [] -%}
+              {%- set demo_exists = discovered_wikis | selectattr('id', 'equalto', 'demo') | list | length > 0 -%}
+              {%- if demo_exists -%}
+                {%- for wiki in discovered_wikis -%}
+                  {%- set _ = updated_wikis.append(wiki | combine({'primary': (wiki.id == 'demo')})) -%}
+                {%- endfor -%}
+              {%- elif discovered_wikis | length > 0 -%}
+                {%- set _ = updated_wikis.append(discovered_wikis[0] | combine({'primary': true})) -%}
+                {%- for wiki in discovered_wikis[1:] -%}
+                  {%- set _ = updated_wikis.append(wiki | combine({'primary': false})) -%}
+                {%- endfor -%}
+              {%- endif -%}
+              {{ updated_wikis }}
           when: existing_primary_wikis | length == 0
-      when: discovered_wikis is defined and discovered_wikis | length > 0
 
     - name: Add wikis without base.php files (fallback)
       set_fact:
