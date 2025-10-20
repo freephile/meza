@@ -4,14 +4,14 @@
 # to populate the wikis: section in public.yml
 
 - name: Check if wikis directory exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ m_local_public }}/wikis"
   register: wikis_dir_exists
   delegate_to: localhost
   run_once: true
 
 - name: Find existing wiki directories
-  find:
+  ansible.builtin.find:
     paths: "{{ m_local_public }}/wikis"
     file_type: directory
   register: existing_wiki_dirs
@@ -20,9 +20,10 @@
   run_once: true
 
 - name: Extract wiki information from existing base.php files
+  when: existing_wiki_dirs is defined and existing_wiki_dirs.files | length > 0
   block:
     - name: Check which wikis have base.php files
-      stat:
+      ansible.builtin.stat:
         path: "{{ item.path }}/preLocalSettings.d/base.php"
       register: base_php_files
       loop: "{{ existing_wiki_dirs.files }}"
@@ -31,7 +32,7 @@
       run_once: true
 
     - name: Read base.php files to extract wiki names
-      slurp:
+      ansible.builtin.slurp:
         src: "{{ item.item.path }}/preLocalSettings.d/base.php"
       register: base_php_contents
       loop: "{{ base_php_files.results }}"
@@ -42,7 +43,8 @@
       run_once: true
 
     - name: Extract wiki site names from base.php files
-      shell: |
+      ansible.builtin.shell: |
+        set -o pipefail
         if [ -f "{{ item.item.path }}/preLocalSettings.d/base.php" ]; then
           grep "^\$wgSitename" "{{ item.item.path }}/preLocalSettings.d/base.php" | sed -E "s/.*['\"]([^'\"]*)['\"].*/\1/" | head -1
         else
@@ -56,9 +58,10 @@
       delegate_to: localhost
       run_once: true
       failed_when: false
+      changed_when: false
 
     - name: Parse wiki information from base.php files
-      set_fact:
+      ansible.builtin.set_fact:
         discovered_wikis: "{{ discovered_wikis | default([]) + [wiki_info] }}"
       vars:
         wiki_id: "{{ item.item.item.path | basename }}"
@@ -66,8 +69,7 @@
         extracted_name: >-
           {%- for result in extracted_sitenames.results -%}
           {%- if result.item.item.path | basename == wiki_id and result.stdout_lines is defined and result.stdout_lines -%}
-          {{ result.stdout_lines[-1] }}
-          {%- endif -%}
+          {{ result.stdout_lines[-1] }}{%- endif -%}
           {%- endfor -%}
         wiki_info:
           id: "{{ wiki_id }}"
@@ -86,16 +88,16 @@
     - name: Preserve existing primary wiki settings or set defaults
       block:
         - name: Get existing primary wikis
-          set_fact:
+          ansible.builtin.set_fact:
             existing_primary_wikis: "{{ current_config.wikis | default([]) | selectattr('primary', 'equalto', true) | map(attribute='id') | list }}"
-        
-        - name: Update primary flags based on existing configuration  
-          set_fact:
+
+        - name: Update primary flags based on existing configuration
+          ansible.builtin.set_fact:
             discovered_wikis: "{{ discovered_wikis | map('combine', {'primary': (item.id in existing_primary_wikis)}) | list }}"
           when: existing_primary_wikis | length > 0
-        
-        - name: Set default primary wiki when no existing configuration  
-          set_fact:
+
+        - name: Set default primary wiki when no existing configuration
+          ansible.builtin.set_fact:
             discovered_wikis: >-
               {%- set updated_wikis = [] -%}
               {%- set demo_exists = discovered_wikis | selectattr('id', 'equalto', 'demo') | list | length > 0 -%}
@@ -113,7 +115,7 @@
           when: existing_primary_wikis | length == 0
 
     - name: Add wikis without base.php files (fallback)
-      set_fact:
+      ansible.builtin.set_fact:
         discovered_wikis: "{{ discovered_wikis | default([]) + [wiki_info] }}"
       vars:
         wiki_id: "{{ item.item.path | basename }}"
@@ -129,17 +131,15 @@
       delegate_to: localhost
       run_once: true
 
-  when: existing_wiki_dirs is defined and existing_wiki_dirs.files | length > 0
-
 - name: Check if public.yml already exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ m_local_public }}/public.yml"
   register: public_yml_exists
   delegate_to: localhost
   run_once: true
 
 - name: Read existing public.yml configuration
-  slurp:
+  ansible.builtin.slurp:
     src: "{{ m_local_public }}/public.yml"
   register: public_yml_content
   when: public_yml_exists.stat.exists
@@ -147,32 +147,33 @@
   run_once: true
 
 - name: Create or update public.yml with discovered wikis
+  when: discovered_wikis is defined and discovered_wikis | length > 0
   block:
     - name: Parse existing YAML configuration (if exists)
-      set_fact:
+      ansible.builtin.set_fact:
         current_config: "{{ public_yml_content['content'] | b64decode | from_yaml | default({}) }}"
       when: public_yml_content is defined
 
     - name: Initialize current config if no existing public.yml
-      set_fact:
+      ansible.builtin.set_fact:
         current_config: {}
       when: current_config is not defined
 
     - name: Check if wikis are already properly declared
-      set_fact:
+      ansible.builtin.set_fact:
         wikis_already_exist: "{{ (current_config.wikis is defined) and (current_config.wikis | length > 0) }}"
 
     - name: Compare existing wikis with discovered wikis
-      set_fact:
+      ansible.builtin.set_fact:
         existing_wiki_ids: "{{ current_config.wikis | map(attribute='id') | list | sort if current_config.wikis is defined else [] }}"
         discovered_wiki_ids: "{{ discovered_wikis | map(attribute='id') | list | sort if discovered_wikis is defined else [] }}"
 
     - name: Determine if migration is needed
-      set_fact:
+      ansible.builtin.set_fact:
         migration_needed: "{{ not wikis_already_exist or (existing_wiki_ids != discovered_wiki_ids) }}"
 
     - name: Display idempotency message when no changes needed
-      debug:
+      ansible.builtin.debug:
         msg: |
           Migration skipped: wikis are already properly declared in public.yml
           Existing wikis: {{ existing_wiki_ids | join(', ') }}
@@ -180,54 +181,58 @@
       when: not migration_needed
 
     - name: Merge discovered wikis with existing configuration
-      set_fact:
+      ansible.builtin.set_fact:
         updated_config: "{{ current_config | combine({'wikis': discovered_wikis}, recursive=true) }}"
       when: discovered_wikis is defined and discovered_wikis | length > 0 and migration_needed
 
     - name: Update only the wikis section in public.yml
+      when: updated_config is defined and migration_needed
+      delegate_to: localhost
+      run_once: true
       block:
         - name: Read current public.yml content as text
-          slurp:
+          ansible.builtin.slurp:
             src: "{{ m_local_public }}/public.yml"
           register: current_yml_text
-          
+
         - name: Generate wikis YAML block
-          set_fact:
+          ansible.builtin.set_fact:
             wikis_yaml: "{{ {'wikis': discovered_wikis} | to_nice_yaml(indent=2) | regex_replace('^---\\n', '') }}"
 
-        - name: Update public.yml with new wikis section  
-          shell: |
+        - name: Update public.yml with new wikis section
+          ansible.builtin.shell: |
+            set -o pipefail
             # Create backup
             cp "{{ m_local_public }}/public.yml" "{{ m_local_public }}/public.yml.backup-$(date +%Y%m%d-%H%M%S)"
-            
+
             # Write the wikis YAML to a temporary file first
             cat << 'EOF' > /tmp/wikis_section.yml
             {{ wikis_yaml }}
             EOF
-            
+
             # Check if wikis section already exists
             if grep -q "^wikis:" "{{ m_local_public }}/public.yml"; then
               # Use Python to safely replace the wikis section
               python3 << 'PYTHON_SCRIPT'
             import re
             import sys
-            
+
             # Read the original file
             with open("{{ m_local_public }}/public.yml", 'r') as f:
                 content = f.read()
-            
+
             # Read the new wikis section
             with open("/tmp/wikis_section.yml", 'r') as f:
                 wikis_content = f.read().strip()
-            
+
             # Replace wikis section using regex
             # Pattern matches from "wikis:" to either next top-level key or end of file
             pattern = r'^wikis:[\s\S]*?(?=^[a-zA-Z_][a-zA-Z0-9_]*:|$)'
             replacement = wikis_content
-            
+
             # Replace the wikis section
             new_content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
-            
+
             # Write the updated content back
             with open("{{ m_local_public }}/public.yml", 'w') as f:
                 f.write(new_content)
@@ -237,17 +242,15 @@
               echo "" >> "{{ m_local_public }}/public.yml"
               cat /tmp/wikis_section.yml >> "{{ m_local_public }}/public.yml"
             fi
-            
+
             # Clean up
             rm -f /tmp/wikis_section.yml
           args:
             executable: /bin/bash
-      when: updated_config is defined and migration_needed
-      delegate_to: localhost
-      run_once: true
+          changed_when: true
 
     - name: Display migration results
-      debug:
+      ansible.builtin.debug:
         msg: |
           Migration completed! Found {{ discovered_wikis | length }} existing wikis:
           {% for wiki in discovered_wikis %}
@@ -259,12 +262,10 @@
       when: discovered_wikis is defined and discovered_wikis | length > 0 and migration_needed
 
     - name: Set migration status for playbook
-      set_fact:
+      ansible.builtin.set_fact:
         migration_was_performed: "{{ migration_needed | default(false) }}"
 
-  when: discovered_wikis is defined and discovered_wikis | length > 0
-
 - name: Display message when no existing wikis found
-  debug:
+  ansible.builtin.debug:
     msg: "No existing wiki directories found to migrate. Declarative configuration is ready for new wikis."
   when: discovered_wikis is not defined or discovered_wikis | length == 0
