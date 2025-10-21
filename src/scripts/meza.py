@@ -124,8 +124,8 @@ def main(argv):
 
     # Every command has a sub-command. No second param, no sub-command. Display
     # help for that specific sub-command.
-    # sub-command "update" does not require additional directives
-    if len(argv) == 1 and argv[0] != "update":
+    # sub-command "update" and "list-wikis" do not require additional directives
+    if len(argv) == 1 and argv[0] not in ("update", "list-wikis"):
         display_docs(argv[0])
         sys.exit(1)
     elif len(argv) == 2 and argv[1] in ('--help', '-h'):
@@ -727,7 +727,7 @@ def meza_command_update(argv):
     meza_remote = "mezaremote"
 
     check_remotes = subprocess.check_output(
-        ["git", "remote"]).strip().split("\n")
+        ["git", "remote"]).decode().strip().split("\n")
     if meza_remote not in check_remotes:
         subprocess.check_output(
             ["git", "remote", "add", meza_remote,
@@ -736,16 +736,39 @@ def meza_command_update(argv):
 
     # Get latest commits and tags from mezaremote
     subprocess.check_output(["git", "fetch", meza_remote])
-    subprocess.check_output(["git", "fetch", meza_remote, "--tags"])
-    tags_text = subprocess.check_output(["git", "tag", "-l"])
+    try:
+        subprocess.check_output(["git", "fetch", meza_remote, "--tags"])
+    except subprocess.CalledProcessError:
+        # If tag fetch fails due to conflicts, try with --force
+        subprocess.check_output(["git", "fetch", meza_remote, "--tags", "--force"])
+    tags_text = subprocess.check_output(["git", "tag", "-l"]).decode()
 
     if not argv:
         # print fetch.strip()
         print("The following versions are available:")
-        print(tags_text.strip())
+        
+        # Filter tags to only show those starting with "43" and sort numerically
+        all_tags = [tag.strip() for tag in tags_text.strip().split("\n") if tag.strip()]
+        version_43_tags = [tag for tag in all_tags if tag.startswith("43.")]
+        
+        # Sort numerically by parsing version components
+        def version_sort_key(version):
+            try:
+                # Split version string like "43.25.11" into [43, 25, 11]
+                parts = version.split(".")
+                return [int(part) for part in parts]
+            except (ValueError, IndexError):
+                # If parsing fails, put at end
+                return [999, 999, 999]
+        
+        version_43_tags.sort(key=version_sort_key)
+        
+        for tag in version_43_tags:
+            print(tag)
+        
         print("")
         closest_tag = subprocess.check_output(
-            ["git", "describe", "--tags", "--always"])
+            ["git", "describe", "--tags", "--always"]).decode()
         print(f"You are currently on version {closest_tag.strip()}")
         print("To change versions, do 'sudo meza update <version>'")
     elif len(argv) > 1:
@@ -753,7 +776,7 @@ def meza_command_update(argv):
     else:
         # Needed else 'git status' gives bad response
         status = subprocess.check_output(
-            ["git", "status", "--untracked-files=no", "--porcelain"])
+            ["git", "status", "--untracked-files=no", "--porcelain"]).decode()
         status = status.strip()
         if status:
             print(f"'git status' not empty:\n{status}")
@@ -762,7 +785,7 @@ def meza_command_update(argv):
         if not status:
             tags = tags_text.split("\n")
             branches = subprocess.check_output(
-                ["git", "branch", "-a"]).strip().split("\n")
+                ["git", "branch", "-a"]).decode().strip().split("\n")
             branches = map(str.strip, branches)
             if version in tags:
                 version_type = "at version"
@@ -1061,25 +1084,108 @@ def meza_command_migrate_wikis(argv):
     meza_shell_exec_exit(rc)
 
 
-def meza_command_create(argv):
+def meza_command_debug(argv):
     """
-    Create a wiki using prompts else use wiki-promptless. So the 'form' of the
-    command is 'meza create wiki' or 'meza create wiki-promptless'.
-
-    Environment must be specified as the second argument.
-
-    If it is 'promptless', the third and fourth arguments must be the wiki_id
-    and wiki_name, respectively.
+    Debug Ansible variables and facts for an environment.
+    
+    General-purpose debug command that can output any Ansible variable or fact.
+    Default variable is 'list_of_wikis' if not specified.
 
     Args:
-        argv (list): The command line arguments passed to the function.
+        argv (list): [environment, variable_name (optional)]
 
     Returns:
         None
 
     Raises:
-        SystemExit: If the required arguments are not provided.
+        SystemExit: If the environment is invalid.
 
+    """
+    if len(argv) < 1:
+        print("You must specify an environment: 'meza debug ENV [variable]'")
+        sys.exit(1)
+
+    env = argv[0]
+    debug_var = argv[1] if len(argv) >= 2 else 'list_of_wikis'
+
+    rc = check_environment(env)
+    if rc > 0:
+        meza_shell_exec_exit(rc)
+
+    # Use general-purpose debug playbook
+    shell_cmd = playbook_cmd('debug', env, {'debug_var': debug_var})
+    rc = meza_shell_exec(shell_cmd, False)
+    meza_shell_exec_exit(rc)
+
+
+def meza_command_list_wikis(argv):
+    """
+    List all wikis configured for an environment.
+    
+    Uses the general-purpose debug.yml playbook to display list_of_wikis.
+    Default environment is 'monolith' if not specified.
+
+    Args:
+        argv (list): The command line arguments. First argument should be environment name (optional).
+
+    Returns:
+        None
+
+    Raises:
+        SystemExit: If the environment is invalid.
+
+    """
+    # Default environment is monolith if not specified
+    env = argv[0] if len(argv) >= 1 else "monolith"
+
+    rc = check_environment(env)
+    if rc > 0:
+        meza_shell_exec_exit(rc)
+
+    # Use general-purpose debug playbook
+    shell_cmd = playbook_cmd('debug', env, {'debug_var': 'list_of_wikis'})
+    rc = meza_shell_exec(shell_cmd, False)
+    meza_shell_exec_exit(rc)
+
+
+def meza_command_create(argv):
+    """
+    Create a new wiki in the specified environment.
+
+    This command supports two modes:
+    1. Interactive mode (wiki) - Prompts user for wiki details
+    2. Non-interactive mode (wiki-promptless) - Uses command-line arguments
+
+    Usage:
+        Interactive:    meza create wiki <environment>
+        Non-interactive: meza create wiki-promptless <environment> <wiki_id> <wiki_name>
+
+    Examples:
+        # Interactive wiki creation (will prompt for details)
+        meza create wiki monolith
+        meza create wiki production
+
+        # Non-interactive wiki creation
+        meza create wiki-promptless monolith testwiki "Test Wiki"
+        meza create wiki-promptless production blogwiki "Company Blog"
+
+    Args:
+        argv (list): Command line arguments:
+            [0] - Sub-command: 'wiki' or 'wiki-promptless'
+            [1] - Environment name (required)
+            [2] - Wiki ID (required for wiki-promptless only)
+            [3] - Wiki display name (required for wiki-promptless only)
+
+    Returns:
+        None
+
+    Raises:
+        SystemExit: If required arguments are missing or environment is invalid.
+
+    Notes:
+        - Wiki IDs must be unique within the environment
+        - Wiki IDs should be lowercase, alphanumeric (no spaces or special chars)
+        - Uses create-wiki.yml or create-wiki-promptless.yml Ansible playbooks
     """
     sub_command = argv[0]
 
@@ -1112,17 +1218,51 @@ def meza_command_create(argv):
 
 def meza_command_delete(argv):
     """
-    Delete a specific component in the Meza environment.
+    Delete wikis or other components in the Meza environment.
+
+    This command supports deletion of different components with three modes:
+    1. Interactive wiki deletion (wiki) - Prompts user to select wiki to delete
+    2. Non-interactive wiki deletion (wiki-promptless) - Deletes specified wiki
+    3. Elasticsearch data deletion (elasticsearch) - Removes search index data
+
+    Usage:
+        Interactive wiki:     meza delete wiki <environment>
+        Non-interactive wiki: meza delete wiki-promptless <environment> <wiki_id>
+        Elasticsearch:        meza delete elasticsearch <environment>
+
+    Examples:
+        # Interactive wiki deletion (will show list to choose from)
+        meza delete wiki monolith
+        meza delete wiki production
+
+        # Delete specific wiki without prompts
+        meza delete wiki-promptless monolith testwiki
+        meza delete wiki-promptless production oldwiki
+
+        # Delete elasticsearch data
+        meza delete elasticsearch monolith
 
     Args:
-        argv (list): List of command-line arguments.
+        argv (list): Command line arguments:
+            [0] - Sub-command: 'wiki', 'wiki-promptless', or 'elasticsearch'
+            [1] - Environment name (required)
+            [2] - Wiki ID (required for wiki-promptless only)
 
     Returns:
         None
 
     Raises:
-        SystemExit: If the sub-command is not valid or if the environment is not specified.
+        SystemExit: If sub-command is invalid, required arguments are missing,
+                   or environment is invalid.
 
+    Warning:
+        Wiki deletion is irreversible. Ensure you have backups before proceeding.
+        Use 'meza backup <env>' to create backups before deletion.
+
+    Notes:
+        - Uses delete-wiki.yml, delete-wiki-promptless.yml, or delete-elasticsearch.yml playbooks
+        - Interactive mode shows available wikis and prompts for confirmation
+        - Wiki deletion removes database, files, and configuration
     """
 
     sub_command = argv[0]
@@ -1801,16 +1941,46 @@ def meza_chown(path, username, groupname):
 
 def display_docs(name):
     """
-    Display the contents of a text file with the given name.
+    Display the contents of a help file with the given name.
+    Prefers Markdown (.md) files over text (.txt) files.
 
     Args:
-        name (str): The name of the text file to display.
+        name (str): The name of the help file to display.
 
     Returns:
         None
+        
+    Notes:
+        - Prioritizes .md files over .txt files for enhanced formatting
+        - Provides fallback to legacy .txt files if .md files don't exist
+        - Shows helpful update instructions if no help file is found
+        - Guides users to update their project sources for latest documentation
     """
-    with open(f'/opt/meza/manual/meza-cmd/{name}.txt', encoding='utf-8') as f:
-        print(f.read())
+    import os
+    
+    # Try .md file first, fallback to .txt
+    md_file = f'/opt/meza/manual/meza-cmd/{name}.md'
+    txt_file = f'/opt/meza/manual/meza-cmd/{name}.txt'
+    
+    if os.path.exists(md_file):
+        with open(md_file, encoding='utf-8') as f:
+            print(f.read())
+    elif os.path.exists(txt_file):
+        with open(txt_file, encoding='utf-8') as f:
+            print(f.read())
+    else:
+        print(f"Help file not found: {name}")
+        print("")
+        print("This may indicate that your Meza installation is outdated.")
+        print("Please update your project sources to get the latest help documentation:")
+        print("")
+        print("  git pull origin main")
+        print("  # or")
+        print("  git pull origin dev")
+        print("")
+        print("For a complete list of available commands, try:")
+        print("  meza base --help")
+        return
 
 
 def prompt(varname, default=False):

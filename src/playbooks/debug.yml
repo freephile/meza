@@ -1,0 +1,21 @@
+---
+# General-purpose debug playbook for outputting Ansible variables and facts
+# Usage: meza debug <env> [variable_name]
+# Default variable: list_of_wikis
+# Examples:
+#   meza debug monolith                    # Shows list_of_wikis
+#   meza debug monolith ansible_facts      # Shows all facts
+#   meza debug monolith m_htdocs           # Shows m_htdocs path
+#   meza debug monolith hostvars           # Shows all host variables
+
+- name: Debug Ansible variables and facts
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - set-vars
+  tasks:
+    - name: Debug specified variable
+      debug:
+        var: "{{ debug_var | default('list_of_wikis') }}"
+        verbosity: 0

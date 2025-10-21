@@ -1,11 +1,33 @@
-Mediawiki EZ Admin
+Meza command "create"
 
-Usage: meza create [directives]
+DESCRIPTION:
+	Create new wikis in the specified environment.
 
-List of directives:
+USAGE:
+	meza create wiki <environment>
+	meza create wiki-promptless <environment> <wiki_id> <wiki_name>
 
-Directive          Description
----------------------------------------------------------------
-wiki               Create a wiki
-wiki-promptless    Create a wiki without prompts. This is not
-                   intended to be called by users.
+EXAMPLES:
+	# Interactive wiki creation (prompts for details)
+	meza create wiki monolith
+	meza create wiki production
+
+	# Non-interactive wiki creation
+	meza create wiki-promptless monolith testwiki "Test Wiki"
+	meza create wiki-promptless production blogwiki "Company Blog"
+
+ARGUMENTS:
+	<environment>    Environment name (required)
+	<wiki_id>        Unique wiki identifier (wiki-promptless only)
+	<wiki_name>      Display name for the wiki (wiki-promptless only)
+
+SUB-COMMANDS:
+	wiki             Interactive wiki creation with prompts
+	wiki-promptless  Non-interactive wiki creation (automation-friendly)
+
+NOTES:
+	- Wiki IDs must be unique within the environment
+	- Wiki IDs should be lowercase, alphanumeric (no spaces or special chars)
+	- Interactive mode will prompt for wiki ID, name, and other settings
+	- Non-interactive mode is useful for scripting and automation
+	- New wikis are automatically added to the environment configuration
