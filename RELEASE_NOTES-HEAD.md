@@ -2,9 +2,9 @@
 
 ### Commits
 
-HEAD -> dev 
+HEAD -> dev
 ## Meza 43.49.2
-* [29d0b9f2](https://github.com/freephile/meza/commit/29d0b9f2) (2025-10-20) Greg Rundlett: truncate RELEASE_NOTES 
+* [29d0b9f2](https://github.com/freephile/meza/commit/29d0b9f2) (2025-10-20) Greg Rundlett: truncate RELEASE_NOTES
   - Modified: `RELEASE-NOTES.md`
 
 ## Meza 43.49.1 origin/dev
