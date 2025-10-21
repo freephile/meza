@@ -1,5 +1,0 @@
-Mediawiki EZ Admin
-
-Usage: meza backup <environment name>
-
-No directives. Backup the entirety of an environment.
