@@ -25,6 +25,13 @@ import sys
 import time
 import yaml
 
+try:
+    from rich.console import Console
+    from rich.markdown import Markdown
+    RICH_AVAILABLE = True
+except ImportError:
+    RICH_AVAILABLE = False
+
 # Get installation directory, typically /opt, but configurable elsewhere
 install_dir = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
@@ -1943,6 +1950,7 @@ def display_docs(name):
     """
     Display the contents of a help file with the given name.
     Prefers Markdown (.md) files over text (.txt) files.
+    Renders markdown with rich formatting if available, otherwise falls back to plain text.
 
     Args:
         name (str): The name of the help file to display.
@@ -1952,19 +1960,26 @@ def display_docs(name):
         
     Notes:
         - Prioritizes .md files over .txt files for enhanced formatting
+        - Uses rich library for markdown rendering when available
         - Provides fallback to legacy .txt files if .md files don't exist
         - Shows helpful update instructions if no help file is found
         - Guides users to update their project sources for latest documentation
     """
-    import os
-    
     # Try .md file first, fallback to .txt
-    md_file = f'/opt/meza/manual/meza-cmd/{name}.md'
-    txt_file = f'/opt/meza/manual/meza-cmd/{name}.txt'
-    
+    # Use install_dir to work both in development and production
+    md_file = f'{install_dir}/meza/manual/meza-cmd/{name}.md'
+    txt_file = f'{install_dir}/meza/manual/meza-cmd/{name}.txt'
     if os.path.exists(md_file):
         with open(md_file, encoding='utf-8') as f:
-            print(f.read())
+            content = f.read()
+        # Use rich markdown rendering if available
+        if RICH_AVAILABLE:
+            console = Console()
+            markdown = Markdown(content)
+            console.print(markdown)
+        else:
+            # Fallback to plain text display
+            print(content)
     elif os.path.exists(txt_file):
         with open(txt_file, encoding='utf-8') as f:
             print(f.read())
