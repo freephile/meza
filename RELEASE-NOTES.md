@@ -251,7 +251,7 @@ nasa/getMeza-patch-1
 
 ## Commits
 origin/bug/191-maintenance-scripts bug/191-maintenance-scripts
-* [d6310e8e](https://github.com/freephile/meza/commit/d6310e8e) (2025-08-25) Greg Rundlett: Add comment about Issue [#72](https://github.com/freephile/meza/issues/72) (deploy without sudo) 
+* [d6310e8e](https://github.com/freephile/meza/commit/d6310e8e) (2025-08-25) Greg Rundlett: Add comment about Issue [#72](https://github.com/freephile/meza/issues/72) (deploy without sudo)
   - Modified: `src/scripts/getmeza.sh`
 
 * [9802d43d](https://github.com/freephile/meza/commit/9802d43d) (2025-08-25) Greg Rundlett: Fix maintenance script quoting For Issue [#191](https://github.com/freephile/meza/issues/191)
@@ -376,7 +376,7 @@ NEW requirements-dev.txt is for Python
   - Added: `requirements-dev.txt`
 
 ## Meza 43.27.2
-* [2619b97c](https://github.com/freephile/meza/commit/2619b97c) (2025-08-21) Greg Rundlett: remove blank space 
+* [2619b97c](https://github.com/freephile/meza/commit/2619b97c) (2025-08-21) Greg Rundlett: remove blank space
   - Modified: `src/scripts/lint-files.sh`
   - Modified: `src/scripts/meza.py`
   - Modified: `src/scripts/shell-functions/linux-user.sh`
@@ -466,7 +466,7 @@ while maintaining consistent references across all roles and playbooks.
   - Modified: `tests/deploys/setup-alt-source-backup.yml`
 
 ## Meza 43.25.14
-* [d89466b6](https://github.com/freephile/meza/commit/d89466b6) (2025-08-21) Greg Rundlett: Add message about RELEASE_NOTES-43.25.11.md 
+* [d89466b6](https://github.com/freephile/meza/commit/d89466b6) (2025-08-21) Greg Rundlett: Add message about RELEASE_NOTES-43.25.11.md
   - Modified: `RELEASE-NOTES.md`
 
 ## Meza 43.25.13
@@ -480,11 +480,11 @@ Ensure the handler names match the task
   - Modified: `src/roles/geerlingguy.kibana/tasks/main.yml`
 
 ## Meza 43.26.5 origin/feature/ehance-elasticsearch-183 feature/ehance-elasticsearch-183
-* [30791abc](https://github.com/freephile/meza/commit/30791abc) (2025-08-20) Greg Rundlett: Make task name and handler name match 
+* [30791abc](https://github.com/freephile/meza/commit/30791abc) (2025-08-20) Greg Rundlett: Make task name and handler name match
   - Modified: `src/roles/elasticsearch/tasks/main.yml`
 
 ## Meza 43.25.12
-* [bf90d10b](https://github.com/freephile/meza/commit/bf90d10b) (2025-08-19) Greg Rundlett: Add release notes for 39.5.0 through 43.25.11 
+* [bf90d10b](https://github.com/freephile/meza/commit/bf90d10b) (2025-08-19) Greg Rundlett: Add release notes for 39.5.0 through 43.25.11
   - Added: `RELEASE_NOTES-43.25.11.md`
 
 ## Meza 43.26.4
@@ -560,7 +560,7 @@ then it needs to be group executable
   - Modified: `src/roles/configure-wiki/tasks/main.yml`
 
 ## Meza 43.25.10
-* [45658c32](https://github.com/freephile/meza/commit/45658c32) (2025-08-17) Greg Rundlett: fix quoting in SMW setupStore shell command 
+* [45658c32](https://github.com/freephile/meza/commit/45658c32) (2025-08-17) Greg Rundlett: fix quoting in SMW setupStore shell command
   - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`
 
 ## Meza 43.25.9
@@ -568,11 +568,11 @@ then it needs to be group executable
   - Modified: `config/MezaCoreExtensions.yml`
 
 ## Meza 43.25.8
-* [4b5df1df](https://github.com/freephile/meza/commit/4b5df1df) (2025-08-16) Greg Rundlett: ignore Python venv and Composer vendor 
+* [4b5df1df](https://github.com/freephile/meza/commit/4b5df1df) (2025-08-16) Greg Rundlett: ignore Python venv and Composer vendor
   - Modified: `.gitignore`
 
 ## Meza 43.25.7
-* [c32d15ed](https://github.com/freephile/meza/commit/c32d15ed) (2025-08-14) Greg Rundlett: Add meza-sbom-stats.txt 
+* [c32d15ed](https://github.com/freephile/meza/commit/c32d15ed) (2025-08-14) Greg Rundlett: Add meza-sbom-stats.txt
   - Added: `src/scripts/meza-sbom-stats.txt`
   - Deleted: `src/scripts/package-stats.txt`
 
@@ -584,11 +584,11 @@ then it needs to be group executable
   - Modified: `src/scripts/generate-sbom.php`
 
 ## Meza 43.25.5
-* [7a333fbf](https://github.com/freephile/meza/commit/7a333fbf) (2025-08-14) Greg Rundlett: Add package-stats.txt 
+* [7a333fbf](https://github.com/freephile/meza/commit/7a333fbf) (2025-08-14) Greg Rundlett: Add package-stats.txt
   - Added: `src/scripts/package-stats.txt`
 
 ## Meza 43.25.4
-* [e85adee9](https://github.com/freephile/meza/commit/e85adee9) (2025-08-14) Greg Rundlett: Add first generated SBOM files 
+* [e85adee9](https://github.com/freephile/meza/commit/e85adee9) (2025-08-14) Greg Rundlett: Add first generated SBOM files
   - Added: `src/scripts/meza-sbom.cyclonedx.json`
   - Added: `src/scripts/meza-sbom.spdx.json`
   - Added: `src/scripts/meza-sbom.txt`
@@ -600,7 +600,7 @@ track composer.lock or composer.local.json in the repo.
 R087	src/scripts/sbom.md	src/scripts/generate-sbom.md
 
 ## Meza 43.25.2
-* [c4dc2d19](https://github.com/freephile/meza/commit/c4dc2d19) (2025-08-13) Greg Rundlett: Yamllint: truthy values should be one of [false, true] 
+* [c4dc2d19](https://github.com/freephile/meza/commit/c4dc2d19) (2025-08-13) Greg Rundlett: Yamllint: truthy values should be one of [false, true]
   - Modified: `src/playbooks/check-for-changes.yml`
   - Modified: `src/roles/autodeployer/tasks/do-deploy.yml`
   - Modified: `src/roles/base/tasks/main.yml`
@@ -616,11 +616,11 @@ R087	src/scripts/sbom.md	src/scripts/generate-sbom.md
   - Modified: `tests/deploys/setup-alt-source-backup.yml`
 
 ## Meza 43.25.1
-* [bc092fb6](https://github.com/freephile/meza/commit/bc092fb6) (2025-08-13) Greg Rundlett: Fix invalid workflow generate-sbom - indentation 
+* [bc092fb6](https://github.com/freephile/meza/commit/bc092fb6) (2025-08-13) Greg Rundlett: Fix invalid workflow generate-sbom - indentation
   - Modified: `.github/workflows/generate-sbom.yml`
 
 ## Meza 43.24.2
-* [3a761ccb](https://github.com/freephile/meza/commit/3a761ccb) (2025-08-13) Greg Rundlett: Add PEP 8 rule to .editorconfig for Python files 
+* [3a761ccb](https://github.com/freephile/meza/commit/3a761ccb) (2025-08-13) Greg Rundlett: Add PEP 8 rule to .editorconfig for Python files
   - Modified: `.editorconfig`
 
 ## Meza 43.24.1 origin/feature/improve-python
@@ -686,15 +686,15 @@ add space around operators
 * [81807369](https://github.com/freephile/meza/commit/81807369) (2025-08-13) Greg Rundlett: basic AutoPEP8 fixes /home/greg/src/meza/.venv/bin/python -m autopep8 --in-place src/scripts/meza.py
   - Modified: `src/scripts/meza.py`
 
-* [1a9ff046](https://github.com/freephile/meza/commit/1a9ff046) (2025-08-13) Greg Rundlett: convert tabs to spaces 
+* [1a9ff046](https://github.com/freephile/meza/commit/1a9ff046) (2025-08-13) Greg Rundlett: convert tabs to spaces
   - Modified: `src/scripts/meza.py`
 
 ## Meza 43.23.1 origin/sec/phpsecurity-s2083-injection sec/phpsecurity-s2083-injection
-* [6959b04a](https://github.com/freephile/meza/commit/6959b04a) (2025-08-07) Greg Rundlett: Slight refactor to put regex into a constant 
+* [6959b04a](https://github.com/freephile/meza/commit/6959b04a) (2025-08-07) Greg Rundlett: Slight refactor to put regex into a constant
   - Modified: `src/roles/htdocs/files/BackupDownload/DownloadTest.php`
   - Modified: `src/roles/htdocs/files/BackupDownload/download.php`
 
-* [b1d3eccd](https://github.com/freephile/meza/commit/b1d3eccd) (2025-08-06) Greg Rundlett: remove error suppression and handle disabled shell_exec 
+* [b1d3eccd](https://github.com/freephile/meza/commit/b1d3eccd) (2025-08-06) Greg Rundlett: remove error suppression and handle disabled shell_exec
   - Modified: `src/roles/htdocs/files/BackupDownload/download.php`
 
 * [bf2521eb](https://github.com/freephile/meza/commit/bf2521eb) (2025-08-06) Greg Rundlett: Prevent web access to sensitive content. Prevents possible XSS in Test files which are not meant
@@ -784,21 +784,21 @@ Also
   - Modified: `src/roles/htdocs/files/BackupDownload/download.php`
 
 ## Meza 43.22.4
-* [4b0511b6](https://github.com/freephile/meza/commit/4b0511b6) (2025-08-05) Greg Rundlett: fix YAML lint errors 
+* [4b0511b6](https://github.com/freephile/meza/commit/4b0511b6) (2025-08-05) Greg Rundlett: fix YAML lint errors
   - Modified: `.github/workflows/generate-sbom.yml`
 
 ## Meza 43.22.3
-* [b92c983d](https://github.com/freephile/meza/commit/b92c983d) (2025-08-05) Greg Rundlett: fix YAML lint errors 
+* [b92c983d](https://github.com/freephile/meza/commit/b92c983d) (2025-08-05) Greg Rundlett: fix YAML lint errors
   - Modified: `.github/workflows/generate-sbom.yml`
   - Modified: `src/roles/apache-php/tasks/main.yml`
 
 ## Meza 43.22.2
-* [0fee59cf](https://github.com/freephile/meza/commit/0fee59cf) (2025-08-05) Greg Rundlett: Update README with component logos 
+* [0fee59cf](https://github.com/freephile/meza/commit/0fee59cf) (2025-08-05) Greg Rundlett: Update README with component logos
   - Modified: `README.md`
   - Added: `assets/meza_component_logos.png`
 
 ## Meza 43.22.1 origin/REL1_43 REL1_43
-* [bb2f80c1](https://github.com/freephile/meza/commit/bb2f80c1) (2025-08-05) Greg Rundlett: Update CHANGELOG for REL1_43 
+* [bb2f80c1](https://github.com/freephile/meza/commit/bb2f80c1) (2025-08-05) Greg Rundlett: Update CHANGELOG for REL1_43
   - Modified: `CHANGELOG`
 
 origin/feature/sbom feature/sbom
@@ -809,11 +809,11 @@ origin/feature/sbom feature/sbom
   - Added: `src/scripts/showTags.md`
   - Added: `src/scripts/showTags.sh`
 
-* [6152f022](https://github.com/freephile/meza/commit/6152f022) (2025-08-04) Greg Rundlett: spaces to tabs 
+* [6152f022](https://github.com/freephile/meza/commit/6152f022) (2025-08-04) Greg Rundlett: spaces to tabs
   - Modified: `src/scripts/importExtensions.php`
   - Modified: `src/scripts/listCoreExtensions.php`
 
-* [16a93f80](https://github.com/freephile/meza/commit/16a93f80) (2025-08-02) Greg Rundlett: convert spaces to tabs per coding standards 
+* [16a93f80](https://github.com/freephile/meza/commit/16a93f80) (2025-08-02) Greg Rundlett: convert spaces to tabs per coding standards
   - Modified: `src/scripts/generate-sbom.php`
 
 * [6abeeac0](https://github.com/freephile/meza/commit/6abeeac0) (2025-08-02) Greg Rundlett: Change root package reference to NASA - Updated download location: Changed from https://github.com/enterprisemediawiki/meza to https://github.com/nasa/meza
@@ -856,16 +856,16 @@ GitHub reads this root-level file as the repository's Security Policy (IOW it's 
   - Added: `SECURITY.md`
 
 ## Meza 43.19.4
-* [3588683f](https://github.com/freephile/meza/commit/3588683f) (2025-08-01) Greg Rundlett: Add TODO comments 
+* [3588683f](https://github.com/freephile/meza/commit/3588683f) (2025-08-01) Greg Rundlett: Add TODO comments
   - Modified: `src/roles/apache-php/tasks/main.yml`
   - Modified: `src/scripts/getmeza.sh`
 
 ## Meza 43.19.3
-* [bbfc7943](https://github.com/freephile/meza/commit/bbfc7943) (2025-07-31) Greg Rundlett: Turn off Kibana by default 
+* [bbfc7943](https://github.com/freephile/meza/commit/bbfc7943) (2025-07-31) Greg Rundlett: Turn off Kibana by default
   - Modified: `config/defaults.yml`
 
 ## Meza 43.19.2
-* [373275a5](https://github.com/freephile/meza/commit/373275a5) (2025-07-31) Greg Rundlett: Turn off Certbot by default 
+* [373275a5](https://github.com/freephile/meza/commit/373275a5) (2025-07-31) Greg Rundlett: Turn off Certbot by default
   - Modified: `config/defaults.yml`
 
 ## Meza 43.19.1
@@ -876,7 +876,7 @@ composer libraries needed by AbuseFilter
   - Modified: `config/MezaCoreExtensions.yml`
 
 origin/bug/issue-workflow bug/issue-workflow
-* [5be1107c](https://github.com/freephile/meza/commit/5be1107c) (2025-07-29) Greg Rundlett: Final nitpick changes fixes Issue [#170](https://github.com/freephile/meza/issues/170) 
+* [5be1107c](https://github.com/freephile/meza/commit/5be1107c) (2025-07-29) Greg Rundlett: Final nitpick changes fixes Issue [#170](https://github.com/freephile/meza/issues/170)
   - Modified: `.github/ISSUE_TEMPLATE/bug_report.md`
   - Modified: `.github/ISSUE_TEMPLATE/feature_request.md`
 
@@ -926,16 +926,16 @@ The default is 'false' because neither git nor Composer want to clobber local ch
   - Modified: `config/MezaCoreExtensions.yml`
 
 ## Meza 43.13.3
-* [1896a15e](https://github.com/freephile/meza/commit/1896a15e) (2025-07-10) Greg Rundlett: Fix linting - remove trailing spaces 
+* [1896a15e](https://github.com/freephile/meza/commit/1896a15e) (2025-07-10) Greg Rundlett: Fix linting - remove trailing spaces
   - Modified: `config/MezaCoreExtensions.yml`
   - Modified: `config/MezaCoreSkins.yml`
 
 ## Meza 43.13.2
-* [869607c0](https://github.com/freephile/meza/commit/869607c0) (2025-07-09) Greg Rundlett: remove extraneous '1' 
+* [869607c0](https://github.com/freephile/meza/commit/869607c0) (2025-07-09) Greg Rundlett: remove extraneous '1'
   - Modified: `src/scripts/listCoreExtensions.php`
 
 ## Meza 43.13.1
-* [db2e3b5c](https://github.com/freephile/meza/commit/db2e3b5c) (2025-07-09) Greg Rundlett: Disable Who's Online for being problematic 
+* [db2e3b5c](https://github.com/freephile/meza/commit/db2e3b5c) (2025-07-09) Greg Rundlett: Disable Who's Online for being problematic
   - Modified: `config/MezaCoreExtensions.yml`
 
 ## Meza 43.12.1
@@ -981,18 +981,18 @@ what the install guide does (hence there are no 'bashisms')
   - Modified: `src/roles/netdata/tasks/main.yml`
 
 ## Meza 43.10.3
-* [66d7a4b2](https://github.com/freephile/meza/commit/66d7a4b2) (2025-06-04) Greg Rundlett: specify theme (neutral) for Mermaid extension 
+* [66d7a4b2](https://github.com/freephile/meza/commit/66d7a4b2) (2025-06-04) Greg Rundlett: specify theme (neutral) for Mermaid extension
   - Modified: `config/MezaCoreExtensions.yml`
 
 ## Meza 43.10.2
-* [6100d3c3](https://github.com/freephile/meza/commit/6100d3c3) (2025-06-04) Greg Rundlett: Block WhatLinksHere using Lockdown against robots #156 
+* [6100d3c3](https://github.com/freephile/meza/commit/6100d3c3) (2025-06-04) Greg Rundlett: Block WhatLinksHere using Lockdown against robots #156
   - Modified: `config/MezaCoreExtensions.yml`
 
 ## Meza 43.10.1
 * [7985579b](https://github.com/freephile/meza/commit/7985579b) (2025-06-01) Greg Rundlett: Fixes #157 include CommentStreams composer.json in composer.local.json
   - Modified: `config/MezaCoreExtensions.yml`
 
-* [63103b85](https://github.com/freephile/meza/commit/63103b85) (2025-05-15) Greg Rundlett: Add logos of component technologies 
+* [63103b85](https://github.com/freephile/meza/commit/63103b85) (2025-05-15) Greg Rundlett: Add logos of component technologies
   - Modified: `README.md`
 
 * [f37f706c](https://github.com/freephile/meza/commit/f37f706c) (2024-12-19) Rich Evans: Update haproxy.cfg.j2 removed commented-out obsolete configuration text in haproxy.cfg
@@ -1001,22 +1001,22 @@ what the install guide does (hence there are no 'bashisms')
 * [9a7c9991](https://github.com/freephile/meza/commit/9a7c9991) (2024-12-02) amcgillivray-nasa: Update getmeza.sh Incorporates cowen23's fix for Issue [#57](https://github.com/freephile/meza/issues/57)
   - Modified: `src/scripts/getmeza.sh`
 
-* [cf09936d](https://github.com/freephile/meza/commit/cf09936d) (2025-03-28) Greg Rundlett: Add quotes to version spec for Bootstrap 
+* [cf09936d](https://github.com/freephile/meza/commit/cf09936d) (2025-03-28) Greg Rundlett: Add quotes to version spec for Bootstrap
   - Modified: `config/MezaCoreExtensions.yml`
 
-* [e4ba295c](https://github.com/freephile/meza/commit/e4ba295c) (2025-02-18) Greg Rundlett: make lint command graceful 
+* [e4ba295c](https://github.com/freephile/meza/commit/e4ba295c) (2025-02-18) Greg Rundlett: make lint command graceful
   - Modified: `.github/workflows/yamllint.yml`
 
-* [a3add764](https://github.com/freephile/meza/commit/a3add764) (2025-02-18) Greg Rundlett: final yamllint fixes 
+* [a3add764](https://github.com/freephile/meza/commit/a3add764) (2025-02-18) Greg Rundlett: final yamllint fixes
   - Modified: `config/Debian.yml`
   - Modified: `config/MezaCoreExtensions.yml`
   - Modified: `config/MezaCoreSkins.yml`
 
-* [33cfdf17](https://github.com/freephile/meza/commit/33cfdf17) (2025-02-18) Greg Rundlett: moved yamllint config 
+* [33cfdf17](https://github.com/freephile/meza/commit/33cfdf17) (2025-02-18) Greg Rundlett: moved yamllint config
 R100	src/.yamllint	.yamllint
 
 origin/fix-yamllint fix-yamllint
-* [f6ad58ee](https://github.com/freephile/meza/commit/f6ad58ee) (2025-02-18) Greg Rundlett: Fix yaml files for syntax 
+* [f6ad58ee](https://github.com/freephile/meza/commit/f6ad58ee) (2025-02-18) Greg Rundlett: Fix yaml files for syntax
   - Modified: `.github/workflows/yamllint.yml`
   - Modified: `.travis.yml`
   - Modified: `config/Debian.yml`
@@ -1079,14 +1079,14 @@ origin/fix-yamllint fix-yamllint
   - Modified: `tests/deploys/setup-alt-source-backup.yml`
 
 origin/qb-1.43 qb-1.43
-* [fd7ac3a9](https://github.com/freephile/meza/commit/fd7ac3a9) (2025-02-17) Greg Rundlett: Update README with yamllint workflow badge 
+* [fd7ac3a9](https://github.com/freephile/meza/commit/fd7ac3a9) (2025-02-17) Greg Rundlett: Update README with yamllint workflow badge
   - Modified: `README.md`
 
-* [73c2c0f6](https://github.com/freephile/meza/commit/73c2c0f6) (2025-02-17) Greg Rundlett: Add multiple branch patterns for the yamllint workflow 
+* [73c2c0f6](https://github.com/freephile/meza/commit/73c2c0f6) (2025-02-17) Greg Rundlett: Add multiple branch patterns for the yamllint workflow
   - Modified: `.github/workflows/yamllint.yml`
 
 origin/feature/yamlint-workflow feature/yamlint-workflow
-* [5c333f5e](https://github.com/freephile/meza/commit/5c333f5e) (2025-02-17) Greg Rundlett: Add new linting workflow 
+* [5c333f5e](https://github.com/freephile/meza/commit/5c333f5e) (2025-02-17) Greg Rundlett: Add new linting workflow
   - Added: `.github/workflows/yamllint.yml`
 
 ## Meza 43.8.1
@@ -1102,7 +1102,7 @@ Fixes Issue [#142](https://github.com/freephile/meza/issues/142)
   - Modified: `src/roles/mediawiki/templates/elastic-rebuild-all.sh.j2`
 
 ## Meza 43.7.1
-* [7cb90918](https://github.com/freephile/meza/commit/7cb90918) (2025-01-24) Greg Rundlett: Add comments for $smwgParserFeatures (Links In Values feature) 
+* [7cb90918](https://github.com/freephile/meza/commit/7cb90918) (2025-01-24) Greg Rundlett: Add comments for $smwgParserFeatures (Links In Values feature)
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [ab10ebe1](https://github.com/freephile/meza/commit/ab10ebe1) (2025-01-17) Greg Rundlett: Maintenance Script update (missed these) Convert script calls to go through executable
@@ -1131,7 +1131,7 @@ Fixes Issue [#142](https://github.com/freephile/meza/issues/142)
   - Modified: `src/scripts/unite-the-wikis.sh`
 
 ## Meza 43.6.1
-* [d624f7b4](https://github.com/freephile/meza/commit/d624f7b4) (2025-01-16) Greg Rundlett: A new tool to inspect the git repos on the controller 
+* [d624f7b4](https://github.com/freephile/meza/commit/d624f7b4) (2025-01-16) Greg Rundlett: A new tool to inspect the git repos on the controller
   - Added: `src/scripts/listExtensionRepos.sh`
 
 ## Meza 43.4.5
@@ -1293,7 +1293,7 @@ This work  was performed for NASA GRC-ATF by WikiWorks per NASA Contract  NNC15B
   - Modified: `config/MezaCoreExtensions.yml`
 
 ## Meza 39.16.1 origin/feature/certbot-130
-* [82d4cb44](https://github.com/freephile/meza/commit/82d4cb44) (2024-12-11) Greg Rundlett: role name change to ansible-role-certbot-meza 
+* [82d4cb44](https://github.com/freephile/meza/commit/82d4cb44) (2024-12-11) Greg Rundlett: role name change to ansible-role-certbot-meza
   - Modified: `src/playbooks/site.yml`
 
 ## Meza 39.16.0
@@ -1341,7 +1341,7 @@ Extract gluster comments into the gluster role default variables file
   - Modified: `src/playbooks/site.yml`
   - Modified: `src/roles/gluster/defaults/main.yml`
 
-* [0f8252de](https://github.com/freephile/meza/commit/0f8252de) (2024-11-22) Greg Rundlett: improve wording for m_opcache_production_mode 
+* [0f8252de](https://github.com/freephile/meza/commit/0f8252de) (2024-11-22) Greg Rundlett: improve wording for m_opcache_production_mode
   - Modified: `config/defaults.yml`
   - Modified: `src/roles/init-controller-config/templates/public.yml.j2`
 
@@ -1394,11 +1394,11 @@ Helps address Issue [#120](https://github.com/freephile/meza/issues/120)
   - Modified: `src/roles/mediawiki/tasks/main.yml`
 
 ## Meza 39.9.6
-* [387ba9c3](https://github.com/freephile/meza/commit/387ba9c3) (2024-11-07) Greg Rundlett: Be explicit about who can edit Gadgets 
+* [387ba9c3](https://github.com/freephile/meza/commit/387ba9c3) (2024-11-07) Greg Rundlett: Be explicit about who can edit Gadgets
   - Modified: `config/MezaCoreExtensions.yml`
 
 ## Meza 39.9.5
-* [85afac96](https://github.com/freephile/meza/commit/85afac96) (2024-11-02) Greg Rundlett: Remove Elasticsearch upgrade playbook Issue [#118](https://github.com/freephile/meza/issues/118) 
+* [85afac96](https://github.com/freephile/meza/commit/85afac96) (2024-11-02) Greg Rundlett: Remove Elasticsearch upgrade playbook Issue [#118](https://github.com/freephile/meza/issues/118)
   - Deleted: `src/playbooks/elasticsearch-upgrade.yml`
   - Deleted: `src/roles/elasticsearch/tasks/es_upgrade.yml`
   - Modified: `src/roles/elasticsearch/tasks/main.yml`
@@ -1407,7 +1407,7 @@ Helps address Issue [#120](https://github.com/freephile/meza/issues/120)
 * [69c8a213](https://github.com/freephile/meza/commit/69c8a213) (2024-11-02) Greg Rundlett: Comment the community collections previously setup for RL8 Fixes Issue [#51](https://github.com/freephile/meza/issues/51)
   - Modified: `requirements.yml`
 
-* [8a7241b0](https://github.com/freephile/meza/commit/8a7241b0) (2024-11-02) Greg Rundlett: Example playbook to observe the function of block scalars 
+* [8a7241b0](https://github.com/freephile/meza/commit/8a7241b0) (2024-11-02) Greg Rundlett: Example playbook to observe the function of block scalars
   - Added: `src/playbooks/example-block.yaml`
 
 * [964b65e7](https://github.com/freephile/meza/commit/964b65e7) (2024-11-02) Greg Rundlett: Add a couple of 'ToDo' comments and reformat the smw index shell cmd The shell command was not working due to block folding the
@@ -1417,18 +1417,18 @@ it nominally 'works'. A comment was added to address the issue that
 this maintenance should not even exist in this role, but should be refactored. See Issue [#117](https://github.com/freephile/meza/issues/117)
   - Modified: `src/roles/mediawiki/tasks/main.yml`
 
-* [105a5363](https://github.com/freephile/meza/commit/105a5363) (2024-10-24) Greg Rundlett: update github issue template 
+* [105a5363](https://github.com/freephile/meza/commit/105a5363) (2024-10-24) Greg Rundlett: update github issue template
   - Modified: `.github/ISSUE_TEMPLATE.md`
 
 ## Meza 39.9.3
-* [923758c1](https://github.com/freephile/meza/commit/923758c1) (2024-10-24) Greg Rundlett: Fix wiki symbolic links Issue [#115](https://github.com/freephile/meza/issues/115) 
+* [923758c1](https://github.com/freephile/meza/commit/923758c1) (2024-10-24) Greg Rundlett: Fix wiki symbolic links Issue [#115](https://github.com/freephile/meza/issues/115)
   - Modified: `src/roles/mediawiki/tasks/main.yml`
 
 ## Meza 39.9.2
-* [1219d724](https://github.com/freephile/meza/commit/1219d724) (2024-10-24) Greg Rundlett: Use system ansible Issue [#51](https://github.com/freephile/meza/issues/51) 
+* [1219d724](https://github.com/freephile/meza/commit/1219d724) (2024-10-24) Greg Rundlett: Use system ansible Issue [#51](https://github.com/freephile/meza/issues/51)
   - Modified: `src/scripts/meza.py`
 
-* [aee09afe](https://github.com/freephile/meza/commit/aee09afe) (2024-10-24) Greg Rundlett: Fix ambiguous STDOUT messaging 
+* [aee09afe](https://github.com/freephile/meza/commit/aee09afe) (2024-10-24) Greg Rundlett: Fix ambiguous STDOUT messaging
   - Modified: `src/scripts/meza.py`
 
 ## Meza 39.9.1
@@ -1461,7 +1461,7 @@ ansible [core 2.16.3]
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [ba25a5df](https://github.com/freephile/meza/commit/ba25a5df) (2024-10-08) Rich Evans: Update getmeza.sh 1) Don't exclude "ansible" and "ansible core" from epel.repo
-2) Don't install of centos-release-ansible-29, and 
+2) Don't install of centos-release-ansible-29, and
 3) Don't specify the version of ansible to install.
   - Modified: `src/scripts/getmeza.sh`
 
@@ -1495,22 +1495,22 @@ to install community collections we depend on
   - Modified: `config/ansible.cfg`
   - Added: `requirements.yml`
 
-* [2f0e5cf0](https://github.com/freephile/meza/commit/2f0e5cf0) (2024-10-04) Greg Rundlett: Ignore common clutter and artifacts 
+* [2f0e5cf0](https://github.com/freephile/meza/commit/2f0e5cf0) (2024-10-04) Greg Rundlett: Ignore common clutter and artifacts
   - Modified: `.gitignore`
 
-* [8b683562](https://github.com/freephile/meza/commit/8b683562) (2024-10-04) Greg Rundlett: ignore Ansible collections 
+* [8b683562](https://github.com/freephile/meza/commit/8b683562) (2024-10-04) Greg Rundlett: ignore Ansible collections
   - Modified: `.gitignore`
 
-* [9cff9352](https://github.com/freephile/meza/commit/9cff9352) (2024-10-04) Greg Rundlett: add comment for powertools and remove  centos-release-ansible-29 
+* [9cff9352](https://github.com/freephile/meza/commit/9cff9352) (2024-10-04) Greg Rundlett: add comment for powertools and remove  centos-release-ansible-29
   - Modified: `src/scripts/getmeza.sh`
 
-* [88f3b2a6](https://github.com/freephile/meza/commit/88f3b2a6) (2024-10-04) Greg Rundlett: bump bootstrap; add bootstrap components 
+* [88f3b2a6](https://github.com/freephile/meza/commit/88f3b2a6) (2024-10-04) Greg Rundlett: bump bootstrap; add bootstrap components
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [cb437664](https://github.com/freephile/meza/commit/cb437664) (2024-10-04) Greg Rundlett: Preliminary removal of Python install INSIDE MediaWiki role @TODO cleanup / remove the separate variables for package_pyhton3_pip and package_python3_pip_rhel8 See Issue [#41](https://github.com/freephile/meza/issues/41)#issuecomment-2045506153
   - Modified: `src/roles/mediawiki/tasks/main.yml`
 
-* [a2c81668](https://github.com/freephile/meza/commit/a2c81668) (2024-10-04) Greg Rundlett: Re-enable Semantic Dependency Updater 
+* [a2c81668](https://github.com/freephile/meza/commit/a2c81668) (2024-10-04) Greg Rundlett: Re-enable Semantic Dependency Updater
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [eab5d30c](https://github.com/freephile/meza/commit/eab5d30c) (2024-10-04) Greg Rundlett: Clarify opcache settings m_use_production_settings was vague
@@ -1530,7 +1530,7 @@ because the latter variable is undefined
 fixes Issue [#98](https://github.com/freephile/meza/issues/98)
   - Modified: `src/roles/mediawiki/tasks/main.yml`
 
-* [20f938f3](https://github.com/freephile/meza/commit/20f938f3) (2024-10-04) Greg Rundlett: Remove the footer in .git-commit-template. 
+* [20f938f3](https://github.com/freephile/meza/commit/20f938f3) (2024-10-04) Greg Rundlett: Remove the footer in .git-commit-template.
   - Modified: `.git-commit-template`
 
 * [59cfafe9](https://github.com/freephile/meza/commit/59cfafe9) (2024-10-04) Greg Rundlett: downgrade ReplaceText + InputBox These extensions' 'main' branch requires
@@ -1538,7 +1538,7 @@ a higher version of MediaWiki core. So, revert to
 the REL1_39 branch for now.
   - Modified: `config/MezaCoreExtensions.yml`
 
-* [4b80c01f](https://github.com/freephile/meza/commit/4b80c01f) (2024-10-04) Greg Rundlett: Fix typo in MezaCoreExtensions.yml 
+* [4b80c01f](https://github.com/freephile/meza/commit/4b80c01f) (2024-10-04) Greg Rundlett: Fix typo in MezaCoreExtensions.yml
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [cfbe3c22](https://github.com/freephile/meza/commit/cfbe3c22) (2024-10-04) Greg Rundlett: Remove SAML configuration The SAML configuration should go into a configuration repo
@@ -1597,7 +1597,7 @@ the default password is published on github.
 * [6bd0c2d2](https://github.com/freephile/meza/commit/6bd0c2d2) (2024-09-11) Rich Evans: Removed WatchAnalytics in MezaCoreExtensions.yml Will add it back after full 1.39 checkout is complete.
   - Modified: `config/MezaCoreExtensions.yml`
 
-* [b48a7455](https://github.com/freephile/meza/commit/b48a7455) (2024-09-11) Rich Evans: Update MezaCoreExtensions.yml so Extention HeaderTabs uses master 
+* [b48a7455](https://github.com/freephile/meza/commit/b48a7455) (2024-09-11) Rich Evans: Update MezaCoreExtensions.yml so Extention HeaderTabs uses master
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [12a9ca69](https://github.com/freephile/meza/commit/12a9ca69) (2024-09-11) Rich Evans: removed extension not used in 1.34 MezaCoreExtensions.yml removed SubpageNavigation, InlineComments, DarkMode, WikiLove, FlexFormUpdate. Will add these extensions back after 1.39 is fully checked-out
@@ -1618,7 +1618,7 @@ the default password is published on github.
 * [3a952f5b](https://github.com/freephile/meza/commit/3a952f5b) (2024-07-11) amcgillivray-nasa: Update haproxy.cfg.j2 Removed "no-tlsv12" in order to maintain compatibility with mwclient on RHEL8 using OpenSSL 1.1.1
   - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
 
-* [f55071aa](https://github.com/freephile/meza/commit/f55071aa) (2024-07-03) ndc-rkevans: Add WikiLove, FlexForms, and change VEForAll brnach to master 
+* [f55071aa](https://github.com/freephile/meza/commit/f55071aa) (2024-07-03) ndc-rkevans: Add WikiLove, FlexForms, and change VEForAll brnach to master
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [a5d919e3](https://github.com/freephile/meza/commit/a5d919e3) (2024-06-10) Rich Evans: Update MezaCoreSkins.yml Add MediaWiki site configuration variables via the Vector skin config
@@ -1636,13 +1636,13 @@ the default password is published on github.
 * [13c853fa](https://github.com/freephile/meza/commit/13c853fa) (2024-06-06) Rich Evans: Update MezaCoreSkins.yml adding more skins to choose from
   - Modified: `config/MezaCoreSkins.yml`
 
-* [ea52868f](https://github.com/freephile/meza/commit/ea52868f) (2024-06-06) ndc-rkevans: replace depricated ansible includes with include_tasks 
+* [ea52868f](https://github.com/freephile/meza/commit/ea52868f) (2024-06-06) ndc-rkevans: replace depricated ansible includes with include_tasks
   - Modified: `src/roles/database/tasks/main.yml`
   - Modified: `src/roles/elasticsearch/tasks/main.yml`
   - Modified: `src/roles/gluster/tasks/main.yml`
   - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`
 
-* [4f1fbe5a](https://github.com/freephile/meza/commit/4f1fbe5a) (2024-06-06) ndc-rkevans: Re-enable SDU and fix CommentStreams config typo 
+* [4f1fbe5a](https://github.com/freephile/meza/commit/4f1fbe5a) (2024-06-06) ndc-rkevans: Re-enable SDU and fix CommentStreams config typo
   - Modified: `config/MezaCoreExtensions.yml`
 
 * [2cb0b81a](https://github.com/freephile/meza/commit/2cb0b81a) (2024-05-31) Rich Evans: Update MezaCoreExtensions.yml make it so that Comment Streams don't show on pages by default
@@ -1651,16 +1651,16 @@ the default password is published on github.
 * [da64b3ba](https://github.com/freephile/meza/commit/da64b3ba) (2024-05-20) Rich Evans: Update .htaccess.j2 Don't expose any files or folders with .git in the path
   - Modified: `src/roles/htdocs/templates/.htaccess.j2`
 
-* [6ce641e0](https://github.com/freephile/meza/commit/6ce641e0) (2024-05-08) ndc-rkevans: Configure Apache ServerTokens to ProductOnly 
+* [6ce641e0](https://github.com/freephile/meza/commit/6ce641e0) (2024-05-08) ndc-rkevans: Configure Apache ServerTokens to ProductOnly
   - Modified: `src/roles/apache-php/templates/httpd.conf.j2`
 
-* [83d38a0c](https://github.com/freephile/meza/commit/83d38a0c) (2024-05-08) ndc-rkevans: Have meza overwrite local commits by default 
+* [83d38a0c](https://github.com/freephile/meza/commit/83d38a0c) (2024-05-08) ndc-rkevans: Have meza overwrite local commits by default
   - Modified: `config/defaults.yml`
 
-* [932042ab](https://github.com/freephile/meza/commit/932042ab) (2024-05-08) ndc-rkevans: Add Extension SubpageNavigation to Meza Core Extension 
+* [932042ab](https://github.com/freephile/meza/commit/932042ab) (2024-05-08) ndc-rkevans: Add Extension SubpageNavigation to Meza Core Extension
   - Modified: `config/MezaCoreExtensions.yml`
 
-* [8eb22403](https://github.com/freephile/meza/commit/8eb22403) (2024-05-01) ndc-rkevans: saml configuration updates 
+* [8eb22403](https://github.com/freephile/meza/commit/8eb22403) (2024-05-01) ndc-rkevans: saml configuration updates
   - Modified: `src/roles/configure-wiki/templates/samlAuthorizations.d/base.php.j2`
   - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
   - Modified: `src/roles/saml/tasks/main.yml`
@@ -1722,18 +1722,18 @@ Removed Extensions:
 The following extensions were removed due to incompatibility
 - Talk Right
 - Wiretap
-  
+
 New Features:
-- Only execute SMW Rebuild Data when requested explicitly. 
+- Only execute SMW Rebuild Data when requested explicitly.
   This feature improves the separation of concerns between "platform updates"
   and "special maintenance". It is accomplished using the tags feature
-  of Ansible: `meza deploy monolith --tags base,smw-data` 
-  
-  Note that you can use the `meza maint rebuild` command to rebuild 
-  SMW data **and** Elasticsearch indexes. This command is equivalent to 
+  of Ansible: `meza deploy monolith --tags base,smw-data`
+
+  Note that you can use the `meza maint rebuild` command to rebuild
+  SMW data **and** Elasticsearch indexes. This command is equivalent to
   `meza deploy monolith --tags base,smw-data,search-index`
 
-- Pretty URLs 
+- Pretty URLs
   There is no *index.php* in URLs, just `mysite.com/wiki/SomePage`
   Easier to type, easier to read, easier to remember, shorter, and pretty!
 
@@ -1883,563 +1883,5 @@ Other Changes:
 There is no automatic upgrade path yet from 35.x to 39.x due to the major
 Elasticsearch and SMW upgrades. An UPGRADE doc may be forthcoming, but basically
 you can create a new instance, migrating your database and media files. Then
-create the search indexes with `meza maint-rebuild monolith`. 
+create the search indexes with `meza maint-rebuild monolith`.
 
-## Meza 31.10.1
-
-Fix PEAR channel
-
-### Commits since 31.10.0
-
-* e048a7b Ensure PEAR channel up-to-date
-
-### Contributors
-
-* 2	James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.10.1
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.10.0
-
-Update PHP to 7.2, fix IUS repo, fix Python symlink
-
-### Commits since 31.9.0
-
-* bbe0009 Remove symlink creation for pip3; IUS appears to do that automatically now
-* c50be32 Remove mcrypt extension no longer available after PHP 7.1
-* 01c04bb Bump to PHP 7.2
-* 10bc863 Fix typo (backslash)
-* f701201 Add second IUS repo and GPG key
-* 8e47150 Update URL to IUS RPM See https://github.com/iusrepo/announce/issues/18
-* 44f2d2c Python 2/3 compatibility
-
-### Contributors
-
-* 6	James Montalvo
-* 1	Andrew Foster
-* 1	Daren Welsh
-* 1	Greg Rundlett
-
-# How to upgrade
-
-```bash
-sudo meza update 31.10.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.9.0
-
-Ansible 2.9 fix; Travis firewall fix
-
-### Commits since 31.8.4
-
-* 4d18daa yaml syntax fix
-* 63716a8 fix more flag syntax
-* fe78845 fix deprecated ansible syntax, ref c06fa04c7ddd0ea99c6e92b6f87ff89fd5be27a4
-* 9dde2d8 Try Parsoid 0.10.0
-* 121de9d Add --no-firewall deploy option
-* 93b6087 Disable firewalld on travis tests
-* 74a7697 Try manually restarting firewalld
-* f9cc3a6 Travis saying Docker not running; perhaps start firewall after offline cmd
-* 892fb1f With firewall-offline-cmd no --permanent option, prob because if offline none could be temp
-* e1ced43 Possible solution to issue #1237 according to this forum:
-* d1b17a9 Add a calendar interface to add and edit events using the Full…
-* a555114 Add function to wait for Internet connection.
-
-### Contributors
-
-* 11	James Montalvo
-* 4	Daren Welsh
-* 1	Vincent Brooks
-* 1	XP1
-
-# How to upgrade
-
-```bash
-sudo meza update 31.9.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.8.2
-
-Multiple fixes in support of bad Composer issue, push-backups, etc
-
-### Commits since 31.8.1
-
-* 6722cdc Make meza-ansible:apache own deploy lock file, not root
-* 16833fd Remove commented out non-ansible-module composer tasks
-* deca0bb Use ansible composer module again
-* c7c510e Mount local meza on docker tests controller containers
-* 0a9ca06 Add error handling to update.php (show errors)
-* dc7c184 WIP
-* b1a140e Try envoking composer directly
-* 2a49a3f Trying deleting composer.lock before composer operations
-* 8b96dc1 Add --no-dev to MW composer commands
-* ddb9fe2 Add refreshLinks script that handles memory leaks
-* fb66fa3 Allow specifying rules for what to gzip in backups-cleanup
-* 8093118 Make update.php write to a log
-* ea7e7f6 Fix bad owner/group on /opt/data-meza
-* 94c79c1 Fix bad variable
-* 93d5a0d Improve logic for how to grab SQL file from backup
-* 25b8013 Make pushed backups in form *push.sql and use them first; more debug
-
-### Contributors
-
-* 24	James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.8.2
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.8.1
-
-Fix permissions for finicky servers; fix bad use of 'notify' tag on 'meza push-backup' command
-
-### Commits since 31.8.0
-
-* 597a49f Ensure MediaWiki and WikiBlender ownership after all operations
-* 8f14b8f Recursively apply owner/perms to simplesaml and mediawiki
-* 2803905 Specify /opt/simplesamlphp owner/group/mode
-* 80177f4 push-backup: Fix bad use of 'notify' tag; Add servers to exclude
-
-### Contributors
-
-* 6	James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.8.1
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.8.0
-
-Standardize secret config permissions; dev-networking fix
-
-### Commits since 31.7.0
-
-* 077e6bc Add lock_timeout to yum/package modules to fix Ansible 2.8 issue
-* d6ddb60 Don't use 'meza' command for dev-networking
-* 2ef8454 Secret directory 775 in getmeza.sh, too
-* 8ba1353 file not directory
-* ab1d9b1 Don't overwrite secrt files
-* c64c41b Relax secret config _directory_ mode; ensure good ownership
-* 968c675 Make meza-ansible own temp_vars.json
-* dd245ae Sync secret perms
-
-### Contributors
-
-* 11	James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.8.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.7.0
-
-Simplify push-backup settings and make cron configurable and with notification
-
-### Commits since 31.6.0
-
-* 8b109a7 Simplify push_backup settings
-* 8a3c059 Fix missing endif
-* 170596c Make push-backup cron configurable add notification
-
-### Contributors
-
-* James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.7.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.6.0
-
-No longer require encryption of secret.yml; prefer variable-level encryption; fix permissions for rsync-push
-
-### Commits since 31.5.0
-
-* e70279c Don't print command for encrypt/decrypt (too much text)
-* 63b86fa Add encrypt_string and decrypt_string meza commands
-* 0c9555f Cleanup comments about encryption, remove secret.yml decryption from test case
-* 3d88285 Remove auto-encrypting of secret.yml
-* 419550a Add --no-perms to rsync-push
-
-### Contributors
-
-* 7	James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.6.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.5.0
-
-Major deploy and autodeploy improvements; Push backups to remote server; Security and general improvements; bug fixes
-
-### Commits since 31.4.0
-
-#### Autodeploy on changes to secret config and use Ansible for autodeployer
-
-Autodeployer has previously just tracked public config and the Meza application. Now it will check secret config, too. Additionally, autodeployer was rewritten in Ansible. Shell scripting got too cumbersome.
-
-* 195cbea Fixes for autodeployer logic and misplaced variables
-* 64896a5 Replace autodeployer scripts with Ansible
-* 4dfb030 Belt and suspenders for ensuring deploy unlocks
-* 006d5ed Reduce duplication in check-for-changes.sh
-* 901f2b9 Make public config and Meza management by autodeployer optional
-* 1dc9894 Use secret_config_repo to define secret config
-* bce32d3 Autodeployer check for changes to secret config
-
-#### Prevent simultaneous deploys and improve logging
-
-Starting a deploy now creates a lock file. Other deploys cannot start until the locking deploy is complete. Additionally, all deploys automatically write to a log file and print to stdout. In the future this will be used to display deploy logs via the web interface.
-
-* 60a680c Add wait() to capture return code
-* e7b8ad3 Make sure deploy log directory exists
-* 5009974 Always have ansible show colors
-* a120ac3 Make meza_shell_exec use subprocess; optionally write to log file
-* c5ef0e5 Add meza deploy-kill, deploy-log, deploy-tail functions
-* 9438f7c Handle sigint; also better info in lock file
-* a8f1aca Add 'meza deploy-(un)lock commands; Autodeployer use them to avoid conflicts
-* dd60b91 Add meza subcommand to check if deploy underway
-* 04e8ddb Prevent simultaneous deploys (#1157)
-
-#### Make autodeployer configurable
-
-In Meza 31.x prior to this release autodeployer, overwrite-deploys, and backups-cleanup had to be configured manually via crontab. 32.x has had the ability to configure these things in public/secret config for a while. This release pulls that functionality into 31.x.
-
-* 220df48 Add autodeployer tag
-* 87a4012 Make autodeployer, overwrite-deploy, and backups-cleanup configurable
-* a5396d8 Fix location of backups-cleanup cron
-* 28df042 Fix autodeployer crons
-
-#### Push backups to an alternate server
-
-Required if for security reasons dev/int servers cannot SSH into production to grab backups. Instead production can push backups directly to other servers. This was essentially possible before by making the other servers in the `backup_servers` group, but that (a) made it so production managed software configuration on the remote servers (as Meza does for all its server groups) and (b) it put file uploads in the `/opt/data-meza/backups` directory rather than in `/opt/data-meza/uploads`. So you'd have to do some symlink or have duplicated data. With pushed backups the production server (or whatever server is pushing) just needs to be setup so user `meza-ansible` can SSH into the server with a lesser-privileged account. The user must be in group `apache` and `meza-backups`.
-
-* 6e54a86 Enable rsync push backups (#1166)
-* 2784f81 Add option to recursively set perms on uploads dir; always run on overwrite
-
-#### Security improvements
-
-Steadily trying to reduce where `root` is required
-
-* 36104ea Have meza-ansible do autodeployer git-fetch
-* 2513a36 Set ownership of meza and config; fix role:init-controller-config
-
-#### General improvements
-
-* Vagrant improvements
-  * bddb797 Unique VM names, /opt/meza owned by UID/GID 10000 in Vagrant
-  * Unique VM names allows you to boot multiple Meza's on one host
-  * UID/GID hack required to support using less `root`. Ref #1155
-* Add `pip` and `pip3`
-  * 3db517a Add pip for Python 2.7
-  * 0155726 Add pip3 (31.x didn't have it yet)
-  * 0f879f8 Make pip3 symlink for RHEL
-
-#### Fix issues with creating Docker images for testing
-
-Rebuilding Docker images for testing is not required often. It really only needs to be done when major changes are made or when a very long time has passed between generating images and new images will make test jobs run faster. Since a long time had passed, certain things had been added to Meza that unexpectedly caused issues with Docker builds.
-
-* 36f965f Reorder AND statement since initial_wikis_dir_check undefined in docker build
-* e919123 Don't use services during docker image building
-* 0795348 More docker skip tasks
-
-#### Bug fixes
-
-* 46f7ac6 Make net adapter select statement break on newlines
-* 40e4388 Don't recreate meza-ansible if user already exists (Revert #965)
-* a621460 Remove yum:PackageKit to remove error
-* 0502a41 Ansible 2.8 fixes (#1162) (`ansible_distribution_version` no longer present and `synchronize` module keeps getting harder to use)
-* 6789e7d Ansible Git module fails with /tmp mounted with noexec; set TMPDIR as workaround
-* 3854c6c Make sure to use TMPDIR when doing Ansible Git operations
-
-### Contributors
-
-* James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.5.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.4.0
-
-Make importing from a live server simpler and more secure by not requiring sudo on the remote. Also use a more stable version of ImageMagick.
-
-### Commits since 31.3.0
-
-* 0d23cf7 Don't push
-* 7ce4ddb Make script actually do release commit. Beware.
-* 47f6518 Improvements to rel notes script order
-* 7fe7b2e Make release script edit RELEASE-NOTES.md
-* 02cb384 WIP: release notes script
-* 7ea1f98 Use known user, not no user, when mysqldump user unspecified
-* 84bc0a0 Install mysql client on backup servers for direct mysqldump
-* 112317c Handle undefined backups_server_db_dump
-* db6f805 Give undefined debug vars print vals
-* cd79230 Make checks for wiki existence during backup go to right server
-* 68ac393 Add tags for rsync-uploads and better debug
-* 4d56386 Set permissions for /opt/conf-meza and /opt/conf-meza/public
-* 6ecc855 Create role remote-dir-check to verify if remote uploads dir exists
-* 527852f Get public config repo as meza-ansible, not root
-* 51f5e34 Re-enable PEAR package; not used by default, but used by MS SQL
-* af9eb52 Move vault pass file from meza-ansible home to /opt/conf-meza/vault
-* bd6b103 Minor spelling mistakes
-* 43691c4 Vagrantfile set mount_options: ["dmode=755,fmode=755"] Windows only
-* 4127c78 Use base ImageMagick rather than Meza's own RPM
-* 6ae982b Use 'remote_src'
-* 186298a The SFTP server is in a different location on Debian
-
-### Contributors
-
-* James Montalvo
-* Greg Rundlett
-
-# How to upgrade
-
-```bash
-sudo meza update 31.4.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.3.0
-
-WatchAnalytics to 3.1.2 for diff in PendingReviews, improved on-page banners
-
-### Commits since 31.2.5
-
-* fc22af4 Bump to WatchAnalytics 3.1.2
-* 70b4e2b Bump to WatchAnalytics 3.1.1
-* ce403a5 Bump WatchAnalytics to 3.1.0
-
-### Contributors
-
-* 4	krisfield
-* 1	James Montalvo
-
-# How to upgrade
-
-```bash
-sudo meza update 31.3.0
-sudo meza deploy <insert-your-environment-name>
-```
-
-## Meza 31.2.4
-
-### Commits since 31.2.3
-
-* 7b3a067 Add debug to troubleshoot backup issue (#1094)
-* d5272fb Make backup a tag so that you can at least skip it
-* 073a64f Make apache ServerAdmin email configurable (#1086)
-* 48b3b13 Move prolific log files into sub-directories
-* 619bea6 Use failed_when instead of ignore_errors (#1083)
-* 368fd1b Use printf and quoting to preserve params
-* 2028087 Add BEGIN rules to awk scripts
-
-### Contributors
-
-@jamesmontalvo3, @hexmode, @freephile
-
-### Mediawiki.org pages updated
-
-* Updated https://www.mediawiki.org/wiki/Meza/Directory_structure with log file locations
-
-## Meza 31.2.3
-
-Fixing bug in Extension:WatchAnalytics
-
-### Commits since 31.2.2
-
-* eea7891 bump WatchAnalytics to 2.0.1 (#1066)
-
-### Contributors
-
-Kris Field
-
-### Mediawiki.org pages updated
-
-None
-
-## Meza 31.2.2
-
-### Commits since previous release
-
-* d544d8b Bumps WatchAnalytics to 2.0.0
-* 1230747 Use GitHub mirrors for Gerrit repos
-* 8be750b Merge pull request #1060 from enterprisemediawiki/ext-wa-0.1.0
-* 9baa1d6 Change Extension:CopyWatchers from master to 0.10.0
-* cde132c Change Extension:MezaExt from master to 0.1.0
-* a92c786 Change Extension:ParserFunctionHelper from master to 1.0.0
-* 2a75abc Change Extension:TalkRight from master to 2.0.0
-* 87522d3 Change Extension:PageImporter from master to 0.1.0
-* ffd07c7 Change Extension:SemanticMeetingMinutes from master to 1.0.0
-* 00c178e Change Extension:NumerAlpha from master to 0.7.0
-* 7313d78 Change Extension:MasonryMainPage from master to 0.3.0
-* 296a47c Change Extension:ImagesLoaded from master to 0.1.0
-* 3760316 Change Extension:Wiretap from master to 0.1.0
-* 3026847 Change WatchAnalytics from master to 0.1.0
-
-### Contributors
-
-@jamesmontalvo3, @krisfield
-
-### Mediawiki.org pages updated
-
-* None
-
-## Meza 31.2.1
-
-### Commits since previous release
-
-* 531b203 Reset +e prior to autodeployer deploys else second deploy fails (#1058)
-* 324fa8b Update php.ini.j2 for `php_max_input_vars`
-* 27730de Update defaults.yml for `php_max_input_vars`
-* 60d50a5 Add fix for `php_max_input_vars` setting
-* c64df3a Update robots.txt.j2
-
-### Contributors
-
-@bryandamon, @krisfield, @jamesmontalvo3
-
-### Mediawiki.org pages updated
-
-* https://www.mediawiki.org/wiki/Meza/Configuration_options added information about `php_max_input_vars`, which needs to be increased if using Page Forms with 1000s of inputs
-
-## Meza 31.2.0
-
-This release has two major changes. One, it bumps Semantic MediaWiki to v3.0.0, as well as updating related extensions. Two, it makes the 31.x branch as close as possible to what is required for running MW 1.32, including some tweaks to Parsoid and Elasticsearch settings, bumping PHP to 7.1, and upgrading Extension:Maps.
-
-### Commits since 31.1.0
-
-* dee80ba Bump PageForms to version that adds spreadsheet sorting (#1050)
-* 532ffbc DataTransfer 1.0 doesn't have fixes for MW 1.31, use release branch instead (#1048)
-* a8e3486 SMW rebuildData: better logging and attempt error handling
-* 115cfa8 Use wfLoadExtension for SRF
-* 8213181 Upgrade Pageforms to Version 4.4.1
-* cfb4014 wfLoadExtension for SRF; bump Maps version slightly
-* c85013f Cleanup parsoid version comments
-* d432fb5 Update Extension:Maps to 6.0.1 (#1044)
-* 98c0ff1 Upgrade Pageforms to Version 4.4.1
-* be439a8 Bump PHP 7.0 to 7.1; include checks to remove old PHP versions
-* 113c229 Set Parsoid strictAcceptCheck = false
-* 1b27616 Upgrade CirrusSearch metastore before (re)indexing
-* 69b5169 Bump SMW and SRF to 3.0.0. Bump SemanticCompoundQueries to 1.2.0 (#1040)
-* e65045e Update pageforms to fix spreadsheet sorting (this didn't really fix it)
-
-### Contributors
-
-* @jamesmontalvo3
-* @krisfield
-
-### Mediawiki.org pages updated
-
-* https://www.mediawiki.org/wiki/Meza added information on how to upgrade Meza, and bumped PHP version.
-
-## Meza 31.1.1
-
-Fix for change to Ansible's support of `enablerepo` option
-
-### Commits since 31.1.0
-
-* 7d1472e Update enablerepo functionality to work better with Ansible 2.7.0 (#1038)
-
-### Contributors
-
-@jamesmontalvo3
-
-## Meza 31.1.0
-
-Fix for PHP opcache, addition of Autodeployer, bump PageForms versions
-
-### Commits since 31.0.0
-
-* a9a8110 Update PageForms to get fix for tree input in SMW 3.0 (#1031)
-* 3627d79 Update PageForms version to latest 30-Sep-2018 version (#1030)
-* b21f178 Make do-deploy.sh use autodeployer Slack vars (#1029)
-* fa39ab8 Fix Meza git commit hashes for autodeployer notifications (#1028)
-* 5f3e9a7 Fix for config.php syntax error (#1027)
-* 8c0242f Move config.sh|php into role to allow quick update for autodeployer (#1026)
-* 38ccddf Add autodeployer (#1025)
-* 31f6649 Make Meza control 10-opcache.ini to properly support modifying settings
-
-### Contributors
-
-@jamesmontalvo3, @krisfield
-
-### Mediawiki.org pages updated
-
-* Created https://www.mediawiki.org/wiki/Meza/Autodeployer
-* Created https://www.mediawiki.org/wiki/Meza/Configuration_options and added Opcache options
-
-## Meza 31.0.0
-
-### Commits since 30.0.0
-
-* 63bcee4 - Bump MediaWiki to 1.31.1 (#1022)
-* c0d5107 - Bump SimpleSamlPhp from 1.15.4 to 1.16.1 (#1021)
-* 4ef7580 - Bump SimpleSamlPhp from 1.15.1 to 1.15.4 (#1020)
-* 102ba84 - Added PHP opcache optimization and configurability (#1019)
-* 54d04b4 - Bump SemanticMediaWiki to 2.5.8 and SemanticResultFormats to 2.5.6 (#1018)
-* a4c1f7d - Added Git fetch prune to MediaWiki core to fix `fatal: protocol error: bad pack header` (#1017)
-* bd14949 - Fixed usage of `$wgVisualEditorAvailableNamespaces`
-* f674e15 - Changed variable `$wgVisualEditorNamespaces` to `$wgVisualEditorAvailableNamespaces`
-* 0725059 - Add Extension:TemplateData to Meza core extensions (#1014)
-* ba1a953 - Show visual diff option on all diff pages (#1013)
-* 06deff2 - Remove `legacy_load` from HeaderFooter (#1012)
-* 0cf5b7f - Bump Extension:HeaderFooter to v3.0.0 (#1011)
-* 8a61c74 - Move elasticsearch logs to `/opt/data-meza` instead of `/var/log` (#1008)
-* 4f5b158 - Bump Approved Revs to properly handle usernames
-* 0ea5846 - Add HSTS response header (#1002)
-* 27229bb - Add python3 for Extension:SyntaxHighlight in MW1.31+ (#1004)
-* 206720f - In `server-performance.sh` script, normalize load to num of CPUs; ref #866
-* 6e50a44 - Use the official version of Approved Revs (#1001)
-* 974f269 - Fix shared directory mode in Vagrant (#998)
-* 59cfd30 - Allow adding core and additional Mediawiki skins (#997)
-* 7dd9ff0 - Accept EULA when upgrading yum packages (#996)
-* 596e0d7 - Fixed combination of MSSQL driver and autofs filesystem for `/home` (#995)
-* 0a6da45 - Improved SSH defaults, allow not using default SSH config
-* 453f299 - Added check if Parsoid svc exists prior to stopping it
-* 03c08cf - Fixed when parsoid user directory needs to change, stop parsoid service first
-* 9e8a501 - Make MediaWiki core ignore extension submodules
-* 19a737c - Disable profiling extensions in php.ini due to incompatibility with PHP 7
-* 9762440 - Specify MW 1.31.0 not REL1_31
-* 74abcee - Fix several issues with 'meza update'
-* 21945b4 - Add 'meza update' command
-* 8d6146f - Remove require_once from some extensions, bump versions for PHP7/MW1.31
-* 3ea4a9f - Several PHP7 fixes: TalkRight, xhprof, mongo, php5_module
-* ecc9e42 - Changed to PHP 7.0
-* 9d014dd - Started Meza 31.x branch; bump versions for MW 1.31, etc
-* a8089b5 - PageForms to latest commit, greater than v4.3.1
-* ba3b0fa - Added wiki-unification script used to generate ISS Wiki (#992)
-* ea1c79f - Added Wiki ID redirects/aliases
-* eaa9425 - Add method to skip overwrite on some wikis
-* fc590c5 - Changed to CentOS 7.4 for Vagrant
-* 0f2e70a - Fix for error in Travis CI due to temp dir permissions (#989)
-* bc1e591 - Install MS SQL driver for PHP if install_ms_sql_driver=true
-
-### Contributors
-
-@jamesmontalvo3, @freephile, @darenwelsh, @djflux
