@@ -1,8 +1,259 @@
 Release Notes
 
-## Meza Release Notes HEAD
+### Commits
 
-HEAD -> dev
+HEAD -> dev 
+## Meza 43.49.2
+* [29d0b9f2](https://github.com/freephile/meza/commit/29d0b9f2) (2025-10-20) Greg Rundlett: truncate RELEASE_NOTES 
+  - Modified: `RELEASE-NOTES.md`
+
+## Meza 43.49.1 origin/dev
+* [cb737a5c](https://github.com/freephile/meza/commit/cb737a5c) (2025-10-20) Greg Rundlett: consolidate RELEASE_NOTES into one Fixes Issue [#3](https://github.com/freephile/meza/issues/3)
+  - Modified: `RELEASE-NOTES.md`
+  - Deleted: `RELEASE_NOTES-43.25.11.md`
+  - Deleted: `RELEASE_NOTES-43.29.1.md`
+  - Deleted: `RELEASE_NOTES-HEAD.md`
+
+## Meza 43.48.2
+* [724467c0](https://github.com/freephile/meza/commit/724467c0) (2025-10-20) Greg Rundlett: Remove obsolete text files Fixes Issue [#3](https://github.com/freephile/meza/issues/3)
+  - Deleted: `manual/meza-cmd/backup.txt`
+  - Deleted: `manual/meza-cmd/base.txt`
+  - Deleted: `manual/meza-cmd/config.txt`
+  - Deleted: `manual/meza-cmd/create.txt`
+  - Deleted: `manual/meza-cmd/debug.txt`
+  - Deleted: `manual/meza-cmd/delete.txt`
+  - Deleted: `manual/meza-cmd/deploy.txt`
+  - Deleted: `manual/meza-cmd/docker.txt`
+  - Deleted: `manual/meza-cmd/install.txt`
+  - Deleted: `manual/meza-cmd/list-wikis.txt`
+  - Deleted: `manual/meza-cmd/maint.txt`
+  - Deleted: `manual/meza-cmd/migrate-wikis.txt`
+  - Deleted: `manual/meza-cmd/prompt.txt`
+  - Deleted: `manual/meza-cmd/prompt_default_on_blank.txt`
+  - Deleted: `manual/meza-cmd/prompt_secure.txt`
+  - Deleted: `manual/meza-cmd/setup.txt`
+
+## Meza 43.48.1
+* [b21a3aeb](https://github.com/freephile/meza/commit/b21a3aeb) (2025-10-20) Greg Rundlett: Feat: migrate help system from txt to markdown Enhanced Documentation Features:
+📊 Structured tables for arguments and options
+🎨 Syntax-highlighted code blocks
+⚠️ Visual warnings with emojis
+🔗 Cross-references between related commands
+📋 Consistent formatting across all files
+command documentation is now in markdown files (.md) replacing any
+pre-existing .txt files
+Added documentation for previously undocumented commands
+Improved documentation for meza create wiki and meza delete wiki
+new command for **list-wikis**
+`meza list-wikis`
+new general purpose **debug** command backed by a debug playbook
+`meza debug monolith m_htdocs`
+new help system for every meza command
+meza <command> --help
+Fixes Issue [#3](https://github.com/freephile/meza/issues/3)
+  - Added: `manual/meza-cmd/DELETION.md`
+  - Added: `manual/meza-cmd/MIGRATION.md`
+  - Added: `manual/meza-cmd/backup.md`
+  - Added: `manual/meza-cmd/base.md`
+  - Added: `manual/meza-cmd/config.md`
+  - Added: `manual/meza-cmd/create.md`
+  - Modified: `manual/meza-cmd/create.txt`
+  - Added: `manual/meza-cmd/debug.md`
+  - Added: `manual/meza-cmd/debug.txt`
+  - Added: `manual/meza-cmd/delete.md`
+  - Added: `manual/meza-cmd/delete.txt`
+  - Added: `manual/meza-cmd/deploy-check.md`
+  - Added: `manual/meza-cmd/deploy-kill.md`
+  - Added: `manual/meza-cmd/deploy-lock.md`
+  - Added: `manual/meza-cmd/deploy-log.md`
+  - Added: `manual/meza-cmd/deploy-tail.md`
+  - Added: `manual/meza-cmd/deploy-unlock.md`
+  - Added: `manual/meza-cmd/deploy.md`
+  - Added: `manual/meza-cmd/docker.md`
+  - Added: `manual/meza-cmd/index.md`
+  - Added: `manual/meza-cmd/install.md`
+  - Added: `manual/meza-cmd/list-wikis.md`
+  - Added: `manual/meza-cmd/list-wikis.txt`
+  - Added: `manual/meza-cmd/maint.md`
+  - Added: `manual/meza-cmd/migrate-wikis.md`
+  - Added: `manual/meza-cmd/setup.md`
+  - Added: `manual/meza-cmd/update.md`
+  - Added: `src/playbooks/debug.yml`
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.47.1
+* [13b0f8d4](https://github.com/freephile/meza/commit/13b0f8d4) (2025-10-20) Greg Rundlett: Add force for symlink creation `meza create wiki` could fail as late as during the update.php phase of a subsequent deploy because the .smw.json file was not writable in the symlinked config directory.
+fixes Issue [#48](https://github.com/freephile/meza/issues/48) and Issue [#44](https://github.com/freephile/meza/issues/44)
+  - Modified: `src/roles/verify-wiki/tasks/main.yml`
+
+## Meza 43.46.2
+* [f0acdaf9](https://github.com/freephile/meza/commit/f0acdaf9) (2025-10-20) Greg Rundlett: Fix ansible syntax problems FQCN (Fully Qualified Collection Names)
+Fixed task key order
+- name
+- when
+- delegate_to
+- run_once
+- block
+Fix shell command issues
+- set -o pipefail to shell commands to handle pipe failures
+- changed_when: false for read-only shell commands
+- changed_when: true for shell commands that modify files
+Jinja2 spacing
+- remove extra space (newline) before {%- endif -%}
+Structure Issues
+- Fixed duplicated when conditions that were appearing at both block and task levels
+- Removed duplicate delegate_to and run_once declarations
+- Properly structured task hierarchies
+  - Modified: `src/roles/migrate-to-declarative-wikis/tasks/main.yml`
+
+## Meza 43.46.1
+* [3f2f5d9e](https://github.com/freephile/meza/commit/3f2f5d9e) (2025-10-20) Greg Rundlett: Fix meza migrate-wikis task 'Set Primary wiki when no existing declarative config'
+was broken with an undefined variable
+The map filter was trying to loop a variable in a non-loop context
+so the Jinja2 template logic was wrong
+`sudo meza migrate-wikis monolith` works now
+instead an 'undefined variable' error
+Fixes Issue [#101](https://github.com/freephile/meza/issues/101) Use a declarative wiki ID
+  - Modified: `src/roles/migrate-to-declarative-wikis/tasks/main.yml`
+
+## Meza 43.45.1
+* [8087fde7](https://github.com/freephile/meza/commit/8087fde7) (2025-10-15) Greg Rundlett: Tag "paths" and "defaults" to run always The 'set-vars' role now includes vars from
+- config/paths.yml
+- config/defaults.yml
+on all ansible commands by using the special 'always' tag.
+A task with the always tag will always run, even if you use
+--skip-tags always or run the playbook with different tags.
+It's useful for critical setup or cleanup tasks.
+The 'always' tag is the opposite of the 'never' tag.
+Now the core configuration loading (OS-specific, paths, and defaults)
+always run regardless of which tags are specified, ensuring that
+essential variables are available for any tagged deployment scenario.
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+
+## Meza 43.44.2
+* [ff03f425](https://github.com/freephile/meza/commit/ff03f425) (2025-10-15) Greg Rundlett: Update SBOM files Update the generated Software Bill Of Materials (SBOM) files
+Also make lint-files.sh executable.
+  - Modified: `src/scripts/lint-files.sh`
+  - Modified: `src/scripts/meza-sbom.cyclonedx.json`
+  - Modified: `src/scripts/meza-sbom.spdx.json`
+  - Modified: `src/scripts/meza-sbom.txt`
+
+## Meza 43.44.1
+* [9114307c](https://github.com/freephile/meza/commit/9114307c) (2025-10-15) Greg Rundlett: Fix meza maint run_jobs sudo meza maint run_jobs will run all jobs for all wikis.
+Meza produces a wrapper script on deploy which can be used to invoke
+MediaWiki's maintenance run.php runJobs for all defined wikis.
+You can also selectively pass a wiki ID to the command.
+Fixed the script invocation and also uses the declarative wiki approach.
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.43.1
+* [091cf901](https://github.com/freephile/meza/commit/091cf901) (2025-10-15) Greg Rundlett: Make CoreExtensions and LocalExtensions robust Make the variable declarations more robust so that --check mode works.
+e.g. ansible-playbook /opt/meza/src/playbooks/site.yml --check
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+
+## Meza 43.42.1
+* [f775e370](https://github.com/freephile/meza/commit/f775e370) (2025-10-15) Greg Rundlett: Add Debian support for ImageMagick and Ghostscript Follow the same pattern of cross-platform compatibility used in the
+database role and the geerlingguy/kibana role for cross-platform
+package installation. Also ensure that the ansible variable is
+defined so that --check works with narrow playbook execution.
+Touches on Issue [#42](https://github.com/freephile/meza/issues/42) and Issue [#204](https://github.com/freephile/meza/issues/204)
+  - Modified: `src/roles/imagemagick/tasks/main.yml`
+  - Added: `src/roles/imagemagick/tasks/setup-Debian.yml`
+  - Added: `src/roles/imagemagick/tasks/setup-RedHat.yml`
+
+## Meza 43.41.1
+* [7dd492a3](https://github.com/freephile/meza/commit/7dd492a3) (2025-10-15) Greg Rundlett: Convert to using a declarative approach for wikis You can now declare wiki IDs, names, aliases, and other
+attributes for wikis in YAML. This deprecates the implied or indirect
+directory method of creating and identifying wikis.
+The deprecated directory method is still supported.
+There is a new meza command 'migrate-wikis' that will write the YAML
+for you - storing it in your conf-meza/public/public.yml file.
+Usage: sudo meza migrate-wikis <environment>
+e.g. sudo meza migrate-wikis monolith
+See config/defaults.yml for example declaration
+You can now use Meza commands to 'create' wiki and 'delete' wiki.
+However, you can now also simply edit your YAML configuration and
+run a meza deploy which will create wikis accordingly.
+New:
+- manual/meza-cmd/migrate-wikis.txt
+- src/playbooks/migrate-wikis.yml
+- src/roles/base-config-scripts/templates/wiki-config.php.j2
+- src/roles/migrate-to-declarative-wikis/tasks/main.yml
+Modified:
+- config/defaults.yml
+- src/roles/base-config-scripts/tasks/main.yml
+- src/roles/base-config-scripts/templates/config.sh.j2
+- src/roles/configure-wiki/tasks/main.yml
+- src/roles/delete-wiki-wrapper/tasks/main.yml
+- src/roles/mediawiki/tasks/main.yml
+- src/roles/mediawiki/templates/LocalSettings.php.j2
+- src/roles/mediawiki/templates/refresh-links.sh.j2
+- src/roles/mediawiki/templates/smw-rebuild-all.sh.j2
+- src/roles/set-vars/tasks/main.yml
+- src/scripts/meza.py
+- src/scripts/unifyUserTables.php
+Fixes Issue [#101](https://github.com/freephile/meza/issues/101)
+  - Modified: `config/defaults.yml`
+  - Added: `manual/meza-cmd/migrate-wikis.txt`
+  - Added: `src/playbooks/migrate-wikis.yml`
+  - Modified: `src/roles/base-config-scripts/tasks/main.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Added: `src/roles/base-config-scripts/templates/wiki-config.php.j2`
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+  - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/smw-rebuild-all.sh.j2`
+  - Added: `src/roles/migrate-to-declarative-wikis/tasks/main.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/scripts/meza.py`
+  - Modified: `src/scripts/unifyUserTables.php`
+
+## Meza 43.40.1
+* [6f654084](https://github.com/freephile/meza/commit/6f654084) (2025-09-29) Greg Rundlett: Fix linting issues in init-controller-config - Remove trailing space character in a comment that breaks linting.
+- Use Fully Qualified Collection Names (FQCN)
+  such as ansible.builtin.file
+- Use templates only at the end of task names.
+  It is **discouraged** to use templates in names at all.
+  If you do use them, at least put them at the end
+  https://ansible.readthedocs.io/projects/lint/rules/name/
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+
+origin/main origin/HEAD nasa/main main
+* [cbce465d](https://github.com/freephile/meza/commit/cbce465d) (2025-09-29) Rich Evans: fixes for the refresh-links.sh template These changes are what was required for the /opt/.deploy-meza/refresh-links.sh script to run without errors on my CMTE system.
+  - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
+
+origin/fix-44-.smw.json
+* [c6bbd3c1](https://github.com/freephile/meza/commit/c6bbd3c1) (2025-09-28) Greg Rundlett: Ensure .smw.json ownership and permissions Change the init-controller-config role to have a comment that reflects
+the intention of the code.
+Change owner and group to apache
+Make ownership of 'wikis' directory recursive
+Change `m_config_public_mode` from 0755 to 0775 for dirs 0664 for files
+by using Symbolic mode u=rwX,g=rwX,o=rX.
+Expand group permissions to be able to write files while reducing
+'other' permissions to only be able to read files.
+Remove permission to execute files from all users.
+Change the `configure-wiki` role **which only runs on wiki creation**
+to properly create `.smw.json` as group-owned by apache.
+Fixes Issue [#44](https://github.com/freephile/meza/issues/44)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+
+## Meza 43.39.5
+* [3046811d](https://github.com/freephile/meza/commit/3046811d) (2025-09-25) Greg Rundlett: Update CHANGELOG and RELEASE_NOTES-HEAD Using the commit-hook actually worked and prevented my local commit
+while enforcing the removal of trailing whitespace!
+I also added better USAGE guidelines for the generate-release-notes.sh
+script (printed if you invoke it without arguments).
+`./src/scripts/updateCHANGELOG.sh` does the work without any arguments.
+`./src/scripts/generate-release-notes.sh 43.29.1 HEAD` does the latest
+release notes file.
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+  - Modified: `src/scripts/generate-release-notes.sh`
+
+## Meza 43.39.4
 * [5068855d](https://github.com/freephile/meza/commit/5068855d) (2025-09-25) Greg Rundlett: Fix lint errors on essential-vars task file Also add fully qualified collection names (FQCN) to avoid other lint
 errors. e.g. `ansible.builtin.set_fact` instead of just `set_fact`.
   - Modified: `src/roles/essential-vars/tasks/main.yml`
@@ -1684,204 +1935,3 @@ See also #53 #54 #55
 This work was performed for NASA GRC-ATF by WikiWorks per NASA Contract NNC15BA02B.
   - Modified: `CHANGELOG`
   - Modified: `RELEASE-NOTES.md`
-
-
-## Meza 39.5.0
-
-Upgrades:
-- MediaWiki 1.39.6
-- Semantic MediaWiki 4.1.3
-- PHP 8.1 using the Remi repo
-- Elasticsearch 7.10.2
-- SAML Authentication
-  - SimpleSAMLphp library to 2.2.1
-  - Extension Pluggable Auth 7.0
-  - Extension SimpleSAMLphp 7.0
-- Composer
-- Extensions
-  - Simple Batch Upload
-  - Flow
-  - SubPageList 3.0.0
-  - Maps
-  - PageForms
-  - Variables
-  - Whos Online
-  - Semantic Extra Special Properties
-  - Header Footer
-  - Watch Analytics
-  - HTML5 Mediator
-  - Simple MathJax
-  - Media Functions
-  - Widgets
-  - Pipe Escape
-  - Semantic Drilldown
-  - Contribution Scores
-
-
-Removed Extensions:
-The following extensions were removed due to incompatibility
-- Talk Right
-- Wiretap
-
-New Features:
-- Only execute SMW Rebuild Data when requested explicitly.
-  This feature improves the separation of concerns between "platform updates"
-  and "special maintenance". It is accomplished using the tags feature
-  of Ansible: `meza deploy monolith --tags base,smw-data`
-
-  Note that you can use the `meza maint rebuild` command to rebuild
-  SMW data **and** Elasticsearch indexes. This command is equivalent to
-  `meza deploy monolith --tags base,smw-data,search-index`
-
-- Pretty URLs
-  There is no *index.php* in URLs, just `mysite.com/wiki/SomePage`
-  Easier to type, easier to read, easier to remember, shorter, and pretty!
-
-- Deploy over local changes
-  Added `overwrite_local_git_changes` option (default: off) for deploys. Say you
-  check out some new branch of code in a particular extension or MediaWiki itself.
-  Then you test that in the browser and get results (good or bad). Next you want to
-  re-deploy to a known state. This option allows you more control with less work.
-  The default value is 'false' (off) preserving current behavior which will fail
-  the deploy, refusing to overwrite local changes.
-
-- WebP (.webp) images are supported for upload
-  The WebP format now makes up 12% of the web. Designed to be more efficient than
-  JPEG and PNG images, the WebP format uses advanced compression for smaller size
-  without losing quality. WebP is supported by 96.3% of browsers.
-  https://en.wikipedia.org/wiki/WebP
-
-- Keep composer updated
-  The configuration option `composer_keep_updated` is observed when running a
-  deploy. Thus, if this role variable is set to 'true' (default), `composer` will
-  self-update on your targets providing you with the latest features, bugfixes
-  and security patches to composer itself.
-
-Other Changes:
-- Reduce git clone size of MediaWiki by 2+GB / improve speed
-- Add .editorconfig
-- Version lock Ansible and Python
-- Disable (automatic) Elasticsearch upgrades for predictability
-- Set PHP-FPM default port to 9000 avoiding surprises or conflicts
-- Syntax cleanup
-- Bug fixes in Python, PHP, YAML
-- Documentation of all 50+ meza.py functions
-- Improve testing scripts
-- Create CHANGELOG
-- Remove obsolete $wgShellLocale
-- Allow easier forking
-- Enable Ansible debugger
-
-### Commits since 35.x
-* 86aea14 (HEAD -> REL1_39, tag: 39.6.0, freephile/REL1_39) Fix first-time deploy errors related to SMW rebuild data
-* 74e74a2 Change SAML logging handler to file
-* 0ac901c Update saml20-idp-remote.php
-* c8f3317 Add commit template; Add Rich to Release Notes
-* 5e2200b (tag: 39.5.0) Create Release Notes for v39.5.0
-* dce594e (HEAD -> REL1_39, origin/REL1_39) Versionlock Ansible and Python to prevent incompatibilities
-* 84e08b0 Fix deploy errors on initial deploy
-* 58933f2 Fix fatal recursion errors
-* 8623081 Finish dressing out the SAML Authentication role
-* df820d7 Remove the old 'remove Extension SimpleSamlAuth'
-* f73c216 Fix default port for PHP-FPM
-* 0011a5d Merge remote-tracking branch 'nasa/grc-atf-dev' into REL1_39
-* 5c89037 (nasa/grc-atf-dev, nasa/39.x) Merge pull request #48 from freephile/REL1_39
-* 315364c (tag: 39.4.0) Modify print_width in .editorconfig - but it doesn't seem to affect yamllint
-* e554ccf Fix 'create wiki' failure due to variable scoping
-* 18871ab Lift restriction on composer version
-* 29f99dd Enable check mode for testing
-* 7905761 Add LocalSettings directive for Extension:SubPageList
-* 0441317 Add FIXME comment about composer
-* e672dcc SubPageList needs a wfLoadExtension
-* 0923618 Upgrade SAML auth to use simpleSAMLphp 2.2.1
-* 5362af6 Extension SubPageList upgraded from 1.6.1 to 3.0.0
-* 6ab981b Reformat: Wrap all comments at 120 characters
-* d465e29 Delete errant swap file from repo
-* 74beb29 (tag: 39.3.0) Fix delete / restore functionality
-* 7d9915d Add VS Code settings to .gitignore
-* 013a11b (tag: 39.2.0) Use Elasticsearch 7.10
-* 873258d Add the --always option to git describe to avoid errors
-* fc45add Document all 53 functions in meza.py
-* 8ee9f63 Semantic Dependency Updater - new home / disabled
-* b76d951 Fix thumbnail generation + add webp support
-* 8edbf4a Fixe the compiled templates ownership issue
-* cd5ad23 Update some integration test scripts
-* 957a0ef Create a CHANGELOG as a de-minimus form of Release Notes
-* d253642 Add some directories to gitignore
-* 60d9bb0 (tag: 39.1.0) Merge remote-tracking branch 'nasa/grc-atf-dev' into REL1_39
-* 1697c20 Add a "Section 508 Info" link to the footer via LocalSettings.php template
-* 383f4c8 (origin/grc-atf-dev, grc-atf-dev) make sure widgets compipled templates folder is owned by meza-ansible to avoid local changes error when updating
-* 81ac965 restore force debug to false
-* e0fcbc4 Merge pull request #45 from freephile/REL1_39
-* a4fadf4 ansible-lint code health changes
-* a044cfe $wgShellLocale is obsolete as of REL1_38
-* 45270d4 Final fixes for .smw.json and create wiki bugs
-* 17f7fae yamllint code health syntax and formatting changes
-* f0dba02 Merge pull request #44 from freephile/REL1_39
-* 1e91f9e Fix permission problems + naming in .smw.json directory
-* 4b0d76a Ensure .smw.json has a home
-* 7049379 Feature: Short URLs
-* 6ca76db Feature: Short URLs
-* c8e6665 Remove commented line
-* afb41e8 Make 'enforce_meza_version' undefined; with comment
-* a02a80c Upgrade PHP to 8.1
-* cd60cf1 Example of Remi repo usage from geerlingguy
-* f2e7e1e Minor yaml lint fixes
-* f3ed040 Add 'force' option to be able to 'overwrite local git changes'
-* f7a5cec Make MediaWiki core branch depth a configuration value
-* 602587f Make the Meza project repository a configuration value
-* d95b682 Update Extension Flow for PHP8.1 compatibility
-* 28f314e git repo URL and branch name as BASH variables
-* 4cbcd64 Upgrade SimpleBatchUpload to 2.x for PHP 8.1 compatibility
-* b6daa75 Use fully qualified built-in module name for dnf
-* 0db71f8 Add .yamllint configuration
-* d2fe7d9 Fix 50 yamllint errors in Base role
-* 972d5ca Reorder dnf set-enabled, install per docs
-* cdef0c4 Add EditorConfig to this project
-* 48782c2 Use 'false' for negative  truthy values
-* 817f8f0 Use 'true'/'false' for truthy values
-* 2861473 Fix some yamllint and ansible-lint warnings
-* c568524 Fix fatal indentation errors
-* 62e2d78 Use fully qualified name  ansible.builtin.debug
-* cd83e12 Upgrade Semantic MediaWiki to 4.1.3
-* e61e989 Upgrade Maps to 10.1.1
-* ccd118c Switch PageForms to latest version (5.6.3)
-* c2bc0a6 Use master branch for Variables extension
-* 4f9ea65 Revert "Variables extension - disabled"
-* dbc68b6 Update WhosOnline for compatibility with REL1_39
-* 3ca303b Fix database backup function
-* 2367a82 Enable Ansible debugger by default
-* e3228e3 Fix Widgets folder permissions tasks
-* 7cac79a Update Semantic Extra Special Properties extesion
-* 20d152c Fix Issue #2 Remove GitHub Actions
-* da17c45 change raw_input() to input() for Python 3.x
-* 4c31903 Fix inconsistent use of tabs and spaces
-* de507d4 Fix issue #7 TypeError: must be str, not bytes
-* dffc4cd Change Elasticsearch repo to disabled by default
-* cee39d4 lint site playbook
-* 4598d89 Add sample script for checking an Upgrade
-* 6109296 Upgrade Elasticsearch to 7.x from 6.x
-* 755bbcb Semantic MediaWiki
-* c70ed42 Variables extension - disabled
-* c6710dc Header Footer
-* d3ef6c1 Watch Analytics - switch to WMF master
-* 936ba9e Talk Right & Wiretap removed
-* 19edfeb HTML5 Mediator
-* faf0520 SimpleMathJax
-* fd3701f Media Functions
-* 74f26f2 Widgets
-* a171341 Pipe Escape
-* 277d390 Semantic Drilldown
-* 420fd5e Contribution Scores
-* 876b8ac Major upgrade of Meza for MediaWiki 1.39
-
-### Contributors
-* 94 Greg Rundlett
-* 7 Rich Evans
-
-# How to upgrade
-There is no automatic upgrade path yet from 35.x to 39.x due to the major
-Elasticsearch and SMW upgrades. An UPGRADE doc may be forthcoming, but basically
-you can create a new instance, migrating your database and media files. Then
-create the search indexes with `meza maint-rebuild monolith`.
-
