@@ -56,15 +56,18 @@
 # FIXME #709: Come up with other method to allow HTTP access to these files
 #             (HAProxy rule? httpd rule? PHP?); current method is vague, and
 #             allows access to other things.
-- name: "{{ wiki_id }} - Ensure wiki htdocs directory in place"
+- name: "Ensure wiki htdocs directory in place for {{ wiki_id }}"
   file:
+    force: yes
     path: "{{ m_htdocs }}/wikis/{{ wiki_id }}"
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: '0755'
-- name: "{{ wiki_id }} - Ensure wiki config symlink in place"
+
+- name: "Ensure wiki config symlink in place for {{ wiki_id }}"
   file:
+    force: yes
     # dest = symlink, src = dir linked to
     src: "{{ m_deploy }}/public/wikis/{{ wiki_id }}"
     dest: "{{ m_htdocs }}/wikis/{{ wiki_id }}/config"
