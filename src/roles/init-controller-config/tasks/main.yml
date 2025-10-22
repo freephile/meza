@@ -18,7 +18,7 @@
 # }
 
 # [1] This should only be run the first time (on the first app server) since on
-# subsequent passes the controller is gauranteed to have a local config.
+# subsequent passes the controller is guaranteed to have a local config.
 - name: Does controller have local config
   ansible.builtin.stat:
     path: "{{ m_local_public }}"
@@ -66,18 +66,13 @@
     - file-perms
 
 
-# Ensure that the 'wikis' directory exists within m_local_public; owned by
-# apache since .smw.json needs to be writable by apache for the SMW Admin
-# Special page interface; but also group-owned by apache so that meza-ansible
-# (which is in group apache) can write to it during maintenance tasks.
-- name: "Ensure wikis directories properly owned/moded in: {{ m_local_public }}"
-  ansible.builtin.file:
+# Ensure that the 'wikis' directory exists within m_local_public
+# Note: ownership will be set later after apache user is created
+- name: "Ensure m_local_public/wikis exists"
+  file:
     path: "{{ m_local_public }}/wikis"
     state: directory
-    owner: "{{ user_apache }}"
-    group: "{{ group_apache }}"
     mode: "{{ m_config_public_mode }}"
-    recurse: true
 
 - name: Ensure pre/post/saml settings directories exists in config
   ansible.builtin.file:

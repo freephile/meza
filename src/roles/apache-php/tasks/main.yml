@@ -142,6 +142,17 @@
     enabled: true
   when: docker_skip_tasks is not defined or not docker_skip_tasks
 
+# Set ownership on wikis directory now that apache user exists
+# This completes the setup started in init-controller-config role
+- name: "Set proper ownership on m_local_public/wikis directory"
+  file:
+    path: "{{ m_local_public }}/wikis"
+    state: directory
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: "{{ m_config_public_mode }}"
+    recurse: true
+
 
 # Might need these for SELinux to be turned back on
 # - name: Configure SELinux to start mysql on any port
