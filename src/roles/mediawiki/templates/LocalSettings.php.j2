@@ -384,7 +384,7 @@ $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $wgDBmysql5 = false;
 
 
-{% if primary_wiki_id is defined %}
+{% if primary_wiki_id is defined and primary_wiki_id %}
 /**
  *  If a primewiki is defined then every wiki will use that wiki db for certain
  *  tables. The shared `interwiki` table allows users to use the same interwiki
@@ -410,6 +410,9 @@ $wgSharedTables = array(
 	'interwiki',       // additional
 	'actor',           // additional, but planned to be default in later MW versions
 );
+{% else %}
+// No shared database configured
+$wgSharedDB = '';
 {% endif %}
 
 
