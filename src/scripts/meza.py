@@ -589,19 +589,51 @@ def get_deploy_log_path(env):
         env (str): The environment name.
 
     Returns:
-        str: The path to the deploy log file.
+        str: The path to the deploy log file, or the most recent log file if no deployment is active.
 
     """
-    timestamp = get_deploy_info(env)["timestamp"]
-    filename = f"{env}-{timestamp}.log"
-
     log_dir = os.path.join(defaults['m_logs'], 'deploy-output')
-    log_path = os.path.join(log_dir, filename)
-
+    
     if not os.path.isdir(log_dir):
         os.makedirs(log_dir)
 
+    try:
+        # Try to get timestamp from active deployment
+        timestamp = get_deploy_info(env)["timestamp"]
+        filename = f"{env}-{timestamp}.log"
+        log_path = os.path.join(log_dir, filename)
+    except FileNotFoundError:
+        # No active deployment, find the most recent log file for this environment
+        log_path = find_most_recent_log_file(env, log_dir)
+    
     return log_path
+
+
+def find_most_recent_log_file(env, log_dir):
+    """
+    Find the most recent log file for a given environment.
+
+    Args:
+        env (str): The environment name.
+        log_dir (str): The directory containing log files.
+
+    Returns:
+        str: The path to the most recent log file, or None if no logs found.
+
+    """
+    import glob
+    
+    # Look for log files matching the pattern: env-*.log
+    pattern = os.path.join(log_dir, f"{env}-*.log")
+    log_files = glob.glob(pattern)
+    
+    if not log_files:
+        return None
+    
+    # Sort by modification time, most recent first
+    log_files.sort(key=os.path.getmtime, reverse=True)
+    
+    return log_files[0]
 
 
 def meza_command_deploy_log(argv):
@@ -616,7 +648,13 @@ def meza_command_deploy_log(argv):
 
     """
     env = argv[0]
-    print(get_deploy_log_path(env))
+    log_path = get_deploy_log_path(env)
+    
+    if log_path is None:
+        print(f"No deployment log files found for environment '{env}'")
+        sys.exit(1)
+    else:
+        print(log_path)
 
 
 def meza_command_deploy_tail(argv):
@@ -630,7 +668,20 @@ def meza_command_deploy_tail(argv):
         None
     """
     env = argv[0]
-    os.system(" ".join(["tail", "-f", get_deploy_log_path(env)]))
+    log_path = get_deploy_log_path(env)
+    
+    if log_path is None:
+        print(f"No deployment log files found for environment '{env}'")
+        print("Try running a deployment first with:")
+        print(f"  sudo meza deploy {env}")
+        sys.exit(1)
+    elif not os.path.isfile(log_path):
+        print(f"Log file not found: {log_path}")
+        print("The deployment may not have started yet or the log file was removed.")
+        sys.exit(1)
+    else:
+        print(f"Following deployment log: {log_path}")
+        os.system(" ".join(["tail", "-f", log_path]))
 
 
 def get_git_hash(directory):

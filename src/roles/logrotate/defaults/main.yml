@@ -1,0 +1,132 @@
+---
+# Meza logrotate role default variables
+# These can be overridden in environment-specific configuration
+
+# Package installation
+logrotate_package_name: logrotate
+
+# Global logrotate settings
+logrotate_global_settings:
+  # Run logrotate weekly by default
+  frequency: weekly
+  # Keep 4 weeks of backups by default
+  rotate: 4
+  # Create new files after rotation
+  create: true
+  # Use date as suffix
+  dateext: true
+  # Compress logs after rotation
+  compress: true
+  # Delay compression by one cycle
+  delaycompress: true
+  # Don't rotate empty files
+  notifempty: true
+  # Don't fail if log files are missing
+  missingok: true
+
+# Deployment log retention settings
+logrotate_deploy_logs:
+  enabled: true
+  frequency: daily
+  rotate: 30  # Keep 30 days of deployment logs
+  compress_after_days: 1
+  create_mode: "0644"
+  create_owner: meza-ansible
+  create_group: "{{ group_apache }}"
+
+# Main deployment log retention
+logrotate_main_deploy_log:
+  enabled: true
+  frequency: weekly
+  rotate: 52  # Keep 1 year of main deploy logs
+  compress_after_days: 7
+  create_mode: "0644"
+  create_owner: meza-ansible
+  create_group: "{{ group_apache }}"
+
+# Backup files retention (.sql files)
+logrotate_backup_files:
+  enabled: true
+  frequency: daily
+  rotate: 90  # Keep 90 days of SQL backups
+  compress_after_days: 1
+  create_mode: "0644"
+  create_owner: meza-ansible
+  create_group: "{{ group_apache }}"
+  # Additional cleanup for very old compressed backups
+  cleanup_old_compressed_days: 180
+
+# Backup log retention (backup operation logs)
+logrotate_backup_logs:
+  enabled: true
+  frequency: weekly
+  rotate: 12  # Keep 3 months of backup logs
+  compress_after_days: 7
+  create_mode: "0644"
+  create_owner: meza-ansible
+  create_group: "{{ group_apache }}"
+
+# MediaWiki debug logs
+logrotate_mediawiki_logs:
+  enabled: true
+  frequency: daily
+  rotate: 7  # Keep 1 week of debug logs
+  compress_after_days: 1
+  create_mode: "0644"
+  create_owner: "{{ user_apache }}"
+  create_group: "{{ group_apache }}"
+
+# Apache logs (if managed by Meza)
+logrotate_apache_logs:
+  enabled: true
+  frequency: daily
+  rotate: 14  # Keep 2 weeks of Apache logs
+  compress_after_days: 1
+  create_mode: "0644"
+  create_owner: "{{ user_apache }}"
+  create_group: "{{ group_apache }}"
+  # Reload Apache after rotation
+  postrotate_reload_apache: true
+
+# Elasticsearch logs (if managed by Meza)
+logrotate_elasticsearch_logs:
+  enabled: true
+  frequency: daily
+  rotate: 14  # Keep 2 weeks of Elasticsearch logs
+  compress_after_days: 1
+  create_mode: "0644"
+  create_owner: elasticsearch
+  create_group: elasticsearch
+
+# Job queue logs
+logrotate_jobqueue_logs:
+  enabled: true
+  frequency: daily
+  rotate: 7  # Keep 1 week of job queue logs
+  compress_after_days: 1
+  create_mode: "0644"
+  create_owner: "{{ user_apache }}"
+  create_group: "{{ group_apache }}"
+
+# PHP logs
+logrotate_php_logs:
+  enabled: true
+  frequency: daily
+  rotate: 7  # Keep 1 week of PHP logs
+  compress_after_days: 1
+  create_mode: "0644"
+  create_owner: "{{ user_apache }}"
+  create_group: "{{ group_apache }}"
+
+# Cleanup logs
+logrotate_cleanup_logs:
+  enabled: true
+  frequency: weekly
+  rotate: 4  # Keep 4 weeks of cleanup logs
+  compress_after_days: 7
+  create_mode: "0644"
+  create_owner: meza-ansible
+  create_group: "{{ group_apache }}"
+
+# Test logrotate configuration after changes
+logrotate_test_config: true

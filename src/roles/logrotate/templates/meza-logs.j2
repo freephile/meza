@@ -1,0 +1,177 @@
+# Meza log rotation configuration
+# Deployed by Ansible - do not modify manually
+# Generated on {{ ansible_date_time.date }} {{ ansible_date_time.time }}
+
+{% if logrotate_deploy_logs.enabled %}
+# Deployment output logs - individual deployment sessions
+{{ m_logs }}/deploy-output/*.log {
+    {{ logrotate_deploy_logs.frequency }}
+    missingok
+    rotate {{ logrotate_deploy_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_deploy_logs.create_mode }} {{ logrotate_deploy_logs.create_owner }} {{ logrotate_deploy_logs.create_group }}
+{% else %}
+    create {{ logrotate_deploy_logs.create_mode }} {{ logrotate_deploy_logs.create_owner }} root
+{% endif %}
+    postrotate
+        # Clean up very old deployment logs (older than {{ logrotate_deploy_logs.rotate * 2 }} days)
+        find {{ m_logs }}/deploy-output -name "*.log.*.gz" -mtime +{{ logrotate_deploy_logs.rotate * 2 }} -delete 2>/dev/null || true
+    endscript
+}
+{% endif %}
+
+{% if logrotate_main_deploy_log.enabled %}
+# Main deployment log - ongoing deployment history
+{{ m_logs }}/deploy/deploy.log {
+    {{ logrotate_main_deploy_log.frequency }}
+    missingok
+    rotate {{ logrotate_main_deploy_log.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_main_deploy_log.create_mode }} {{ logrotate_main_deploy_log.create_owner }} {{ logrotate_main_deploy_log.create_group }}
+{% else %}
+    create {{ logrotate_main_deploy_log.create_mode }} {{ logrotate_main_deploy_log.create_owner }} root
+{% endif %}
+}
+{% endif %}
+
+{% if logrotate_backup_logs.enabled %}
+# Backup operation logs
+{{ m_logs }}/backup/*.log {
+    {{ logrotate_backup_logs.frequency }}
+    missingok
+    rotate {{ logrotate_backup_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_backup_logs.create_mode }} {{ logrotate_backup_logs.create_owner }} {{ logrotate_backup_logs.create_group }}
+{% else %}
+    create {{ logrotate_backup_logs.create_mode }} {{ logrotate_backup_logs.create_owner }} root
+{% endif %}
+}
+{% endif %}
+
+{% if logrotate_mediawiki_logs.enabled %}
+# MediaWiki debug and application logs
+{{ m_logs }}/mediawiki/*.log {
+    {{ logrotate_mediawiki_logs.frequency }}
+    missingok
+    rotate {{ logrotate_mediawiki_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_passwd'] is defined and user_apache in ansible_facts['getent_passwd'] and ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_mediawiki_logs.create_mode }} {{ logrotate_mediawiki_logs.create_owner }} {{ logrotate_mediawiki_logs.create_group }}
+{% else %}
+    create {{ logrotate_mediawiki_logs.create_mode }} root root
+{% endif %}
+    sharedscripts
+    postrotate
+        # Reload PHP-FPM to release file handles if it's running
+        systemctl reload php-fpm 2>/dev/null || true
+    endscript
+}
+{% endif %}
+
+{% if logrotate_apache_logs.enabled %}
+# Apache access and error logs (if managed by Meza)
+{{ m_logs }}/apache/*.log {
+    {{ logrotate_apache_logs.frequency }}
+    missingok
+    rotate {{ logrotate_apache_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_passwd'] is defined and user_apache in ansible_facts['getent_passwd'] and ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_apache_logs.create_mode }} {{ logrotate_apache_logs.create_owner }} {{ logrotate_apache_logs.create_group }}
+{% else %}
+    create {{ logrotate_apache_logs.create_mode }} root root
+{% endif %}
+    sharedscripts
+    postrotate
+{% if logrotate_apache_logs.postrotate_reload_apache %}
+        # Reload Apache/httpd to release file handles
+        systemctl reload httpd 2>/dev/null || systemctl reload apache2 2>/dev/null || true
+{% endif %}
+    endscript
+}
+{% endif %}
+
+{% if logrotate_elasticsearch_logs.enabled %}
+# Elasticsearch logs (if managed by Meza)
+{{ m_logs }}/elasticsearch/*.log {
+    {{ logrotate_elasticsearch_logs.frequency }}
+    missingok
+    rotate {{ logrotate_elasticsearch_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_passwd'] is defined and 'elasticsearch' in ansible_facts['getent_passwd'] and ansible_facts['getent_group'] is defined and 'elasticsearch' in ansible_facts['getent_group'] %}
+    create {{ logrotate_elasticsearch_logs.create_mode }} {{ logrotate_elasticsearch_logs.create_owner }} {{ logrotate_elasticsearch_logs.create_group }}
+{% else %}
+    create {{ logrotate_elasticsearch_logs.create_mode }} root root
+{% endif %}
+}
+{% endif %}
+
+{% if logrotate_jobqueue_logs.enabled %}
+# MediaWiki job queue logs
+{{ m_logs }}/jobqueue/*.log {
+    {{ logrotate_jobqueue_logs.frequency }}
+    missingok
+    rotate {{ logrotate_jobqueue_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_passwd'] is defined and user_apache in ansible_facts['getent_passwd'] and ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_jobqueue_logs.create_mode }} {{ logrotate_jobqueue_logs.create_owner }} {{ logrotate_jobqueue_logs.create_group }}
+{% else %}
+    create {{ logrotate_jobqueue_logs.create_mode }} root root
+{% endif %}
+}
+{% endif %}
+
+{% if logrotate_php_logs.enabled %}
+# PHP error and access logs
+{{ m_logs }}/php/*.log {
+    {{ logrotate_php_logs.frequency }}
+    missingok
+    rotate {{ logrotate_php_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_passwd'] is defined and user_apache in ansible_facts['getent_passwd'] and ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_php_logs.create_mode }} {{ logrotate_php_logs.create_owner }} {{ logrotate_php_logs.create_group }}
+{% else %}
+    create {{ logrotate_php_logs.create_mode }} root root
+{% endif %}
+    sharedscripts
+    postrotate
+        # Reload PHP-FPM to release file handles
+        systemctl reload php-fpm 2>/dev/null || true
+    endscript
+}
+{% endif %}
+
+{% if logrotate_cleanup_logs.enabled %}
+# Cleanup operation logs
+{{ m_logs }}/cleanup/*.log {
+    {{ logrotate_cleanup_logs.frequency }}
+    missingok
+    rotate {{ logrotate_cleanup_logs.rotate }}
+    compress
+    delaycompress
+    notifempty
+{% if ansible_facts['getent_group'] is defined and group_apache in ansible_facts['getent_group'] %}
+    create {{ logrotate_cleanup_logs.create_mode }} {{ logrotate_cleanup_logs.create_owner }} {{ logrotate_cleanup_logs.create_group }}
+{% else %}
+    create {{ logrotate_cleanup_logs.create_mode }} {{ logrotate_cleanup_logs.create_owner }} root
+{% endif %}
+}
+{% endif %}

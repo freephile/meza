@@ -1,0 +1,31 @@
+---
+# Logrotate role metadata
+galaxy_info:
+  author: Meza Project
+  description: Comprehensive log rotation and backup file management for Meza MediaWiki platform
+  company: Enterprise MediaWiki LLC
+  license: GPL-3.0+
+  min_ansible_version: "2.9"
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Ubuntu
+      versions:
+        - "20.04"
+        - "22.04"
+  galaxy_tags:
+    - logrotate
+    - logs
+    - backup
+    - mediawiki
+    - meza
+
+dependencies:
+  - role: set-vars
+
+# Role collections
+collections:
+  - ansible.builtin
+  - community.general

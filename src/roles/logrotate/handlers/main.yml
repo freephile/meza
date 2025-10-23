@@ -1,0 +1,11 @@
+---
+- name: Test logrotate configuration
+  ansible.builtin.command:
+    cmd: logrotate -d /etc/logrotate.d/meza-logs
+  register: logrotate_test
+  failed_when:
+    - logrotate_test.rc != 0
+    - "'unknown user' not in logrotate_test.stderr"
+    - "'unknown group' not in logrotate_test.stderr"
+  changed_when: false
+  when: logrotate_test_config | default(true)
