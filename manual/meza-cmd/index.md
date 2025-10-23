@@ -32,7 +32,11 @@ Meza is a comprehensive MediaWiki deployment automation platform. Use these comm
 
 1. **Install Meza:**
    ```bash
-   meza install monolith
+   # Download and install Meza
+   curl -L https://raw.githubusercontent.com/nasa/meza/master/src/scripts/getmeza.sh | bash
+   
+   # Or if you have the repository locally:
+   sudo bash src/scripts/getmeza.sh
    ```
 
 2. **Deploy default environment:**
@@ -49,8 +53,9 @@ Meza is a comprehensive MediaWiki deployment automation platform. Use these comm
 
 ### Development Setup
 ```bash
+# Download and install Meza first
+sudo bash src/scripts/getmeza.sh
 meza setup dev                    # Set up development tools
-meza install monolith            # Install on single machine
 meza deploy monolith             # Deploy local environment
 meza create wiki monolith        # Create test wiki
 ```
