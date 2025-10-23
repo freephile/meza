@@ -62,7 +62,7 @@ def display_docs(name):
 All Meza commands now have comprehensive Markdown documentation:
 
 - [`backup.md`](backup.md) - Environment backup operations
-- [`base.md`](base.md) - Main Meza overview and command reference
+- [`help.md`](help.md) - Main Meza overview and command reference
 - [`config.md`](config.md) - Configuration management
 - [`create.md`](create.md) - Wiki creation commands
 - [`debug.md`](debug.md) - Debug and troubleshooting

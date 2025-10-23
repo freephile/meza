@@ -121,10 +121,10 @@ def main(argv):
     # meza requires a command parameter. No first param, no command. Display
     # help. Also display help if explicitly specifying help.
     if not argv:
-        display_docs('base')
+        display_docs('help')
         sys.exit(1)
     elif argv[0] in ('-h', '--help'):
-        display_docs('base')
+        display_docs('help')
         sys.exit(0)  # asking for help doesn't give error code
     elif argv[0] in ('-v', '--version'):
         version = subprocess.check_output(
@@ -2212,7 +2212,7 @@ def meza_command_help(argv):
         argv (list): Command line arguments
     """
     if len(argv) < 1:
-        display_docs('base')
+        display_docs('help')
         return
 
     command = argv[0]
