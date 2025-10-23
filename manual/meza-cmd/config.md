@@ -1,61 +1,95 @@
-# Meza Command: `config`
+# Meza Configuration Management
 
-## Description
+## No `meza config` Command Available
 
-Get or set configuration values for Meza environments.
+There is no `meza config` command in the current implementation. Such a command would require:
 
-## Usage
+- A complex configuration management system
+- Direct YAML file manipulation capabilities
+- Environment-aware key/value storage
+- Integration with Meza's multi-layered configuration hierarchy
+
+This level of complexity doesn't align with Meza's current architecture, which is designed around direct file editing and Ansible-based configuration management.
+
+## Managing config in Meza
+
+Here is how Meza provides configuration management (get/set/apply):
+
+### View Configuration Values
+
+Use the `meza debug` command to view any configuration variable:
 
 ```bash
-meza config <key> [value]
+# View a specific configuration value
+meza debug monolith mediawiki_version
+
+# View database configuration
+Meza database configuration starts with the 'inventory' file
+
+# View all wikis configured
+meza debug production list_of_wikis
+
+# View backup settings
+meza debug monolith m_backup_retention_days
 ```
 
-## Examples
+Remember that it is fast and useful to just grep the two config hierarchies:
+`grep -r is_this_even_real /opt/conf-meza /opt/meza'
+
+### Set Configuration Values
+
+Edit configuration files directly using your preferred editor:
 
 ```bash
-# Get current value of a configuration key
-meza config database_host
+# Edit public (non-sensitive) configuration
+sudo vi /opt/conf-meza/public/monolith/public.yml
 
-# Set a configuration value
-meza config database_host "db.example.com"
+# Edit secret (sensitive) configuration
+sudo vi /opt/conf-meza/secret/monolith/secret.yml
 
-# Get MediaWiki version setting
-meza config mediawiki_version
-
-# Set environment-specific setting
-meza config backup_retention_days 30
+# Edit global defaults (affects all environments)
+# This is only for changes to the project itself
+sudo vi /opt/meza/config/defaults.yml
 ```
 
-## Arguments
+### Apply Configuration Changes
 
-| Argument | Description | Required |
-|----------|-------------|----------|
-| `<key>` | Configuration key to get or set | ✓ |
-| `[value]` | Value to set (omit to get current value) | No |
+Deploy the environment to apply configuration changes:
 
-## Behavior
+```bash
+# Apply all configuration changes
+meza deploy monolith
 
-- **With value**: Sets the configuration key to the specified value
-- **Without value**: Displays the current value of the configuration key (if it exists)
+# Apply only configuration changes (faster, skips updates)
+meza deploy monolith --tags mediawiki --skip-tags latest,update.php
+```
 
-## Notes
+## Configuration File Hierarchy
 
-- Configuration changes may require redeployment to take effect
-- Some configuration keys are environment-specific
-- Critical settings should be verified before deployment
-- Use `meza deploy` to apply configuration changes
+Meza uses a layered configuration system where values are resolved in this order:
 
-## Common Configuration Keys
+1. **Environment secrets**: `/opt/conf-meza/secret/<env>/secret.yml` (highest priority)
+2. **Environment public**: `/opt/conf-meza/public/<env>/public.yml`
+3. **OS-specific defaults**: `/opt/meza/config/RedHat.yml` or `/opt/meza/config/Debian.yml`
+4. **Global defaults**: `/opt/meza/config/defaults.yml` (lowest priority)
 
-| Key | Description | Example |
-|-----|-------------|---------|
-| `database_host` | Database server hostname | `db.example.com` |
-| `mediawiki_version` | MediaWiki version to deploy | `1.39.4` |
-| `backup_retention_days` | Days to keep backups | `30` |
-| `php_version` | PHP version to use | `8.1` |
+## Common Configuration Examples
+
+### MediaWiki Version
+```yaml
+# In /opt/conf-meza/public/production/public.yml
+mediawiki_version: "1.39.4"
+```
+
+### Backup Configuration
+```yaml
+# In /opt/conf-meza/public/production/public.yml
+m_backup_retention_days: 30
+m_backup_enable: true
+```
 
 ## See Also
 
+- [`meza debug`](debug.md) - View configuration values and variables
 - [`meza deploy`](deploy.md) - Apply configuration changes
-- [`meza setup`](setup.md) - Environment setup
-- [`meza debug`](debug.md) - Debug configuration values
+- [`meza setup`](setup.md) - Environment setup and initial configuration

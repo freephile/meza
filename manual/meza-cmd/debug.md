@@ -16,15 +16,12 @@ meza debug <environment> <variable_name>
 # Debug specific variables
 meza debug monolith m_wikis
 meza debug production m_install
-meza debug development m_mediawiki_version
+meza debug development mediawiki_version
 
 # Debug environment paths
 meza debug monolith m_uploads_dir
 meza debug monolith m_conf_meza_public
 
-# Debug database configuration
-meza debug production m_db_master_server
-meza debug production m_db_slave_servers
 ```
 
 ## Arguments
@@ -38,14 +35,12 @@ meza debug production m_db_slave_servers
 
 | Variable | Description |
 |----------|-------------|
-| `m_wikis` | List of configured wikis |
+| `list_of_wikis` | List of configured wikis |
 | `m_install` | Meza installation directory |
 | `m_uploads_dir` | Wiki uploads directory |
-| `m_mediawiki_version` | MediaWiki version |
+| `mediawiki_version` | MediaWiki version |
 | `m_conf_meza_public` | Public configuration directory |
 | `m_conf_meza_secret` | Secret configuration directory |
-| `m_db_master_server` | Database master server |
-| `m_db_slave_servers` | Database slave servers |
 
 ## Notes
 
@@ -53,6 +48,8 @@ meza debug production m_db_slave_servers
 - Loads environment configuration through set-vars role
 - Useful for troubleshooting configuration issues
 - Can inspect any Ansible variable available in the environment
+- It is fast and useful to just grep the two config hierarchies:
+  - `grep -r is_this_even_real /opt/conf-meza /opt/meza'
 
 ## See Also
 

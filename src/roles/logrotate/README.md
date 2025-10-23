@@ -171,10 +171,12 @@ The logrotate configuration includes:
 
 ## 📚 Related Documentation
 
-- [Logrotate Role Tasks](../tasks/main.yml)
-- [Logrotate Default Variables](../defaults/main.yml)
-- [Logrotate Templates](../templates/)
-- [Backup Cleanup Script](../templates/cleanup-backups.sh.j2)
+- [Logrotate Role Tasks](https://github.com/freephile/meza/blob/dev/src/roles/logrotate/tasks/main.yml)
+- [Logrotate Default Variables](https://github.com/freephile/meza/blob/dev/src/roles/logrotate/defaults/main.yml)
+- [Logrotate Templates](https://github.com/freephile/meza/blob/dev/src/roles/logrotate/templates/)
+  - See the generated configuration for logrotate at `/etc/logrotate.d/meza-logs`
+  - The [cleanup-backups.sh script](https://github.com/freephile/meza/blob/dev/src/scripts/cleanup-backups.sh) is output to the 'scripts' directory.
+- [Backup Cleanup Script Documentation](https://github.com/freephile/meza/blob/dev/src/scripts/cleanup-backups.md) (markdown) is side-by-side in the 'scripts' directory.
 
 ---
 
