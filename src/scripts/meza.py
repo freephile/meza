@@ -1408,16 +1408,6 @@ def meza_command_setbaseconfig(argv):
     meza_shell_exec_exit(rc)
 
 
-def meza_command_destroy(argv):  # pylint: disable=unused-argument
-    """
-    Placeholder for destroy command - not yet implemented.
-
-    Args:
-        argv (list): Command line arguments (unused).
-    """
-    print("command not yet built")
-
-
 # FIXME #825: It would be great to have this function automatically map all
 #             scripts in MediaWiki's maintenance directory to all wikis. Then
 #             you could do:
