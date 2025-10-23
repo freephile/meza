@@ -1,1 +1,2 @@
 pre-commit
+rich  # Optional: Enhanced markdown rendering for help documentation
