@@ -12,12 +12,12 @@ meza maint [directive]
 
 ## Directives
 
-### `jobs` - Run Wiki Jobs
+### `run-jobs` - Run Wiki Jobs
 
 Run all pending jobs on all wikis in the environment.
 
 ```bash
-meza maint jobs
+meza maint run-jobs
 ```
 
 **What it does:**
@@ -29,11 +29,67 @@ meza maint jobs
   - Image thumbnail generation
   - Cache invalidation
 
+### `rebuild <env>` - Rebuild Search and SMW
+
+Rebuild Semantic MediaWiki data and search indexes for an environment.
+
+```bash
+meza maint rebuild <environment>
+```
+
+**What it does:**
+- Rebuilds Semantic MediaWiki (SMW) data structures
+- Recreates search indexes for all wikis
+- Updates CirrusSearch/Elasticsearch indexes
+
+### `cleanuploadstash <env>` - Clean Upload Stash
+
+Clean up temporary upload files from the upload stash directory.
+
+```bash
+meza maint cleanuploadstash <environment>
+```
+
+**What it does:**
+- Removes stale temporary upload files
+- Frees up disk space from incomplete uploads
+- Cleans upload stash directory
+
+### `encrypt-string <env> <value> [var_name]` - Encrypt String
+
+Encrypt a string value using Ansible Vault for secure storage.
+
+```bash
+meza maint encrypt-string <environment> <secret_value>
+meza maint encrypt-string <environment> <secret_value> variable_name
+```
+
+**What it does:**
+- Encrypts sensitive values using Ansible Vault
+- Optionally assigns a variable name to the encrypted string
+- Returns encrypted string for use in configuration files
+
+### `decrypt-string <env> <encrypted_value>` - Decrypt String
+
+Decrypt a previously encrypted string using Ansible Vault.
+
+```bash
+meza maint decrypt-string <environment> '$ANSIBLE_VAULT;1.1;AES256...'
+```
+
+**What it does:**
+- Decrypts Ansible Vault encrypted strings
+- Shows the original plaintext value
+- Useful for retrieving forgotten encrypted values
+
 ## Arguments
 
 | Argument | Description | Required |
 |----------|-------------|----------|
 | `[directive]` | Maintenance operation to perform | No |
+| `<environment>` | Environment name (for env-specific commands) | Yes (for some directives) |
+| `<value>` | Value to encrypt/decrypt | Yes (for encrypt/decrypt) |
+| `[var_name]` | Variable name for encrypted string | No |
 
 ## Job Queue Operations
 
@@ -48,14 +104,32 @@ The job queue processes various MediaWiki background tasks:
 | **ThumbnailRender** | Generate image thumbnails |
 | **CategoryMembershipChange** | Update category memberships |
 
-## When to Run Jobs
+## When to Run Maintenance
 
-Run maintenance jobs when:
+Run various maintenance operations when:
+
+**Job Queue (`run-jobs`):**
 - ✅ After bulk content imports
 - ✅ After extension installations
 - ✅ When search results seem outdated
 - ✅ When page links appear broken
 - ✅ As part of regular maintenance schedule
+
+**Rebuild (`rebuild`):**
+- ✅ After Semantic MediaWiki updates
+- ✅ When search functionality is broken
+- ✅ After major content restructuring
+- ✅ When CirrusSearch indexes are corrupted
+
+**Upload Stash Cleanup (`cleanuploadstash`):**
+- ✅ When disk space is running low
+- ✅ As part of regular cleanup maintenance
+- ✅ After failed bulk upload operations
+
+**String Encryption/Decryption:**
+- ✅ When storing sensitive configuration values
+- ✅ For secure password management
+- ✅ When troubleshooting encrypted values
 
 ## Notes
 
@@ -75,4 +149,6 @@ Run maintenance jobs when:
 
 - [`meza deploy`](deploy.md) - Deploy environment updates
 - [`meza backup`](backup.md) - Backup before major maintenance
-- [`meza debug`](debug.md) - Debug job queue issues
+- [`meza debug`](debug.md) - Debug maintenance issues
+- [`meza create`](create.md) - Create new wikis
+- [`meza delete`](delete.md) - Delete wikis or components

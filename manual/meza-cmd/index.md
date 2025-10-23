@@ -17,6 +17,7 @@ Meza is a comprehensive MediaWiki deployment automation platform. Use these comm
 
 ### Maintenance & Backup
 - [`meza backup`](backup.md) - Create environment backups
+- [`meza maint`](maint.md) - Run maintenance operations (jobs, rebuild, cleanup, encryption)
 - [`meza debug`](debug.md) - Debug Ansible variables and configuration
 
 ### Deployment Management
@@ -83,6 +84,15 @@ meza deploy-unlock production    # Remove deployment lock after issues
 meza update                      # List available versions
 meza update 43.39.5             # Update to specific version
 meza deploy production           # Deploy version changes
+```
+
+### Maintenance Operations
+```bash
+meza maint run-jobs production   # Run MediaWiki job queue
+meza maint rebuild production    # Rebuild search index and SMW
+meza maint cleanuploadstash production  # Clean upload stash
+meza maint encrypt-string production "secret"  # Encrypt sensitive data
+meza maint decrypt-string production "encrypted"  # Decrypt data
 ```
 
 ## Getting Help

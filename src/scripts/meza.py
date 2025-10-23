@@ -28,9 +28,17 @@ import yaml
 try:
     from rich.console import Console
     from rich.markdown import Markdown
+    from rich.table import Table
+    from rich.text import Text
     RICH_AVAILABLE = True
 except ImportError:
     RICH_AVAILABLE = False
+
+try:
+    import webbrowser
+    WEBBROWSER_AVAILABLE = True
+except ImportError:
+    WEBBROWSER_AVAILABLE = False
 
 # Get installation directory, typically /opt, but configurable elsewhere
 install_dir = os.path.dirname(os.path.dirname(
@@ -593,7 +601,7 @@ def get_deploy_log_path(env):
 
     """
     log_dir = os.path.join(defaults['m_logs'], 'deploy-output')
-    
+
     if not os.path.isdir(log_dir):
         os.makedirs(log_dir)
 
@@ -605,7 +613,7 @@ def get_deploy_log_path(env):
     except FileNotFoundError:
         # No active deployment, find the most recent log file for this environment
         log_path = find_most_recent_log_file(env, log_dir)
-    
+
     return log_path
 
 
@@ -622,17 +630,17 @@ def find_most_recent_log_file(env, log_dir):
 
     """
     import glob
-    
+
     # Look for log files matching the pattern: env-*.log
     pattern = os.path.join(log_dir, f"{env}-*.log")
     log_files = glob.glob(pattern)
-    
+
     if not log_files:
         return None
-    
+
     # Sort by modification time, most recent first
     log_files.sort(key=os.path.getmtime, reverse=True)
-    
+
     return log_files[0]
 
 
@@ -649,7 +657,7 @@ def meza_command_deploy_log(argv):
     """
     env = argv[0]
     log_path = get_deploy_log_path(env)
-    
+
     if log_path is None:
         print(f"No deployment log files found for environment '{env}'")
         sys.exit(1)
@@ -669,7 +677,7 @@ def meza_command_deploy_tail(argv):
     """
     env = argv[0]
     log_path = get_deploy_log_path(env)
-    
+
     if log_path is None:
         print(f"No deployment log files found for environment '{env}'")
         print("Try running a deployment first with:")
@@ -804,11 +812,11 @@ def meza_command_update(argv):
     if not argv:
         # print fetch.strip()
         print("The following versions are available:")
-        
+
         # Filter tags to only show those starting with "43" and sort numerically
         all_tags = [tag.strip() for tag in tags_text.strip().split("\n") if tag.strip()]
         version_43_tags = [tag for tag in all_tags if tag.startswith("43.")]
-        
+
         # Sort numerically by parsing version components
         def version_sort_key(version):
             try:
@@ -818,12 +826,12 @@ def meza_command_update(argv):
             except (ValueError, IndexError):
                 # If parsing fails, put at end
                 return [999, 999, 999]
-        
+
         version_43_tags.sort(key=version_sort_key)
-        
+
         for tag in version_43_tags:
             print(tag)
-        
+
         print("")
         closest_tag = subprocess.check_output(
             ["git", "describe", "--tags", "--always"]).decode()
@@ -1112,7 +1120,7 @@ def meza_command_setup_docker(argv):  # pylint: disable=unused-argument
 def meza_command_migrate_wikis(argv):
     """
     Migrate existing directory-based wikis to declarative configuration.
-    
+
     Scans existing wiki directories and extracts wiki names from base.php files
     to populate the wikis: section in public.yml.
 
@@ -1145,7 +1153,7 @@ def meza_command_migrate_wikis(argv):
 def meza_command_debug(argv):
     """
     Debug Ansible variables and facts for an environment.
-    
+
     General-purpose debug command that can output any Ansible variable or fact.
     Default variable is 'list_of_wikis' if not specified.
 
@@ -1179,7 +1187,7 @@ def meza_command_debug(argv):
 def meza_command_list_wikis(argv):
     """
     List all wikis configured for an environment.
-    
+
     Uses the general-purpose debug.yml playbook to display list_of_wikis.
     Default environment is 'monolith' if not specified.
 
@@ -1447,8 +1455,8 @@ def meza_command_maint_run_jobs(argv):
     """
     Run maintenance jobs (mediawiki/maintenance/runJobs.php) for available wikis.
 
-    This function executes the meza `runAllJobs.php` script. 
-    
+    This function executes the meza `runAllJobs.php` script.
+
     By default, it will run jobs for ALL wikis. The wiki id used is just to get
 	meza to run. If a specific wiki is provided as a command-line argument,
     the function runs maintenance jobs only for that wiki.
@@ -1456,7 +1464,7 @@ def meza_command_maint_run_jobs(argv):
     Usage:
     Run jobs for all wikis:
 	sudo meza maint run_jobs
-    
+
     Run jobs for a specific wiki (e.g., 'demo'):
     sudo meza maint run_jobs -- demo
 
@@ -1997,21 +2005,49 @@ def meza_chown(path, username, groupname):
     os.chown(path, uid, gid)
 
 
+def _get_github_help_url(filename):
+    """
+    Generate GitHub URL for help documentation with automatic branch detection.
+
+    Args:
+        filename (str): The name of the help file (e.g., 'base.md')
+
+    Returns:
+        str: GitHub URL for the help file
+    """
+    # Try to detect current git branch
+    try:
+        branch = subprocess.check_output(
+            ["git", f"--git-dir={install_dir}/meza/.git", "rev-parse", "--abbrev-ref", "HEAD"],
+            stderr=subprocess.DEVNULL
+        ).decode().strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        # Fallback to dev branch if git command fails
+        branch = "dev"
+
+    # Use dev branch for most common case, but allow for other branches
+    if branch in ["main", "master", "dev"]:
+        return f"https://github.com/freephile/meza/blob/{branch}/manual/meza-cmd/{filename}"
+    else:
+        # For feature branches or unknown branches, default to dev
+        return f"https://github.com/freephile/meza/blob/dev/manual/meza-cmd/{filename}"
+
+
 def display_docs(name):
     """
     Display the contents of a help file with the given name.
     Prefers Markdown (.md) files over text (.txt) files.
-    Renders markdown with rich formatting if available, otherwise falls back to plain text.
+    Provides multiple rendering strategies for optimal display.
 
     Args:
         name (str): The name of the help file to display.
 
     Returns:
         None
-        
+
     Notes:
         - Prioritizes .md files over .txt files for enhanced formatting
-        - Uses rich library for markdown rendering when available
+        - Uses multiple rendering strategies: rich (with fallbacks), plain text, and browser links
         - Provides fallback to legacy .txt files if .md files don't exist
         - Shows helpful update instructions if no help file is found
         - Guides users to update their project sources for latest documentation
@@ -2020,17 +2056,32 @@ def display_docs(name):
     # Use install_dir to work both in development and production
     md_file = f'{install_dir}/meza/manual/meza-cmd/{name}.md'
     txt_file = f'{install_dir}/meza/manual/meza-cmd/{name}.txt'
+
     if os.path.exists(md_file):
         with open(md_file, encoding='utf-8') as f:
             content = f.read()
-        # Use rich markdown rendering if available
+
+        # Strategy 1: Try rich markdown rendering
         if RICH_AVAILABLE:
-            console = Console()
-            markdown = Markdown(content)
-            console.print(markdown)
-        else:
-            # Fallback to plain text display
-            print(content)
+            try:
+                console = Console()
+                markdown = Markdown(content)
+                console.print(markdown)
+
+                # Check if content has tables and rich version might have issues
+                if '|' in content and 'Command' in content:
+                    console.print("\n[dim]Note: For best table formatting, view the full documentation at:[/dim]")
+                    github_url = _get_github_help_url(f"{name}.md")
+                    console.print(f"[link]{github_url}[/link]")
+
+                return
+            except Exception:
+                # Rich failed, fall through to other strategies
+                pass
+
+        # Strategy 2: Enhanced plain text with basic table formatting
+        _display_enhanced_plain_text(content, md_file)
+
     elif os.path.exists(txt_file):
         with open(txt_file, encoding='utf-8') as f:
             print(f.read())
@@ -2047,6 +2098,160 @@ def display_docs(name):
         print("For a complete list of available commands, try:")
         print("  meza base --help")
         return
+
+
+def _display_enhanced_plain_text(content, file_path):
+    """
+    Display markdown content with enhanced plain text formatting.
+
+    Args:
+        content (str): The markdown content to display
+        file_path (str): Path to the original file for reference
+    """
+    lines = content.split('\n')
+    in_code_block = False
+    in_table = False
+
+    print()  # Start with a blank line
+
+    for line in lines:
+        # Handle code blocks
+        if line.strip().startswith('```'):
+            in_code_block = not in_code_block
+            if in_code_block:
+                print("┌" + "─" * 78 + "┐")
+                continue
+            else:
+                print("└" + "─" * 78 + "┘")
+                continue
+
+        if in_code_block:
+            print(f"│ {line:<76} │")
+            continue
+
+        # Handle headers
+        if line.startswith('# '):
+            print("=" * 80)
+            print(f" {line[2:].strip().upper()}")
+            print("=" * 80)
+            continue
+        elif line.startswith('## '):
+            print("\n" + "─" * 60)
+            print(f" {line[3:].strip()}")
+            print("─" * 60)
+            continue
+        elif line.startswith('### '):
+            print(f"\n▶ {line[4:].strip()}")
+            print("─" * 40)
+            continue
+
+        # Handle tables
+        if '|' in line and ('Command' in line or 'Description' in line or line.count('|') >= 2):
+            if not in_table:
+                in_table = True
+                print()
+
+            # Simple table formatting
+            if '━' in line or '─' in line:
+                print("─" * 80)
+            else:
+                # Clean up table cells and format
+                cells = [cell.strip() for cell in line.split('|') if cell.strip()]
+                if cells:
+                    formatted = "  ".join(f"{cell:<20}" for cell in cells[:4])  # Limit to 4 columns
+                    print(formatted)
+            continue
+        else:
+            if in_table:
+                in_table = False
+                print()
+
+        # Handle bullet points
+        if line.strip().startswith('• ') or line.strip().startswith('- '):
+            print(f"  • {line.strip()[2:]}")
+            continue
+        elif line.strip().startswith('* '):
+            print(f"  • {line.strip()[2:]}")
+            continue
+
+        # Handle numbered lists
+        import re
+        if re.match(r'^\d+\.\s', line.strip()):
+            print(f"  {line.strip()}")
+            continue
+
+        # Regular text
+        if line.strip():
+            print(line)
+        else:
+            print()
+
+    # Add footer with link to full documentation
+    print("\n" + "─" * 60)
+    print("📖 For full formatting and latest updates, view the complete documentation:")
+
+    # Extract just the filename from the full path for GitHub URL
+    filename = os.path.basename(file_path)
+    github_url = _get_github_help_url(filename)
+    print(f"   {github_url}")
+    print("   Or open in your browser for best markdown rendering.")
+    print("─" * 60)
+
+
+def meza_command_help(argv):
+    """
+    Enhanced help command with multiple viewing options.
+
+    Usage:
+        meza help <command>           # Display help in terminal
+        meza help <command> --browser # Open help in default browser
+        meza help <command> --editor  # Open help in default editor
+        meza help <command> --path    # Show path to help file
+
+    Args:
+        argv (list): Command line arguments
+    """
+    if len(argv) < 1:
+        display_docs('base')
+        return
+
+    command = argv[0]
+    options = argv[1:] if len(argv) > 1 else []
+
+    # Find the help file
+    md_file = f'{install_dir}/meza/manual/meza-cmd/{command}.md'
+    txt_file = f'{install_dir}/meza/manual/meza-cmd/{command}.txt'
+
+    help_file = md_file if os.path.exists(md_file) else (txt_file if os.path.exists(txt_file) else None)
+
+    if not help_file:
+        print(f"Help file not found for command: {command}")
+        return
+
+    # Handle different viewing options
+    if '--browser' in options:
+        # Generate GitHub URL for better markdown rendering
+        filename = os.path.basename(help_file)
+        github_url = _get_github_help_url(filename)
+
+        if WEBBROWSER_AVAILABLE:
+            print(f"Opening {command} help in browser (GitHub)...")
+            webbrowser.open(github_url)
+        else:
+            print("Browser opening not available. GitHub URL:")
+            print(github_url)
+    elif '--editor' in options:
+        editor = os.environ.get('EDITOR', 'vi')
+        print(f"Opening {command} help in {editor}...")
+        os.system(f'{editor} "{help_file}"')
+    elif '--path' in options:
+        filename = os.path.basename(help_file)
+        github_url = _get_github_help_url(filename)
+        print(f"Local file: {os.path.abspath(help_file)}")
+        print(f"GitHub URL: {github_url}")
+    else:
+        # Default: display in terminal
+        display_docs(command)
 
 
 def prompt(varname, default=False):
@@ -2073,10 +2278,8 @@ def prompt(varname, default=False):
 
     value = input(input_msg)
     if default:
-        # If there's a default, either use user entry or default
         value = value or default
     else:
-        # If no default, keep asking until user supplies a value
         while not value:
             value = input(input_msg)
 
