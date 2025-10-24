@@ -145,6 +145,49 @@ Run various maintenance operations when:
 - Monitor system resources during job processing
 - Consider breaking up large job runs across multiple sessions
 
+## Advanced: Custom Maintenance Scripts
+
+For advanced users, you can run any MediaWiki maintenance script using the general-purpose playbook:
+
+### Direct Ansible Playbook Usage
+
+```bash
+# Run any MediaWiki maintenance script on all wikis
+ansible-playbook /opt/meza/src/playbooks/run-maintenance.yml \
+  -e "maintenance_script=scriptname" \
+  -i /opt/conf-meza/secret/<env>/hosts
+
+# Run script with arguments on all wikis
+ansible-playbook /opt/meza/src/playbooks/run-maintenance.yml \
+  -e "maintenance_script=runJobs" \
+  -e "maintenance_args=--maxjobs=10" \
+  -i /opt/conf-meza/secret/<env>/hosts
+
+# Run script on specific wiki only
+ansible-playbook /opt/meza/src/playbooks/run-maintenance.yml \
+  -e "maintenance_script=update" \
+  -e "target_wiki=demo" \
+  -i /opt/conf-meza/secret/<env>/hosts
+```
+
+### Common Maintenance Scripts
+
+| Script | Purpose | Example Arguments |
+|--------|---------|-------------------|
+| `runJobs` | Process job queue | `--maxjobs=50 --type=refreshLinks` |
+| `update` | Update database schema | `--quick` |
+| `refreshLinks` | Refresh page links | `--verbose` |
+| `rebuildall` | Rebuild all indexes | ` ` |
+| `cleanupUploadStash` | Clean upload stash | `--delete-after=7` |
+| `importDump` | Import XML dump | `--username-prefix=import` |
+| `dumpBackup` | Create XML backup | `--full --uploads` |
+
+### Script Parameters
+
+- **`maintenance_script`** (required): Name of the maintenance script (with or without .php extension)
+- **`maintenance_args`** (optional): Command-line arguments to pass to the script
+- **`target_wiki`** (optional): Run on specific wiki only (defaults to all wikis)
+
 ## See Also
 
 - [`meza deploy`](deploy.md) - Deploy environment updates

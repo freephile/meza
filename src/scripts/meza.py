@@ -1559,7 +1559,9 @@ def meza_command_maint_cleanuploadstash(argv):
     # strip environment off of it
     argv = argv[1:]
 
-    shell_cmd = playbook_cmd('cleanup-upload-stash', env, more_extra_vars)
+    more_extra_vars = {'maintenance_script': 'cleanupUploadStash'}
+
+    shell_cmd = playbook_cmd('run-maintenance', env, more_extra_vars)
     if len(argv) > 0:
         shell_cmd = shell_cmd + argv
 

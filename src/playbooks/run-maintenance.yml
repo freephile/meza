@@ -1,4 +1,29 @@
 ---
+#
+# General-purpose MediaWiki maintenance script runner
+#
+# This playbook can run any MediaWiki maintenance script across all wikis or specific wikis.
+#
+# Required variables:
+#   maintenance_script: Name of the maintenance script (with or without .php extension)
+#
+# Optional variables:
+#   maintenance_args: Arguments to pass to the maintenance script
+#   target_wiki: Run script on specific wiki only (defaults to all wikis)
+#
+# Examples:
+#   # Run cleanupUploadStash.php on all wikis
+#   ansible-playbook run-maintenance.yml -e "maintenance_script=cleanupUploadStash"
+#
+#   # Run runJobs.php with arguments on all wikis
+#   ansible-playbook run-maintenance.yml -e "maintenance_script=runJobs" -e "maintenance_args=--maxjobs=10"
+#
+#   # Run update.php on specific wiki
+#   ansible-playbook run-maintenance.yml -e "maintenance_script=update" -e "target_wiki=demo"
+#
+#   # Run refreshLinks.php with verbose output on specific wiki
+#   ansible-playbook run-maintenance.yml -e "maintenance_script=refreshLinks" -e "maintenance_args=--verbose" -e "target_wiki=mywiki"
+#
 
 - name: Run MediaWiki maintenance scripts
   hosts: app_servers
