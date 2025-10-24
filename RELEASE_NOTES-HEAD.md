@@ -3,7 +3,39 @@
 ### Commits
 
 HEAD -> dev
-## Meza 43.54.3 origin/dev
+## Meza 43.57.1 origin/dev
+* [d91c7a73](https://github.com/freephile/meza/commit/d91c7a73) (2025-10-24) Greg Rundlett: Re-enable WatchAnalytics Fixes Issue [#214](https://github.com/freephile/meza/issues/214)
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [4541968c](https://github.com/freephile/meza/commit/4541968c) (2025-10-24) Greg Rundlett: minor tweaks to Quick Start section (curl not ready yet)
+whitespace changes in meza.py
+  - Modified: `manual/meza-cmd/index.md`
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.56.1
+* [53d45c48](https://github.com/freephile/meza/commit/53d45c48) (2025-10-23) Greg Rundlett: Add Maintence script runner Remove the 'cleanup-upload-stash' playbook and replace it with a general purpose MediaWiki Maintenance script runner: `run-maintenance.yml`
+Update maint command doc
+Backward compatibility is retained for invoking cleanupUploadStash
+  - Modified: `manual/meza-cmd/maint.md`
+  - Modified: `src/playbooks/cleanup-upload-stash.yml`
+  - Added: `src/playbooks/run-maintenance.yml`
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.55.1
+* [a590d270](https://github.com/freephile/meza/commit/a590d270) (2025-10-23) Greg Rundlett: Add LinkTarget extension
+  - Modified: `config/MezaCoreExtensions.yml`
+
+## Meza 43.54.4
+* [6eb271e6](https://github.com/freephile/meza/commit/6eb271e6) (2025-10-23) Greg Rundlett: Update Changelog and RELEASE NOTES
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
+* [0fb72fa6](https://github.com/freephile/meza/commit/0fb72fa6) (2025-10-23) Greg Rundlett: Update Changelog and RELEASE NOTES
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+  - Modified: `manual/meza-cmd/index.md`
+
+## Meza 43.54.3
 * [ce3ed9b9](https://github.com/freephile/meza/commit/ce3ed9b9) (2025-10-23) Greg Rundlett: Correct the quick start section Add curl command for running getmeza.sh
 `curl -L https://raw.githubusercontent.com/nasa/meza/master/src/scripts/getmeza.sh | bash`
 Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
