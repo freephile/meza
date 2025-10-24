@@ -1,13 +1,124 @@
-## Meza Release Notes 43.39.2 → HEAD
+## Meza Release Notes 43.39.3 → HEAD
 
 ### Commits
 
-HEAD -> dev
+HEAD -> dev 
+## Meza 43.54.3 origin/dev
+* [ce3ed9b9](https://github.com/freephile/meza/commit/ce3ed9b9) (2025-10-23) Greg Rundlett: Correct the quick start section Add curl command for running getmeza.sh
+`curl -L https://raw.githubusercontent.com/nasa/meza/master/src/scripts/getmeza.sh | bash`
+Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
+  - Modified: `manual/meza-cmd/index.md`
+
+## Meza 43.54.2
+* [c4043ba1](https://github.com/freephile/meza/commit/c4043ba1) (2025-10-23) Greg Rundlett: Add in the 'rich' requirement for better console help 
+  - Modified: `requirements-dev.txt`
+
+* [0faa71cf](https://github.com/freephile/meza/commit/0faa71cf) (2025-10-23) Greg Rundlett: Remove undefined 'destroy' command The meza destroy command was a placeholder for undefined functionality.
+Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.54.1
+* [04b98d47](https://github.com/freephile/meza/commit/04b98d47) (2025-10-23) Greg Rundlett: Fix help command alignment Intuitive rename of base.md to help.md to follow the pattern where
+meza commands have a .md file by the same name.
+meza                   # Shows help.md (general help)
+meza --help            # Shows help.md (general help)
+meza help              # Shows help.md (general help)
+meza help deploy       # Shows deploy.md (deploy command help)
+meza help --help       # Shows help.md (help for help command itself)
+meza deploy --help     # Shows deploy.md (deploy command help)
+Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
+  - Modified: `manual/meza-cmd/MIGRATION.md`
+R100	manual/meza-cmd/base.md	manual/meza-cmd/help.md
+  - Modified: `src/scripts/meza.py`
+
+* [19193c2a](https://github.com/freephile/meza/commit/19193c2a) (2025-10-23) Greg Rundlett: Add missing newline at end of file 
+  - Modified: `manual/meza-cmd/deploy-notify.md`
+
+## Meza 43.53.3
+* [8c1e6c67](https://github.com/freephile/meza/commit/8c1e6c67) (2025-10-23) Greg Rundlett: Add doc for deploy-notify playbook and command - Adds manual/meza-cmd/deploy-notify.md
+This fixes Issue [#211](https://github.com/freephile/meza/issues/211)
+  - Added: `manual/meza-cmd/deploy-notify.md`
+
+## Meza 43.53.2
+* [016aacb6](https://github.com/freephile/meza/commit/016aacb6) (2025-10-23) Greg Rundlett: Add autodeployer doc - improve doc for 'debug'
+- correct doc for 'config'
+  - there's no such command, but we explain how config is managed in meza
+- move cleanup-backups script documentation to scripts directory
+Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
+  - Added: `manual/meza-cmd/autodeploy.md`
+  - Modified: `manual/meza-cmd/config.md`
+  - Modified: `manual/meza-cmd/debug.md`
+  - Modified: `src/roles/logrotate/README.md`
+R099	manual/meza-cmd/cleanup-backups.md	src/scripts/cleanup-backups.md
+
+## Meza 43.53.1
+* [64c1e8eb](https://github.com/freephile/meza/commit/64c1e8eb) (2025-10-23) Greg Rundlett: Document the maintenance command 
+  - Modified: `manual/meza-cmd/index.md`
+  - Modified: `manual/meza-cmd/maint.md`
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.52.2
+* [43b4eb8c](https://github.com/freephile/meza/commit/43b4eb8c) (2025-10-23) Greg Rundlett: Avoid setting shared DB if there is no prime wiki, then there can be no
+sharing configured
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+## Meza 43.52.1
+* [2ab3548e](https://github.com/freephile/meza/commit/2ab3548e) (2025-10-22) Greg Rundlett: Add Backup and Retention Policy Framework meza.py
+- add find_most_recent_log_file
+- enhance get_deploy_log_path(env)
+- enhance deploy_log
+- make deploy-tail more able to find log_path
+site.yml
+- add task to 'Configure log rotation on all servers'
+- with tags logrotate, logs
+logrotate role
+- see README.md for complete overview
+- new - implements a complete log and backup retention policy
+cleanup-backups.sh new script
+cleanup-backups.md documentation
+  - Added: `manual/meza-cmd/cleanup-backups.md`
+  - Modified: `src/playbooks/site.yml`
+  - Added: `src/roles/logrotate/README.md`
+  - Added: `src/roles/logrotate/defaults/main.yml`
+  - Added: `src/roles/logrotate/handlers/main.yml`
+  - Added: `src/roles/logrotate/meta/main.yml`
+  - Added: `src/roles/logrotate/tasks/main.yml`
+  - Added: `src/roles/logrotate/templates/cleanup-backups.sh.j2`
+  - Added: `src/roles/logrotate/templates/meza-logs.j2`
+  - Added: `src/scripts/cleanup-backups.sh`
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.51.1
+* [02d78fc8](https://github.com/freephile/meza/commit/02d78fc8) (2025-10-22) Greg Rundlett: Fix first-time deploy error due to Apache missing role: init-controller-config
+- remove ownership details from 'wikis' directory (set it later)
+role: apache-php
+- add apache-php task to "Set proper ownership" on wikis
+Fixes Issue [#212](https://github.com/freephile/meza/issues/212)
+  - Modified: `src/roles/apache-php/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+
+## Meza 43.50.1
+* [4a96eef8](https://github.com/freephile/meza/commit/4a96eef8) (2025-10-21) Greg Rundlett: Enhance help display using rich markdown rendering 
+  - Modified: `src/scripts/meza.py`
+
+## Meza 43.49.4
+* [dc865669](https://github.com/freephile/meza/commit/dc865669) (2025-10-21) Greg Rundlett: Update CHANGELOG 
+  - Modified: `CHANGELOG`
+
+* [9a2be9a6](https://github.com/freephile/meza/commit/9a2be9a6) (2025-10-20) Greg Rundlett: Remove trailing whitespace in markdown 
+  - Modified: `RELEASE-NOTES.md`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
+## Meza 43.49.3
+* [2379a054](https://github.com/freephile/meza/commit/2379a054) (2025-10-20) Greg Rundlett: update RELEASE_NOTES to v43.49.2 
+  - Modified: `RELEASE-NOTES.md`
+  - Added: `RELEASE_NOTES-HEAD.md`
+
 ## Meza 43.49.2
-* [29d0b9f2](https://github.com/freephile/meza/commit/29d0b9f2) (2025-10-20) Greg Rundlett: truncate RELEASE_NOTES
+* [29d0b9f2](https://github.com/freephile/meza/commit/29d0b9f2) (2025-10-20) Greg Rundlett: truncate RELEASE_NOTES 
   - Modified: `RELEASE-NOTES.md`
 
-## Meza 43.49.1 origin/dev
+## Meza 43.49.1
 * [cb737a5c](https://github.com/freephile/meza/commit/cb737a5c) (2025-10-20) Greg Rundlett: consolidate RELEASE_NOTES into one Fixes Issue [#3](https://github.com/freephile/meza/issues/3)
   - Modified: `RELEASE-NOTES.md`
   - Deleted: `RELEASE_NOTES-43.25.11.md`
