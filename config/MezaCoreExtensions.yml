@@ -836,13 +836,13 @@ list:
           "_merge_strategy" => "array_plus"
       ];
 
-#  # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the
-#  # wiki as a whole is, as well as to invite users to watch and review neglected pages
-#  - name: WatchAnalytics
-#    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WatchAnalytics
-#    version: "master"
-#    config: |
-#      $egPendingReviewsEmphasizeDays = 10;
+  # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the
+  # wiki as a whole is, as well as to invite users to watch and review neglected pages
+  - name: WatchAnalytics
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WatchAnalytics
+    version: "master"
+    config: |
+      $egPendingReviewsEmphasizeDays = 10;
 
   # Whitelist Pages - Allows site administrators to specify which pages are publicaly viewable
   - name: WhitelistPages
