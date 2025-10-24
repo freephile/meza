@@ -23,7 +23,7 @@ def display_docs(name):
     """
     Display the contents of a help file with the given name.
     Prefers Markdown (.md) files over text (.txt) files.
-    
+
     Notes:
         - Prioritizes .md files over .txt files for enhanced formatting
         - Provides fallback to legacy .txt files if .md files don't exist
@@ -31,11 +31,11 @@ def display_docs(name):
         - Guides users to update their project sources for latest documentation
     """
     import os
-    
+
     # Try .md file first, fallback to .txt
     md_file = f'/opt/meza/manual/meza-cmd/{name}.md'
     txt_file = f'/opt/meza/manual/meza-cmd/{name}.txt'
-    
+
     if os.path.exists(md_file):
         with open(md_file, encoding='utf-8') as f:
             print(f.read())
@@ -49,7 +49,7 @@ def display_docs(name):
         print("Please update your project sources to get the latest help documentation:")
         print("")
         print("  git pull origin main")
-        print("  # or")  
+        print("  # or")
         print("  git pull origin dev")
         print("")
         print("For a complete list of available commands, try:")
@@ -139,7 +139,7 @@ All help commands now display rich Markdown formatting:
 # All commands show enhanced Markdown help
 meza create --help     # Wiki creation with detailed examples
 meza delete --help     # Deletion with safety warnings and emojis
-meza deploy --help     # Deployment options and workflows  
+meza deploy --help     # Deployment options and workflows
 meza backup --help     # Backup operations with visual indicators
 meza setup --help      # Environment setup instructions
 meza deploy --help     # Deployment directives and requirements
@@ -157,8 +157,8 @@ meza migrate-wikis --help  # Wiki migration workflows
 
 ## Migration Results
 
-**Before migration**: 16 `.txt` files, 0 `.md` files  
-**After migration**: 16 `.txt` files, 16 `.md` files  
+**Before migration**: 16 `.txt` files, 0 `.md` files
+**After migration**: 16 `.txt` files, 16 `.md` files
 **After cleanup**: 0 `.txt` files, 16 `.md` files (pending deletion)
 
 ### Files Ready for Deletion
