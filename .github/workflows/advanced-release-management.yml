@@ -1,0 +1,292 @@
+name: Advanced Release Management
+
+"on":
+  push:
+    branches:
+      - main
+      - dev
+    tags:
+      - 'v*'
+      - '[0-9]+.*'
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force update even if no changes detected'
+        required: false
+        default: false
+        type: boolean
+      version_tag:
+        description: 'Specific version tag to generate release notes for'
+        required: false
+        type: string
+
+jobs:
+  release-management:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed for proper release notes
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+
+      - name: Determine version information
+        id: version_info
+        run: |
+          # Check if this is a tag push
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG_NAME=${GITHUB_REF#refs/tags/}
+            echo "current_tag=$TAG_NAME" >> $GITHUB_OUTPUT
+            echo "is_tag_push=true" >> $GITHUB_OUTPUT
+          elif [[ -n "${{ github.event.inputs.version_tag }}" ]]; then
+            TAG_NAME="${{ github.event.inputs.version_tag }}"
+            echo "current_tag=$TAG_NAME" >> $GITHUB_OUTPUT
+            echo "is_tag_push=false" >> $GITHUB_OUTPUT
+          else
+            echo "is_tag_push=false" >> $GITHUB_OUTPUT
+            echo "current_tag=" >> $GITHUB_OUTPUT
+          fi
+
+          # Find previous tag for range generation
+          PREV_TAG=$(git describe --tags --abbrev=0 --exclude="$TAG_NAME" 2>/dev/null || echo "")
+          echo "previous_tag=$PREV_TAG" >> $GITHUB_OUTPUT
+
+          # Determine if we should use HEAD for ongoing development
+          if [[ -z "$TAG_NAME" ]]; then
+            echo "end_ref=HEAD" >> $GITHUB_OUTPUT
+          else
+            echo "end_ref=$TAG_NAME" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ -n "$PREV_TAG" ]]; then
+            echo "start_ref=$PREV_TAG" >> $GITHUB_OUTPUT
+          else
+            # Use first commit if no previous tag
+            FIRST_COMMIT=$(git rev-list --max-parents=0 HEAD)
+            echo "start_ref=$FIRST_COMMIT" >> $GITHUB_OUTPUT
+          fi
+
+          echo "Version info determined:"
+          echo "  Current tag: $TAG_NAME"
+          echo "  Previous tag: $PREV_TAG"
+          echo "  Start ref: $([[ -n "$PREV_TAG" ]] && echo "$PREV_TAG" || git rev-list --max-parents=0 HEAD)"
+          echo "  End ref: $([[ -z "$TAG_NAME" ]] && echo "HEAD" || echo "$TAG_NAME")"
+
+      - name: Check for changes since last update
+        id: check_changes
+        run: |
+          FORCE_UPDATE="${{ github.event.inputs.force_update }}"
+
+          if [[ "$FORCE_UPDATE" == "true" ]]; then
+            echo "Force update requested"
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "reason=force_requested" >> $GITHUB_OUTPUT
+          elif [[ "${{ steps.version_info.outputs.is_tag_push }}" == "true" ]]; then
+            echo "Tag push detected, updating release notes"
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "reason=tag_push" >> $GITHUB_OUTPUT
+          else
+            # Check CHANGELOG for new commits
+            LAST_COMMIT=$(grep -P -om 1 'commit ([0-9a-f]{8})' CHANGELOG | head -1 | cut -d' ' -f 2 2>/dev/null || echo "")
+
+            if [[ -z "$LAST_COMMIT" ]]; then
+              echo "No previous commit found in CHANGELOG"
+              echo "needs_update=true" >> $GITHUB_OUTPUT
+              echo "reason=no_previous_changelog" >> $GITHUB_OUTPUT
+            else
+              NEW_COMMITS=$(git rev-list --count ${LAST_COMMIT}..HEAD 2>/dev/null || echo "1")
+              if [[ "$NEW_COMMITS" -gt "0" ]]; then
+                echo "Found $NEW_COMMITS new commits since last changelog update"
+                echo "needs_update=true" >> $GITHUB_OUTPUT
+                echo "reason=new_commits_found" >> $GITHUB_OUTPUT
+              else
+                echo "No new commits since last changelog update"
+                echo "needs_update=false" >> $GITHUB_OUTPUT
+                echo "reason=no_new_commits" >> $GITHUB_OUTPUT
+              fi
+            fi
+          fi
+
+      - name: Update CHANGELOG
+        if: steps.check_changes.outputs.needs_update == 'true'
+        run: |
+          echo "Updating CHANGELOG..."
+          chmod +x src/scripts/updateCHANGELOG.sh
+          ./src/scripts/updateCHANGELOG.sh
+          echo "✅ CHANGELOG updated successfully"
+
+      - name: Generate Release Notes
+        if: steps.check_changes.outputs.needs_update == 'true'
+        run: |
+          echo "Generating release notes..."
+          chmod +x src/scripts/generate-release-notes.sh
+
+          START_REF="${{ steps.version_info.outputs.start_ref }}"
+          END_REF="${{ steps.version_info.outputs.end_ref }}"
+
+          echo "Generating release notes from $START_REF to $END_REF"
+          ./src/scripts/generate-release-notes.sh "$START_REF" "$END_REF"
+
+          echo "✅ Release notes generated successfully"
+
+      - name: Validate generated files
+        if: steps.check_changes.outputs.needs_update == 'true'
+        run: |
+          echo "Validating generated files..."
+
+          # Check CHANGELOG exists and has content
+          if [[ ! -f "CHANGELOG" ]] || [[ ! -s "CHANGELOG" ]]; then
+            echo "❌ CHANGELOG is missing or empty"
+            exit 1
+          fi
+
+          # Check release notes exist
+          RELEASE_FILE="RELEASE_NOTES-${{ steps.version_info.outputs.end_ref }}.md"
+          if [[ ! -f "$RELEASE_FILE" ]]; then
+            echo "❌ Release notes file $RELEASE_FILE not found"
+            exit 1
+          fi
+
+          # Basic content validation
+          if ! grep -q "## Meza Release Notes" "$RELEASE_FILE"; then
+            echo "❌ Release notes file appears to be malformed"
+            exit 1
+          fi
+
+          echo "✅ All generated files validated successfully"
+
+          # Show file sizes for info
+          echo "File sizes:"
+          ls -lh CHANGELOG RELEASE_NOTES-*.md 2>/dev/null || true
+
+      - name: Check for file changes
+        id: check_files
+        run: |
+          # Check if any relevant files were modified
+          if git diff --quiet HEAD -- CHANGELOG RELEASE_NOTES-*.md; then
+            echo "No changes detected in generated files"
+            echo "files_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected in generated files"
+            echo "files_changed=true" >> $GITHUB_OUTPUT
+
+            # Show what changed for debugging
+            echo "Changed files:"
+            git diff --name-only HEAD -- CHANGELOG RELEASE_NOTES-*.md
+          fi
+
+      - name: Commit and push changes (direct push)
+        if: steps.check_files.outputs.files_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "Committing changes to main branch..."
+
+          # Add all CHANGELOG and release notes files
+          git add CHANGELOG RELEASE_NOTES-*.md
+
+          # Create descriptive commit message
+          COMMIT_MSG="🤖 Auto-update: CHANGELOG and Release Notes
+
+          Reason: ${{ steps.check_changes.outputs.reason }}
+          Generated from: ${{ steps.version_info.outputs.start_ref }} → ${{ steps.version_info.outputs.end_ref }}
+
+          Changes:
+          - Updated CHANGELOG with latest commit history
+          - Generated release notes with formatted output
+          - Automated by GitHub Actions on $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+          [skip ci]"
+
+          git commit -m "$COMMIT_MSG"
+          git push origin ${{ github.ref_name }}
+
+          echo "✅ Changes committed and pushed to main"
+
+      - name: Create Release (for tags)
+        if: steps.version_info.outputs.is_tag_push == 'true' && steps.check_files.outputs.files_changed == 'true'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version_info.outputs.current_tag }}
+          release_name: "Meza ${{ steps.version_info.outputs.current_tag }}"
+          body_path: "RELEASE_NOTES-${{ steps.version_info.outputs.current_tag }}.md"
+          draft: false
+          prerelease: false
+
+      - name: Create Pull Request (for other branches)
+        if: steps.check_files.outputs.files_changed == 'true' && !(github.event_name == 'push' && github.ref == 'refs/heads/main')
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            🤖 Auto-update: CHANGELOG and Release Notes
+
+            Reason: ${{ steps.check_changes.outputs.reason }}
+            Generated from: ${{ steps.version_info.outputs.start_ref }} → ${{ steps.version_info.outputs.end_ref }}
+
+            - Updated CHANGELOG with latest commit history
+            - Generated release notes with formatted output
+            - Automated by GitHub Actions
+          title: "🤖 Auto-update: CHANGELOG and Release Notes"
+          body: |
+            ## 📋 Automated Release Documentation Update
+
+            This PR was automatically created to update project documentation.
+
+            ### 🔄 Changes Made
+            - ✅ **CHANGELOG**: Updated with latest commit history
+            - ✅ **Release Notes**: Generated formatted release notes
+            - 🔧 **Range**: ${{ steps.version_info.outputs.start_ref }} → ${{ steps.version_info.outputs.end_ref }}
+            - 🤖 **Trigger**: ${{ steps.check_changes.outputs.reason }}
+
+            ### ✨ Features
+            - Commit links to GitHub
+            - Issue reference linking
+            - File change tracking
+            - Consistent formatting
+
+            ### 👀 Review Checklist
+            - [ ] Verify CHANGELOG entries are accurate
+            - [ ] Check release notes formatting
+            - [ ] Confirm commit links work correctly
+            - [ ] Validate issue references
+
+            ---
+            *This PR was automatically generated by the Release Management workflow.*
+          branch: auto-release-docs-${{ github.run_number }}
+          delete-branch: true
+
+      - name: Job Summary
+        if: always()
+        run: |
+          echo "## 📊 Release Management Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Trigger** | ${{ github.event_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch/Tag** | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Update Needed** | ${{ steps.check_changes.outputs.needs_update }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Reason** | ${{ steps.check_changes.outputs.reason }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Files Changed** | ${{ steps.check_files.outputs.files_changed }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Version Range** | ${{ steps.version_info.outputs.start_ref }} → ${{ steps.version_info.outputs.end_ref }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ steps.check_files.outputs.files_changed }}" == "true" ]]; then
+            echo "### 📝 Files Updated" >> $GITHUB_STEP_SUMMARY
+            echo "- CHANGELOG" >> $GITHUB_STEP_SUMMARY
+            echo "- RELEASE_NOTES-${{ steps.version_info.outputs.end_ref }}.md" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ℹ️ No Updates Required" >> $GITHUB_STEP_SUMMARY
+            echo "No changes were needed to the documentation files." >> $GITHUB_STEP_SUMMARY
+          fi

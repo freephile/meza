@@ -1,0 +1,184 @@
+name: Manual Release Notes Generator
+
+"on":
+  workflow_dispatch:
+    inputs:
+      start_ref:
+        description: 'Start reference (tag, branch, or commit)'
+        required: true
+        default: 'HEAD~10'
+      end_ref:
+        description: 'End reference (tag, branch, or commit)'
+        required: true
+        default: 'HEAD'
+      update_changelog:
+        description: 'Also update the CHANGELOG file'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  generate-release-notes:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action - Manual Release Notes"
+
+      - name: Validate input references
+        id: validate
+        run: |
+          START_REF="${{ github.event.inputs.start_ref }}"
+          END_REF="${{ github.event.inputs.end_ref }}"
+
+          echo "Validating references..."
+          echo "Start: $START_REF"
+          echo "End: $END_REF"
+
+          # Validate that both references exist
+          if ! git rev-parse --verify "$START_REF" >/dev/null 2>&1; then
+            echo "❌ Invalid start reference: $START_REF"
+            exit 1
+          fi
+
+          if ! git rev-parse --verify "$END_REF" >/dev/null 2>&1; then
+            echo "❌ Invalid end reference: $END_REF"
+            exit 1
+          fi
+
+          # Get full commit hashes
+          START_COMMIT=$(git rev-parse "$START_REF")
+          END_COMMIT=$(git rev-parse "$END_REF")
+
+          echo "start_commit=$START_COMMIT" >> $GITHUB_OUTPUT
+          echo "end_commit=$END_COMMIT" >> $GITHUB_OUTPUT
+
+          # Check if there are commits in the range
+          COMMIT_COUNT=$(git rev-list --count "$START_REF..$END_REF" 2>/dev/null || echo "0")
+          echo "commit_count=$COMMIT_COUNT" >> $GITHUB_OUTPUT
+
+          if [[ "$COMMIT_COUNT" -eq "0" ]]; then
+            echo "⚠️ No commits found in range $START_REF..$END_REF"
+            echo "This may be intentional, continuing anyway..."
+          else
+            echo "✅ Found $COMMIT_COUNT commits in range"
+          fi
+
+      - name: Update CHANGELOG
+        if: github.event.inputs.update_changelog == 'true'
+        run: |
+          echo "Updating CHANGELOG..."
+          chmod +x src/scripts/updateCHANGELOG.sh
+          ./src/scripts/updateCHANGELOG.sh
+          echo "✅ CHANGELOG updated"
+
+      - name: Generate Release Notes
+        run: |
+          echo "Generating release notes..."
+          chmod +x src/scripts/generate-release-notes.sh
+
+          START_REF="${{ github.event.inputs.start_ref }}"
+          END_REF="${{ github.event.inputs.end_ref }}"
+
+          echo "Range: $START_REF → $END_REF"
+          ./src/scripts/generate-release-notes.sh "$START_REF" "$END_REF"
+
+          # Show generated file info
+          RELEASE_FILE="RELEASE_NOTES-$END_REF.md"
+          if [[ -f "$RELEASE_FILE" ]]; then
+            echo "✅ Generated: $RELEASE_FILE"
+            echo "File size: $(wc -l < "$RELEASE_FILE") lines"
+
+            # Show preview of first few lines
+            echo ""
+            echo "Preview (first 10 lines):"
+            head -10 "$RELEASE_FILE"
+          else
+            echo "❌ Failed to generate release notes file"
+            exit 1
+          fi
+
+      - name: Display generated content
+        run: |
+          echo "## 📝 Generated Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Show CHANGELOG status if updated
+          if [[ "${{ github.event.inputs.update_changelog }}" == "true" ]]; then
+            CHANGELOG_LINES=$(wc -l < CHANGELOG)
+            echo "- **CHANGELOG**: Updated (${CHANGELOG_LINES} total lines)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Show release notes info
+          END_REF="${{ github.event.inputs.end_ref }}"
+          RELEASE_FILE="RELEASE_NOTES-$END_REF.md"
+          if [[ -f "$RELEASE_FILE" ]]; then
+            RELEASE_LINES=$(wc -l < "$RELEASE_FILE")
+            echo "- **Release Notes**: $RELEASE_FILE (${RELEASE_LINES} lines)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Commit Range Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commits**: ${{ steps.validate.outputs.commit_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Range**: ${{ github.event.inputs.start_ref }} → ${{ github.event.inputs.end_ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Start Commit**: \`${{ steps.validate.outputs.start_commit }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **End Commit**: \`${{ steps.validate.outputs.end_commit }}\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create artifact with generated files
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-documentation-${{ github.run_number }}
+          path: |
+            CHANGELOG
+            RELEASE_NOTES-*.md
+          retention-days: 30
+
+      - name: Check for changes and offer commit
+        id: check_changes
+        run: |
+          if git diff --quiet HEAD -- CHANGELOG RELEASE_NOTES-*.md; then
+            echo "No changes to commit"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected, ready to commit"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+
+            # Show what would be committed
+            echo "Files that would be committed:"
+            git diff --name-only HEAD -- CHANGELOG RELEASE_NOTES-*.md
+          fi
+
+      - name: Commit changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          # Add generated files
+          git add CHANGELOG RELEASE_NOTES-*.md
+
+          # Create commit message
+          COMMIT_MSG="📝 Manual release notes generation
+
+          Generated release documentation:
+          - Range: ${{ github.event.inputs.start_ref }} → ${{ github.event.inputs.end_ref }}
+          - Commits: ${{ steps.validate.outputs.commit_count }}
+          - CHANGELOG updated: ${{ github.event.inputs.update_changelog }}
+          - Manual trigger by: ${{ github.actor }}
+          - Workflow run: ${{ github.run_number }}
+
+          [skip ci]"
+
+          git commit -m "$COMMIT_MSG"
+          git push origin ${{ github.ref_name }}
+
+          echo "✅ Changes committed and pushed"
+          echo "🔗 View commit: https://github.com/${{ github.repository }}/commit/$(git rev-parse HEAD)"
