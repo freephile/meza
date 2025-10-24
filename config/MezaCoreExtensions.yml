@@ -416,6 +416,13 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/LabeledSectionTransclusion
     version: "{{ mediawiki_default_branch }}"
 
+  # LinkTarget - Provides a way to define custom link targets for internal links
+  - name: LinkTarget
+    repo: https://github.com/wikimedia/mediawiki-extensions-LinkTarget
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgLinkTargetDefault = '_self';
+
   # Linter - Helps identify wikitext that will not be supported by the visual editor
   - name: Linter
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Linter
