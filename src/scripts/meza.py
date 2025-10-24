@@ -806,7 +806,8 @@ def meza_command_update(argv):
         subprocess.check_output(["git", "fetch", meza_remote, "--tags"])
     except subprocess.CalledProcessError:
         # If tag fetch fails due to conflicts, try with --force
-        subprocess.check_output(["git", "fetch", meza_remote, "--tags", "--force"])
+        subprocess.check_output(
+            ["git", "fetch", meza_remote, "--tags", "--force"])
     tags_text = subprocess.check_output(["git", "tag", "-l"]).decode()
 
     if not argv:
@@ -814,7 +815,8 @@ def meza_command_update(argv):
         print("The following versions are available:")
 
         # Filter tags to only show those starting with "43" and sort numerically
-        all_tags = [tag.strip() for tag in tags_text.strip().split("\n") if tag.strip()]
+        all_tags = [tag.strip()
+                    for tag in tags_text.strip().split("\n") if tag.strip()]
         version_43_tags = [tag for tag in all_tags if tag.startswith("43.")]
 
         # Sort numerically by parsing version components
@@ -1408,11 +1410,18 @@ def meza_command_setbaseconfig(argv):
     meza_shell_exec_exit(rc)
 
 
-# FIXME #825: It would be great to have this function automatically map all
-#             scripts in MediaWiki's maintenance directory to all wikis. Then
-#             you could do:
-#   $ meza maint runJobs + argv            --> run jobs on all wikis
-#   $ meza maint createAndPromote + argv   --> create a user on all wikis
+# General-purpose maintenance script runner implemented.
+# The run-maintenance.yml playbook can now run any MediaWiki
+# maintenance script on all wikis or specific wikis. Examples:
+#   $ ansible-playbook run-maintenance.yml -e "maintenance_script=runJobs"
+#   $ ansible-playbook run-maintenance.yml -e "maintenance_script=createAndPromote" -e "maintenance_args=--bureaucrat"
+#
+# The meza maint command provides pre-configured shortcuts for common operations:
+#   $ meza maint cleanuploadstash <env>    --> run cleanupUploadStash.php on all wikis
+#   $ meza maint rebuild <env>             --> rebuild search index and SMW
+#   $ meza maint run-jobs                  --> run jobs on all wikis
+#
+# For custom scripts, use the playbook directly with maintenance_script parameter.
 def meza_command_maint(argv):
     """
     Executes the specified maintenance sub-command.
@@ -1448,12 +1457,12 @@ def meza_command_maint_run_jobs(argv):
     This function executes the meza `runAllJobs.php` script.
 
     By default, it will run jobs for ALL wikis. The wiki id used is just to get
-	meza to run. If a specific wiki is provided as a command-line argument,
+        meza to run. If a specific wiki is provided as a command-line argument,
     the function runs maintenance jobs only for that wiki.
 
     Usage:
     Run jobs for all wikis:
-	sudo meza maint run_jobs
+        sudo meza maint run_jobs
 
     Run jobs for a specific wiki (e.g., 'demo'):
     sudo meza maint run_jobs -- demo
@@ -2010,7 +2019,8 @@ def _get_github_help_url(filename):
     # Try to detect current git branch
     try:
         branch = subprocess.check_output(
-            ["git", f"--git-dir={install_dir}/meza/.git", "rev-parse", "--abbrev-ref", "HEAD"],
+            ["git", f"--git-dir={install_dir}/meza/.git",
+                "rev-parse", "--abbrev-ref", "HEAD"],
             stderr=subprocess.DEVNULL
         ).decode().strip()
     except (subprocess.CalledProcessError, FileNotFoundError):
@@ -2062,7 +2072,8 @@ def display_docs(name):
 
                 # Check if content has tables and rich version might have issues
                 if '|' in content and 'Command' in content:
-                    console.print("\n[dim]Note: For best table formatting, view the full documentation at:[/dim]")
+                    console.print(
+                        "\n[dim]Note: For best table formatting, view the full documentation at:[/dim]")
                     github_url = _get_github_help_url(f"{name}.md")
                     console.print(f"[link]{github_url}[/link]")
 
@@ -2148,9 +2159,11 @@ def _display_enhanced_plain_text(content, file_path):
                 print("─" * 80)
             else:
                 # Clean up table cells and format
-                cells = [cell.strip() for cell in line.split('|') if cell.strip()]
+                cells = [cell.strip()
+                         for cell in line.split('|') if cell.strip()]
                 if cells:
-                    formatted = "  ".join(f"{cell:<20}" for cell in cells[:4])  # Limit to 4 columns
+                    # Limit to 4 columns
+                    formatted = "  ".join(f"{cell:<20}" for cell in cells[:4])
                     print(formatted)
             continue
         else:
@@ -2214,7 +2227,8 @@ def meza_command_help(argv):
     md_file = f'{install_dir}/meza/manual/meza-cmd/{command}.md'
     txt_file = f'{install_dir}/meza/manual/meza-cmd/{command}.txt'
 
-    help_file = md_file if os.path.exists(md_file) else (txt_file if os.path.exists(txt_file) else None)
+    help_file = md_file if os.path.exists(md_file) else (
+        txt_file if os.path.exists(txt_file) else None)
 
     if not help_file:
         print(f"Help file not found for command: {command}")

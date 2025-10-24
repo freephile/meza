@@ -33,9 +33,10 @@ Meza is a comprehensive MediaWiki deployment automation platform. Use these comm
 1. **Install Meza:**
    ```bash
    # Download and install Meza
+   # This approach does not work yet.
    curl -L https://raw.githubusercontent.com/nasa/meza/master/src/scripts/getmeza.sh | bash
 
-   # Or if you have the repository locally:
+   # Run the installer from a locally cloned repository:
    sudo bash src/scripts/getmeza.sh
    ```
 
