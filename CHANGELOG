@@ -3,11 +3,11 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 23 13:26:44 2025 -0400
 
     Correct the quick start section
-    
+
     Add curl command for running getmeza.sh
-    
+
     `curl -L https://raw.githubusercontent.com/nasa/meza/master/src/scripts/getmeza.sh | bash`
-    
+
     Fixes Issue #211
 
 commit c4043ba19919faae14bbeaef2ad4dd6243229a9b
@@ -21,9 +21,9 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 23 12:21:47 2025 -0400
 
     Remove undefined 'destroy' command
-    
+
     The meza destroy command was a placeholder for undefined functionality.
-    
+
     Fixes Issue #211
 
 commit 04b98d473442c0eb94288ecd64e596e153c26848
@@ -31,17 +31,17 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 23 11:30:50 2025 -0400
 
     Fix help command alignment
-    
+
     Intuitive rename of base.md to help.md to follow the pattern where
     meza commands have a .md file by the same name.
-    
+
     meza                   # Shows help.md (general help)
     meza --help            # Shows help.md (general help)
     meza help              # Shows help.md (general help)
     meza help deploy       # Shows deploy.md (deploy command help)
     meza help --help       # Shows help.md (help for help command itself)
     meza deploy --help     # Shows deploy.md (deploy command help)
-    
+
     Fixes Issue #211
 
 commit 19193c2aef71a0b8e18c377b11ea3e8ec9b1eab5
@@ -55,9 +55,9 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 23 11:07:47 2025 -0400
 
     Add doc for deploy-notify playbook and command
-    
+
     - Adds manual/meza-cmd/deploy-notify.md
-    
+
     This fixes Issue #211
 
 commit 016aacb680009dd51a2ca3ed454f6eb6014e27cc
@@ -65,12 +65,12 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 23 10:53:03 2025 -0400
 
     Add autodeployer doc
-    
+
     - improve doc for 'debug'
     - correct doc for 'config'
       - there's no such command, but we explain how config is managed in meza
     - move cleanup-backups script documentation to scripts directory
-    
+
     Fixes Issue #211
 
 commit 64c1e8eb1abf81efcfdd557510df6ef35431ce47
@@ -84,7 +84,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 23 00:37:33 2025 -0400
 
     Avoid setting shared DB
-    
+
     if there is no prime wiki, then there can be no
     sharing configured
 
@@ -93,21 +93,21 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 22 23:33:46 2025 -0400
 
     Add Backup and Retention Policy Framework
-    
+
     meza.py
     - add find_most_recent_log_file
     - enhance get_deploy_log_path(env)
     - enhance deploy_log
     - make deploy-tail more able to find log_path
-    
+
     site.yml
     - add task to 'Configure log rotation on all servers'
     - with tags logrotate, logs
-    
+
     logrotate role
     - see README.md for complete overview
     - new - implements a complete log and backup retention policy
-    
+
     cleanup-backups.sh new script
     cleanup-backups.md documentation
 
@@ -116,13 +116,13 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 22 15:22:57 2025 -0400
 
     Fix first-time deploy error due to Apache missing
-    
+
     role: init-controller-config
     - remove ownership details from 'wikis' directory (set it later)
-    
+
     role: apache-php
     - add apache-php task to "Set proper ownership" on wikis
-    
+
     Fixes Issue #212
 
 commit 4a96eef8c0f4f33a29479fed6b861f94abe1e29c
@@ -160,7 +160,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Oct 20 23:28:11 2025 -0400
 
     consolidate RELEASE_NOTES into one
-    
+
     Fixes Issue #3
 
 commit 724467c08ad5cc790e5b8318f9d07005651e0143
@@ -168,7 +168,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Oct 20 22:18:11 2025 -0400
 
     Remove obsolete text files
-    
+
     Fixes Issue #3
 
 commit b21a3aeb13907c791fd83f194dcb78615a09782c
@@ -176,31 +176,31 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Oct 20 21:24:42 2025 -0400
 
     Feat: migrate help system from txt to markdown
-    
+
     Enhanced Documentation Features:
-    
+
     📊 Structured tables for arguments and options
     🎨 Syntax-highlighted code blocks
     ⚠️ Visual warnings with emojis
     🔗 Cross-references between related commands
     📋 Consistent formatting across all files
-    
+
     command documentation is now in markdown files (.md) replacing any
     pre-existing .txt files
-    
+
     Added documentation for previously undocumented commands
-    
+
     Improved documentation for meza create wiki and meza delete wiki
-    
+
     new command for **list-wikis**
     `meza list-wikis`
-    
+
     new general purpose **debug** command backed by a debug playbook
     `meza debug monolith m_htdocs`
-    
+
     new help system for every meza command
     meza <command> --help
-    
+
     Fixes Issue #3
 
 commit 13b0f8d493c3c215904da4e81625bd56ce1706fd
@@ -208,9 +208,9 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Oct 20 21:00:42 2025 -0400
 
     Add force for symlink creation
-    
+
     `meza create wiki` could fail as late as during the update.php phase of a subsequent deploy because the .smw.json file was not writable in the symlinked config directory.
-    
+
     fixes Issue #48 and Issue #44
 
 commit f0acdaf9e6ec5fc6b7c21503851acbb785986f32
@@ -218,7 +218,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Oct 20 14:12:01 2025 -0400
 
     Fix ansible syntax problems
-    
+
     FQCN (Fully Qualified Collection Names)
     Fixed task key order
     - name
@@ -242,16 +242,16 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Oct 20 13:52:22 2025 -0400
 
     Fix meza migrate-wikis
-    
+
     task 'Set Primary wiki when no existing declarative config'
     was broken with an undefined variable
-    
+
     The map filter was trying to loop a variable in a non-loop context
     so the Jinja2 template logic was wrong
-    
+
     `sudo meza migrate-wikis monolith` works now
     instead an 'undefined variable' error
-    
+
     Fixes Issue #101 Use a declarative wiki ID
 
 commit 8087fde7e71462c5bb82f53c49e699c6604f7981
@@ -259,19 +259,19 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 15 19:09:22 2025 +0000
 
     Tag "paths" and "defaults" to run always
-    
+
     The 'set-vars' role now includes vars from
     - config/paths.yml
     - config/defaults.yml
-    
+
     on all ansible commands by using the special 'always' tag.
-    
+
     A task with the always tag will always run, even if you use
     --skip-tags always or run the playbook with different tags.
     It's useful for critical setup or cleanup tasks.
-    
+
     The 'always' tag is the opposite of the 'never' tag.
-    
+
     Now the core configuration loading (OS-specific, paths, and defaults)
     always run regardless of which tags are specified, ensuring that
     essential variables are available for any tagged deployment scenario.
@@ -281,7 +281,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 15 00:51:06 2025 +0000
 
     Update SBOM files
-    
+
     Update the generated Software Bill Of Materials (SBOM) files
     Also make lint-files.sh executable.
 
@@ -290,14 +290,14 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 15 00:44:05 2025 +0000
 
     Fix meza maint run_jobs
-    
+
     sudo meza maint run_jobs will run all jobs for all wikis.
-    
+
     Meza produces a wrapper script on deploy which can be used to invoke
     MediaWiki's maintenance run.php runJobs for all defined wikis.
-    
+
     You can also selectively pass a wiki ID to the command.
-    
+
     Fixed the script invocation and also uses the declarative wiki approach.
 
 commit 091cf9019dab480cf929380497a3de1ffac4b12c
@@ -305,7 +305,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 15 00:39:38 2025 +0000
 
     Make CoreExtensions and LocalExtensions robust
-    
+
     Make the variable declarations more robust so that --check mode works.
     e.g. ansible-playbook /opt/meza/src/playbooks/site.yml --check
 
@@ -314,12 +314,12 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 15 00:31:19 2025 +0000
 
     Add Debian support for ImageMagick and Ghostscript
-    
+
     Follow the same pattern of cross-platform compatibility used in the
     database role and the geerlingguy/kibana role for cross-platform
     package installation. Also ensure that the ansible variable is
     defined so that --check works with narrow playbook execution.
-    
+
     Touches on Issue #42 and Issue #204
 
 commit 7dd492a389982c6318bd2b338509f091b78f3cd2
@@ -327,24 +327,24 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Oct 15 00:24:57 2025 +0000
 
     Convert to using a declarative approach for wikis
-    
+
     You can now declare wiki IDs, names, aliases, and other
     attributes for wikis in YAML. This deprecates the implied or indirect
     directory method of creating and identifying wikis.
-    
+
     The deprecated directory method is still supported.
-    
+
     There is a new meza command 'migrate-wikis' that will write the YAML
     for you - storing it in your conf-meza/public/public.yml file.
     Usage: sudo meza migrate-wikis <environment>
     e.g. sudo meza migrate-wikis monolith
-    
+
     See config/defaults.yml for example declaration
-    
+
     You can now use Meza commands to 'create' wiki and 'delete' wiki.
     However, you can now also simply edit your YAML configuration and
     run a meza deploy which will create wikis accordingly.
-    
+
     New:
     - manual/meza-cmd/migrate-wikis.txt
     - src/playbooks/migrate-wikis.yml
@@ -363,7 +363,7 @@ Date:   Wed Oct 15 00:24:57 2025 +0000
     - src/roles/set-vars/tasks/main.yml
     - src/scripts/meza.py
     - src/scripts/unifyUserTables.php
-    
+
     Fixes Issue #101
 
 commit 6f654084460a43e5394f46977cf6abb8265362a8
@@ -371,7 +371,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Sep 29 13:26:32 2025 -0400
 
     Fix linting issues in init-controller-config
-    
+
     - Remove trailing space character in a comment that breaks linting.
     - Use Fully Qualified Collection Names (FQCN)
       such as ansible.builtin.file
@@ -385,7 +385,7 @@ Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
 Date:   Mon Sep 29 10:24:44 2025 -0400
 
     fixes for the refresh-links.sh template
-    
+
     These changes are what was required for the /opt/.deploy-meza/refresh-links.sh script to run without errors on my CMTE system.
 
 commit d42698f3f3e34694e0642b1d287d3fc3fb36632a
@@ -394,7 +394,7 @@ Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
 Date:   Mon Sep 29 10:17:04 2025 -0400
 
     Merge pull request #70 from freephile/dev
-    
+
     Minor changes coming from freephile/dev branch
 
 commit 322182a846da600fc9ba83177e1fe66c7ea1c74c
@@ -403,7 +403,7 @@ Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
 Date:   Mon Sep 29 10:16:27 2025 -0400
 
     Merge pull request #66 from freephile/fix-44-.smw.json
-    
+
     Ensure .smw.json ownership and permissions
 
 commit c6bbd3c1b66b07561d802e3f744344a6dd784815
@@ -411,23 +411,23 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Sun Sep 28 11:45:38 2025 +0000
 
     Ensure .smw.json ownership and permissions
-    
+
     Change the init-controller-config role to have a comment that reflects
     the intention of the code.
-    
+
     Change owner and group to apache
-    
+
     Make ownership of 'wikis' directory recursive
-    
+
     Change `m_config_public_mode` from 0755 to 0775 for dirs 0664 for files
     by using Symbolic mode u=rwX,g=rwX,o=rX.
     Expand group permissions to be able to write files while reducing
     'other' permissions to only be able to read files.
     Remove permission to execute files from all users.
-    
+
     Change the `configure-wiki` role **which only runs on wiki creation**
     to properly create `.smw.json` as group-owned by apache.
-    
+
     Fixes Issue #44
 
 commit 3046811de7f480beaafd414e00365df7d2d39bbb
@@ -435,13 +435,13 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Sep 25 22:17:05 2025 -0400
 
     Update CHANGELOG and RELEASE_NOTES-HEAD
-    
+
     Using the commit-hook actually worked and prevented my local commit
     while enforcing the removal of trailing whitespace!
-    
+
     I also added better USAGE guidelines for the generate-release-notes.sh
     script (printed if you invoke it without arguments).
-    
+
     `./src/scripts/updateCHANGELOG.sh` does the work without any arguments.
     `./src/scripts/generate-release-notes.sh 43.29.1 HEAD` does the latest
     release notes file.
@@ -451,7 +451,7 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Sep 25 21:35:09 2025 -0400
 
     Fix lint errors on essential-vars task file
-    
+
     Also add fully qualified collection names (FQCN) to avoid other lint
     errors. e.g. `ansible.builtin.set_fact` instead of just `set_fact`.
 
@@ -461,7 +461,7 @@ Author: Rich Evans <86021670+ndc-rkevans@users.noreply.github.com>
 Date:   Thu Sep 25 15:16:34 2025 -0400
 
     Merge pull request #65 from freephile/main
-    
+
     Add essential vars role (from freephile/main)
 
 commit b65ba2dfd56ecdd2cf39938d80f0ba91d226c053
@@ -469,12 +469,12 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Sep 25 15:56:32 2025 +0000
 
     Fixup the test-certbot playbook to use set-vars
-    
+
     The test-certbot playbook was broken - referencing an unknown role.
     And it did not use the `set-vars` role to properly initialize.
-    
+
     Now it uses `set-vars` and includes the local certbot role.
-    
+
     Adds to the fix for Issue #207
 
 commit ab879a58381447b7910780d45f451e78ae7f64b9
@@ -482,17 +482,17 @@ Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Sep 25 15:22:09 2025 +0000
 
     Setup key variables early; avoid extra-vars
-    
+
     We're one step closer to not needing sudo in the deploy command.
     With a new role 'essential-vars', we set `ansible_user` and
     `group_wheel` with OS-specific logic.
-    
+
     The variables `group_wheel` and `ansible_user` will now be consistently
     available throughout all playbooks and roles where they are referenced.
-    
+
     On a RedHat family OS, using 'sudo meza deploy...' we get:
     ['group_wheel: wheel', 'ansible_user: meza-ansible', 'ansible_env.USER: root']
-    
+
     - Updated the bootstrap section of site.yml to use the new role
       instead of inline variable definitions.
     - Maintains compatibility with existing `set-vars` role structure.
@@ -515,7 +515,7 @@ Date:   Thu Sep 25 15:22:09 2025 +0000
       as meza-ansible
     - TODO: Skip copy id_rsa to id_rsa and similar copy operations when
       `inventory_hostname == 'localhost'`
-    
+
     Fixes Issue #207
 
 commit 9a2be9a6ea2fdadca079ba21dd00b0c1024c0cfe

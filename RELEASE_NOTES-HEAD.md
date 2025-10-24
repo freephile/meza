@@ -2,7 +2,7 @@
 
 ### Commits
 
-HEAD -> dev 
+HEAD -> dev
 ## Meza 43.54.3 origin/dev
 * [ce3ed9b9](https://github.com/freephile/meza/commit/ce3ed9b9) (2025-10-23) Greg Rundlett: Correct the quick start section Add curl command for running getmeza.sh
 `curl -L https://raw.githubusercontent.com/nasa/meza/master/src/scripts/getmeza.sh | bash`
@@ -10,7 +10,7 @@ Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
   - Modified: `manual/meza-cmd/index.md`
 
 ## Meza 43.54.2
-* [c4043ba1](https://github.com/freephile/meza/commit/c4043ba1) (2025-10-23) Greg Rundlett: Add in the 'rich' requirement for better console help 
+* [c4043ba1](https://github.com/freephile/meza/commit/c4043ba1) (2025-10-23) Greg Rundlett: Add in the 'rich' requirement for better console help
   - Modified: `requirements-dev.txt`
 
 * [0faa71cf](https://github.com/freephile/meza/commit/0faa71cf) (2025-10-23) Greg Rundlett: Remove undefined 'destroy' command The meza destroy command was a placeholder for undefined functionality.
@@ -31,7 +31,7 @@ Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
 R100	manual/meza-cmd/base.md	manual/meza-cmd/help.md
   - Modified: `src/scripts/meza.py`
 
-* [19193c2a](https://github.com/freephile/meza/commit/19193c2a) (2025-10-23) Greg Rundlett: Add missing newline at end of file 
+* [19193c2a](https://github.com/freephile/meza/commit/19193c2a) (2025-10-23) Greg Rundlett: Add missing newline at end of file
   - Modified: `manual/meza-cmd/deploy-notify.md`
 
 ## Meza 43.53.3
@@ -52,7 +52,7 @@ Fixes Issue [#211](https://github.com/freephile/meza/issues/211)
 R099	manual/meza-cmd/cleanup-backups.md	src/scripts/cleanup-backups.md
 
 ## Meza 43.53.1
-* [64c1e8eb](https://github.com/freephile/meza/commit/64c1e8eb) (2025-10-23) Greg Rundlett: Document the maintenance command 
+* [64c1e8eb](https://github.com/freephile/meza/commit/64c1e8eb) (2025-10-23) Greg Rundlett: Document the maintenance command
   - Modified: `manual/meza-cmd/index.md`
   - Modified: `manual/meza-cmd/maint.md`
   - Modified: `src/scripts/meza.py`
@@ -98,24 +98,24 @@ Fixes Issue [#212](https://github.com/freephile/meza/issues/212)
   - Modified: `src/roles/init-controller-config/tasks/main.yml`
 
 ## Meza 43.50.1
-* [4a96eef8](https://github.com/freephile/meza/commit/4a96eef8) (2025-10-21) Greg Rundlett: Enhance help display using rich markdown rendering 
+* [4a96eef8](https://github.com/freephile/meza/commit/4a96eef8) (2025-10-21) Greg Rundlett: Enhance help display using rich markdown rendering
   - Modified: `src/scripts/meza.py`
 
 ## Meza 43.49.4
-* [dc865669](https://github.com/freephile/meza/commit/dc865669) (2025-10-21) Greg Rundlett: Update CHANGELOG 
+* [dc865669](https://github.com/freephile/meza/commit/dc865669) (2025-10-21) Greg Rundlett: Update CHANGELOG
   - Modified: `CHANGELOG`
 
-* [9a2be9a6](https://github.com/freephile/meza/commit/9a2be9a6) (2025-10-20) Greg Rundlett: Remove trailing whitespace in markdown 
+* [9a2be9a6](https://github.com/freephile/meza/commit/9a2be9a6) (2025-10-20) Greg Rundlett: Remove trailing whitespace in markdown
   - Modified: `RELEASE-NOTES.md`
   - Modified: `RELEASE_NOTES-HEAD.md`
 
 ## Meza 43.49.3
-* [2379a054](https://github.com/freephile/meza/commit/2379a054) (2025-10-20) Greg Rundlett: update RELEASE_NOTES to v43.49.2 
+* [2379a054](https://github.com/freephile/meza/commit/2379a054) (2025-10-20) Greg Rundlett: update RELEASE_NOTES to v43.49.2
   - Modified: `RELEASE-NOTES.md`
   - Added: `RELEASE_NOTES-HEAD.md`
 
 ## Meza 43.49.2
-* [29d0b9f2](https://github.com/freephile/meza/commit/29d0b9f2) (2025-10-20) Greg Rundlett: truncate RELEASE_NOTES 
+* [29d0b9f2](https://github.com/freephile/meza/commit/29d0b9f2) (2025-10-20) Greg Rundlett: truncate RELEASE_NOTES
   - Modified: `RELEASE-NOTES.md`
 
 ## Meza 43.49.1
