@@ -1,37 +1,31 @@
-# Meza Command: `install`
+# Meza Installation Guide
 
-## Description
+## ⚠️ Important Note
 
-Install Meza components and set up system dependencies.
+**There is no `meza install` command.** This documentation previously described a non-existent command.
 
-## Usage
+## Correct Commands for Installation Tasks
 
-```bash
-meza install [directive]
-```
+### Single Machine Deployment
 
-## Directives
-
-### `monolith` - Single Machine Installation
-
-Install Meza on a single machine for development or small-scale deployment.
+To set up Meza on a single machine (formerly `install monolith`):
 
 ```bash
-meza install monolith
+meza deploy monolith
 ```
 
 **What it does:**
-- Installs all Meza dependencies
+- Deploys all Meza dependencies
 - Sets up MediaWiki and required services
 - Configures single-server environment
-- Prepares system for wiki deployment
+- Creates the complete MediaWiki deployment
 
-### `dev-networking` - VirtualBox VM Networking
+### VirtualBox VM Networking Setup
 
-Set up networking configuration for VirtualBox virtual machines.
+To configure networking for VirtualBox VMs (formerly `install dev-networking`):
 
 ```bash
-meza install dev-networking
+meza setup dev-networking
 ```
 
 **What it does:**
@@ -39,12 +33,12 @@ meza install dev-networking
 - Sets up development-friendly networking
 - Enables proper host-guest communication
 
-### `docker` - Docker Installation
+### Docker Installation
 
-Install Docker container runtime (CentOS only).
+To install Docker container runtime (formerly `install docker`):
 
 ```bash
-meza install docker
+meza setup docker
 ```
 
 **What it does:**
@@ -53,21 +47,27 @@ meza install docker
 - Sets up container environment
 - **Note:** Currently supported on CentOS only
 
-## Arguments
+## Quick Start for New Users
 
-| Argument | Description | Required |
-|----------|-------------|----------|
-| `[directive]` | Installation type to perform | No |
+For a complete single-machine MediaWiki setup:
+
+```bash
+# Deploy monolith environment (creates 'demo' wiki automatically)
+meza deploy monolith
+
+# Create additional wikis
+meza create wiki monolith mywiki "My Wiki"
+```
 
 ## Notes
 
-- Installation requires root or sudo privileges
-- `monolith` is the most common installation type for new setups
-- Different directives may have OS-specific requirements
-- Installation process may take time depending on internet connection
+- Deployment requires root or sudo privileges
+- `monolith` is the most common environment type for new setups
+- Different setup commands may have OS-specific requirements
+- Deployment process may take time depending on internet connection
 
 ## See Also
 
-- [`meza setup`](setup.md) - Set up environments after installation
 - [`meza deploy`](deploy.md) - Deploy environments
-- [`meza create`](create.md) - Create wikis after setup
+- [`meza setup`](setup.md) - Set up system components
+- [`meza create`](create.md) - Create wikis after deployment

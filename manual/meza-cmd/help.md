@@ -28,10 +28,7 @@ sudo meza deploy <env-name>
 
 | Command | Directives | Description |
 |---------|------------|-------------|
-| **install** | `dev-networking` | Setup networking on VM |
-| | `monolith` | Install server on this machine |
-| | `docker` | Install Docker (CentOS only) |
-| **deploy** | `<environment>` | Deploy your server |
+| **deploy** | `<environment>` | Deploy your server (e.g. `monolith`) |
 | **setup** | `env` | Setup an environment |
 | | `dev` | Setup dev features (Git, FTP) |
 | **create** | `wiki` | Create a wiki |
@@ -46,8 +43,8 @@ Every command has directives. If you run any command without directives, it will
 
 ```bash
 # Get help for specific commands
-meza install --help
 meza deploy --help
+meza setup --help
 meza create --help
 ```
 
