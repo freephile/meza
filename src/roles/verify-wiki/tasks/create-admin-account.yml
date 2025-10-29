@@ -1,0 +1,53 @@
+---
+
+# Renamed the file to create-admin-account.yml since that is its only purpose.
+# This task file is only included when initializing new wikis.
+# Prompt for secure admin password for Demo Wiki
+- name: Prompt for Admin password on Demo Wiki
+  ansible.builtin.pause:
+    prompt: |
+
+      Creating Admin user for Demo Wiki ({{ wiki_id }})
+
+      MediaWiki Password Requirements:
+      - Minimum 8 characters
+      - Must contain at least one uppercase letter
+      - Must contain at least one lowercase letter
+      - Must contain at least one number
+      - Must contain at least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)
+      - Cannot contain spaces
+
+      Enter a secure password for the Admin user
+    echo: false
+  register: admin_password_prompt
+  run_once: true
+  when: wiki_id == "demo"
+
+# Validate password meets MediaWiki requirements
+- name: Validate Admin password meets requirements
+  ansible.builtin.fail:
+    msg: |
+      Password does not meet MediaWiki requirements:
+      - Must be at least 8 characters long
+      - Must contain uppercase, lowercase, number, and special character
+      - Cannot contain spaces
+  when:
+    - wiki_id == "demo"
+    - >
+      admin_password_prompt.user_input | length < 8 or
+      admin_password_prompt.user_input is not regex('[A-Z]') or
+      admin_password_prompt.user_input is not regex('[a-z]') or
+      admin_password_prompt.user_input is not regex('[0-9]') or
+      admin_password_prompt.user_input is not regex('[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]') or
+      ' ' in admin_password_prompt.user_input
+  run_once: true
+
+# Create an admin user for Demo Wiki with the provided secure password
+# https://www.mediawiki.org/wiki/Manual:CreateAndPromote.php
+# https://meta.wikimedia.org/wiki/Password_policy
+- name: Create Admin user on Demo Wiki
+  ansible.builtin.shell: >
+    WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run createAndPromote --force --sysop --bureaucrat Admin {{ admin_password_prompt.user_input | quote }}
+  run_once: true
+  when: wiki_id == "demo"
+  no_log: true

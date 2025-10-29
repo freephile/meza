@@ -119,8 +119,8 @@
 #
 # SECTION: init new wiki
 #
-- name: "{{ wiki_id }} - Include init-wiki.yml only when a new wiki created (but not imported)"
-  include_tasks: init-wiki.yml
+- name: "Include create-admin-account.yml for a new (not imported) wiki - {{ wiki_id }}"
+  include_tasks: create-admin-account.yml
   when: created_new_wiki
 
 
