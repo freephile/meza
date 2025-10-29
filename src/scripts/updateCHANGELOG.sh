@@ -5,7 +5,7 @@
 # This script updates the CHANGELOG file by finding the latest commit hash in
 # the top of the CHANGELOG file, and then using git log --pretty to prepend new content.
 
-git log --pretty $(grep -P -om 1 'commit (\d{8})' CHANGELOG | cut -d' ' -f 2)..HEAD > tmp.log
+git log --pretty $(grep --perl-regexp --only-matching --max-count 1 'commit ([a-z0-9]{8})' CHANGELOG | cut -d' ' -f 2)..HEAD > tmp.log
 (cat tmp.log; echo; cat CHANGELOG) > tmpfile && mv tmpfile CHANGELOG
 rm tmp.log
 echo "Updated CHANGELOG"
