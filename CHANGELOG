@@ -1,3 +1,19 @@
+commit a6a76f61c893920dcc96addad8cf08a277785df5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 30 14:08:47 2025 -0400
+
+    process the dev branch
+
+commit 09a7a3c31edb3bfc768c0e1a249d88bad913e6e1
+Author: GitHub Action <action@github.com>
+Date:   Thu Oct 30 07:41:09 2025 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit b19e5f528eaab38d42a12eb18dec052feb009be9
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 30 03:10:48 2025 -0400

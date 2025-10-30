@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* a6a76f6 (2025-10-30) Greg Rundlett: process the dev branch 
+  - Modified: `.github/workflows/yamllint.yml`
+
+* 09a7a3c (2025-10-30) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * b19e5f5 (2025-10-30) Greg Rundlett: Major enhancements: Create wiki logging, etc. "meza create wiki" logging implementation
 -----------------------------------------
 The new create-wiki logging mirrors the deploy logging architecture with both transactional and processing logs.
