@@ -2,6 +2,9 @@
 
 - hosts: app_servers
   become: true
+  vars:
+    # admin_password is passed via extra vars from meza.py
+    # wiki_id and wiki_name are also passed via extra vars
   roles:
     - set-vars
     - create-wiki-wrapper

@@ -44,20 +44,140 @@ except ImportError:
 install_dir = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 
-#
-# It'd be much better to pull this from config/paths.yml, but doing so
-# requires processing YAML and Jinja and Meza with Python 2.7 doesn't seem
-# to have the dependiencies in place to make that happen easily.
-#
-defaults = {
-    "m_i18n": f"{install_dir}/meza/config/i18n",
-    "m_meza_data": f"{install_dir}/data-meza",
-    "m_logs_deploy": f"{install_dir}/data-meza/logs/deploy/deploy.log",
-    "m_logs": f"{install_dir}/data-meza/logs",
-    "m_local_secret": f"{install_dir}/conf-meza/secret",
-    "m_home": f"{install_dir}/conf-meza/users",
-    "m_config_vault": f"{install_dir}/conf-meza/vault",
-}
+
+def resolve_jinja_templates(data, context, max_iterations=10):
+    """
+    Recursively resolve Jinja2-style template variables in a dictionary.
+    
+    Args:
+        data: Dictionary or string containing template variables
+        context: Dictionary of variables to substitute
+        max_iterations: Maximum number of resolution passes to prevent infinite loops
+    
+    Returns:
+        Resolved data with template variables substituted
+    """
+    import re
+    
+    def substitute_string(text, ctx):
+        """Substitute {{ variable }} patterns in a string."""
+        if not isinstance(text, str):
+            return text
+            
+        # Pattern to match {{ variable_name }}
+        pattern = r'\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}'
+        
+        def replacer(match):
+            var_name = match.group(1)
+            if var_name in ctx:
+                return str(ctx[var_name])
+            else:
+                # Leave unresolved variables as-is for now
+                return match.group(0)
+        
+        return re.sub(pattern, replacer, text)
+    
+    def resolve_recursive(obj, ctx):
+        """Recursively resolve templates in nested data structures."""
+        if isinstance(obj, dict):
+            return {k: resolve_recursive(v, ctx) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [resolve_recursive(item, ctx) for item in obj]
+        elif isinstance(obj, str):
+            return substitute_string(obj, ctx)
+        else:
+            return obj
+    
+    # Make multiple passes to resolve interdependent variables
+    current_data = data
+    current_context = dict(context)  # Copy to avoid modifying original
+    
+    for iteration in range(max_iterations):
+        previous_data = current_data
+        
+        # Resolve templates using current context
+        current_data = resolve_recursive(current_data, current_context)
+        
+        # Update context with newly resolved values (if data is a dict)
+        if isinstance(current_data, dict):
+            current_context.update(current_data)
+        
+        # Check if we've converged (no more changes)
+        if current_data == previous_data:
+            break
+    else:
+        print(f"Warning: Template resolution did not converge after {max_iterations} iterations")
+    
+    return current_data
+
+
+def load_defaults_from_paths_yml():
+    """
+    Load default paths from config/paths.yml with template resolution.
+    
+    Returns:
+        dict: Resolved configuration dictionary
+        
+    Raises:
+        SystemExit: If paths.yml cannot be loaded or parsed
+    """
+    paths_yml_file = os.path.join(install_dir, "meza", "config", "paths.yml")
+    
+    if not os.path.isfile(paths_yml_file):
+        print(f"ERROR: Required configuration file not found: {paths_yml_file}")
+        print("Meza requires a properly configured paths.yml file to operate.")
+        sys.exit(1)
+    
+    try:
+        # Load the raw YAML content
+        with open(paths_yml_file, 'r', encoding='utf-8') as f:
+            raw_config = yaml.load(f, Loader=yaml.Loader)
+        
+        if not isinstance(raw_config, dict):
+            raise ValueError("paths.yml must contain a YAML dictionary")
+        
+        # Set up initial context with m_install
+        initial_context = {
+            "m_install": install_dir
+        }
+        
+        # Resolve all template variables
+        resolved_config = resolve_jinja_templates(raw_config, initial_context)
+        
+        # Extract the specific variables meza.py needs
+        required_vars = [
+            "m_i18n", "m_meza_data", "m_logs_deploy", "m_logs_create_wiki", "m_logs", 
+            "m_local_secret", "m_home", "m_config_vault"
+        ]
+        
+        defaults = {}
+        missing_vars = []
+        
+        for var in required_vars:
+            if var in resolved_config:
+                defaults[var] = resolved_config[var]
+            else:
+                missing_vars.append(var)
+        
+        if missing_vars:
+            print(f"ERROR: Required variables missing from paths.yml: {', '.join(missing_vars)}")
+            print(f"Please ensure paths.yml contains all required path definitions.")
+            sys.exit(1)
+        
+        return defaults
+        
+    except yaml.YAMLError as e:
+        print(f"ERROR: Failed to parse paths.yml: {e}")
+        print(f"Please check the YAML syntax in: {paths_yml_file}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"ERROR: Failed to load configuration from paths.yml: {e}")
+        print(f"Configuration file: {paths_yml_file}")
+        sys.exit(1)
+
+
+# Load defaults from paths.yml - no fallbacks, fail fast if not available
+defaults = load_defaults_from_paths_yml()
 
 # Handle pressing of ctrl-c. Make sure to remove lock file when deploying.
 DEPLOY_LOCK_ENVIRONMENT = False
@@ -463,6 +583,68 @@ def write_deploy_log(timestamp, env, unique, condition, args_string):
     with open(deploy_log, "a", encoding='utf-8') as myfile:
         myfile.write(line)
 
+
+def write_create_wiki_log(timestamp, env, unique, condition, wiki_id, wiki_name, args_string):
+    """
+    Write create-wiki log to a file.
+
+    Args:
+        timestamp (str): The timestamp of the wiki creation.
+        env (str): The environment in which the wiki is created.
+        unique (str): A unique identifier for the operation.
+        condition (str): The condition of the operation.
+        wiki_id (str): The ID of the wiki being created.
+        wiki_name (str): The display name of the wiki being created.
+        args_string (str): A string representation of the arguments.
+
+    Returns:
+        None
+    """
+    create_wiki_log = defaults['m_logs_create_wiki']
+
+    line = (f"{timestamp}\t{env}\t{unique}\t{condition}\t"
+            f"{wiki_id}\t{wiki_name}\t"
+            f"{get_git_describe_tags(f'{install_dir}/meza')}\t"
+            f"{get_git_hash(f'{install_dir}/meza')}\t"
+            f"{get_git_hash(f'{install_dir}/conf-meza/secret')}\t"
+            f"{get_git_hash(f'{install_dir}/conf-meza/public')}\t"
+            f"{args_string}\n")
+
+    log_dir = os.path.dirname(os.path.realpath(create_wiki_log))
+
+    if not os.path.isdir(log_dir):
+        os.makedirs(log_dir)
+
+    with open(create_wiki_log, "a", encoding='utf-8') as myfile:
+        myfile.write(line)
+
+
+def get_create_wiki_log_path(env):
+    """
+    Get the path to the create-wiki processing log file for a given environment.
+
+    Args:
+        env (str): The environment name.
+
+    Returns:
+        str: The path to the create-wiki processing log file, or the most recent log file if no operation is active.
+
+    """
+    log_dir = os.path.join(defaults['m_logs'], 'create-wiki-output')
+
+    if not os.path.isdir(log_dir):
+        os.makedirs(log_dir)
+
+    try:
+        # Try to get timestamp from active create-wiki operation (not implemented yet, but future-ready)
+        # For now, find the most recent log file for this environment
+        log_path = find_most_recent_log_file(env, log_dir)
+    except:
+        # Find the most recent log file for this environment
+        log_path = find_most_recent_log_file(env, log_dir)
+
+    return log_path
+
 # "meza deploy-check <ENV>" to return 0 on no deploy, 1 on deploy is active
 
 
@@ -689,6 +871,54 @@ def meza_command_deploy_tail(argv):
         sys.exit(1)
     else:
         print(f"Following deployment log: {log_path}")
+        os.system(" ".join(["tail", "-f", log_path]))
+
+
+def meza_command_create_wiki_log(argv):
+    """
+    Get the create-wiki processing log path for the specified environment.
+
+    Args:
+        argv (list): A list containing the environment name.
+
+    Returns:
+        str: The path to the create-wiki processing log file.
+
+    """
+    env = argv[0]
+    log_path = get_create_wiki_log_path(env)
+
+    if log_path is None:
+        print(f"No create-wiki log files found for environment '{env}'")
+        sys.exit(1)
+    else:
+        print(log_path)
+
+
+def meza_command_create_wiki_tail(argv):
+    """
+    Display the tail of the create-wiki processing log for the specified environment.
+
+    Args:
+        argv (list): A list of command-line arguments. The first element should be the environment.
+
+    Returns:
+        None
+    """
+    env = argv[0]
+    log_path = get_create_wiki_log_path(env)
+
+    if log_path is None:
+        print(f"No create-wiki log files found for environment '{env}'")
+        print("Try running a wiki creation first with:")
+        print(f"  sudo meza create wiki {env}")
+        sys.exit(1)
+    elif not os.path.isfile(log_path):
+        print(f"Log file not found: {log_path}")
+        print("The create-wiki operation may not have started yet or the log file was removed.")
+        sys.exit(1)
+    else:
+        print(f"Following create-wiki log: {log_path}")
         os.system(" ".join(["tail", "-f", log_path]))
 
 
@@ -1226,7 +1456,7 @@ def meza_command_create(argv):
 
     Usage:
         Interactive:    meza create wiki <environment>
-        Non-interactive: meza create wiki-promptless <environment> <wiki_id> <wiki_name>
+        Non-interactive: meza create wiki-promptless <environment> <wiki_id> <wiki_name> [admin_password]
 
     Examples:
         # Interactive wiki creation (will prompt for details)
@@ -1234,8 +1464,8 @@ def meza_command_create(argv):
         meza create wiki production
 
         # Non-interactive wiki creation
-        meza create wiki-promptless monolith testwiki "Test Wiki"
-        meza create wiki-promptless production blogwiki "Company Blog"
+        meza create wiki-promptless monolith testwiki "Test Wiki" "SecureP@ssw0rd123!"
+        meza create wiki-promptless production blogwiki "Company Blog" "MyS3cur3P@ss!"
 
     Args:
         argv (list): Command line arguments:
@@ -1243,6 +1473,7 @@ def meza_command_create(argv):
             [1] - Environment name (required)
             [2] - Wiki ID (required for wiki-promptless only)
             [3] - Wiki display name (required for wiki-promptless only)
+            [4] - Admin password (optional for wiki-promptless; if not provided, generates secure random password)
 
     Returns:
         None
@@ -1254,6 +1485,7 @@ def meza_command_create(argv):
         - Wiki IDs must be unique within the environment
         - Wiki IDs should be lowercase, alphanumeric (no spaces or special chars)
         - Uses create-wiki.yml or create-wiki-promptless.yml Ansible playbooks
+        - All operations are logged to create-wiki.log for audit purposes
     """
     sub_command = argv[0]
 
@@ -1269,18 +1501,72 @@ def meza_command_create(argv):
         if rc > 0:
             meza_shell_exec_exit(rc)
 
-        playbook = "create-" + sub_command
-
+        # Set up logging
+        start = get_datetime_string()
+        unique = hashlib.sha1((start + env).encode('utf-8')).hexdigest()[:8]
+        args_string = ' '.join(argv)
+        
+        # Get wiki details for logging
         if sub_command == "wiki-promptless":
             if len(argv) < 4:
                 print("create wiki-promptless requires wiki_id and wiki_name arguments")
+                print("Usage: meza create wiki-promptless <env> <wiki_id> <wiki_name> [admin_password]")
                 sys.exit(1)
+            wiki_id = argv[2]
+            wiki_name = argv[3]
+            # Optional admin password; generate secure random if not provided
+            if len(argv) >= 5:
+                admin_password = argv[4]
+            else:
+                # Generate a secure random password meeting MediaWiki requirements
+                import secrets
+                import string
+                # Ensure password has all required character types
+                chars = string.ascii_letters + string.digits + "!@#$%^&*()_+-=[]{}|;:,.<>?"
+                admin_password = ''.join(secrets.choice(chars) for _ in range(16))
+                # Ensure it contains at least one of each required type
+                admin_password = (
+                    secrets.choice(string.ascii_uppercase) +
+                    secrets.choice(string.ascii_lowercase) + 
+                    secrets.choice(string.digits) +
+                    secrets.choice("!@#$%^&*()_+-=[]{}|;:,.<>?") +
+                    admin_password[4:]
+                )
+                print(f"Generated secure admin password: {admin_password}")
+                print("Please save this password - it will not be displayed again!")
+        else:
+            # For interactive mode, we don't know the wiki details yet
+            wiki_id = "interactive"
+            wiki_name = "interactive"
+
+        # Write start log
+        write_create_wiki_log(start, env, unique, 'start', wiki_id, wiki_name, args_string)
+
+        playbook = "create-" + sub_command
+
+        if sub_command == "wiki-promptless":
             shell_cmd = playbook_cmd(
-                playbook, env, {'wiki_id': argv[2], 'wiki_name': argv[3]})
+                playbook, env, {'wiki_id': wiki_id, 'wiki_name': wiki_name, 'admin_password': admin_password})
         else:
             shell_cmd = playbook_cmd(playbook, env)
 
-        rc = meza_shell_exec(shell_cmd)
+        # Execute with processing log (similar to deploy-output)
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        log_file = f"{defaults['m_logs']}/create-wiki-output/{env}-{timestamp}.log"
+        log_dir = os.path.dirname(log_file)
+        if not os.path.isdir(log_dir):
+            os.makedirs(log_dir)
+        
+        rc = meza_shell_exec(shell_cmd, True, log_file)
+
+        # Write completion log
+        end = get_datetime_string()
+        if not rc:
+            condition = 'complete'
+        else:
+            condition = 'failed'
+
+        write_create_wiki_log(end, env, unique, condition, wiki_id, wiki_name, args_string)
         meza_shell_exec_exit(rc)
 
 

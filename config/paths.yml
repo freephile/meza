@@ -30,6 +30,7 @@ m_cache_directory: "{{ m_meza_data }}/cache"
 m_tmp: "{{ m_meza_data }}/tmp"
 m_logs: "{{ m_meza_data }}/logs"
 m_logs_deploy: "{{ m_meza_data }}/logs/deploy/deploy.log"
+m_logs_create_wiki: "{{ m_meza_data }}/logs/create-wiki/create-wiki.log"
 
 # uploads dir. This WILL BE OVERIDDEN if multiple app servers are used, and
 # instead will use /opt/data-meza/uploads-gluster to use GlusterFS distributed

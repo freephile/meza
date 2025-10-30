@@ -513,8 +513,10 @@
     msg: "{{ item }}"
   loop: "{{ list_of_wikis|flatten(levels=1) }}"
 
-# create symlink to core for short urls
-# tag it latest, so that the symlink gets created whenever core is downloaded
+# Create symlink to core for short urls
+# Tag it latest, so that the symlink gets created whenever core is downloaded
+# This essential task is duplicated in the create-wiki-wrapper role for individual
+# wiki creation outside of full deploys.
 - name: Create symlink to core, to enable short urls
   file:
     src: "{{ m_mediawiki }}"

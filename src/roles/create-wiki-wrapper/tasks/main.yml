@@ -30,6 +30,17 @@
   include_role:
     name: verify-wiki
 
+# Create symlink to core for short urls (from mediawiki role)
+# This is needed for new wikis created individually (not during full deploy)
+- name: Create symlink to core, to enable short urls
+  file:
+    src: "{{ m_mediawiki }}"
+    dest: "{{ m_htdocs }}/{{ wiki_id }}"
+    state: link
+    force: yes
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+
 # Wikis are totally built at this point, but search needs rebuilding?
 # Pretty sure this is taken care of in the MedidaWiki role.
 - name: (Re-)build search index for each wiki
