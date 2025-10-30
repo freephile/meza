@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* 51e8d6f (2025-10-30) Greg Rundlett: We don't need no stinkin' badges 
+  - Modified: `README.md`
+
+* 1e87757 (2025-10-30) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * a6a76f6 (2025-10-30) Greg Rundlett: process the dev branch 
   - Modified: `.github/workflows/yamllint.yml`
 
