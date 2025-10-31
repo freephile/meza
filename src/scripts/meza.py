@@ -2364,7 +2364,7 @@ def display_docs(name):
                     console.print(f"[link]{github_url}[/link]")
 
                 return
-            except Exception:
+            except (ImportError, AttributeError, UnicodeError, OSError):
                 # Rich failed, fall through to other strategies
                 pass
 
@@ -2380,12 +2380,12 @@ def display_docs(name):
         print("This may indicate that your Meza installation is outdated.")
         print("Please update your project sources to get the latest help documentation:")
         print("")
-        print("  git pull origin main")
-        print("  # or")
-        print("  git pull origin dev")
+        print("  git fetch --all")
+        print("  # then")
+        print("  git status")
         print("")
         print("For a complete list of available commands, try:")
-        print("  meza base --help")
+        print("  meza --help")
         return
 
 
