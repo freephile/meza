@@ -1,10 +1,14 @@
 #!/bin/bash
 #
 # Meza Linting Script - Run appropriate linters on files
-# Usage: ./lint-files.sh [file1] [file2] ... or ./lint-files.sh (for all files)
+# Usage: ./lint-files.sh [-v|--verbose] [file1] [file2] ... or ./lint-files.sh (for all files)
+# Note: quickly fix files with trailing whitespace using: sed -i 's/[[:space:]]\+$//' <filename>
 #
 
 set -e
+
+# Global verbose flag
+VERBOSE=false
 
 # Colors for output
 RED='\033[0;31m'
@@ -15,11 +19,20 @@ NC='\033[0m' # No Color
 
 # Function to print colored output
 print_status() {
+    if [ "$VERBOSE" = true ]; then
+        echo -e "${BLUE}[LINT]${NC} $1"
+    fi
+}
+
+# Always-visible output functions
+print_info() {
     echo -e "${BLUE}[LINT]${NC} $1"
 }
 
 print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    if [ "$VERBOSE" = true ]; then
+        echo -e "${GREEN}[SUCCESS]${NC} $1"
+    fi
 }
 
 print_warning() {
@@ -148,26 +161,52 @@ lint_file() {
 
 # Main function
 main() {
-    print_status "Starting Meza file linting..."
+    local files=()
+    local exit_code=0
+
+    # Parse command line arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -v|--verbose)
+                VERBOSE=true
+                shift
+                ;;
+            -h|--help)
+                echo "Usage: $0 [-v|--verbose] [FILES...]"
+                echo ""
+                echo "Options:"
+                echo "  -v, --verbose    Show detailed progress and success messages"
+                echo "  -h, --help       Show this help message"
+                echo ""
+                echo "By default, only warnings and errors are shown."
+                exit 0
+                ;;
+            -*)
+                echo "Unknown option: $1" >&2
+                exit 1
+                ;;
+            *)
+                files+=("$1")
+                shift
+                ;;
+        esac
+    done
+
+    print_info "Starting Meza file linting..."
 
     # Check if tools are available
     if ! check_tools; then
         exit 1
     fi
 
-    local files=()
-    local exit_code=0
-
-    # If no arguments provided, find all relevant files
-    if [ $# -eq 0 ]; then
+    # If no files specified, find all relevant files
+    if [ ${#files[@]} -eq 0 ]; then
         print_status "No files specified, finding all YAML files..."
         # Find all YAML files, excluding certain directories
-        mapfile -t files < <(find . -name "*.yml" -o -name "*.yaml" | grep -v -E "^\./(\.venv|vendor|\.cache|tests/docker)" | sort)
-    else
-        files=("$@")
+        mapfile -t files < <(find . -name "*.yml" -o -name "*.yaml" | grep -v -E "^\./(\.venv|vendor|\.cache|tests/docker|collections)" | sort)
     fi
 
-    print_status "Found ${#files[@]} files to lint"
+    print_info "Found ${#files[@]} files to lint"
 
     # Lint each file
     local failed_files=()
@@ -180,11 +219,12 @@ main() {
 
     # Summary
     echo
-    print_status "Linting complete!"
+    print_info "Linting complete!"
 
     if [ $exit_code -eq 0 ]; then
-        print_success "All files passed linting checks!"
+        echo -e "${GREEN}[SUCCESS]${NC} All ${#files[@]} files passed linting checks!"
     else
+        echo -e "${GREEN}[SUCCESS]${NC} $((${#files[@]} - ${#failed_files[@]}))/${#files[@]} files passed"
         print_error "Linting failed for ${#failed_files[@]} files:"
         for file in "${failed_files[@]}"; do
             echo "  - $file"
