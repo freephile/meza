@@ -67,7 +67,7 @@ jobs:
 
           # Use tag 43.0.0 as the baseline starting point
           START_TAG="43.0.0"
-          
+
           # Verify the tag exists, fallback if needed
           if git rev-parse --verify "$START_TAG" >/dev/null 2>&1; then
             echo "Using baseline tag: $START_TAG"

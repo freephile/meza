@@ -6,7 +6,7 @@
   connection: local
   gather_facts: true
   become: false
-  
+
   roles:
     - set-vars
     - migrate-to-declarative-wikis
@@ -15,19 +15,19 @@
     - name: Remind user to test configuration (when changes were made)
       debug:
         msg: |
-          
+
           ============================================================
           MIGRATION COMPLETE
           ============================================================
-          
-          Your existing wikis have been migrated to declarative 
+
+          Your existing wikis have been migrated to declarative
           configuration in {{ m_local_public }}/public.yml
-          
+
           NEXT STEPS:
           1. Review the generated configuration file
           2. Test with: meza deploy {{ env }} --check
           3. Deploy to apply changes: meza deploy {{ env }}
-          
+
           The original public.yml has been backed up with .backup suffix.
           ============================================================
       when: migration_was_performed | default(false)
@@ -35,15 +35,15 @@
     - name: Remind user about idempotent state (when no changes were needed)
       debug:
         msg: |
-          
+
           ============================================================
           MIGRATION STATUS: NO CHANGES NEEDED
           ============================================================
-          
-          Your wikis are already properly configured in declarative 
+
+          Your wikis are already properly configured in declarative
           format in {{ m_local_public }}/public.yml
-          
-          The migration is idempotent - no changes were made to your 
+
+          The migration is idempotent - no changes were made to your
           configuration as it already matches the discovered wikis.
           ============================================================
       when: not (migration_was_performed | default(true))

@@ -11,7 +11,7 @@
 - name: Debug Ansible variables and facts
   hosts: localhost
   connection: local
-  gather_facts: no
+  gather_facts: false
   roles:
     - set-vars
   tasks:

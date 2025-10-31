@@ -143,7 +143,7 @@
     - name: Add new wiki to configuration (if not already present)
       set_fact:
         updated_wikis: "{{ updated_wikis + [{'id': wiki_id, 'name': wiki_name, 'primary': false}] }}"
-      when: 
+      when:
         - current_config is defined
         - updated_wikis | selectattr('id', 'equalto', wiki_id) | list | length == 0
 
@@ -163,7 +163,7 @@
       when: updated_config is defined
       delegate_to: localhost
       run_once: true
-      
+
     - name: Display wiki addition notice
       debug:
         msg: |
@@ -171,7 +171,7 @@
           If you want to make it the primary wiki, edit {{ m_local_public }}/public.yml
           and set 'primary: true' for this wiki.
       when: current_config is defined
-      
+
   # Always run this block now since we ensure public.yml exists above
   delegate_to: localhost
   run_once: true

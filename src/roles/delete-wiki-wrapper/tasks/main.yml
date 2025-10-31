@@ -26,7 +26,7 @@
     - "{{ gluster_brick_dir }}/{{ wiki_id }}"
 
 
-# Auto-remove from declarative wiki configuration  
+# Auto-remove from declarative wiki configuration
 - name: Check if using declarative wiki configuration
   stat:
     path: "{{ m_local_public }}/public.yml"
@@ -71,12 +71,12 @@
       when: updated_config is defined
       delegate_to: localhost
       run_once: true
-      
+
     - name: Display wiki removal notice
       debug:
         msg: "Wiki '{{ wiki_id }}' has been automatically removed from declarative configuration."
       when: current_config is defined
-      
+
   when: public_yml_exists.stat.exists
   delegate_to: localhost
   run_once: true
