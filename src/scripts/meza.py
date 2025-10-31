@@ -48,25 +48,25 @@ install_dir = os.path.dirname(os.path.dirname(
 def resolve_jinja_templates(data, context, max_iterations=10):
     """
     Recursively resolve Jinja2-style template variables in a dictionary.
-    
+
     Args:
         data: Dictionary or string containing template variables
         context: Dictionary of variables to substitute
         max_iterations: Maximum number of resolution passes to prevent infinite loops
-    
+
     Returns:
         Resolved data with template variables substituted
     """
     import re
-    
+
     def substitute_string(text, ctx):
         """Substitute {{ variable }} patterns in a string."""
         if not isinstance(text, str):
             return text
-            
+
         # Pattern to match {{ variable_name }}
         pattern = r'\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}'
-        
+
         def replacer(match):
             var_name = match.group(1)
             if var_name in ctx:
@@ -74,9 +74,9 @@ def resolve_jinja_templates(data, context, max_iterations=10):
             else:
                 # Leave unresolved variables as-is for now
                 return match.group(0)
-        
+
         return re.sub(pattern, replacer, text)
-    
+
     def resolve_recursive(obj, ctx):
         """Recursively resolve templates in nested data structures."""
         if isinstance(obj, dict):
@@ -87,85 +87,85 @@ def resolve_jinja_templates(data, context, max_iterations=10):
             return substitute_string(obj, ctx)
         else:
             return obj
-    
+
     # Make multiple passes to resolve interdependent variables
     current_data = data
     current_context = dict(context)  # Copy to avoid modifying original
-    
+
     for iteration in range(max_iterations):
         previous_data = current_data
-        
+
         # Resolve templates using current context
         current_data = resolve_recursive(current_data, current_context)
-        
+
         # Update context with newly resolved values (if data is a dict)
         if isinstance(current_data, dict):
             current_context.update(current_data)
-        
+
         # Check if we've converged (no more changes)
         if current_data == previous_data:
             break
     else:
         print(f"Warning: Template resolution did not converge after {max_iterations} iterations")
-    
+
     return current_data
 
 
 def load_defaults_from_paths_yml():
     """
     Load default paths from config/paths.yml with template resolution.
-    
+
     Returns:
         dict: Resolved configuration dictionary
-        
+
     Raises:
         SystemExit: If paths.yml cannot be loaded or parsed
     """
     paths_yml_file = os.path.join(install_dir, "meza", "config", "paths.yml")
-    
+
     if not os.path.isfile(paths_yml_file):
         print(f"ERROR: Required configuration file not found: {paths_yml_file}")
         print("Meza requires a properly configured paths.yml file to operate.")
         sys.exit(1)
-    
+
     try:
         # Load the raw YAML content
         with open(paths_yml_file, 'r', encoding='utf-8') as f:
             raw_config = yaml.load(f, Loader=yaml.Loader)
-        
+
         if not isinstance(raw_config, dict):
             raise ValueError("paths.yml must contain a YAML dictionary")
-        
+
         # Set up initial context with m_install
         initial_context = {
             "m_install": install_dir
         }
-        
+
         # Resolve all template variables
         resolved_config = resolve_jinja_templates(raw_config, initial_context)
-        
+
         # Extract the specific variables meza.py needs
         required_vars = [
-            "m_i18n", "m_meza_data", "m_logs_deploy", "m_logs_create_wiki", "m_logs", 
+            "m_i18n", "m_meza_data", "m_logs_deploy", "m_logs_create_wiki", "m_logs",
             "m_local_secret", "m_home", "m_config_vault"
         ]
-        
+
         defaults = {}
         missing_vars = []
-        
+
         for var in required_vars:
             if var in resolved_config:
                 defaults[var] = resolved_config[var]
             else:
                 missing_vars.append(var)
-        
+
         if missing_vars:
             print(f"ERROR: Required variables missing from paths.yml: {', '.join(missing_vars)}")
             print(f"Please ensure paths.yml contains all required path definitions.")
             sys.exit(1)
-        
+
         return defaults
-        
+
     except yaml.YAMLError as e:
         print(f"ERROR: Failed to parse paths.yml: {e}")
         print(f"Please check the YAML syntax in: {paths_yml_file}")
@@ -1505,7 +1505,7 @@ def meza_command_create(argv):
         start = get_datetime_string()
         unique = hashlib.sha1((start + env).encode('utf-8')).hexdigest()[:8]
         args_string = ' '.join(argv)
-        
+
         # Get wiki details for logging
         if sub_command == "wiki-promptless":
             if len(argv) < 4:
@@ -1527,7 +1527,7 @@ def meza_command_create(argv):
                 # Ensure it contains at least one of each required type
                 admin_password = (
                     secrets.choice(string.ascii_uppercase) +
-                    secrets.choice(string.ascii_lowercase) + 
+                    secrets.choice(string.ascii_lowercase) +
                     secrets.choice(string.digits) +
                     secrets.choice("!@#$%^&*()_+-=[]{}|;:,.<>?") +
                     admin_password[4:]
@@ -1556,7 +1556,7 @@ def meza_command_create(argv):
         log_dir = os.path.dirname(log_file)
         if not os.path.isdir(log_dir):
             os.makedirs(log_dir)
-        
+
         rc = meza_shell_exec(shell_cmd, True, log_file)
 
         # Write completion log
