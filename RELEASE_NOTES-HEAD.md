@@ -3,6 +3,32 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* bd8551e (2025-10-30) Greg Rundlett: Make lint-files.sh script more quiet By default only show warnings and errors.
+We introduce a -v or --verbose option if you want to show success
+messages too.
+Add --help with usage
+  - Modified: `src/scripts/lint-files.sh`
+
+* 979fe60 (2025-10-30) Greg Rundlett: Fix yaml linting errors 
+  - Modified: `.github/workflows/release-notes.yml`
+  - Modified: `src/playbooks/create-wiki.yml`
+  - Modified: `src/playbooks/debug.yml`
+  - Modified: `src/playbooks/migrate-wikis.yml`
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+  - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/imagemagick/tasks/setup-Debian.yml`
+  - Modified: `src/roles/imagemagick/tasks/setup-RedHat.yml`
+
+* 99d9597 (2025-10-30) Greg Rundlett: Improve linting configuration Ignore 'collections' which is 3rd-party code.
+  - Modified: `.ansible-lint`
+  - Modified: `.yamllint`
+
+* ff9e66b (2025-10-30) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * 51e8d6f (2025-10-30) Greg Rundlett: We don't need no stinkin' badges 
   - Modified: `README.md`
 
