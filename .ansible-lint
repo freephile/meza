@@ -6,6 +6,7 @@ profile: production  # min, basic, moderate, safety, shared, production
 exclude_paths:
   - .venv/
   - .cache/
+  - collections/
   - vendor/
   - tests/docker/
   - src/roles/geerlingguy.kibana/
