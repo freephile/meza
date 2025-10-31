@@ -1,3 +1,40 @@
+commit bd8551ea9aee87e3aef2d84e292c9fa82ee5b09e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 30 20:42:50 2025 -0400
+
+    Make lint-files.sh script more quiet
+    
+    By default only show warnings and errors.
+    
+    We introduce a -v or --verbose option if you want to show success
+    messages too.
+    
+    Add --help with usage
+
+commit 979fe6098683e23f3673fa4a05c67e3e929fc819
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 30 20:38:35 2025 -0400
+
+    Fix yaml linting errors
+
+commit 99d95977997cc576c5ef5018e57e7eb1c807e544
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Oct 30 20:23:52 2025 -0400
+
+    Improve linting configuration
+    
+    Ignore 'collections' which is 3rd-party code.
+
+commit ff9e66b99ea223ff7e5461536f552d381c19ffd2
+Author: GitHub Action <action@github.com>
+Date:   Thu Oct 30 18:38:37 2025 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 51e8d6f8f41ed4bc8d7ad901b165c93bd402cb5a
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 30 14:38:24 2025 -0400
