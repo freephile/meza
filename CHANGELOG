@@ -1,3 +1,43 @@
+commit 59cd7f0c525338cbadfd46783d3571463e8d2ff6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 31 16:11:00 2025 -0400
+
+    cleanup info about "install" command
+
+commit 538fe06fc9656cf635a61ede4c0fa7b8b372d1f5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 31 16:03:34 2025 -0400
+
+    strip trailing whitespace
+
+commit c9f6d6d0abe3f43ce2091cf1c21316234b64a529
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 31 16:00:44 2025 -0400
+
+    doc getmeza.sh
+    
+    concise version
+    Fixes Issue #172
+
+commit 27d5656b04ca59905913a0e974b81c5d0a5021ca
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Oct 31 15:57:26 2025 -0400
+
+    doc getmeza.sh
+    
+    Verbose version
+    Addresses Issue #172
+
+commit 45ad0b89d0bde6d8d830cc1fc6757ad0cd81a9b4
+Author: GitHub Action <action@github.com>
+Date:   Fri Oct 31 01:34:42 2025 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 67bc1b6d8623e78e9a7c7dd353600349b5d6788b
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Oct 30 21:33:52 2025 -0400
