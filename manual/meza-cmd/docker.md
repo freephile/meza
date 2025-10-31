@@ -83,6 +83,5 @@ meza docker exec abc123 systemctl status httpd
 
 ## See Also
 
-- [`meza install`](install.md) - Production installation methods
 - [`meza deploy`](deploy.md) - Deploy environments
 - [`meza setup`](setup.md) - Environment setup

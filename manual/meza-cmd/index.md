@@ -5,7 +5,6 @@ Meza is a comprehensive MediaWiki deployment automation platform. Use these comm
 ## Core Commands
 
 ### Environment Management
-- [`meza install`](install.md) - Install Meza components and dependencies
 - [`meza setup`](setup.md) - Set up environments and development tools
 - [`meza deploy`](deploy.md) - Deploy MediaWiki environments
 - [`meza update`](update.md) - Update Meza to specific version or branch

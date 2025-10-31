@@ -137,6 +137,5 @@ meza delete
 
 ## See Also
 
-- [Complete Command Index](index.md) - Detailed documentation for all commands
-- [Installation Guide](install.md) - Get started with Meza
+- [Index](index.md) - Overview documentation for all commands
 - [Setup Guide](setup.md) - Environment configuration

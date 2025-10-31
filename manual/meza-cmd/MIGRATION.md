@@ -69,7 +69,7 @@ All Meza commands now have comprehensive Markdown documentation:
 - [`delete.md`](delete.md) - Wiki deletion commands with safety warnings
 - [`deploy.md`](deploy.md) - Environment deployment
 - [`docker.md`](docker.md) - Docker container management (experimental)
-- [`install.md`](install.md) - Installation guide (corrected for actual commands)
+- [`install.md`](install.md) - Installation guide
 - [`list-wikis.md`](list-wikis.md) - Wiki listing
 - [`maint.md`](maint.md) - Maintenance operations
 - [`migrate-wikis.md`](migrate-wikis.md) - Wiki migration functionality

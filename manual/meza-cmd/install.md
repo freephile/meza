@@ -1,5 +1,7 @@
 # Meza Installation Guide
 
+To install meza, use the [getmeza.sh](../../src/scripts/getmeza.sh) script ([docs](../../src/scripts/getmeza.md))
+
 ## ⚠️ Important Note
 
 **There is no `meza install` command.** This documentation previously described a non-existent command.
