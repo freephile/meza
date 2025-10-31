@@ -3,12 +3,23 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* 67bc1b6 (2025-10-30) Greg Rundlett: Correct the basic meza help message Also, avoid catching too generic exception
+  - Modified: `src/scripts/meza.py`
+
+* ca0e0d8 (2025-10-31) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
+## Meza 43.60.6
 * bd8551e (2025-10-30) Greg Rundlett: Make lint-files.sh script more quiet By default only show warnings and errors.
 We introduce a -v or --verbose option if you want to show success
 messages too.
 Add --help with usage
   - Modified: `src/scripts/lint-files.sh`
 
+## Meza 43.60.5
 * 979fe60 (2025-10-30) Greg Rundlett: Fix yaml linting errors 
   - Modified: `.github/workflows/release-notes.yml`
   - Modified: `src/playbooks/create-wiki.yml`
@@ -19,6 +30,7 @@ Add --help with usage
   - Modified: `src/roles/imagemagick/tasks/setup-Debian.yml`
   - Modified: `src/roles/imagemagick/tasks/setup-RedHat.yml`
 
+## Meza 43.60.4
 * 99d9597 (2025-10-30) Greg Rundlett: Improve linting configuration Ignore 'collections' which is 3rd-party code.
   - Modified: `.ansible-lint`
   - Modified: `.yamllint`
@@ -29,6 +41,7 @@ Add --help with usage
   - Modified: `CHANGELOG`
   - Modified: `RELEASE_NOTES-HEAD.md`
 
+## Meza 43.60.3
 * 51e8d6f (2025-10-30) Greg Rundlett: We don't need no stinkin' badges 
   - Modified: `README.md`
 
@@ -47,6 +60,7 @@ Add --help with usage
   - Modified: `CHANGELOG`
   - Modified: `RELEASE_NOTES-HEAD.md`
 
+## Meza 43.60.2
 * b19e5f5 (2025-10-30) Greg Rundlett: Major enhancements: Create wiki logging, etc. "meza create wiki" logging implementation
 -----------------------------------------
 The new create-wiki logging mirrors the deploy logging architecture with both transactional and processing logs.
@@ -99,6 +113,7 @@ Fixes Issue [#220](https://github.com/freephile/meza/issues/220)
   - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`
   - Modified: `src/scripts/meza.py`
 
+## Meza 43.59.2
 * 465eaee (2025-10-29) Greg Rundlett: Fix the CHANGELOG automation - fix the updateCHANGELOG.sh script (used by Continuous Integration)
 - Update the entire CHANGELOG for consistent 'pretty' formatting
 - Limit the CHANGELOG to start at 2022-01-01 for length
@@ -113,6 +128,7 @@ Fixes Issue [#219](https://github.com/freephile/meza/issues/219)
   - Modified: `CHANGELOG`
   - Modified: `RELEASE_NOTES-HEAD.md`
 
+## Meza 43.60.1
 * a799fa8 (2025-10-29) Greg Rundlett: Prompt for credentials when creating Admin acct When Meza creates an Admin account, whether for the initial 'demo'
 or for any new wiki, prompt for the secure password and do not log it.
 This way it is only known to the user, and not a vulnerability.
@@ -131,6 +147,7 @@ Fixes Issue [#217](https://github.com/freephile/meza/issues/217)
   - Modified: `CHANGELOG`
   - Modified: `RELEASE_NOTES-HEAD.md`
 
+## Meza 43.59.1
 * 43cfde0 (2025-10-24) Greg Rundlett: Automated RELEASE NOTES and Changelog w/ Actions see .github/RELEASE_AUTOMATION.md for details
 Though GitHub Actions, we integrated automatic Changelog and RELEASE
 NOTES generation.
