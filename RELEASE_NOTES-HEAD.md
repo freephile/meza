@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [123f4378](https://github.com/freephile/meza/commit/123f4378) (2025-12-09) Greg Rundlett: add CrawlerProtection extension Block bots with CrawlerProtection
+Lockdown extension is left installed, but the configuration is
+removed since currently it is not doing anything out of the box.
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [f9d4e87a](https://github.com/freephile/meza/commit/f9d4e87a) (2025-12-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [8feff366](https://github.com/freephile/meza/commit/8feff366) (2025-12-09) Greg Rundlett: enhance Copilot instructions for Python Also add references to named standards and conventions
   - Modified: `.github/copilot-instructions.md`
 
