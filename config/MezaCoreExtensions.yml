@@ -218,11 +218,13 @@ list:
         [30, 50], # past 30 days, limit 50
         [0, 50]
       ];
-  # # Currently has a problem with 1.43
-  # # Crawler Protection
-  # - name: CrawlerProtection
-  #   repo: https://github.com/Mywikis/CrawlerProtection
-  #   version: "main"
+
+  # Crawler Protection
+  - name: CrawlerProtection
+    repo: https://github.com/Mywikis/CrawlerProtection
+    version: "main"
+    config: |
+      // no configuration is needed unless you want to block more pages
 
   # CreateUserPage - Check if user has a page and if not creates it with the content {{User}}
   - name: CreateUserPage
@@ -434,12 +436,9 @@ list:
     version: "{{ mediawiki_default_branch }}"
     config: |
       # handle web crawlers
-      # https://www.mediawiki.org/wiki/Handling_web_crawlers#Lockdown
-      # get a full list of special pages via:
-      # curl -s "[YOURWIKI]api.php?action=query&meta=siteinfo&siprop=specialpagealiases&format=json" | jq -r '.query.specialpagealiases[].aliases[]' | sort
-      $wgSpecialPageLockdown['Recentchangeslinked'] = ['user'];
-      $wgSpecialPageLockdown['WhatLinksHere'] = ['user'];
-      $wgActionLockdown['history'] = [ 'user' ];
+      # for SpecialPage handling, see CrawlerProtection extension
+      # CrawlerProtection even handles actions like history, diff, etc.
+      # $wgActionLockdown['history'] = [ 'user' ];
 
   # LoginNotify - Notifies users about suspicious login attempts
   - name: LoginNotify
