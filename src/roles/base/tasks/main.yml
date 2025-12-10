@@ -47,7 +47,7 @@
 - name: Ensure /etc/sudoers.d/meza-ansible in place
   ansible.builtin.template:
     src: "sudoers_meza-ansible.j2"
-    dest: "{{ m_meza_sudeoers_file }}"
+    dest: "{{ m_meza_sudoers_file }}"
     owner: root
     group: root
     mode: "0644"
