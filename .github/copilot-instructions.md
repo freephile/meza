@@ -186,17 +186,163 @@ ansible-lint <playbook.yml>            # For Ansible best practices
 2. **AFTER making changes**: Run linting again to verify no new errors introduced
 3. **If linting fails**: Fix all errors before proceeding or suggesting the changes to user
 
+#### Pre-Commit Checklist
+
+**For Python Files:**
+- [ ] Remove unused imports and variables (or prefix unused with `_`)
+- [ ] Use specific exception types, not bare `Exception`
+- [ ] Add module docstring with Requirements and Usage
+- [ ] Add function docstrings for non-trivial functions
+- [ ] Remove unnecessary f-strings (static strings)
+- [ ] Check line length (aim for <100 chars)
+- [ ] Follow naming conventions (UPPER_CASE, lower_case, PascalCase)
+- [ ] Escape template braces for `.format()`: `{{{{` → `{{`
+- [ ] Run: `pylint yourfile.py`
+
+**For YAML/Ansible Files:**
+- [ ] Use 2-space indentation consistently
+- [ ] Use FQCN for all Ansible modules
+- [ ] No trailing whitespace
+- [ ] Line length under 140 chars
+- [ ] Run: `./src/scripts/lint-files.sh <file>`
+
+**For All Files:**
+- [ ] Executable scripts have `#!/usr/bin/env python3` and `chmod +x`
+- [ ] No secrets or passwords committed
+- [ ] Absolute paths used in Ansible (not relative)
+- [ ] Test changes with `--check` or `--dry-run` mode first
+
 #### Linting Configuration
 - **yamllint config**: `.yamllint` (140 char line length, relaxed rules)
 - **ansible-lint config**: `.ansible-lint` (production profile, FQCN enforcement)
 - **Excluded paths**: `.venv/`, `vendor/`, `tests/docker/`, external roles
 
 ### Code Quality Standards
-- **YAML**: Follow yamllint rules, use consistent indentation (2 spaces)
-- **Ansible**: Use FQCN for modules (`ansible.builtin.file` not `file`)
-- **Python**: Follow PEP 8 style guidelines
-- **No trailing whitespace** in any files
-- **Proper file permissions**: Executable scripts must have `chmod +x`
+
+#### YAML
+- Follow yamllint rules, use consistent indentation (2 spaces)
+- No trailing whitespace
+- Maximum line length: 140 characters
+
+#### Ansible
+- Use FQCN for modules (`ansible.builtin.file` not `file`)
+- Follow ansible-lint production profile rules
+- Test with `--check` mode before applying changes
+
+#### Python
+All Python code must follow **PEP 8** (Python Enhancement Proposal 8 - Style Guide for Python Code) and pass pylint validation:
+
+**Import Management:**
+- Only import what you use - remove unused imports
+- Group imports per **PEP 8**: stdlib, third-party, local modules
+```python
+# ✅ Good
+import argparse
+import sys
+import pywikibot
+
+# ❌ Bad - unused import
+from pywikibot import pagegenerators  # If not used elsewhere
+```
+
+**Exception Handling:**
+- Use specific exceptions, never bare `except Exception:`
+```python
+# ✅ Good
+try:
+    page.save()
+except (pywikibot.exceptions.Error, OSError) as e:
+    print(f"Error: {e}")
+
+# ❌ Bad - too broad
+except Exception as e:
+    pass
+```
+
+**Variable Naming:**
+- Prefix intentionally unused variables with underscore
+```python
+# ✅ Good
+_created, _skipped, error_count = create_pages()
+# Only error_count is used later
+
+# ❌ Bad - pylint will complain about unused variables
+created, skipped, errors = create_pages()
+```
+
+**String Formatting:**
+- Only use f-strings when interpolating variables
+```python
+# ✅ Good
+print(f"Processing: {page_title}")
+print("Static message")
+
+# ❌ Bad - unnecessary f-string
+print(f"Static message")
+```
+
+**Docstrings:**
+- All modules must have docstrings explaining purpose and usage
+- Non-trivial functions need docstrings with Args, Returns, Raises sections
+```python
+#!/usr/bin/env python3
+"""
+Module description.
+
+Requirements:
+    pip install package
+
+Usage:
+    python script.py [options]
+"""
+
+def process_data(input_file, verbose=False):
+    """
+    Process the input file.
+
+    Args:
+        input_file: Path to file to process
+        verbose: Enable verbose output
+
+    Returns:
+        int: Number of items processed
+
+    Raises:
+        FileNotFoundError: If input file doesn't exist
+    """
+    pass
+```
+
+**Naming Conventions:**
+- Follow **PEP 8** naming standards:
+- `UPPER_CASE` for constants: `MAX_RETRIES = 3`
+- `lower_case_with_underscores` for variables/functions: `page_title`, `create_feature_page()`
+- `PascalCase` for classes: `WikiPageCreator`
+
+**Template String Escaping:**
+- When generating content with braces, escape for `.format()`:
+```python
+# ✅ Good - generates {{Feature}} in output
+template = "{{{{Feature\n|title={title}\n}}}}"
+
+# ❌ Bad - generates {Feature} in output
+template = "{{Feature\n|title={title}\n}}"
+```
+
+**Special Config Files:**
+- Use `# pylint: skip-file` for PyWikibot/special config files that use runtime variables
+```python
+# pylint: skip-file
+# flake8: noqa
+# This file uses PyWikibot's configuration format
+
+family = 'freephile'
+usernames['freephile']['en'] = 'BotName'  # Defined at runtime
+```
+
+**File Permissions:**
+- Executable scripts must have `chmod +x` and shebang: `#!/usr/bin/env python3`
+- No trailing whitespace in any files
 
 ## Debugging Commands
 ```bash
@@ -209,3 +355,21 @@ ansible-playbook site.yml --list-tasks
 # Test specific role in isolation
 ansible-playbook site.yml --tags <role-name> --check
 ```
+
+## Standards and References
+
+### Python
+- **PEP 8** – Style Guide for Python Code: https://pep8.org/
+- **PEP 257** – Docstring Conventions: https://www.python.org/dev/peps/pep-0257/
+- **Pylint Documentation**: https://pylint.pycqa.org/
+- **Google Python Style Guide**: https://google.github.io/styleguide/pyguide.html
+
+### YAML & Ansible
+- **yamllint**: https://yamllint.readthedocs.io/
+- **ansible-lint**: https://ansible-lint.readthedocs.io/
+- **Ansible Best Practices**: https://docs.ansible.com/ansible/latest/tips_tricks/ansible_tips_tricks.html
+
+### MediaWiki
+- **MediaWiki Coding Conventions**: https://www.mediawiki.org/wiki/Manual:Coding_conventions
+- **PyWikibot Documentation**: https://www.mediawiki.org/wiki/Manual:Pywikibot
+- **MediaWiki API**: https://www.mediawiki.org/wiki/API:Main_page
