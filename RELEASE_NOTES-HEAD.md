@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [06545e1c](https://github.com/freephile/meza/commit/06545e1c) (2025-12-10) Greg Rundlett: add examples and reference for PyWikiBot 
+  - Added: `scripts/README_PYWIKIBOT.md`
+  - Added: `scripts/create_extension_features.py`
+  - Added: `scripts/pywikibot-user-config.py`
+
+* [c6d00a97](https://github.com/freephile/meza/commit/c6d00a97) (2025-12-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [123f4378](https://github.com/freephile/meza/commit/123f4378) (2025-12-09) Greg Rundlett: add CrawlerProtection extension Block bots with CrawlerProtection
 Lockdown extension is left installed, but the configuration is
 removed since currently it is not doing anything out of the box.
