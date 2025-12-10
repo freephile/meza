@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [ef9a927e](https://github.com/freephile/meza/commit/ef9a927e) (2025-12-10) Greg Rundlett: Security and Maintenance release update to 1.43.6
+also fix typo for sudoers
+  - Modified: `config/defaults.yml`
+  - Modified: `src/roles/base/tasks/main.yml`
+
+* [427747c6](https://github.com/freephile/meza/commit/427747c6) (2025-12-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [06545e1c](https://github.com/freephile/meza/commit/06545e1c) (2025-12-10) Greg Rundlett: add examples and reference for PyWikiBot 
   - Added: `scripts/README_PYWIKIBOT.md`
   - Added: `scripts/create_extension_features.py`
