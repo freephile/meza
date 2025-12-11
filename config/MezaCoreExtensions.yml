@@ -529,6 +529,16 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-PageExchange
     version: master
 
+  # ParserMigration - Helps identify wikitext that will not be supported by the visual editor
+  - name: ParserMigration
+    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ParserMigration
+    version: "{{ mediawiki_default_branch }}"
+    config: |
+      $wgParserMigrationEnableParsoidArticlePages = true;
+      $wgParserMigrationEnableParsoidDiscussionTools = true; // default false
+      $wgParserMigrationEnableParsoidMobileFrontend = true; // default true
+      $wgParserMigrationEnableParsoidMobileFrontendTalkPages = true; // default false
+
   # PdfHandler - Allows for the display of PDFs in the browser
   # FileExtensions is also found in conf-meza/base
   # Shell memory is also found in the conf-meza/overrides
