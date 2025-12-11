@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [4b24c258](https://github.com/freephile/meza/commit/4b24c258) (2025-12-11) Greg Rundlett: add ParserMigration for Parsoid reads There should be new User preferences to opt in
+Fixes Issue [#239](https://github.com/freephile/meza/issues/239)
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [eba1f494](https://github.com/freephile/meza/commit/eba1f494) (2025-12-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [ef9a927e](https://github.com/freephile/meza/commit/ef9a927e) (2025-12-10) Greg Rundlett: Security and Maintenance release update to 1.43.6
 also fix typo for sudoers
   - Modified: `config/defaults.yml`
