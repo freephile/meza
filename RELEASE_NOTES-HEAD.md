@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [78f9f5e8](https://github.com/freephile/meza/commit/78f9f5e8) (2025-12-11) Greg Rundlett: disable ParserMigration extension requires MediaWiki 1.46+
+fixes Issue [#239](https://github.com/freephile/meza/issues/239)
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [745e90b9](https://github.com/freephile/meza/commit/745e90b9) (2025-12-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [4b24c258](https://github.com/freephile/meza/commit/4b24c258) (2025-12-11) Greg Rundlett: add ParserMigration for Parsoid reads There should be new User preferences to opt in
 Fixes Issue [#239](https://github.com/freephile/meza/issues/239)
   - Modified: `config/MezaCoreExtensions.yml`
