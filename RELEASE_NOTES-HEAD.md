@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [1494ef61](https://github.com/freephile/meza/commit/1494ef61) (2025-12-18) Greg Rundlett: Re-enable WhosOnline After fixing the extension for MW compatibility
+and removing logging of anonymous users, we can re-enable the extension
+Fixes Issue [#177](https://github.com/freephile/meza/issues/177)
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [94e7c884](https://github.com/freephile/meza/commit/94e7c884) (2025-12-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [78f9f5e8](https://github.com/freephile/meza/commit/78f9f5e8) (2025-12-11) Greg Rundlett: disable ParserMigration extension requires MediaWiki 1.46+
 fixes Issue [#239](https://github.com/freephile/meza/issues/239)
   - Modified: `config/MezaCoreExtensions.yml`
