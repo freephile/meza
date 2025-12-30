@@ -3,6 +3,19 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [9882079d](https://github.com/freephile/meza/commit/9882079d) (2025-12-29) Greg Rundlett: Improve templating of Extensions Add better examples and reference link to MezaLocalExtensions.yml
+Include the -wikis conditional gate for Local Extensions described on-wiki
+Improve the wording, and remove excess whitespace from the 'Extensions.php' deploy file
+Add Jinja comments to improve the readability of control structures
+  - Modified: `src/roles/init-controller-config/templates/MezaLocalExtensions.yml.j2`
+  - Modified: `src/roles/mediawiki/templates/Extensions.php.j2`
+
+* [386986b1](https://github.com/freephile/meza/commit/386986b1) (2025-12-19) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [1494ef61](https://github.com/freephile/meza/commit/1494ef61) (2025-12-18) Greg Rundlett: Re-enable WhosOnline After fixing the extension for MW compatibility
 and removing logging of anonymous users, we can re-enable the extension
 Fixes Issue [#177](https://github.com/freephile/meza/issues/177)

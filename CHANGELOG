@@ -1,3 +1,24 @@
+commit 9882079d79c01b7e59a67c7ef6fca720448ae3e1
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Dec 29 23:01:50 2025 -0500
+
+    Improve templating of Extensions
+    
+    Add better examples and reference link to MezaLocalExtensions.yml
+    Include the -wikis conditional gate for Local Extensions described on-wiki
+    Improve the wording, and remove excess whitespace from the 'Extensions.php' deploy file
+    Add Jinja comments to improve the readability of control structures
+
+commit 386986b1df2fb9c3c51c3a110c8adb29a9b5b65f
+Author: GitHub Action <action@github.com>
+Date:   Fri Dec 19 03:41:49 2025 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 1494ef610632874c321b8dd8ebf9c945fd2663cc
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Dec 18 22:41:35 2025 -0500
