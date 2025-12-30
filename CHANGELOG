@@ -1,3 +1,30 @@
+commit 2ca5454aad88565125b35b567dcf0c352c337150
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Dec 30 12:05:59 2025 -0500
+
+    add script for developing the jinja template for Extensions.php
+    
+    Jinja templating is hard, confusing, and unpredictable.
+    Toss in differences between Python 3.6.8 and modern Python and you're soon pulling your hair out.
+    This script allows you to iterate on src/roles/mediawiki/templates/Extensions.php.j2
+    without needing to do deploys just to see the results.
+
+commit def1caba8b84ee35d75199717ad16fbfb2ffdec0
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Dec 30 09:21:59 2025 -0500
+
+    replace tabs with spaces in Jinja templates
+
+commit 353dc13cc1d6dba048865e300001443bc257a962
+Author: GitHub Action <action@github.com>
+Date:   Tue Dec 30 04:02:01 2025 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 9882079d79c01b7e59a67c7ef6fca720448ae3e1
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Dec 29 23:01:50 2025 -0500

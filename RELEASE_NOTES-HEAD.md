@@ -3,6 +3,21 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [2ca5454a](https://github.com/freephile/meza/commit/2ca5454a) (2025-12-30) Greg Rundlett: add script for developing the jinja template for Extensions.php Jinja templating is hard, confusing, and unpredictable.
+Toss in differences between Python 3.6.8 and modern Python and you're soon pulling your hair out.
+This script allows you to iterate on src/roles/mediawiki/templates/Extensions.php.j2
+without needing to do deploys just to see the results.
+  - Added: `src/scripts/render_extensions_php.py`
+
+* [def1caba](https://github.com/freephile/meza/commit/def1caba) (2025-12-30) Greg Rundlett: replace tabs with spaces in Jinja templates 
+  - Modified: `src/roles/mediawiki/templates/Extensions.php.j2`
+
+* [353dc13c](https://github.com/freephile/meza/commit/353dc13c) (2025-12-30) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [9882079d](https://github.com/freephile/meza/commit/9882079d) (2025-12-29) Greg Rundlett: Improve templating of Extensions Add better examples and reference link to MezaLocalExtensions.yml
 Include the -wikis conditional gate for Local Extensions described on-wiki
 Improve the wording, and remove excess whitespace from the 'Extensions.php' deploy file
