@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [3a48d02d](https://github.com/freephile/meza/commit/3a48d02d) (2025-12-30) Greg Rundlett: fix typo skip-ci 
+  - Modified: `src/scripts/render_extensions_php.py`
+
+* [b58b1a11](https://github.com/freephile/meza/commit/b58b1a11) (2025-12-30) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [7ba28a1e](https://github.com/freephile/meza/commit/7ba28a1e) (2025-12-30) Greg Rundlett: add comment about the helper script for Extensions.php 
   - Modified: `src/roles/mediawiki/templates/Extensions.php.j2`
 
