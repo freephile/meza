@@ -1,3 +1,19 @@
+commit 7ba28a1ec9dc73525af2add6ff12f9ef6ee4bd10
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Dec 30 17:52:37 2025 +0000
+
+    add comment about the helper script for Extensions.php
+
+commit ab35d350aa234519b155705afeb8ceb8aee7e6d5
+Author: GitHub Action <action@github.com>
+Date:   Tue Dec 30 17:06:32 2025 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 2ca5454aad88565125b35b567dcf0c352c337150
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Tue Dec 30 12:05:59 2025 -0500

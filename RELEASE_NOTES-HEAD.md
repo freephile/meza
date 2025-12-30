@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [7ba28a1e](https://github.com/freephile/meza/commit/7ba28a1e) (2025-12-30) Greg Rundlett: add comment about the helper script for Extensions.php 
+  - Modified: `src/roles/mediawiki/templates/Extensions.php.j2`
+
+* [ab35d350](https://github.com/freephile/meza/commit/ab35d350) (2025-12-30) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [2ca5454a](https://github.com/freephile/meza/commit/2ca5454a) (2025-12-30) Greg Rundlett: add script for developing the jinja template for Extensions.php Jinja templating is hard, confusing, and unpredictable.
 Toss in differences between Python 3.6.8 and modern Python and you're soon pulling your hair out.
 This script allows you to iterate on src/roles/mediawiki/templates/Extensions.php.j2
