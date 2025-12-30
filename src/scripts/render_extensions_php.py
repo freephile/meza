@@ -15,7 +15,7 @@ so you can validate formatting and structure.
 Requirements:
     pip install jinja2 pyyaml
     From my .venv during development I used
-    pip3.6 install 'jinja2<3' 'markupsafe<2.1' pyyam
+    pip3.6 install 'jinja2<3' 'markupsafe<2.1' pyyaml
 
 Usage:
     ./src/scripts/render_extensions_php.py \
