@@ -41,9 +41,9 @@
 {% for ext in meza_core_extensions['list'] if ext.composer is not defined %}
 {# JINJA IF: legacy_load means use require_once instead of wfLoadExtension #}
 {% if ext.legacy_load is defined and ext.legacy_load -%}
-	require_once "$IP/extensions/{{ ext.name }}/{{ ext.name }}.php";
+  require_once "$IP/extensions/{{ ext.name }}/{{ ext.name }}.php";
 {%- else -%}
-	wfLoadExtension( "{{ ext.name }}" );
+  wfLoadExtension( "{{ ext.name }}" );
 {%- endif -%}
 {# JINJA IF: optional per-extension config snippet (rendered verbatim) #}
 {%- if ext.config is defined %}
@@ -63,9 +63,9 @@
 {% for ext in meza_core_skins['list'] if ext.composer is not defined %}
 {# JINJA IF: legacy_load means use require_once instead of wfLoadSkin #}
 {% if ext.legacy_load is defined and ext.legacy_load -%}
-	require_once "$IP/skins/{{ ext.name }}/{{ ext.name }}.php";
+  require_once "$IP/skins/{{ ext.name }}/{{ ext.name }}.php";
 {%- else -%}
-	wfLoadSkin( "{{ ext.name }}" );
+  wfLoadSkin( "{{ ext.name }}" );
 {%- endif -%}
 {# JINJA IF: optional per-skin config snippet (rendered verbatim) #}
 {%- if ext.config is defined %}
@@ -121,18 +121,18 @@
 {% for ext in meza_local_extensions['list'] if ext.composer is not defined %}
 {# JINJA IF: only enable this extension on the listed wiki IDs #}
 {% if ext.wikis is defined -%}
-	if ( in_array( $wikiId, array( {% for wiki in ext.wikis -%}'{{ wiki}}', {%- endfor -%} ) ) ) {
+  if ( in_array( $wikiId, array( {% for wiki in ext.wikis -%}'{{ wiki}}', {%- endfor -%} ) ) ) {
 {%- endif -%}
-	{# JINJA IF: legacy_load means use require_once instead of wfLoadExtension #}
-	{%- if ext.legacy_load is defined and ext.legacy_load -%}
-		require_once "$IP/extensions/{{ ext.name }}/{{ ext.name }}.php";
-	{%- else -%}
-		wfLoadExtension( "{{ ext.name }}" );
-	{%- endif -%}
-	{# JINJA IF: optional per-extension config snippet (rendered verbatim) #}
-	{%- if ext.config is defined %}
+  {# JINJA IF: legacy_load means use require_once instead of wfLoadExtension #}
+  {%- if ext.legacy_load is defined and ext.legacy_load -%}
+    require_once "$IP/extensions/{{ ext.name }}/{{ ext.name }}.php";
+  {%- else -%}
+    wfLoadExtension( "{{ ext.name }}" );
+  {%- endif -%}
+  {# JINJA IF: optional per-extension config snippet (rendered verbatim) #}
+  {%- if ext.config is defined %}
 {{ ext.config }}
-	{%- endif -%}
+  {%- endif -%}
 {# JINJA IF: close the wiki-gating if-block opened above #}
 {%- if ext.wikis is defined %}
 }
@@ -159,18 +159,18 @@
 
 {# JINJA IF: only enable this skin on the listed wiki IDs #}
 {% if ext.wikis is defined -%}
-	if ( in_array( $wikiId, array( {% for wiki in ext.wikis -%}'{{ wiki}}', {%- endfor -%} ) ) ) {
+  if ( in_array( $wikiId, array( {% for wiki in ext.wikis -%}'{{ wiki}}', {%- endfor -%} ) ) ) {
 {%- endif -%}
-	{# JINJA IF: legacy_load means use require_once instead of wfLoadSkin #}
-	{%- if ext.legacy_load is defined and ext.legacy_load -%}
-		require_once "$IP/skins/{{ ext.name }}/{{ ext.name }}.php";
-	{%- else -%}
-		wfLoadSkin( "{{ ext.name }}" );
-	{%- endif -%}
-	{# JINJA IF: optional per-skin config snippet (rendered verbatim) #}
-	{%- if ext.config is defined %}
+  {# JINJA IF: legacy_load means use require_once instead of wfLoadSkin #}
+  {%- if ext.legacy_load is defined and ext.legacy_load -%}
+    require_once "$IP/skins/{{ ext.name }}/{{ ext.name }}.php";
+  {%- else -%}
+    wfLoadSkin( "{{ ext.name }}" );
+  {%- endif -%}
+  {# JINJA IF: optional per-skin config snippet (rendered verbatim) #}
+  {%- if ext.config is defined %}
 {{ ext.config }}
-	{%- endif -%}
+  {%- endif -%}
 {# JINJA IF: close the wiki-gating if-block opened above #}
 {%- if ext.wikis is defined %}
 }
