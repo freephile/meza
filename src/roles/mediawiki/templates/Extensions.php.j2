@@ -4,180 +4,176 @@
 
 
 /**
- *  SECTION: CORE MEZA COMPOSER EXTENSIONS
+ *  SECTION: CORE EXTENSIONS - installed via Composer
  *
  *  Below is configuration for extensions installed by Composer, which are part
  *  of core meza. Further down the document is a section for Composer-installed
  *  local extensions config.
  **/
+{# JINJA LOOP: core extensions that are installed via Composer AND have config #}
 {% for ext in meza_core_extensions['list'] if ext.composer is defined and ext.config is defined %}
-
-#
 # Config for Extension:{{ ext.name }}
-#
 {{ ext.config }}
-
 {% endfor %}
+{# END LOOP: core Composer extensions w/ config #}
 
 /**
- *  SECTION: CORE MEZA COMPOSER SKINS
+ *  SECTION: CORE SKINS installed via Composer
  *
  *  Below is configuration for skins installed by Composer, which are part
  *  of core meza. Further down the document is a section for Composer-installed
  *  local skins config.
  **/
+{# JINJA LOOP: core skins that are installed via Composer AND have config #}
 {% for ext in meza_core_skins['list'] if ext.composer is defined and ext.config is defined %}
-
-#
 # Config for Skin:{{ ext.name }}
-#
 {{ ext.config }}
-
 {% endfor %}
-
-
+{# END LOOP: core Composer skins w/ config #}
 
 /**
- *  SECTION: CORE MEZA STANDARD EXTENSIONS
+ *  SECTION: CORE EXTENSIONS - standard loading
  *
  *  Extensions below are part of core Meza. Further down in this file there may
  *  be additional extensions specified by this particular installation of meza
  **/
+{# JINJA LOOP: core extensions that use standard or legacy loading #}
 {% for ext in meza_core_extensions['list'] if ext.composer is not defined %}
-
+{# JINJA IF: legacy_load means use require_once instead of wfLoadExtension #}
 {% if ext.legacy_load is defined and ext.legacy_load -%}
 	require_once "$IP/extensions/{{ ext.name }}/{{ ext.name }}.php";
 {%- else -%}
 	wfLoadExtension( "{{ ext.name }}" );
 {%- endif -%}
-
+{# JINJA IF: optional per-extension config snippet (rendered verbatim) #}
 {%- if ext.config is defined %}
-
 {{ ext.config }}
 {%- endif -%}
-
 {%- endfor %}
+{# END LOOP: core standard extensions #}
 
 
 /**
- *  SECTION: CORE MEZA STANDARD SKINS
+ *  SECTION: CORE SKINS - standard loading
  *
  *  Skins below are part of core Meza. Further down in this file there may
  *  be additional skins specified by this particular installation of meza
  **/
+{# JINJA LOOP: core skins that are NOT installed via Composer #}
 {% for ext in meza_core_skins['list'] if ext.composer is not defined %}
-
+{# JINJA IF: legacy_load means use require_once instead of wfLoadSkin #}
 {% if ext.legacy_load is defined and ext.legacy_load -%}
 	require_once "$IP/skins/{{ ext.name }}/{{ ext.name }}.php";
 {%- else -%}
 	wfLoadSkin( "{{ ext.name }}" );
 {%- endif -%}
-
+{# JINJA IF: optional per-skin config snippet (rendered verbatim) #}
 {%- if ext.config is defined %}
-
 {{ ext.config }}
 {%- endif -%}
-
 {%- endfor %}
+{# END LOOP: core standard skins #}
 
 
 /**
- *  SECTION: LOCAL MEZA COMPOSER EXTENSIONS
+ *  SECTION: LOCAL EXTENSIONS installed via Composer
  *
  *  Below is configuration for extensions installed by Composer, which are part
  *  of this local meza installation. This section may be blank if no Composer
  *  extensions are required for this local installation.
  **/
+{# JINJA LOOP: local extensions installed via Composer AND have config #}
 {% for ext in meza_local_extensions['list'] if ext.composer is defined and ext.config is defined %}
-
-#
 # Config for Extension:{{ ext.name }}
-#
 {{ ext.config }}
-
 {% endfor %}
-
+{# END LOOP: local Composer extensions w/ config #}
 
 /**
- *  SECTION: LOCAL MEZA COMPOSER SKINS
+ *  SECTION: LOCAL SKINS installed via Composer
  *
  *  Below is configuration for skins installed by Composer, which are part
  *  of this local meza installation. This section may be blank if no Composer
  *  skins are required for this local installation.
  **/
+{# JINJA LOOP: local skins installed via Composer AND have config #}
 {% for ext in meza_local_skins['list'] if ext.composer is defined and ext.config is defined %}
-
-#
 # Config for Skin:{{ ext.name }}
-#
 {{ ext.config }}
-
 {% endfor %}
+{# END LOOP: local Composer skins w/ config #}
 
 
 /**
- *  SECTION: LOCAL MEZA STANDARD EXTENSIONS
+ *  SECTION: LOCAL EXTENSIONS - standard loading
  *
  *  Extensions configured by this installation of Meza, but not included in
  *  core meza. These extensions are defined in MezaLocalExtensions.yml in
  *  /opt/conf-meza/public. This section may be blank if no additional extensions
  *  are required for this local installation.
  **/
-{% for ext in meza_local_extensions['list'] if ext.composer is not defined %}
+{# JINJA LOOP: local extensions that use standard loading.
 
+  Some local extensions can be limited to specific wikis via `ext.wikis`.
+  When `ext.wikis` is present, we gate loading/config behind a PHP runtime check:
+  `in_array($wikiId, [ ... ])`.
+#}
+{% for ext in meza_local_extensions['list'] if ext.composer is not defined %}
+{# JINJA IF: only enable this extension on the listed wiki IDs #}
 {% if ext.wikis is defined -%}
 	if ( in_array( $wikiId, array( {% for wiki in ext.wikis -%}'{{ wiki}}', {%- endfor -%} ) ) ) {
 {%- endif -%}
-
-
+	{# JINJA IF: legacy_load means use require_once instead of wfLoadExtension #}
 	{%- if ext.legacy_load is defined and ext.legacy_load -%}
 		require_once "$IP/extensions/{{ ext.name }}/{{ ext.name }}.php";
 	{%- else -%}
 		wfLoadExtension( "{{ ext.name }}" );
 	{%- endif -%}
-
+	{# JINJA IF: optional per-extension config snippet (rendered verbatim) #}
 	{%- if ext.config is defined %}
-
 {{ ext.config }}
 	{%- endif -%}
-
-
+{# JINJA IF: close the wiki-gating if-block opened above #}
 {%- if ext.wikis is defined %}
 }
 {%- endif -%}
-
 {%- endfor %}
+{# END LOOP: local standard extensions #}
 
 
 /**
- *  SECTION: LOCAL MEZA STANDARD SKINS
+ *  SECTION: LOCAL SKINS - standard loading
  *
  *  Skins configured by this installation of Meza, but not included in
  *  core meza. These skins are defined in MezaLocalSkins.yml in
  *  /opt/conf-meza/public. This section may be blank if no additional skins
  *  are required for this local installation.
  **/
+{#
+  JINJA LOOP: local skins that are NOT installed via Composer.
+
+  Some local skins can be limited to specific wikis via `ext.wikis`.
+  When `ext.wikis` is present, we gate loading/config behind a PHP runtime check.
+#}
 {% for ext in meza_local_skins['list'] if ext.composer is not defined %}
 
+{# JINJA IF: only enable this skin on the listed wiki IDs #}
 {% if ext.wikis is defined -%}
 	if ( in_array( $wikiId, array( {% for wiki in ext.wikis -%}'{{ wiki}}', {%- endfor -%} ) ) ) {
 {%- endif -%}
-
-
+	{# JINJA IF: legacy_load means use require_once instead of wfLoadSkin #}
 	{%- if ext.legacy_load is defined and ext.legacy_load -%}
 		require_once "$IP/skins/{{ ext.name }}/{{ ext.name }}.php";
 	{%- else -%}
 		wfLoadSkin( "{{ ext.name }}" );
 	{%- endif -%}
-
+	{# JINJA IF: optional per-skin config snippet (rendered verbatim) #}
 	{%- if ext.config is defined %}
-
 {{ ext.config }}
 	{%- endif -%}
-
-
+{# JINJA IF: close the wiki-gating if-block opened above #}
 {%- if ext.wikis is defined %}
 }
 {%- endif -%}
-
 {%- endfor %}
+{# END LOOP: local standard skins #}

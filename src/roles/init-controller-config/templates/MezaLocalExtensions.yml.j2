@@ -1,13 +1,29 @@
 ---
 list: []
-  # To add extensions to this file, first remove the [] from the line above,
-  # then define an extension as follows:
-  #
-  # - name: UserJourney
-  #   repo: https://github.com/darenwelsh/UserJourney
-  #   version: master
-  #   config: |
-  #     $wgSomeVar = true;
-  #     $wgAnotherVar = false;
-  #
+# To add extensions to this file, first remove the [] from the line above,
+# then define extensions like the following examples:
+# ref. https://www.mediawiki.org/wiki/Meza/Installing_additional_extensions
 
+## A legacy loaded extension
+#   - name: UserJourney
+#     repo: https://github.com/darenwelsh/UserJourney
+#     version: master
+#     legacy_load: True
+#     config: |
+#       $fakeVarJustForTesting = false;
+
+## A modern loaded extension, limited just to the demo wiki
+#   - name: CommentStreams
+#     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CommentStreams.git
+#     version: master
+#     config: |
+#       $wgCommentStreamsEnableTalk = true;
+#     wikis:
+#       - demo
+
+## A Composer loaded extension (these cannot be limited to specific wikis)
+#   - name: Semantic Breadcrumb Links
+#     composer: mediawiki/semantic-breadcrumb-links
+#     version: "~1.3"
+#     config: |
+#       $egSBLTryToFindClosestDescendant = true;
