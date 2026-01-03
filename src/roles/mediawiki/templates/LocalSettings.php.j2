@@ -658,6 +658,11 @@ $wgFileExtensions = array_merge ( $wgFileExtensions, [
 	'xlsx',
 	'zip'] );
 
+// Native (browser) rendering has been available since 1.41
+// Use partial so that huge SVGs are still rasterized server-side.
+$wgSVGNativeRendering = "partial";
+$wgSVGNativeRenderingSizeLimit = 50 * 1024; // 50 KB is the default
+
 // Tell Universal Language Selector not to try to guess language based upon IP
 // address. This (a) isn't likely needed in enterprise use cases and (b) fails
 // anyway due to outdated URLs or firewall rules.
