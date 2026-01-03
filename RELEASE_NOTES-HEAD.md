@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [3a30ea25](https://github.com/freephile/meza/commit/3a30ea25) (2026-01-03) Greg Rundlett: add SVG native client-side rendering Using `$wgSVGNativeRendering=true;` MediaWiki will serve SVG files
+to the client browser instead of converting them to rasterized formats.
+Fixes Issue [#248](https://github.com/freephile/meza/issues/248)
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [7bdd76d9](https://github.com/freephile/meza/commit/7bdd76d9) (2025-12-30) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [3a48d02d](https://github.com/freephile/meza/commit/3a48d02d) (2025-12-30) Greg Rundlett: fix typo skip-ci 
   - Modified: `src/scripts/render_extensions_php.py`
 
