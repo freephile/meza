@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [f602c7b0](https://github.com/freephile/meza/commit/f602c7b0) (2026-01-06) Greg Rundlett: remove inadvertent setting for CategoryTree ext CategoryTree can have $wgCategoryTreeSidebarRoot, but it would be a
+local choice and is not valid in some skins.
+The setting has been disabled by comment in CoreExtensions
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [e5221464](https://github.com/freephile/meza/commit/e5221464) (2026-01-03) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [3a30ea25](https://github.com/freephile/meza/commit/3a30ea25) (2026-01-03) Greg Rundlett: add SVG native client-side rendering Using `$wgSVGNativeRendering=true;` MediaWiki will serve SVG files
 to the client browser instead of converting them to rasterized formats.
 Fixes Issue [#248](https://github.com/freephile/meza/issues/248)

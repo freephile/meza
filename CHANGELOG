@@ -1,3 +1,24 @@
+commit f602c7b048ee253d6c5e7130bfb3a2a196b3ac2c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 6 23:02:06 2026 +0000
+
+    remove inadvertent setting for CategoryTree ext
+    
+    CategoryTree can have $wgCategoryTreeSidebarRoot, but it would be a
+    local choice and is not valid in some skins.
+    
+    The setting has been disabled by comment in CoreExtensions
+
+commit e5221464409e4f012d9594e57b670cd42dcf42de
+Author: GitHub Action <action@github.com>
+Date:   Sat Jan 3 15:02:14 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 3a30ea25fc4ea79846f0b994faadca31dc30f455
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Sat Jan 3 14:59:21 2026 +0000
