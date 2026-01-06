@@ -67,7 +67,7 @@ list:
       //  If not set, no tree is integrated (this is the default). Integrating
       //  a CategoryTree into the sidebar only works with skins based upon SkinTemplate,
       //  that is, Modern, Monobook, Chick, Simple, and MySkin, but not Standard, Nostalgia or CologneBlue.
-      $wgCategoryTreeSidebarRoot = 'People';
+      // $wgCategoryTreeSidebarRoot = 'People';
       // if true, forces the scripts needed by CategoryTree on every page, instead of on-demand.
       // This may be needed if a CategoryTree is embedded in an unusual way, for example in a custom skin or in a system message
       // $wgCategoryTreeForceHeaders = true;
