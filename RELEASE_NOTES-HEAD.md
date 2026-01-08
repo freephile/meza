@@ -3,6 +3,18 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [b2785e3d](https://github.com/freephile/meza/commit/b2785e3d) (2026-01-08) Greg Rundlett: remove archived Graph extension Graph should not be used on a public wiki and the code is archived.
+Fixes Issue [#251](https://github.com/freephile/meza/issues/251)
+For more, see the discussion "Improve Chartinging capabilities of
+Meza" https://github.com/freephile/meza/discussions/252
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [7e016a91](https://github.com/freephile/meza/commit/7e016a91) (2026-01-06) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [f602c7b0](https://github.com/freephile/meza/commit/f602c7b0) (2026-01-06) Greg Rundlett: remove inadvertent setting for CategoryTree ext CategoryTree can have $wgCategoryTreeSidebarRoot, but it would be a
 local choice and is not valid in some skins.
 The setting has been disabled by comment in CoreExtensions
