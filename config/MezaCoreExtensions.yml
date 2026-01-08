@@ -364,12 +364,6 @@ list:
       $wgGroupPermissions['interface-admin']['gadgets-edit'] = true;
       $wgGroupPermissions['interface-admin']['gadgets-definition-edit'] = true;
 
-  # Graph - Allows data visualizations such as bar charts, pie charts, timelines, and histograms (demo) in a JSON format
-  # that renders a Vega-based graph.
-  - name: Graph
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Graph
-    version: "{{ mediawiki_default_branch }}"
-
   # HeaderFooter - Provides per-namespace and per-page header and footer inclusion.
   - name: HeaderFooter
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/HeaderFooter
