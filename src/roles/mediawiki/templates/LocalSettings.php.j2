@@ -23,7 +23,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 
 /**
- *  1) WIKI-SPECIFIC SETUP
+ *  SECTION 1) WIKI-SPECIFIC SETUP
  *
  *  Acquire the intended wiki either from the REQUEST_URI (for web requests) or
  *  from the WIKI environment variable (for command line scripts)
@@ -124,11 +124,8 @@ foreach ( glob("$m_deploy/public/wikis/$wikiId/preLocalSettings.d/*.php") as $fi
 }
 
 
-
-
-
 /**
- *  2) DEBUG
+ *  SECTION 2) DEBUG
  *
  *  Options to enable debug are below. The lowest-impact solution should be
  *  chosen. Options are listed from least impact to most impact.
@@ -142,6 +139,7 @@ foreach ( glob("$m_deploy/public/wikis/$wikiId/preLocalSettings.d/*.php") as $fi
  *       users of a single wiki.
  *    5) Set `$mezaForceDebug = true;` to turn on debug for all users and wikis
  **/
+
 $mezaCommandLineDebug = {{ m_command_line_debug }}; // don't we always want debug on command line?
 $mezaForceDebug = {{ m_force_debug }};
 
@@ -226,15 +224,8 @@ else {
 }
 
 
-
-
-
-
-
-
-
 /**
- *  3) PATH SETUP
+ *  SECTION 3) PATH SETUP
  *
  *
  **/
@@ -287,13 +278,8 @@ $wgStylePath = "$wgScriptPath/skins";
 $wgResourceBasePath = $wgScriptPath;
 
 
-
-
-
-
-
 /**
- *  4) EMAIL
+ *  SECTION 4) EMAIL
  *
  *  Email configuration
  **/
@@ -323,12 +309,8 @@ $wgAllowHTMLEmail = true;
 $wgDefaultUserOptions['echo-email-format'] = 'html'; // default = plain-text
 
 
-
-
-
-
 /**
- *  5) DATABASE SETUP
+ *  SECTION 5) DATABASE SETUP
  *
  *
  **/
@@ -416,15 +398,13 @@ $wgSharedDB = '';
 {% endif %}
 
 
-
-
-
 /**
- *  6) GENERAL CONFIGURATION
+ *  SECTION 6) GENERAL CONFIGURATION
  *
  *
  *
  **/
+
 // proxy setup
 $wgUseCdn = true;
 $wgUsePrivateIPs = true;
@@ -580,9 +560,6 @@ $wgCacheDirectory = "{{ m_cache_directory }}/$wikiId";
 $smwgConfigFileDir = "/opt/conf-meza/public/wikis/{$wikiId}";
 
 
-
-
-
 /**
  *
  * Take from LocalSettingsAdditions
@@ -674,15 +651,13 @@ $wgNamespacesWithSubpages[NS_MAIN] = true;
 $wgUseRCPatrol = false;
 
 
-
-
-
 /**
- *  7) PERMISSIONS
+ *  SECTION 7) PERMISSIONS
  *
  *
  *
  **/
+
 # Prevent new user registrations except by sysops
 $wgGroupPermissions['*']['createaccount'] = false;
 
@@ -763,16 +738,16 @@ else if ( $mezaAuthType === 'viewer-read' ) {
     $wgGroupPermissions['Contributor'] = $wgGroupPermissions['user'];
     $wgGroupPermissions['Contributor']['edit'] = true;
 
+} else {
+	// we should never get here bc it's defaulted in public.yml, but someone could enter an invalid value
+	die( "Unknown auth type: \"$mezaAuthType\"\n" );
 }
 
-
-
-
-
 /**
- *  8) EXTENSION SETTINGS
+ *  SECTION 8) EXTENSION SETTINGS
  *
- *  Extensions defined in meza core and meza local yaml files, which are used to  *  load the extensions via Git or Composer, and which generate the PHP files
+ *  Extensions defined in meza core and meza local yaml files, which are used to
+ *  load the extensions via Git or Composer, and which generate the PHP files
  *  below.
  */
 
@@ -783,7 +758,7 @@ require_once "{{ m_deploy }}/Extensions.php";
  * Extension:CirrusSearch
  *
  * CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
- * cannot be easily added to base-extensions.yml. As such, CirrusSearch config
+ * cannot be easily added to MezaCoreExtensions.yml. As such, CirrusSearch config
  * is included directly in LocalSettings.php.j2
  */
 $wgSearchType = 'CirrusSearch';
@@ -815,12 +790,13 @@ $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$f
 };
 
 /**
- *  9) LOAD POST LOCAL SETTINGS
+ *  SECTION 9) LOAD POST LOCAL SETTINGS
  *
  *     Items to override standard config
  *
  *
  **/
+
 #    (1) Load all PHP files in postLocalSettings.d for all wikis
 foreach ( glob("$m_deploy/public/postLocalSettings.d/*.php") as $filename) {
     require_once $filename;
