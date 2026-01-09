@@ -896,10 +896,10 @@ list:
 #      $wgWikiLoveLogging = true;
 
 
-  # # Wiretap - Provides special pages for tracking user page viewing stats
-  # - name: Wiretap
-  #   repo: https://github.com/enterprisemediawiki/Wiretap.git
-  #   version: tags/0.2.0
+  # Wiretap - Provides special pages for tracking user page viewing stats
+  - name: Wiretap
+    repo: https://github.com/freephile/Wiretap.git
+    version: "master"
 
   # YouTube - Allows users to embed YouTube and Google Videos movies
   - name: YouTube

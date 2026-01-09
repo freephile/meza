@@ -4,6 +4,18 @@
 // To modify this template, please use the helper script at 
 // src/scripts/render_extensions_php.py
 
+{% if m_excluded_extension_names is defined and m_excluded_extension_names|length > 0 %}
+/**
+ *  EXCLUDED EXTENSIONS
+ *
+ *  The following extensions from MezaCoreExtensions.yml have been excluded
+ *  via m_excluded_extension_names configuration:
+{% for ext_name in m_excluded_extension_names %}
+ *    - {{ ext_name }}
+{% endfor %}
+ **/
+{% endif %}
+
 /**
  *  SECTION: CORE EXTENSIONS - installed via Composer
  *

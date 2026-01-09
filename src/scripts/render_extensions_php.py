@@ -12,6 +12,10 @@ It loads real core data from:
 Local extensions/skins are optional; if you omit them the script uses empty lists
 so you can validate formatting and structure.
 
+If you provide a public.yml file via --public-config, the script will extract
+m_excluded_extension_names and apply the same filtering logic as the Ansible
+deploy, plus add a PHP comment documenting the exclusions.
+
 Requirements:
     pip install jinja2 pyyaml
     From my .venv during development I used
@@ -25,6 +29,7 @@ Usage:
     ./src/scripts/render_extensions_php.py \
       --local-extensions /opt/conf-meza/public/MezaLocalExtensions.yml \
       --local-skins /opt/conf-meza/public/MezaLocalSkins.yml \
+      --public-config /opt/conf-meza/public/public.yml \
       --out /tmp/Extensions.php
 
 Notes:
@@ -96,6 +101,11 @@ def parse_args() -> argparse.Namespace:
         help="Optional path to MezaLocalSkins.yml (absolute or relative to --repo)",
     )
     parser.add_argument(
+        "--public-config",
+        default=None,
+        help="Optional path to public.yml (absolute or relative to --repo)",
+    )
+    parser.add_argument(
         "--out",
         default="logs/Extensions.php.simulated.php",
         help="Output path (absolute or relative to --repo)",
@@ -131,6 +141,7 @@ def main() -> int:
     core_skins_path = resolve_path(repo_root, args.core_skins)
     local_extensions_path = resolve_path(repo_root, args.local_extensions)
     local_skins_path = resolve_path(repo_root, args.local_skins)
+    public_config_path = resolve_path(repo_root, args.public_config)
     out_path = resolve_path(repo_root, args.out)
 
     if template_path is None or out_path is None:
@@ -149,6 +160,23 @@ def main() -> int:
     else:
         meza_local_skins = load_yaml(local_skins_path)
 
+    # Load public config to get excluded extensions
+    m_excluded_extension_names = []
+    if public_config_path is not None:
+        public_config = load_yaml(public_config_path)
+        m_excluded_extension_names = public_config.get("m_excluded_extension_names", [])
+
+    # Apply exclusions to core extensions (same logic as Ansible task)
+    if m_excluded_extension_names:
+        original_count = len(meza_core_extensions.get("list", []))
+        meza_core_extensions["list"] = [
+            ext for ext in meza_core_extensions.get("list", [])
+            if ext.get("name") not in m_excluded_extension_names
+        ]
+        filtered_count = len(meza_core_extensions["list"])
+        print(f"Excluding {len(m_excluded_extension_names)} extension(s): {', '.join(m_excluded_extension_names)}")
+        print(f"Core extensions: {original_count} → {filtered_count}")
+
     undefined_cls = jinja2.StrictUndefined if args.strict else jinja2.Undefined
     env = jinja2.Environment(
         undefined=undefined_cls,
@@ -166,6 +194,7 @@ def main() -> int:
         "meza_core_skins": meza_core_skins,
         "meza_local_extensions": meza_local_extensions,
         "meza_local_skins": meza_local_skins,
+        "m_excluded_extension_names": m_excluded_extension_names,
         # Some templates assume this exists for wiki gating; leaving as a sensible
         # default here is helpful even when local lists are empty.
         "wikiId": "demo",

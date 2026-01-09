@@ -18,6 +18,30 @@ meza_auth_type: "anon-read"
 
 blender_landing_page_title: Test of Meza Wikis
 
+## List of extension names to exclude (must match names in MezaCoreExtensions.yml exactly)
+# m_excluded_extension_names:
+#   - Wiretap
+#   - CommentStreams
+#   - Flow
+#
+# NOTES:
+# - Extension names are case-sensitive and must match exactly as they appear in MezaCoreExtensions.yml
+# - After modifying public.yml, run: sudo meza deploy <env>
+# - This only prevents installation/loading; it doesn't remove already-installed extensions
+# - To fully remove an extension, you may need to manually delete from /opt/meza/htdocs/mediawiki/extensions/
+#
+# Common extensions you might want to exclude:
+# - Wiretap           # Page viewing statistics tracking
+# - CommentStreams    # Commenting system (incompatible with some MediaWiki versions)
+# - Flow              # Threaded discussions (requires Parsoid, can be complex)
+# - DarkMode          # Dark mode toggle (if you don't need it)
+# - WhoIsWatching     # Shows who is watching pages
+# - WhosOnline        # Shows currently logged-in users
+# - WatchAnalytics    # Analytics for watchlists
+# - YouTube           # If you don't allow YouTube embeds
+
+
+
 # Email senders
 # Refs:
 #   https://www.mediawiki.org/wiki/Manual:$wgPasswordSender

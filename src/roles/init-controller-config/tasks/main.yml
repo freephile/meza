@@ -86,7 +86,6 @@
     - postLocalSettings.d
     - samlAuthorizations.d
 
-
 - name: "Ensure base files present, do NOT overwrite"
   ansible.builtin.template:
     src: "templates/{{ item }}.j2"

@@ -143,6 +143,24 @@
   tags:
     - always
 
+- name: Apply extension exclusions from m_excluded_extension_names
+  set_fact:
+    meza_core_extensions:
+      list: "{{ meza_core_extensions.list | rejectattr('name', 'in', m_excluded_extension_names | default([])) | list }}"
+  when: m_excluded_extension_names is defined and m_excluded_extension_names | length > 0
+  tags:
+    - always
+
+- name: Debug - Log excluded extensions
+  ansible.builtin.debug:
+    msg:
+      - "Excluding {{ m_excluded_extension_names | length }} extension(s) from MezaCoreExtensions.yml"
+      - "Excluded extensions: {{ m_excluded_extension_names | join(', ') }}"
+      - "Remaining core extensions count: {{ meza_core_extensions.list | length }}"
+  when: m_excluded_extension_names is defined and m_excluded_extension_names | length > 0
+  tags:
+    - always
+
 - name: Ensure core meza extensions installed (non-Composer)
   become: true
   become_user: "meza-ansible"
@@ -229,6 +247,7 @@
 
 # File holding extension loading and config for core and local extensions
 # as well as core and local skins
+# This is the primary shim to LocalSettings.php for loading extensions and skins
 - name: Ensure Extensions.php in place
   template:
     src: Extensions.php.j2
