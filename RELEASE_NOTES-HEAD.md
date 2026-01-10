@@ -3,6 +3,22 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [680a9de7](https://github.com/freephile/meza/commit/680a9de7) (2026-01-10) Greg Rundlett: add cache for SemanticMediaWiki set `$smwgQueryResultCacheType=CACHE_MEMCACHED;` for SMW
+Memcached is already configured for other caches in LocalSettings.php
+fixes Issue [#111](https://github.com/freephile/meza/issues/111)
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [858a6d5a](https://github.com/freephile/meza/commit/858a6d5a) (2026-01-10) Greg Rundlett: add helpful prompt about missing WIKI=foo The new failure message for a missing wikiId now includes a line to say
+"Perhaps you forgot to specify WIKI=foo in your script command?"
+[skip ci]
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [d653d469](https://github.com/freephile/meza/commit/d653d469) (2026-01-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [fa83a80a](https://github.com/freephile/meza/commit/fa83a80a) (2026-01-10) Greg Rundlett: format PHP templates for quality / conformance fix up LocalSettings.php and Extensions.php files
 - PHPDoc header - Added proper file documentation with @package Meza
 - Section headers - Changed from SECTION X) to SECTION X: format with proper PHPDoc blocks /** */
