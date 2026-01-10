@@ -30,8 +30,7 @@ warn_list:
 # Enable offline mode to skip galaxy role checks
 offline: false
 
-# Use colored output
+# Use default rules and settings
 use_default_rules: true
-parseable: false
 quiet: false
 verbosity: 1
