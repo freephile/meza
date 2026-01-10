@@ -29,7 +29,7 @@ list:
     version: "~5.0"
     config: |
       wfLoadExtension( 'Bootstrap' );
-      # Bootstrap modules are loaded in 'override.php'
+      // Bootstrap modules are loaded in 'override.php'
 
   # Adds Tooltips, Cards, Carousel etc.
   - name: BootstrapComponents
@@ -94,9 +94,9 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CirrusSearch
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
-      # cannot be easily added to MezaCoreExtensions.yml. As such, CirrusSearch config
-      # is included directly in LocalSettings.php.j2
+      // CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
+      // cannot be easily added to MezaCoreExtensions.yml. As such, CirrusSearch config
+      // is included directly in LocalSettings.php.j2
 
   # Cite - Allows a user to create references as footnotes on a page.
   - name: Cite
@@ -123,7 +123,7 @@ list:
   - name: CodeMirror
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CodeMirror
     config: |
-      # Enables use of CodeMirror by default but still allow users to disable it
+      // Enables use of CodeMirror by default but still allow users to disable it
       $wgDefaultUserOptions['usecodemirror'] = 1;
     version: "{{ mediawiki_default_branch }}"
 
@@ -141,13 +141,13 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
-      # All users have commenting rights by default
-      # $wgGroupPermissions['user']['cs-comment'] = true;
+      // All users have commenting rights by default
+      // $wgGroupPermissions['user']['cs-comment'] = true;
       $wgAllowDisplayTitle = true;
       $wgRestrictDisplayTitle = false;
       $wgCommentStreamsEnableVoting = true;
       $wgCommentStreamsModeratorFastDelete = true;
-      # By setting to -1, comments are allowed ONLY when <comment-streams /> is used on the page.
+      // By setting to -1, comments are allowed ONLY when <comment-streams /> is used on the page.
       $wgCommentStreamsAllowedNamespaces = -1;
 
   # ConfirmEdit - Provides CAPTCHA support to help prevent spam and abuse from automated bots
@@ -200,22 +200,22 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ContributionScores
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # Exclude Bots from the reporting - Can be omitted.
+      // Exclude Bots from the reporting - Can be omitted.
       $wgContribScoreIgnoreBots = true;
-      # Exclude Blocked Users from the reporting - Can be omitted.
+      // Exclude Blocked Users from the reporting - Can be omitted.
       $wgContribScoreIgnoreBlockedUsers = true;
-      # Exclude specific usernames from the reporting - Can be omitted.
+      // Exclude specific usernames from the reporting - Can be omitted.
       $wgContribScoreIgnoreUsernames = [];
-      # Use real user names when available - Can be omitted. Only for MediaWiki 1.19 and later.
+      // Use real user names when available - Can be omitted. Only for MediaWiki 1.19 and later.
       $wgContribScoresUseRealName = true;
-      # Set to true to disable cache for parser function and inclusion of table.
+      // Set to true to disable cache for parser function and inclusion of table.
       $wgContribScoreDisableCache = false;
-      # Use the total edit count to compute the Contribution score.
+      // Use the total edit count to compute the Contribution score.
       $wgContribScoreUseRoughEditCount = false;
-      # Each array defines a report.
+      // Each array defines a report.
       $wgContribScoreReports = [
-        [7, 50],  # "past 7 days" and "LIMIT 50"
-        [30, 50], # past 30 days, limit 50
+        [7, 50],  // "past 7 days" and "LIMIT 50"
+        [30, 50], // past 30 days, limit 50
         [0, 50]
       ];
 
@@ -326,32 +326,32 @@ list:
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
-      # Set the default content format for Flow
+      // Set the default content format for Flow
       $wgFlowContentFormat = 'html';
 
-      # Permit at least one "group" to create Flow boards
+      // Permit at least one "group" to create Flow boards
       $wgGroupPermissions['user']['flow-create-board'] = true;
 
-      # Configure Content Model for namespaces using Flow
+      // Configure Content Model for namespaces using Flow
       $wgNamespaceContentModels[NS_TALK] = 'flow-board';
       $wgNamespaceContentModels[NS_USER_TALK] = 'flow-board';
-      # Configure "subpages" feature for the same namespaces
+      // Configure "subpages" feature for the same namespaces
       $wgNamespacesWithSubpages[NS_TALK] = true;
       $wgNamespacesWithSubpages[NS_USER_TALK] = true;
 
-      # Flow needs Parsoid if using VE, and with MW 1.39 Flow still ignores zero-config Parsoid
+      // Flow needs Parsoid if using VE, and with MW 1.39 Flow still ignores zero-config Parsoid
       wfLoadExtension( 'Parsoid', "$IP/vendor/wikimedia/parsoid/extension.json" );
-      # Flow ignores RESTBase, but we did not test or document this setting
-      # $wmgUseRestbaseVRS= false;
+      // Flow ignores RESTBase, but we did not test or document this setting
+      // $wmgUseRestbaseVRS= false;
 
       $wgVirtualRestConfig['modules']['parsoid'] = [
         'url' => "http://localhost:8080/$wikiId/rest.php",
-      # server and port variables would be better here, but other Meza roles are not yet ready
-      # 'url' => "$wgServer/$wikiId/rest.php",
-      # 'domain' => $wikiId,
+      // server and port variables would be better here, but other Meza roles are not yet ready
+      // 'url' => "$wgServer/$wikiId/rest.php",
+      // 'domain' => $wikiId,
         'prefix' => $wikiId,
-      # Forward cookies is dangerous for non-private wikis
-      # 'forwardCookies' => true
+      // Forward cookies is dangerous for non-private wikis
+      // 'forwardCookies' => true
       ];
 
   # Gadgets
@@ -359,8 +359,8 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Gadgets
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # Supposedly these permissions are not granted to anyone so we need to
-      # be explicit about who can edit Gadgets
+      // Supposedly these permissions are not granted to anyone so we need to
+      // be explicit about who can edit Gadgets
       $wgGroupPermissions['interface-admin']['gadgets-edit'] = true;
       $wgGroupPermissions['interface-admin']['gadgets-definition-edit'] = true;
 
@@ -429,10 +429,10 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Lockdown
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # handle web crawlers
-      # for SpecialPage handling, see CrawlerProtection extension
-      # CrawlerProtection even handles actions like history, diff, etc.
-      # $wgActionLockdown['history'] = [ 'user' ];
+      // handle web crawlers
+      // for SpecialPage handling, see CrawlerProtection extension
+      // CrawlerProtection even handles actions like history, diff, etc.
+      // $wgActionLockdown['history'] = [ 'user' ];
 
   # LoginNotify - Notifies users about suspicious login attempts
   - name: LoginNotify
@@ -570,8 +570,8 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ParserFunctions
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # Also enable StringFunctions, like len, pos, sub, replace, explode
-      # https://www.mediawiki.org/wiki/Extension:StringFunctions
+      // Also enable StringFunctions, like len, pos, sub, replace, explode
+      // https://www.mediawiki.org/wiki/Extension:StringFunctions
       $wgPFEnableStringFunctions = true;
 
   # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being
@@ -628,7 +628,7 @@ list:
     config: |
       $wgSDUProperty = 'Semantic Dependency';
       $wgSDUUseJobQueue = false;
-      # $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
+      // $wgDebugLogGroups['SemanticDependencyUpdater'] = '/opt/data-meza/logs/SDU.log';
 
   # SemanticDrilldown - Provides a page for "drilling down" through a site's data, using categories and property filters
   - name: SemanticDrilldown
@@ -664,15 +664,17 @@ list:
     version: "^6.0.0"
     config: |
       wfLoadExtension( 'SemanticMediaWiki' );
-      # add true bc we have a full URL https://www.semantic-mediawiki.org/wiki/Help:EnableSemantics
+      // add true bc we have a full URL https://www.semantic-mediawiki.org/wiki/Help:EnableSemantics
       enableSemantics( $wgServer . '/' . $wikiId . '/', true );
       $smwgQMaxSize = 5000;
+      // CACHE_MEMCACHED is configured already in LocalSettings.php.j2
+      $smwgQueryResultCacheType = CACHE_MEMCACHED;
       $wgObjectCacheSessionExpiry = 86400;
-      # allow semantic properties in Talk and Template namespaces
+      // allow semantic properties in Talk and Template namespaces
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
       $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
-      # allow Links in Values https://www.semantic-mediawiki.org/wiki/Help:$smwgLinksInValues
+      // allow Links in Values https://www.semantic-mediawiki.org/wiki/Help:$smwgLinksInValues
       $smwgParserFeatures = ( $smwgParserFeatures | SMW_PARSER_LINV );
       $smwgPageSpecialProperties[] = '_LEDT';
       $smwgPageSpecialProperties[] = '_MDAT';
@@ -682,11 +684,11 @@ list:
       $smwgPageSpecialProperties[] = '_NEWP';
       $smwgPageSpecialProperties[] = '_DTITLE';
       $smwgPageSpecialProperties[] = '_ATTCH_LINK';
-      # Give 'smw-admin' right to 'smwadministrator' group
-      # sysops are automatically in this group
-      # Allows access to the Special:SemanticMediaWiki admin interface
-      # $wgGroupPermissions['smwadministrator']['smw-admin'] = true;
-      # Or, be more explicit and give sysops all SMW-defined rights directly
+      // Give 'smw-admin' right to 'smwadministrator' group
+      // sysops are automatically in this group
+      // Allows access to the Special:SemanticMediaWiki admin interface
+      // $wgGroupPermissions['smwadministrator']['smw-admin'] = true;
+      // Or, be more explicit and give sysops all SMW-defined rights directly
       $wgGroupPermissions['sysop']['smw-admin'] = true;
       $wgGroupPermissions['sysop']['smw-pageedit'] = true;
       $wgGroupPermissions['sysop']['smw-patternedit'] = true;
@@ -698,7 +700,7 @@ list:
     version: "^5.0"
     config: |
       wfLoadExtension( 'SemanticResultFormats' );
-      # @TODO Document the formats as features.
+      // @TODO Document the formats as features.
       $srfgFormats[] = 'excel';
       $srfgFormats[] = 'filtered';
       $srfgFormats[] = 'exhibit';
@@ -739,7 +741,7 @@ list:
     version: "dev-master"
     config: |
       wfLoadExtension( 'SubPageList' );
-      # automatically refresh the tree after a subpage is created or deleted
+      // automatically refresh the tree after a subpage is created or deleted
       $egSPLAutorefresh = true;
 
   #  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
@@ -800,13 +802,13 @@ list:
     repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
     version: "{{ mediawiki_default_branch }}"
     config: |
-      # Disable international phoenetic alphabet selector that breaks searching for
-      # English users. From docs:
-      # $wgULSIMEEnabled - Disable the input methods feature for all users by
-      # default. Can still be enabled manually by the user.
-      # Refs:
-      # https://www.mediawiki.org/wiki/Help:Extension:UniversalLanguageSelector/Input_methods
-      # https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
+      // Disable international phoenetic alphabet selector that breaks searching for
+      // English users. From docs:
+      // $wgULSIMEEnabled - Disable the input methods feature for all users by
+      // default. Can still be enabled manually by the user.
+      // Refs:
+      // https://www.mediawiki.org/wiki/Help:Extension:UniversalLanguageSelector/Input_methods
+      // https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
       $wgULSIMEEnabled = false;
 
   # UrlGetParameters - enables you to use and/or display URL GET parameters in wiki pages
@@ -882,8 +884,8 @@ list:
     config: |
       $wgDefaultUserOptions['usebetatoolbar'] = 1;
       $wgDefaultUserOptions['usebetatoolbar-cgd'] = 1;
-      $wgDefaultUserOptions['wikieditor-publish'] = 1; # displays publish button
-      $wgDefaultUserOptions['wikieditor-preview'] = 1; # Displays the Preview and Changes tabs
+      $wgDefaultUserOptions['wikieditor-publish'] = 1; // displays publish button
+      $wgDefaultUserOptions['wikieditor-preview'] = 1; // Displays the Preview and Changes tabs
 
 #  # WikiLove - Makes adding awards, gifts, and invitations to user talk pages as simple as clicking a few buttons.
 #  # documentation: https://www.mediawiki.org/wiki/Extension:WikiLove
