@@ -84,6 +84,10 @@ wiki_id_redirects: {}
 
 m_force_debug: false
 
+# Parser cache type: CACHE_NONE, CACHE_MEMCACHED, CACHE_ACCEL, etc.
+# See https://www.mediawiki.org/wiki/Manual:$wgParserCacheType
+m_parser_cache_type: CACHE_NONE
+
 enable_wiki_emails: true
 
 # Enable the use of LetsEncrypt certificates

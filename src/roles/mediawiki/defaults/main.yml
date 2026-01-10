@@ -31,6 +31,10 @@ m_force_debug: false
 # Whether to enable debug when using the command line
 m_command_line_debug: true
 
+# Parser cache type: CACHE_NONE, CACHE_MEMCACHED, CACHE_ACCEL, etc.
+# See https://www.mediawiki.org/wiki/Manual:$wgParserCacheType
+m_parser_cache_type: CACHE_NONE
+
 wgPasswordSender: admin@example.com
 
 # Whether to upgrade CirrusSearch metastore and apply index templates
