@@ -3,6 +3,20 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [fe969fc1](https://github.com/freephile/meza/commit/fe969fc1) (2026-01-10) Greg Rundlett: set parser cache Performance improved 50%
+$wgParserCacheType = CACHE_MEMCACHED;
+fixes Issue [#111](https://github.com/freephile/meza/issues/111)
+Also, last commit standardized PHP comment syntax
+in MezaCoreExtensions.yml config blocks
+  - Modified: `config/MezaCoreExtensions.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [4311c054](https://github.com/freephile/meza/commit/4311c054) (2026-01-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [680a9de7](https://github.com/freephile/meza/commit/680a9de7) (2026-01-10) Greg Rundlett: add cache for SemanticMediaWiki set `$smwgQueryResultCacheType=CACHE_MEMCACHED;` for SMW
 Memcached is already configured for other caches in LocalSettings.php
 fixes Issue [#111](https://github.com/freephile/meza/issues/111)
