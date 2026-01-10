@@ -106,7 +106,8 @@ if ( !in_array( $wikiId, $wikis ) && empty( $wikiId ) ) {
 	$wikiId = getenv( $mezaWikiEnvVarName );
 	if ( !$wikiId ) {
 		// handle invalid wiki
-		die( "unable to determine a valid wiki name: \"$wikiId\"\n" );
+		die( "Unable to determine a valid wiki name: \"$wikiId\"".
+		"Perhaps you forgot to specify WIKI=foo in your script command?\n" );
 	}
 
 }
