@@ -3,6 +3,33 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [180c02e1](https://github.com/freephile/meza/commit/180c02e1) (2026-01-10) Greg Rundlett: property parseable is not allowed in ansible-lint config The -p (or --parseable) command-line option and the corresponding
+parseable configuration file property were used in older versions of
+ansible-lint to produce output in a pep8 compatible format. These
+options were removed as part of a breaking change in favor of the
+current, more structured output formats. The schema validation in
+newer versions of ansible-lint now flags this deprecated property as
+an error.
+You may wish to upgrade your ansible-lint with
+pip install --upgrade ansible-lint
+  - Modified: `.ansible-lint`
+
+* [127c494a](https://github.com/freephile/meza/commit/127c494a) (2026-01-10) Greg Rundlett: make Parser Cache Type into a configurable setting Historically Meza used $wgParserCacheType = CACHE_NONE so that is the
+default configuration. Users who wish to enable caching can now set
+this to CACHE_ANYTHING OR CACHE_MEMCACHED by overriding it in
+their public.yml.
+See https://www.mediawiki.org/wiki/Meza/Variables
+fixes Issue [#111](https://github.com/freephile/meza/issues/111)
+  - Modified: `config/defaults.yml`
+  - Modified: `src/roles/mediawiki/defaults/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [696531ec](https://github.com/freephile/meza/commit/696531ec) (2026-01-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [fe969fc1](https://github.com/freephile/meza/commit/fe969fc1) (2026-01-10) Greg Rundlett: set parser cache Performance improved 50%
 $wgParserCacheType = CACHE_MEMCACHED;
 fixes Issue [#111](https://github.com/freephile/meza/issues/111)
