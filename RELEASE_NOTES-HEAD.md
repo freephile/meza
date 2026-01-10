@@ -3,6 +3,53 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [fa83a80a](https://github.com/freephile/meza/commit/fa83a80a) (2026-01-10) Greg Rundlett: format PHP templates for quality / conformance fix up LocalSettings.php and Extensions.php files
+- PHPDoc header - Added proper file documentation with @package Meza
+- Section headers - Changed from SECTION X) to SECTION X: format with proper PHPDoc blocks /** */
+- Comment style - Changed # and ## to // for inline comments, PHPDoc /** */ for blocks
+- Array syntax - Changed all array() to short syntax []
+- Quote consistency - Fixed inconsistent quote usage (single quotes for string literals)
+- Spacing - Added spaces around parentheses: if ( condition ) not if( condition )
+- elseif - Changed else if to elseif (PHP best practice)
+- Capitalization - Consistent comment capitalization
+- Indentation - Tabs inside conditionals, proper formatting throughout
+- @see tags - Changed reference comments to proper @see PHPDoc tags
+- removed old $wgDisableCookieCheck setting
+  - Modified: `src/roles/mediawiki/templates/Extensions.php.j2`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [e6f73eff](https://github.com/freephile/meza/commit/e6f73eff) (2026-01-09) Greg Rundlett: clean up LocalSettings.php template shrink excess vertical whitespace by adding SECTION labels in all caps
+This makes it like Extensions.php and is easy to search / visually scan
+Also added a minor failsafe die() for any invalid auth-type
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [e7d6a6e6](https://github.com/freephile/meza/commit/e7d6a6e6) (2026-01-09) Greg Rundlett: add new feature to exclude core extensions reenable Wiretap extension; switching to freephile repo
+introduce new variable `m_excluded_extension_names` that can be used
+in `public.yml` to exclude extensions which otherwise are installed
+as 'core' by MezaCoreExtensions.yml.
+Excluded extensions *can* be re-enabled at the same time in
+LocalExtensions.yml
+(where they can also be configured to only install on a per-wiki basis).
+Deploy output contains a message about excluded extensions for visibility
+src/roles/init-controller-config/templates/public.yml.j2 contains
+example exclude content to guide new admins
+add `--public-config` option to `src/scripts/render_extensions_php.py`
+helper script so that the tool mimics the extension excludes
+revert interim solution from src/roles/init-controller-config/tasks/main.yml
+fixes Issue [#256](https://github.com/freephile/meza/issues/256)
+  - Modified: `config/MezaCoreExtensions.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/templates/public.yml.j2`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/Extensions.php.j2`
+  - Modified: `src/scripts/render_extensions_php.py`
+
+* [b0f0b6d7](https://github.com/freephile/meza/commit/b0f0b6d7) (2026-01-08) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [b2785e3d](https://github.com/freephile/meza/commit/b2785e3d) (2026-01-08) Greg Rundlett: remove archived Graph extension Graph should not be used on a public wiki and the code is archived.
 Fixes Issue [#251](https://github.com/freephile/meza/issues/251)
 For more, see the discussion "Improve Chartinging capabilities of

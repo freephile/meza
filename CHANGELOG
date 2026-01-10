@@ -1,3 +1,72 @@
+commit fa83a80ab1d2b3ec10458f397b4364b37d461960
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jan 10 00:36:43 2026 +0000
+
+    format PHP templates for quality / conformance
+    
+    fix up LocalSettings.php and Extensions.php files
+    
+    - PHPDoc header - Added proper file documentation with @package Meza
+    - Section headers - Changed from SECTION X) to SECTION X: format with proper PHPDoc blocks /** */
+    - Comment style - Changed # and ## to // for inline comments, PHPDoc /** */ for blocks
+    - Array syntax - Changed all array() to short syntax []
+    - Quote consistency - Fixed inconsistent quote usage (single quotes for string literals)
+    - Spacing - Added spaces around parentheses: if ( condition ) not if( condition )
+    - elseif - Changed else if to elseif (PHP best practice)
+    - Capitalization - Consistent comment capitalization
+    - Indentation - Tabs inside conditionals, proper formatting throughout
+    - @see tags - Changed reference comments to proper @see PHPDoc tags
+    - removed old $wgDisableCookieCheck setting
+
+commit e6f73eff925f583cdfdb4725c2b693186ea4e946
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 9 21:48:10 2026 +0000
+
+    clean up LocalSettings.php template
+    
+    shrink excess vertical whitespace by adding SECTION labels in all caps
+    This makes it like Extensions.php and is easy to search / visually scan
+    
+    Also added a minor failsafe die() for any invalid auth-type
+
+commit e7d6a6e6e6dbbceb1c4e80dc39291c652bc94671
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 9 21:35:29 2026 +0000
+
+    add new feature to exclude core extensions
+    
+    reenable Wiretap extension; switching to freephile repo
+    
+    introduce new variable `m_excluded_extension_names` that can be used
+    in `public.yml` to exclude extensions which otherwise are installed
+    as 'core' by MezaCoreExtensions.yml.
+    
+    Excluded extensions *can* be re-enabled at the same time in
+    LocalExtensions.yml
+    (where they can also be configured to only install on a per-wiki basis).
+    
+    Deploy output contains a message about excluded extensions for visibility
+    
+    src/roles/init-controller-config/templates/public.yml.j2 contains
+    example exclude content to guide new admins
+    
+    add `--public-config` option to `src/scripts/render_extensions_php.py`
+    helper script so that the tool mimics the extension excludes
+    
+    revert interim solution from src/roles/init-controller-config/tasks/main.yml
+    
+    fixes Issue #256
+
+commit b0f0b6d7e509bfd252a2fb1fa216cecdaa8e6828
+Author: GitHub Action <action@github.com>
+Date:   Thu Jan 8 23:08:35 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit b2785e3d0025f892859c775a7080f6f7910236b6
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Jan 8 23:05:15 2026 +0000
