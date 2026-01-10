@@ -1,3 +1,45 @@
+commit 180c02e13159e6c4d2bc008b493eb8058c3cbb00
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jan 10 15:20:38 2026 -0500
+
+    property parseable is not allowed in ansible-lint config
+    
+    The -p (or --parseable) command-line option and the corresponding
+    parseable configuration file property were used in older versions of
+    ansible-lint to produce output in a pep8 compatible format. These
+    options were removed as part of a breaking change in favor of the
+    current, more structured output formats. The schema validation in
+    newer versions of ansible-lint now flags this deprecated property as
+    an error.
+    
+    You may wish to upgrade your ansible-lint with
+    pip install --upgrade ansible-lint
+
+commit 127c494a60b9f0b831d7d741453777fa87aa7d32
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jan 10 15:12:35 2026 -0500
+
+    make Parser Cache Type into a configurable setting
+    
+    Historically Meza used $wgParserCacheType = CACHE_NONE so that is the
+    default configuration. Users who wish to enable caching can now set
+    this to CACHE_ANYTHING OR CACHE_MEMCACHED by overriding it in
+    their public.yml.
+    
+    See https://www.mediawiki.org/wiki/Meza/Variables
+    
+    fixes issue #111
+
+commit 696531ece3c3b4ad0d6f7278003e355d7a8bb80f
+Author: GitHub Action <action@github.com>
+Date:   Sat Jan 10 04:44:44 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit fe969fc1941c35722cc48f581043ab90bff1adfc
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Sat Jan 10 04:43:33 2026 +0000
