@@ -435,14 +435,14 @@ $wgCdnServersNoPurge = [
 
 ];
 
-// Memcached settings
+// Caching configuration
 $wgMainCacheType = CACHE_MEMCACHED;
-// Use parser cache in memcached for performance. If Extension:HeaderFooter
-// with SMW queries still has issues with cached output on specific pages,
-// handle those cases selectively (e.g. via hooks or Post-LocalSettings),
-// rather than disabling parser cache site-wide.
-$wgParserCacheType = CACHE_NONE;
+$wgParserCacheType = CACHE_MEMCACHED;
 $wgMessageCacheType = CACHE_MEMCACHED;
+$wgSessionCacheType = CACHE_MEMCACHED;
+// SemanticMediaWiki cache is set in MezaCoreExtensions.yml
+
+// Memcached configuration
 $wgMemCachedServers = [
 	{% for server in groups['memcached_servers'] -%}
 	{%- if server == inventory_hostname -%}
@@ -453,7 +453,6 @@ $wgMemCachedServers = [
 	{%- endfor %}
 ];
 
-$wgSessionCacheType = CACHE_MEMCACHED;
 
 // Of course we allow uploads, we even allow large uploads.
 $wgEnableUploads = true;

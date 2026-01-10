@@ -668,7 +668,8 @@ list:
       enableSemantics( $wgServer . '/' . $wikiId . '/', true );
       $smwgQMaxSize = 5000;
       // CACHE_MEMCACHED is configured already in LocalSettings.php.j2
-      $smwgQueryResultCacheType = CACHE_MEMCACHED;
+      // We're leaving this unset because initial testing showed a negative performance impact
+      // $smwgQueryResultCacheType = CACHE_MEMCACHED;
       $wgObjectCacheSessionExpiry = 86400;
       // allow semantic properties in Talk and Template namespaces
       $smwgNamespacesWithSemanticLinks[NS_TALK] = true;
