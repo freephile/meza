@@ -1,3 +1,70 @@
+commit 62791b9a9b1fd525f33b43761adc4ee338921efc
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Jan 11 01:36:08 2026 +0000
+
+    modernized Meza PHP profiling
+    
+    Replace XHGui+MongoDB with lightweight xhprof-based profiling
+    which integrates with MediaWiki.
+    
+    Changes Made
+    
+    == NEW files ==
+    - 20-xhprof.ini.j2 - PHP extension configuration
+    - profiling.php.j2 - MediaWiki profiler configuration with hierarchical control
+    - logrotate-profiler.j2 - Log rotation for file-based output
+    - README_PROFILING.md - Comprehensive documentation
+    
+    == Changed files ==
+    - profiling.yml - Replaced MongoDB/XHGui with xhprof-only installation
+    - php.yml - Added conditional xhprof extension deployment
+    - main.yml - Uncommented profiling task include
+    - defaults.yml - Added profiling configuration with detailed comments
+    - php.ini.j2 - Removed obsolete profiling references
+    - httpd.conf.j2 - Removed port 8089 VirtualHost
+    - php-fpm-httpd.conf.j2 - Removed port 8089 VirtualHost
+    - main.yml - Removed port 8088 firewall rules
+    
+    == DELETED files ==
+    mongod.conf.j2 - Obsolete MongoDB configuration
+    mongo.repo.j2 - Obsolete MongoDB repository
+    xhgui.config.php.j2 - Obsolete XHGui configuration
+    
+    == Features ==
+    - Hierarchical profiling control - Environment-level, per-wiki, and output format
+    - Two output modes - Footer display (ProfilerOutputText) or file logging
+    - Automatic log rotation - Daily cleanup with configurable retention
+    - Security considerations - Documented risks and best practices
+    - Comprehensive documentation - Usage guide with common scenarios
+    - Backward compatibility - Legacy deployments handled gracefully
+    
+    == Configuration Example ==
+    
+    ```yaml
+    m_setup_php_profiling: true
+    m_profiling_output_type: footer
+    m_profiling_file_retention_days: 1
+    
+    wikis:
+      - id: demo
+        name: Demo Wiki
+        enable_profiling: true
+    ```
+    
+    All YAML files validated successfully. Ready for testing and deployment.
+    
+    Fixes Issue #262
+
+commit fa7d5861d297b03500003b7fe48237f6c265a19a
+Author: GitHub Action <action@github.com>
+Date:   Sat Jan 10 20:24:23 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 180c02e13159e6c4d2bc008b493eb8058c3cbb00
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Sat Jan 10 15:20:38 2026 -0500
