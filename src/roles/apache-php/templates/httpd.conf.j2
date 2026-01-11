@@ -481,25 +481,6 @@ Listen 8082
         ErrorLog  /var/log/httpd/nonwiki-error.log
 </VirtualHost>
 
-{% if m_setup_php_profiling -%}
-# Enable profiling for PHP
-Listen 8089
-<VirtualHost *:8089>
-
-	<Directory {{ m_profiling_xhgui_directory }}/webroot>
-		Options Indexes MultiViews FollowSymLinks
-		AllowOverride All
-		Require all granted
-	</Directory>
-
-	DocumentRoot {{ m_profiling_xhgui_directory }}/webroot
-
-	# HAProxy listening on 8088 for this
-	ServerName http://{{ wiki_app_fqdn }}:8088
-
-</VirtualHost>
-{% endif %}
-
 # Use port 8090 to access mod_status. Not accessible outside firewall.
 # Accessible via [[Special:Serverstatus]]
 ExtendedStatus on

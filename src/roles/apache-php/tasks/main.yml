@@ -96,10 +96,9 @@
   include_role:
     name: composer
 
-# - name: Ensure PHP profiling configured
-#   import_tasks: profiling.yml
-#   # http://docs.ansible.com/ansible/playbooks_roles.html#dynamic-versus-static-includes
-#   when: m_setup_php_profiling
+- name: Ensure PHP profiling configured
+  import_tasks: profiling.yml
+  when: m_setup_php_profiling
 
 # If profiling not enabled, disable MongoDB if it exists (e.g. profiling had
 # previously been enabled)

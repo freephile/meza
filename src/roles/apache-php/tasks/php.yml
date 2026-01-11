@@ -47,6 +47,24 @@
     - restart apache
     - restart php-fpm
 
+- name: Write xhprof php.d ini file when profiling enabled
+  template:
+    src: "20-xhprof.ini.j2"
+    dest: "{{ path_php_conf_d }}/20-xhprof.ini"
+  when: m_setup_php_profiling
+  notify:
+    - restart apache
+    - restart php-fpm
+
+- name: Remove xhprof php.d ini file when profiling disabled
+  ansible.builtin.file:
+    path: "{{ path_php_conf_d }}/20-xhprof.ini"
+    state: absent
+  when: not m_setup_php_profiling
+  notify:
+    - restart apache
+    - restart php-fpm
+
 # FIXME: Is this left over from old method of supporting MSSQL? Not required now
 #        that MS-provided drivers are used?
 - name: Write freetds.conf file

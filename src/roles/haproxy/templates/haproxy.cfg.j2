@@ -112,14 +112,6 @@ backend nonwiki-backend
 
 {% endif %}
 
-{% if m_setup_php_profiling %}
-listen php-profiling
-	bind *:8088
-	{% for host in groups['app_servers'] -%}
-		server profiling{{ loop.index }} {{ host }}:8089 check
-	{% endfor %}
-{% endif %}
-
 {% if load_balancer_handle_internal %}
 listen mediawiki-internal
 	bind *:8081

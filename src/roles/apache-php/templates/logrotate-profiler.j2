@@ -1,0 +1,17 @@
+# Meza PHP Profiler Log Rotation
+# Managed by Ansible - changes will be overwritten
+# Rotates profiling output files to prevent disk space issues
+
+{{ m_profiling_file_path }}/*.log {{ m_profiling_file_path }}/*.txt {
+    daily
+    rotate {{ m_profiling_file_retention_days }}
+    missingok
+    notifempty
+    compress
+    delaycompress
+    create 0644 {{ user_apache }} {{ group_apache }}
+    sharedscripts
+    postrotate
+        # No service restart needed for profiler logs
+    endscript
+}
