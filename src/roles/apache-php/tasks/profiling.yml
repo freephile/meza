@@ -4,13 +4,6 @@
 # Uses xhprof extension with MediaWiki's ProfilerXhprof
 # Replaced legacy XHGui+MongoDB stack (disabled since Meza 30.x)
 
-- name: Install xhprof PECL package
-  ansible.builtin.command:
-    cmd: pecl install xhprof
-    creates: "{{ path_php_conf_d }}/20-xhprof.ini"
-  register: xhprof_install
-  failed_when: false
-
 - name: Check if xhprof is already installed
   ansible.builtin.command:
     cmd: pecl list
@@ -22,6 +15,7 @@
     cmd: pecl install xhprof
   when: "'xhprof' not in pecl_list.stdout"
   register: xhprof_pecl_install
+  changed_when: xhprof_pecl_install.rc == 0
 
 - name: Ensure profiler log directory exists when using file output
   ansible.builtin.file:
@@ -35,17 +29,17 @@
 - name: Deploy MediaWiki profiler configuration to global postLocalSettings.d
   ansible.builtin.template:
     src: postLocalSettings.d/profiling.php.j2
-    dest: "{{ m_local_public }}/{{ env }}/postLocalSettings.d/profiling.php"
-    owner: "{{ user_meza_ansible }}"
-    group: "{{ group_meza_ansible }}"
+    dest: "{{ m_local_public }}/postLocalSettings.d/profiling.php"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
     mode: '0644'
 
 - name: Ensure per-wiki postLocalSettings.d directories exist for wikis with profiling enabled
   ansible.builtin.file:
-    path: "{{ m_local_public }}/{{ env }}/wikis/{{ item.id }}/postLocalSettings.d"
+    path: "{{ m_local_public }}/wikis/{{ item.id }}/postLocalSettings.d"
     state: directory
-    owner: "{{ user_meza_ansible }}"
-    group: "{{ group_meza_ansible }}"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
     mode: '0755'
   loop: "{{ wikis }}"
   when: item.enable_profiling | default(false)
