@@ -3,6 +3,19 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [745068b1](https://github.com/freephile/meza/commit/745068b1) (2026-01-11) Greg Rundlett: fix documentation - fix paths
+- explain how to 'turn off'
+- you do NOT have to 'view source'
+output is at the bottom of the page
+for Issue [#262](https://github.com/freephile/meza/issues/262)
+  - Modified: `src/roles/apache-php/README_PROFILING.md`
+
+* [3c87f2e0](https://github.com/freephile/meza/commit/3c87f2e0) (2026-01-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [9197e025](https://github.com/freephile/meza/commit/9197e025) (2026-01-11) Greg Rundlett: fix destination and ownership of profiling.php for Issue [#262](https://github.com/freephile/meza/issues/262)
   - Modified: `src/roles/apache-php/tasks/profiling.yml`
 
