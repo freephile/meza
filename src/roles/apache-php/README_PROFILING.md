@@ -18,11 +18,11 @@ Profiling is controlled through three levels:
 Set `m_setup_php_profiling` in your environment's `public.yml`:
 
 ```yaml
-# /opt/conf-meza/public/<env>/public.yml
+# /opt/conf-meza/public/public.yml
 m_setup_php_profiling: true
 ```
 
-**When true:** Installs xhprof PHP extension on all servers  
+**When true:** Installs xhprof PHP extension on all app servers
 **When false:** Extension not installed, per-wiki settings have no effect
 
 ### 2. Per-Wiki Control
@@ -30,7 +30,7 @@ m_setup_php_profiling: true
 Add `enable_profiling` to individual wiki definitions:
 
 ```yaml
-# /opt/conf-meza/public/<env>/public.yml
+# /opt/conf-meza/public/public.yml
 wikis:
   - id: demo
     name: Demo Wiki
@@ -47,7 +47,7 @@ wikis:
 Choose how profiling data is presented:
 
 ```yaml
-# /opt/conf-meza/public/<env>/public.yml
+# /opt/conf-meza/public/public.yml
 
 # Option 1: Display in page footer (default)
 m_profiling_output_type: footer
@@ -89,8 +89,11 @@ When global profiling is enabled without per-wiki overrides, all wikis are profi
 
 ### Production Environment (Profiling Disabled)
 
+Note that you do not have to set this at all since the project default
+in config/default.yml is already set to false.
+However, once you enable it, then you must disable it (or remove it) from public.yml to turn it off (with a deploy) when finished profiling.
 ```yaml
-# /opt/conf-meza/public/prod/public.yml
+# /opt/conf-meza/public/public.yml
 m_setup_php_profiling: false
 ```
 
@@ -102,9 +105,8 @@ When `m_profiling_output_type: footer`, profiling data appears at the bottom of 
 
 **How to view:**
 1. Load any wiki page
-2. View page source (Ctrl+U or right-click → View Source)
-3. Scroll to the bottom
-4. Look for profiling section with function call data
+2. Scroll to the bottom
+3. Look for profiling section with function call data
 
 **Example output:**
 ```
@@ -297,7 +299,7 @@ cat /etc/php.d/20-xhprof.ini
 
 **Check 3: Is MediaWiki configuration present?**
 ```bash
-cat /opt/conf-meza/public/<env>/postLocalSettings.d/profiling.php
+cat /opt/conf-meza/public/postLocalSettings.d/profiling.php
 ```
 
 **Check 4: Restart services**
