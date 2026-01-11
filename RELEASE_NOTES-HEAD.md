@@ -3,6 +3,65 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [3f04972d](https://github.com/freephile/meza/commit/3f04972d) (2026-01-11) Greg Rundlett: modernized Meza PHP profiling Replace XHGui+MongoDB with lightweight xhprof-based profiling
+which integrates with MediaWiki.
+Changes Made
+- 20-xhprof.ini.j2 - PHP extension configuration
+- profiling.php.j2 - MediaWiki profiler configuration with hierarchical control
+- logrotate-profiler.j2 - Log rotation for file-based output
+- README_PROFILING.md - Comprehensive documentation
+- profiling.yml - Replaced MongoDB/XHGui with xhprof-only installation
+- php.yml - Added conditional xhprof extension deployment
+- main.yml - Uncommented profiling task include
+- defaults.yml - Added profiling configuration with detailed comments
+- php.ini.j2 - Removed obsolete profiling references
+- httpd.conf.j2 - Removed port 8089 VirtualHost
+- php-fpm-httpd.conf.j2 - Removed port 8089 VirtualHost
+- main.yml - Removed port 8088 firewall rules
+mongod.conf.j2 - Obsolete MongoDB configuration
+mongo.repo.j2 - Obsolete MongoDB repository
+xhgui.config.php.j2 - Obsolete XHGui configuration
+- Hierarchical profiling control - Environment-level, per-wiki, and output format
+- Two output modes - Footer display (ProfilerOutputText) or file logging
+- Automatic log rotation - Daily cleanup with configurable retention
+- Security considerations - Documented risks and best practices
+- Comprehensive documentation - Usage guide with common scenarios
+- Backward compatibility - Legacy deployments handled gracefully
+Configuration Example
+```yaml
+m_setup_php_profiling: true
+m_profiling_output_type: footer
+m_profiling_file_retention_days: 1
+wikis:
+  - id: demo
+    name: Demo Wiki
+    enable_profiling: true
+```
+All YAML files validated successfully. Ready for testing and deployment.
+Fixes Issue [#262](https://github.com/freephile/meza/issues/262)
+  - Modified: `config/defaults.yml`
+  - Added: `src/roles/apache-php/README_PROFILING.md`
+  - Modified: `src/roles/apache-php/tasks/main.yml`
+  - Modified: `src/roles/apache-php/tasks/php.yml`
+  - Modified: `src/roles/apache-php/tasks/profiling.yml`
+  - Added: `src/roles/apache-php/templates/20-xhprof.ini.j2`
+  - Modified: `src/roles/apache-php/templates/httpd.conf.j2`
+  - Added: `src/roles/apache-php/templates/logrotate-profiler.j2`
+  - Deleted: `src/roles/apache-php/templates/mongo.repo.j2`
+  - Deleted: `src/roles/apache-php/templates/mongod.conf.j2`
+  - Modified: `src/roles/apache-php/templates/php-fpm-httpd.conf.j2`
+  - Modified: `src/roles/apache-php/templates/php.ini.j2`
+  - Added: `src/roles/apache-php/templates/postLocalSettings.d/profiling.php.j2`
+  - Deleted: `src/roles/apache-php/templates/xhgui.config.php.j2`
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+  - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
+
+* [fa7d5861](https://github.com/freephile/meza/commit/fa7d5861) (2026-01-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [180c02e1](https://github.com/freephile/meza/commit/180c02e1) (2026-01-10) Greg Rundlett: property parseable is not allowed in ansible-lint config The -p (or --parseable) command-line option and the corresponding
 parseable configuration file property were used in older versions of
 ansible-lint to produce output in a pep8 compatible format. These
