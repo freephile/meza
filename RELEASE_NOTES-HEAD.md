@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [9197e025](https://github.com/freephile/meza/commit/9197e025) (2026-01-11) Greg Rundlett: fix destination and ownership of profiling.php for Issue [#262](https://github.com/freephile/meza/issues/262)
+  - Modified: `src/roles/apache-php/tasks/profiling.yml`
+
+* [311a8d17](https://github.com/freephile/meza/commit/311a8d17) (2026-01-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [62791b9a](https://github.com/freephile/meza/commit/62791b9a) (2026-01-11) Greg Rundlett: modernized Meza PHP profiling Replace XHGui+MongoDB with lightweight xhprof-based profiling
 which integrates with MediaWiki.
 Changes Made
