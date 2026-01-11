@@ -297,32 +297,6 @@
     - (docker_skip_tasks is not defined or not docker_skip_tasks)
     - firewall_skip_tasks is not defined or not firewall_skip_tasks
 
-- name: Ensure firewall port 8088 OPEN when PHP profiling ENABLED
-  include_role:
-    name: firewall_port
-  vars:
-    firewall_action: open
-    firewall_port: 8088
-    firewall_protocol: tcp
-    firewall_zone: "{{m_private_networking_zone|default('public')}}"
-  when:
-    - m_setup_php_profiling
-    - (docker_skip_tasks is not defined or not docker_skip_tasks)
-    - firewall_skip_tasks is not defined or not firewall_skip_tasks
-
-- name: Ensure firewall port 8088 CLOSED when PHP profiling DISABLED
-  include_role:
-    name: firewall_port
-  vars:
-    firewall_action: close
-    firewall_port: 8088
-    firewall_protocol: tcp
-    firewall_zone: "{{m_private_networking_zone|default('public')}}"
-  when:
-    - not m_setup_php_profiling
-    - (docker_skip_tasks is not defined or not docker_skip_tasks)
-    - firewall_skip_tasks is not defined or not firewall_skip_tasks
-
 
 # FIXME #747: haproxy will need to handle reverse proxy for Elasticsearch plugins
 # - name: Configure firewalld for Elasticsearch reverse proxy

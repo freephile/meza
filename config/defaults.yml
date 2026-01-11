@@ -100,8 +100,65 @@ enable_haproxy_stats: false
 haproxy_stats_user: admin
 haproxy_stats_password: password
 
-# Only useful for developers and testing performance issues
+#
+# PHP Profiling Configuration
+#
+# Meza uses xhprof with MediaWiki's built-in ProfilerXhprof for performance analysis.
+# This is useful for developers and performance testing.
+#
+# HIERARCHICAL CONTROL:
+# 1. Environment-level: Set m_setup_php_profiling in your environment config
+#    - When true: Installs xhprof PHP extension
+#    - When false: Extension not installed, per-wiki settings have no effect
+#
+# 2. Per-wiki level: Add enable_profiling to individual wiki definitions
+#    - Only works if m_setup_php_profiling is true at environment level
+#    - Allows selective profiling of specific wikis in dev environments
+#
+# 3. Output format: Controls where profiling data appears
+#
+# EXAMPLE CONFIGURATIONS:
+#
+# Test environment (profile all wikis):
+#   /opt/conf-meza/public/test/public.yml:
+#     m_setup_php_profiling: true
+#
+# Dev environment (profile specific wikis):
+#   /opt/conf-meza/public/dev/public.yml:
+#     m_setup_php_profiling: true
+#     wikis:
+#       - id: demo
+#         name: Demo Wiki
+#         enable_profiling: true
+#       - id: production_test
+#         name: Production Test
+#         enable_profiling: false
+#
+# Production environment (profiling disabled):
+#   /opt/conf-meza/public/prod/public.yml:
+#     m_setup_php_profiling: false
+#
+# SECURITY WARNING:
+# - ProfilerOutputText (footer mode) exposes internal performance data in page HTML
+# - For production profiling (if needed), use file output mode or restrict to admin users
+# - Recommend keeping m_setup_php_profiling: false in production environments
+#
+# See src/roles/apache-php/README_PROFILING.md for usage details
+
+# Install xhprof extension and enable profiling capability
 m_setup_php_profiling: false
+
+# Profiling output type: 'footer' or 'file'
+# - footer: Shows profiling data at bottom of each page (ProfilerOutputText)
+# - file: Logs profiling data to files (ProfilerOutputFile)
+m_profiling_output_type: footer
+
+# Directory for profiling log files (when m_profiling_output_type: file)
+m_profiling_file_path: "{{ m_logs }}/profiler"
+
+# Number of days to retain profiling log files
+# Log rotation runs daily at 2:00 AM
+m_profiling_file_retention_days: 1
 
 # Enable slow query log
 mysql_slow_query_log_enabled: true

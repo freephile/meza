@@ -1,0 +1,67 @@
+<?php
+/**
+ * Meza PHP Profiling Configuration
+ *
+ * This file enables xhprof-based profiling for MediaWiki when configured.
+ * Managed by Ansible - changes will be overwritten on deployment.
+ *
+ * Enable via:
+ * - Environment level: m_setup_php_profiling: true
+ * - Per-wiki level: enable_profiling: true in wiki definition
+ *
+ * @see config/defaults.yml for configuration options
+ * @see src/roles/apache-php/README_PROFILING.md for usage documentation
+ */
+
+// Only configure profiling if xhprof extension is loaded
+if ( !extension_loaded( 'xhprof' ) ) {
+	return;
+}
+
+// Determine if profiling should be enabled for this wiki
+$enableProfiling = false;
+
+// Check if profiling is globally enabled
+{% if m_setup_php_profiling %}
+$enableProfiling = true;
+{% endif %}
+
+// Check if this specific wiki has profiling enabled
+// Per-wiki setting overrides global setting
+{% if wikis is defined %}
+{% for wiki in wikis %}
+{% if wiki.enable_profiling | default(false) %}
+if ( $wikiId === '{{ wiki.id }}' ) {
+	$enableProfiling = true;
+}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+// Configure MediaWiki profiler if enabled
+if ( $enableProfiling ) {
+	$wgProfiler['class'] = 'ProfilerXhprof';
+	
+{% if m_profiling_output_type == 'footer' %}
+	// Output profiling data in page footer (visible in HTML)
+	$wgProfiler['output'] = [ 'ProfilerOutputText' ];
+	$wgProfiler['visible'] = true;
+{% elif m_profiling_output_type == 'file' %}
+	// Log profiling data to files
+	$wgProfiler['output'] = [ 'text' ];
+	$wgProfiler['outputDir'] = '{{ m_profiling_file_path }}';
+	
+	// Ensure output directory exists
+	if ( !is_dir( $wgProfiler['outputDir'] ) ) {
+		wfMkdirParents( $wgProfiler['outputDir'], null, __METHOD__ );
+	}
+{% endif %}
+	
+	// Optional: Configure sampling rate (profile every Nth request)
+	// Uncomment and adjust to reduce overhead on high-traffic wikis
+	// $wgProfiler['sampling'] = 10; // Profile 1 out of every 10 requests
+	
+	// Optional: Filter which functions to profile
+	// $wgProfiler['exclude'] = []; // Functions to exclude
+	// $wgProfiler['include'] = []; // Only profile these functions
+}

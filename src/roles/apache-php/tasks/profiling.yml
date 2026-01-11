@@ -1,97 +1,69 @@
 ---
 
-# Only required for developers and performance testing
-- name: add mongo repo file
-  template:
-    src: mongo.repo.j2
-    dest: /etc/yum.repos.d/mongo.repo
-  run_once: true
+# PHP profiling for developers and performance testing
+# Uses xhprof extension with MediaWiki's ProfilerXhprof
+# Replaced legacy XHGui+MongoDB stack (disabled since Meza 30.x)
 
-- name: Install mongodb-org package
-  yum:
-    lock_timeout: 180  # wait up to 3 minutes for a lock ansible/ansible#57189
-    name: mongodb-org
-    state: present
-  run_once: true
+- name: Install xhprof PECL package
+  ansible.builtin.command:
+    cmd: pecl install xhprof
+    creates: "{{ path_php_conf_d }}/20-xhprof.ini"
+  register: xhprof_install
+  failed_when: false
 
-- name: Ensure MongoDB conf file in place
-  template:
-    src: mongod.conf.j2
-    dest: /etc/mongod.conf
+- name: Check if xhprof is already installed
+  ansible.builtin.command:
+    cmd: pecl list
+  register: pecl_list
+  changed_when: false
 
-- name: run mongodb
-  service:
-    name: mongod
-    state: started
-    enabled: true
-  run_once: true
+- name: Install xhprof if not present
+  ansible.builtin.command:
+    cmd: pecl install xhprof
+  when: "'xhprof' not in pecl_list.stdout"
+  register: xhprof_pecl_install
 
-# FIXME #753: Setup indexes for MongoDB used for profiling
-
-- name: Install XHProf and mongo PECL packages for profiling
-  pear:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - pecl/xhprof-beta
-    - pecl/mongodb
-
-- name: Ensure XHGui present
-  # Ref #1149 for TMPDIR environment var
-  environment:
-    TMPDIR: "{{ m_tmp }}"
-  git:
-    repo: https://github.com/perftools/xhgui.git
-    dest: "{{ m_profiling_xhgui_directory }}"
-    version: "0.8.1"
-    force: true
-    umask: "0002"
-
-- name: Ensure XHGui directory owned by Apache
-  file:
-    path: "{{ m_profiling_xhgui_directory }}"
+- name: Ensure profiler log directory exists when using file output
+  ansible.builtin.file:
+    path: "{{ m_profiling_file_path }}"
+    state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: '0755'
-    recurse: true
+  when: m_profiling_output_type == 'file'
+
+- name: Deploy MediaWiki profiler configuration to global postLocalSettings.d
+  ansible.builtin.template:
+    src: postLocalSettings.d/profiling.php.j2
+    dest: "{{ m_local_public }}/{{ env }}/postLocalSettings.d/profiling.php"
+    owner: "{{ user_meza_ansible }}"
+    group: "{{ group_meza_ansible }}"
+    mode: '0644'
+
+- name: Ensure per-wiki postLocalSettings.d directories exist for wikis with profiling enabled
+  ansible.builtin.file:
+    path: "{{ m_local_public }}/{{ env }}/wikis/{{ item.id }}/postLocalSettings.d"
     state: directory
+    owner: "{{ user_meza_ansible }}"
+    group: "{{ group_meza_ansible }}"
+    mode: '0755'
+  loop: "{{ wikis }}"
+  when: item.enable_profiling | default(false)
 
-- name: Ensure XHGui packages present
-  composer:
-    command: install
-    prefer_dist: true
-    working_dir: "{{ m_profiling_xhgui_directory }}"
+- name: Configure logrotate for profiler files
+  ansible.builtin.template:
+    src: logrotate-profiler.j2
+    dest: /etc/logrotate.d/meza-profiler
+    owner: root
+    group: root
+    mode: '0644'
+  when: m_profiling_output_type == 'file'
 
-- name: Ensure XHGui using correct Mongo DB instance (on first app server)
-  template:
-    src: xhgui.config.php.j2
-    dest: "{{ m_profiling_xhgui_directory }}/config/config.php"
-
-- name: "Ensure XHGui cache directory configured"
-  file:
-    path: "{{ m_profiling_xhgui_directory }}/cache"
-    # owner: who?
-    # group: who?
-
-    # FIXME #804: suggested per docs, but c'mon
-    mode: '0777'
-    recurse: true
-    state: directory
-
-- name: Open port 27017 for MongoDB on all but first app server
-  include_role:
-    name: firewalld
-  vars:
-    firewall_port: 27017
-    firewall_protocol: tcp
-    firewall_servers: "{{ groups['app_servers'] }}"
-    firewall_zone: "{{m_private_networking_zone|default('public')}}"
-
-- name: Open port 8089 to load balancer
-  include_role:
-    name: firewalld
-  vars:
-    firewall_port: 8089
-    firewall_protocol: tcp
-    firewall_servers: "{{ groups['load_balancers'] }}"
-    firewall_zone: "{{m_private_networking_zone|default('public')}}"
+- name: Add cron job for profiler file cleanup
+  ansible.builtin.cron:
+    name: "Meza profiler file cleanup"
+    minute: "0"
+    hour: "2"
+    job: "find {{ m_profiling_file_path }} -type f -mtime +{{ m_profiling_file_retention_days }} -delete"
+    user: root
+    state: "{{ 'present' if m_profiling_output_type == 'file' else 'absent' }}"
