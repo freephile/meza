@@ -44,7 +44,6 @@
     - name: Ensure controller has user alt-meza-ansible
       user:
         name: alt-meza-ansible
-        move_home: true
         home: "{{ m_home }}/alt-meza-ansible"
         group: "{{ group_wheel }}"
     - name: Ensure user alt-meza-ansible .ssh dir configured
