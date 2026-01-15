@@ -241,9 +241,11 @@ Vagrant.configure("2") do |config|
       # Also, at least on Windows it's not possible to change the owner/group
       # after it is mounted, so instead we pick a UID and GID and meza-ansible
       # and wheel are changed to these IDs after they are created.
-      app1.vm.synced_folder ".", install_directory + "/meza", type: "virtualbox", owner: 10000, group: 10000, mount_options: ["dmode=755,fmode=755"]
+      # Use dmode=775 for directories, fmode=755 for files (allows execute bit)
+      app1.vm.synced_folder ".", install_directory + "/meza", type: "virtualbox", owner: 10000, group: 10000, mount_options: ["dmode=775,fmode=755"]
     else
-      app1.vm.synced_folder ".", install_directory + "/meza", type: "virtualbox", owner: 10000, group: 10000
+      # On Linux/Mac, same, use dmode=775 for directories, fmode=755 for files (allows execute bit)
+      app1.vm.synced_folder ".", install_directory + "/meza", type: "virtualbox", owner: 10000, group: 10000, mount_options: ["dmode=775,fmode=755"]
     end
 
     # Transfer keys to app1
@@ -268,8 +270,17 @@ Vagrant.configure("2") do |config|
 
       cat #{install_directory}/conf-meza/users/meza-ansible/.ssh/id_rsa.pub >> #{install_directory}/conf-meza/users/meza-ansible/.ssh/authorized_keys
 
+      # Change meza-ansible UID and wheel GID to match mount ownership
       usermod -u 10000 meza-ansible
       groupmod -g 10000 wheel
+      
+      # Add meza-ansible to vboxsf group for shared folder access
+      usermod -aG vboxsf meza-ansible
+      
+      # Fix permissions on shared folder to be accessible
+      # This only affects the guest VM 'view'; host permissions are unaffected
+      chown -R meza-ansible:wheel #{install_directory}/meza
+      chmod -R u+rwX,g+rwX,o+rX #{install_directory}/meza
     SHELL
 
     #
