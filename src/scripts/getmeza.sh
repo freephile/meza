@@ -49,206 +49,247 @@ fi
 umask 002
 
 # Check distro and version to determine what needs to be installed
-#
-if [ -f /etc/redhat-release ]; then
-	# This bit checks for the variant-release package and builds variables
-	# appropriately
-	#
-	RH_VARIANTS="centos redhat rocky"
-
-	for VARIANT in ${RH_VARIANTS}
-	do
-		version=$(rpm -q ${VARIANT}-release --queryformat "%{VERSION}" | grep -v not)
-		if [ ! -z "${version}"  ]; then
-			distro=${VARIANT}
-			break
-		fi
-	done
-
-# if Debian support still desired, add else condition here
+if [ ! -f /etc/redhat-release ]; then
+    echo "Error: Only RedHat-based systems (Rocky Linux 8+, RHEL 8+) are supported"
+    exit 1
 fi
 
-# make sure conf-meza exists and has good permissions
+# Detect RedHat variant and version
+RH_VARIANTS="redhat rocky"
+for VARIANT in ${RH_VARIANTS}; do
+    version=$(rpm -q ${VARIANT}-release --queryformat "%{VERSION}" 2>/dev/null | grep -v "not installed" || true)
+    if [ -n "${version}" ]; then
+        distro=${VARIANT}
+        break
+    fi
+done
+
+if [ -z "${distro}" ]; then
+    echo "Error: Could not detect supported RedHat variant"
+    exit 1
+fi
+
+# Verify supported version
+case ${distro} in
+    rocky)
+        if [[ ! "${version}" =~ ^8\. ]]; then
+            echo "Error: Only Rocky Linux 8.x is currently supported (detected: ${version})"
+            exit 1
+        fi
+        ;;
+    redhat)
+        if [[ ! "${version}" =~ ^8\. ]]; then
+            echo "Error: Only Red Hat Enterprise Linux 8.x is currently supported (detected: ${version})"
+            exit 1
+        fi
+        ;;
+esac
+
+echo "Detected: ${distro} ${version}"
+
+# Create conf-meza directory structure
 mkdir -p ${INSTALL_DIR}/conf-meza/secret
 chmod 755 ${INSTALL_DIR}/conf-meza
 chmod 775 ${INSTALL_DIR}/conf-meza/secret
 
-# Install epel if not installed
-if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
-
-	case ${distro} in
-
-		centos)
-			yum install -y epel-release
-			;;
-
-		rocky)
-			# https://docs.fedoraproject.org/en-US/epel/getting-started/
-			# just enable 'powertools' and install epel-release
-			dnf config-manager --set-enabled powertools
-			dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-
-
-			dnf module -y reset php
-			sed -i.meza -e 's;countme=1$;countme=1\nexclude = python38;g' /etc/yum.repos.d/epel.repo
-			echo "exclude = python38" >> /etc/yum.repos.d/Rocky-AppStream.repo
-			cp /etc/yum.repos.d/epel.repo ${INSTALL_DIR}/conf-meza/epel.repo-withexcludes
-			cp /etc/yum.repos.d/Rocky-AppStream.repo ${INSTALL_DIR}/conf-meza/Rocky-AppStream.repo
-			;;
-
-		redhat)
-			case ${version} in
-
-				7.*)
-					epel_repo_url="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
-					# epel_repo_gpg_key_url="/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7"
-					rpm -Uvh $epel_repo_url
-					yum install y git ansible libselinux-python
-					;;
-
-				8.*)
-					epel_repo_url="https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
-					echo "Enabling code-ready-builder and ansible repo for RHEL. This may take some time."
-					subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
-					subscription-manager repos --enable ansible-2-for-rhel-8-$(arch)-rpms
-					dnf install -y ${epel_repo_url}
-					sed -i.meza -e 's;countme=1$;countme=1\nexclude = ansible ansible-core python38;g' /etc/yum.repos.d/epel.repo
-					sed -i.meza -e 's;AppStream (RPMs)$;AppStream (RPMs)\nexclude = ansible ansible-core python38;g' /etc/yum.repos.d/redhat.repo
-					cp /etc/yum.repos.d/epel.repo ${INSTALL_DIR}/conf-meza/epel.repo-withexcludes
-					cp /etc/yum.repos.d/redhat.repo ${INSTALL_DIR}/conf-meza/redhat.repo-withexcludes
-					dnf module -y reset php
-					dnf module -y enable php:7.4
-					;;
-
-				*)
-					echo "RedHat version ${version} is not supported yet." && exit 187
-					;;
-			esac
-			;;
-
-		*)
-			echo "Cannot determine operating system distro or version" && exit 187
-			;;
-	esac
-
-fi
-
+# Configure repositories based on distro
 case ${distro} in
+    rocky)
+        # Install dnf-plugins-core (required for config-manager command)
+        if ! rpm -q dnf-plugins-core >/dev/null 2>&1; then
+            echo "Installing dnf-plugins-core..."
+            dnf install -y dnf-plugins-core
+        fi
 
-	centos)
-		yum install -y git ansible libselinux-python
-		;;
+        # Enable PowerTools/CRB repository (check if already enabled first)
+        if ! dnf repolist enabled --quiet | grep -qE 'powertools|crb'; then
+            echo "Enabling PowerTools repository..."
 
-	rocky)
-		dnf install -y python36
-		dnf install -y git ansible
-		dnf install -y python3-libselinux
-		alternatives --set python /usr/bin/python3
-		;;
+            # Show what we found
+            echo "Available PowerTools repositories:"
+            dnf repolist all --quiet | grep -iE 'powertools|crb' | grep -v 'debug\|source'
 
-	redhat)
-		case ${version} in
+            # The repo ID is just "powertools" on generic/rocky8
+            dnf config-manager --set-enabled powertools 2>/dev/null || \
+            dnf config-manager --set-enabled PowerTools 2>/dev/null || \
+            dnf config-manager --set-enabled crb 2>/dev/null
 
-			7.*)
-				yum install -y git ansible libselinux-python
-				;;
+            # Verify it was enabled
+            if dnf repolist enabled --quiet | grep -qE 'powertools|crb'; then
+                echo "✓ Successfully enabled PowerTools repository"
+            else
+                echo "⚠ WARNING: Failed to enable PowerTools repository"
+                echo "Enabled repositories:"
+                dnf repolist enabled
+            fi
+        else
+            echo "✓ PowerTools repository already enabled"
+        fi
 
-			8.*)
-				dnf install -y python36 git python3-libselinux
-				alternatives --set python /usr/bin/python3
-				;;
+        # Install EPEL repository if not present
+        if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
+            echo "Installing EPEL repository..."
+            dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        fi
 
-			*)
-				echo "RedHat version ${version} is not supported yet." && exit 188
-				;;
-		esac
-		;;
+        # Reset PHP module to allow version selection
+        dnf module -y reset php 2>/dev/null || true
+        ;;
 
-	*)
-		echo "Cannot determine operating system distro or version" && exit 189
-		;;
+    redhat)
+        # Enable CodeReady Builder repository
+        if ! subscription-manager repos --list-enabled | grep -q codeready-builder; then
+            echo "Enabling CodeReady Builder repository..."
+            subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
+        fi
+
+        # Install EPEL if not present
+        if [ ! -f "/etc/yum.repos.d/epel.repo" ]; then
+            echo "Installing EPEL repository..."
+            dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        fi
+
+        # Reset PHP module
+        dnf module -y reset php 2>/dev/null || true
+        ;;
 esac
 
-# Meza repository URL and branch can be set in your system shell as environment variables so as to work locally with
-# your preferred setup and/or test changes to this file in development without needing to alter this file explicitly.
-#
-# Use
-# export MEZA_REPOSITORY_URL='https://github.com/freephile/meza.git'
-# in your shell to override the default repo URL set here
-MEZA_REPOSITORY_URL="${MEZA_REPOSITORY_URL:-https://github.com/nasa/meza.git}"
+# Install base system packages
+echo "Installing base system packages..."
+dnf install -y \
+    git \
+    python36 \
+    ansible \
+    python3-libselinux \
+    python3-devel \
+    gcc \
+    make \
+    autoconf \
+    automake \
+    pkgconfig \
+    libffi-devel \
+    openssl-devel \
+    cargo \
+    rust
 
-# Declare which branch in the repo to use
-#
-# Use
-# export MEZA_BRANCH_NAME='REL1_39'
-# in your shell to override the default branch name set here
-MEZA_BRANCH_NAME="${MEZA_BRANCH_NAME:-main}"
+# Set python3 as default python
+alternatives --set python /usr/bin/python3 2>/dev/null || true
 
-# if /opt/meza doesn't exist, clone our sources, always keeping the 'meza' name
-if [ ! -d "${INSTALL_DIR}/meza" ]; then
-	git clone ${MEZA_REPOSITORY_URL} ${INSTALL_DIR}/meza --branch ${MEZA_BRANCH_NAME} "${INSTALL_DIR}/meza"
+# Verify PowerTools/CRB is enabled
+echo "Verifying repository configuration..."
+if dnf repolist enabled | grep -iE '(powertools|crb|codeready)' >/dev/null; then
+    echo "✓ Development repository enabled"
+else
+    echo "⚠ WARNING: Development repository may not be enabled"
+    echo "This may cause package installation failures during deployment"
+    echo "Enabled repositories:"
+    dnf repolist enabled
 fi
 
-# Make sure /opt/meza permissions are good in case git-cloned earlier
-#  - Ensure users can read everything
-#  - Ensure users can also execute directories
+# Meza repository URL and branch configuration
+# Example overrides:
+# export MEZA_REPOSITORY_URL='https://github.com/freephile/meza.git';
+# export MEZA_BRANCH_NAME='dev';
+MEZA_REPOSITORY_URL="${MEZA_REPOSITORY_URL:-https://github.com/nasa/meza.git}"
+MEZA_BRANCH_NAME="${MEZA_BRANCH_NAME:-main}"
+
+# Clone meza repository if it doesn't exist
+if [ ! -d "${INSTALL_DIR}/meza" ]; then
+    echo "Cloning Meza repository..."
+    echo "using Repository URL: ${MEZA_REPOSITORY_URL}"
+    echo "using Branch name: ${MEZA_BRANCH_NAME}"
+    git clone ${MEZA_REPOSITORY_URL} --branch ${MEZA_BRANCH_NAME} "${INSTALL_DIR}/meza"
+fi
+
+# Set proper permissions on meza directory
+echo "Setting repository permissions..."
 chmod a+r ${INSTALL_DIR}/meza -R
 find ${INSTALL_DIR}/meza -type d -exec chmod 755 {} +
 
+# Create meza command symlink
 if [ ! -f "/usr/bin/meza" ]; then
-	ln -s "${INSTALL_DIR}/meza/src/scripts/meza.py" "/usr/bin/meza"
+    ln -s "${INSTALL_DIR}/meza/src/scripts/meza.py" "/usr/bin/meza"
 fi
 
-# Create .deploy-meza directory and very basic config.sh if they don't exist
-# This is done to make the user setup script(s) work
+# Create .deploy-meza directory with basic config
 mkdir -p ${INSTALL_DIR}/.deploy-meza
 chmod 755 ${INSTALL_DIR}/.deploy-meza
 
 if [ ! -f ${INSTALL_DIR}/.deploy-meza/config.sh ]; then
-	echo "m_scripts='${INSTALL_DIR}/meza/src/scripts'; ansible_user='meza-ansible';" > ${INSTALL_DIR}/.deploy-meza/config.sh
+    echo "m_scripts='${INSTALL_DIR}/meza/src/scripts'; ansible_user='meza-ansible';" > ${INSTALL_DIR}/.deploy-meza/config.sh
 fi
 
-# Required initially for creating lock files
+# Create data directory for lock files (@TODO: better location? - need write access to enable deploys without sudo)
 mkdir -p ${INSTALL_DIR}/data-meza
 
-# If user meza-ansible already exists, make sure home directory is correct
-# (update from old meza versions)
+# Setup or verify meza-ansible user
 ret=false
 getent passwd meza-ansible >/dev/null 2>&1 && ret=true
+
 if $ret; then
-	echo "meza-ansible already exists"
-	homedir=$( getent passwd "meza-ansible" | cut -d: -f6 )
-	if [ "$homedir" == "/home/meza-ansible" ]; then
-		echo "meza-ansible home directory not correct. moving."
-		mkdir -p "${INSTALL_DIR}/conf-meza/users"
-		usermod -m -d "${INSTALL_DIR}/conf-meza/users/meza-ansible" "meza-ansible"
-		ls -la ${INSTALL_DIR}/conf-meza/users
-		ls -la ${INSTALL_DIR}/conf-meza/users/meza-ansible
-		ls -la ${INSTALL_DIR}/conf-meza/users/meza-ansible/.ssh
-	else
-		echo "meza-ansible home-dir in correct location"
-	fi
+    echo "Verifying meza-ansible user configuration..."
+    homedir=$( getent passwd "meza-ansible" | cut -d: -f6 )
+    if [ "$homedir" != "${INSTALL_DIR}/conf-meza/users/meza-ansible" ]; then
+        echo "Updating meza-ansible home directory..."
+        mkdir -p "${INSTALL_DIR}/conf-meza/users"
+        usermod -m -d "${INSTALL_DIR}/conf-meza/users/meza-ansible" "meza-ansible"
+    fi
 else
-	echo
-	echo "Add ansible master user"
-	source "${INSTALL_DIR}/meza/src/scripts/ssh-users/setup-master-user.sh"
+    echo "Creating meza-ansible user..."
+    source "${INSTALL_DIR}/meza/src/scripts/ssh-users/setup-master-user.sh"
 fi
 
+# Set ownership on meza directories
 chown meza-ansible:wheel ${INSTALL_DIR}/conf-meza
 chown meza-ansible:wheel ${INSTALL_DIR}/conf-meza/secret
 chown meza-ansible:wheel ${INSTALL_DIR}/meza
 
-# Don't require TTY or visible password for sudo. Ref #769
+# Configure sudoers for passwordless ansible operations
+# @TODO: setup-minion-user.sh needs to be refactored/updated
+echo "Configuring sudo permissions..."
 sed -r -i "s/^Defaults\\s+requiretty/#Defaults requiretty/g;" /etc/sudoers
 sed -r -i "s/^Defaults\\s+\!visiblepw/#Defaults \\!visiblepw/g;" /etc/sudoers
 
+# Upgrade pip to avoid cryptography build issues (ignore root warning - intentional system-wide install)
+echo "Upgrading pip and installing Ansible..."
+python3 -m pip install --upgrade pip setuptools wheel 2>&1 | grep -v "WARNING: Running pip as the 'root' user" || true
 
-# install ansible into the ansible user's environment
-su - meza-ansible
-pip3 install --user ansible
-cd /opt/meza/config
-ansible-galaxy collection install -r ../requirements.yml
+# Install ansible system-wide (newer pip supports --root-user-action flag)
+python3 -m pip install ansible --root-user-action=ignore 2>/dev/null || python3 -m pip install ansible
 
-# @todo [Run meza as non-root user](https://github.com/freephile/meza/issues/72)
-echo "meza command installed. Use it:"
-echo "  sudo meza deploy monolith -vvv"
+# Install ansible collections as meza-ansible user
+echo "Installing Ansible collections..."
+sudo -H -u meza-ansible bash -c 'cd /opt/meza/config && ansible-galaxy collection install -r ../requirements.yml'
+
+# @TODO [Run meza as non-root user](https://github.com/freephile/meza/issues/72)
+# Display completion message with next steps
+if id -u vagrant >/dev/null 2>&1; then
+    echo ""
+    echo "✓ Meza bootstrap complete (Vagrant environment detected)"
+    echo ""
+    echo "Vagrant provisioning will automatically run 'meza setup env vagrant'"
+    echo "After provisioning completes, deploy with:"
+    echo "  vagrant ssh"
+	echo "  sudo su - meza-ansible"
+	echo "  cd /opt/meza/config"
+    echo "  sudo meza deploy vagrant -vvv"
+else
+    echo ""
+    echo "✓ Meza bootstrap complete"
+    echo ""
+	echo "Remember to always become the meza-ansible user"
+	echo "and navigate to /opt/meza/config before deploying:"
+	echo ""
+	echo "  sudo su - meza-ansible"
+	echo "  cd /opt/meza/config"
+	echo ""
+    echo "Next steps:"
+    echo "  1. Setup environment:  sudo meza setup env <env-name>"
+    echo "     Example (single server): sudo meza setup env prod --fqdn=wiki.example.com --db_pass=SecurePass123"
+    echo ""
+    echo "  2. Deploy MediaWiki:   sudo meza deploy <env-name> -vvv"
+    echo ""
+    echo "For local testing on this server:"
+    echo "  sudo meza setup env monolith --fqdn=\$(hostname -I | awk '{print \$1}') --db_pass=TestPass123"
+    echo "  sudo meza deploy monolith -vvv"
+fi
