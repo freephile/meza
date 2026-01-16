@@ -40,3 +40,14 @@ app1:
 #   memory: 512
 #   cpus: 1
 #   ip_address: "192.168.56.58"
+
+# Install directory where Meza will be installed in the VM
+# Default: /opt (which means Meza installed at /opt/meza)
+# install_directory: "/opt"
+
+# Note: VirtualBox shared folders are configured with proper permissions
+# for the meza-ansible user. If you experience permission issues:
+#   1. SSH into VM: vagrant ssh
+#   2. Run: sudo bash /opt/meza/manual/fix-vbox-permissions.sh
+#   3. Log out and back in: exit && vagrant ssh
+# See manual/VBOX_PERMISSIONS.md for details
