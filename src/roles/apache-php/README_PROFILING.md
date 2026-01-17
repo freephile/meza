@@ -480,6 +480,7 @@ mv xhgui-archive-*.tar.gz /opt/data-meza/backups/
 ## Resources
 
 - [MediaWiki Profiling Documentation](https://www.mediawiki.org/wiki/Manual:Profiling)
+- [Meza Profiling](https://wiki.freephile.org/wiki/Meza/profiling)
 - [xhprof GitHub Repository](https://github.com/longxinH/xhprof)
 - [PHP Performance Profiling Guide](https://www.php.net/manual/en/book.xhprof.php)
 - [Meza Configuration Documentation](https://www.mediawiki.org/wiki/Meza)
