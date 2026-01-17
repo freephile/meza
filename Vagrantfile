@@ -224,23 +224,10 @@ Vagrant.configure("2") do |config|
     # Increase boot timeout for slower systems or first-time box downloads
     app1.vm.boot_timeout = 600
 
-    # Get the kernel inside the box upgraded so VBox Guest Additions work
-    app1.vbguest.installer_options = { allow_kernel_upgrade: true, auto_reboot: true }
-
-    # Wait for network before trying to install packages, add retries, pause briefly
-
-    # Without these dependencies, VirtualBox Guest Additions compilation fails, causing:
-
-    # No shared folder support (/opt/meza mount fails)
-    # Poor VM performance (no graphics acceleration)
-    # Time sync issues between host and guest
-    # The retry logic specifically addresses Rocky Linux's occasional slow network initialization on first boot.
-
-    app1.vbguest.installer_hooks[:before_install] = [
-      "echo 'Waiting for network...' && for i in {1..30}; do ping -c 1 8.8.8.8 >/dev/null 2>&1 && break || sleep 2; done",
-      "dnf -y install bzip2 elfutils-libelf-devel gcc kernel kernel-devel kernel-headers make perl tar || dnf -y install bzip2 elfutils-libelf-devel gcc kernel kernel-devel kernel-headers make perl tar",
-      "sleep 2"
-    ]
+    # Disable auto-update for vbguest - it hangs after successful installation
+    # Guest Additions install correctly on first boot and don't need reinstalling
+    # If you need to update Guest Additions, run: vagrant vbguest --do install --no-cleanup
+    app1.vbguest.auto_update = false
 
     hostname = 'meza-app1-' + box_os
     app1.vm.box = baseBox
