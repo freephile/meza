@@ -72,16 +72,7 @@
   failed_when: false
   tags:
     - mediawiki-core
-- name: Ensure MediaWiki core owned by meza-ansible
-  file:
-    path: "{{ m_mediawiki }}"
-    mode: "{{ m_htdocs_mode }}"
-    owner: "{{ m_htdocs_owner }}"
-    group: "{{ group_apache }}"
-    state: directory
-    recurse: true
-  tags:
-    - mediawiki-core
+
 - name: Ensure proper MediaWiki git version installed
   become: true
   become_user: "meza-ansible"
@@ -273,11 +264,23 @@
 - name: Run composer update on MediaWiki and composer local extensions
   become: true
   become_user: "meza-ansible"
-  composer:
-    command: update
-    working_dir: "{{ m_mediawiki }}"
-    no_dev: "{{ m_disable_composer_dev_dependencies| default(false, true) }}"
-    prefer_source: true
+  # Explicitly set umask 0002 for composer operations
+  # The Ansible composer module doesn't support umask parameter (unlike git module)
+  # Without this, composer inherits restrictive umask (often 0022) and creates files
+  # in vendor/ directory with permissions 0644/0755 instead of 0664/0775
+  # This causes permission issues when:
+  #   - Apache needs to write cache files
+  #   - meza-ansible needs to update composer dependencies
+  # Using shell with explicit umask ensures group-writable files (apache group)
+  environment:
+    TMPDIR: "{{ m_tmp }}"
+  shell: |
+    umask 0002
+    composer update {{ '--no-dev' if m_disable_composer_dev_dependencies | default(false, true) else '' }} --prefer-source
+  args:
+    chdir: "{{ m_mediawiki }}"
+  register: composer_result
+  changed_when: "'Nothing to install, update or remove' not in composer_result.stdout"
   tags:
     - extensions
     - composer-extensions
@@ -340,6 +343,22 @@
     - latest
 
 #
+# VERIFY AND FIX PERMISSIONS
+#
+# Now that MediaWiki core, extensions, skins, and composer dependencies are all
+# installed, verify and fix all permissions. This includes both general MediaWiki
+# files and special cases (Widgets, cache, uploads).
+- name: Verify and fix all MediaWiki permissions and ownership
+  ansible.builtin.include_role:
+    name: verify-permissions
+  tags:
+    - mediawiki-core
+    - extensions
+    - verify
+    - permissions
+    - file-perms
+
+#
 # LocalSettings.php
 #
 
@@ -351,47 +370,10 @@
     owner: "{{ m_htdocs_owner }}"
     group: "{{ group_apache }}"
 
-- name: Ensure MediaWiki still properly owned
-  file:
-    path: "{{ m_mediawiki }}"
-    mode: "{{ m_htdocs_mode }}"
-    owner: "{{ m_htdocs_owner }}"
-    group: "{{ group_apache }}"
-    state: directory
-    recurse: true
-  tags:
-    - mediawiki-core
-    - file-perms
-
-- name: Check if the compiled_templates directory exists
-  stat:
-    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
-  register: compiled_templates_folder
-
-- name: "Ensure compiled templates folder for widget extension is owned by apache"
-  file:
-    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
-    owner: "{{ user_apache }}"
-    group: "{{ group_apache }}"
-    mode: "u=rwX,g=rwX,o=rX"
-    state: directory
-    recurse: true
-    modification_time: preserve
-    access_time: preserve
-  when: compiled_templates_folder.stat.exists
-
-- name: Ensure all MediaWiki directories have proper group permissions
-  file:
-    path: "{{ item }}"
-    state: directory
-    group: "{{ group_apache }}"
-    mode: "g+rwX"
-    recurse: true
-  loop:
-    - "{{ m_mediawiki }}/cache"
-    - "{{ m_mediawiki }}/images"
-    - "{{ m_uploads_dir }}"
-  when: ansible_distribution_file_variety == 'RedHat'
+# NOTE: All MediaWiki permissions are now handled by the verify-permissions
+# role included after all MediaWiki components are installed (line ~320).
+# This includes general ownership/permissions plus edge cases like Widgets,
+# cache, images, and uploads directories.
 
 #
 # LANDING PAGE
