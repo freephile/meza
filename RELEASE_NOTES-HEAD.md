@@ -2,6 +2,138 @@
 
 ### Commits
 
+* [49e7c39e](https://github.com/freephile/meza/commit/49e7c39e) (2026-01-20) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
+origin/issue268-better-dev
+* [a610b5f7](https://github.com/freephile/meza/commit/a610b5f7) (2026-01-19) Greg Rundlett: Add blank known_hosts file to avoid error in dev Probably a code smell. Investigate later. known_hosts is created in
+multiple other roles that seem loosely organized and definitely not
+documented.
+Final fix for Issue [#268](https://github.com/freephile/meza/issues/268) Better Dev Environments with Vagrant
+  - Modified: `Vagrantfile`
+
+* [94efecef](https://github.com/freephile/meza/commit/94efecef) (2026-01-17) Greg Rundlett: remove problematic initialization The 'sophisticated' conditioning of the Vagrant box during
+initialization caused problems with the vagrant-vbguest plugin
+detecting completion - resulting in a "hung" `vagrant up` because the
+terminal prompt would not return. The box got created, but the prompt
+was never released.
+Fixes Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `Vagrantfile`
+
+* [158abdf8](https://github.com/freephile/meza/commit/158abdf8) (2026-01-17) Greg Rundlett: Add comments to Vagrant configuration 
+  - Modified: `vagrantconf.default.yml`
+
+* [d2395cf4](https://github.com/freephile/meza/commit/d2395cf4) (2026-01-17) Greg Rundlett: rebuild Vagrant infrastructure In the Vagrantfile...
+Used generic/rocky8 for baseBox for VirtualBox compatibility.
+Increased boot time to 10 min for slower systems.
+Add VBGuest installer hooks before install:
+- Wait up to 60 seconds for network connectivity (ping 8.8.8.8)
+- Install build dependencies (with retry)
+- Pause briefly so system settles and to avoid RockyLinux boot issues.
+- VirtualBox Guest Additions installer runs (automatic, configured by
+vbguest plugin)
+Without these dependencies, VirtualBox Guest Additions compilation fails,
+causing:
+- No shared folder support (/opt/meza mount fails)
+- Poor VM performance (no graphics acceleration)
+- Time sync issues between host and guest
+The retry logic specifically addresses Rocky Linux's occasional slow
+network initialization on first boot.
+Add graphics controller for VirtualBox compatibility
+Missing SSH Keys Fix:
+Modified the Vagrantfile getmeza provisioner to:
+- Check if files exist before trying to move them
+- Create .ssh directory before attempting file operations
+- Show warning messages if keys aren't found (helps debug the issue)
+- Removed rm -rf commands that were pointlessly trying to remove files
+that don't exist yet
+Fix Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `Vagrantfile`
+
+* [b65cb79e](https://github.com/freephile/meza/commit/b65cb79e) (2026-01-16) Greg Rundlett: improve getmeza.sh (setup-env) The setup-env role would pollute the output of `vagrant up` by
+dumping the entire Ansible 'vars'
+Now gate it on the value of `m_force_debug`
+related to Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `src/roles/setup-env/tasks/main.yml`
+
+* [d80b6e21](https://github.com/freephile/meza/commit/d80b6e21) (2026-01-16) Greg Rundlett: improve getmeza.sh The script is now ~40% shorter, easier to maintain, and only supports
+platforms that are actively maintained and relevant for modern MediaWiki.
+Complete refactor removing EOL distros CentOS, RHEL 7.x
+Note: more work to remove related code
+Remove sed workarounds for old incompatible packages.
+Modern Rocky/RHEL 8 repos don't have conflicting ansible packages.
+We install ansible via pip explicitly (not dnf)
+Add `--root-user-action=ignore` to intentional system-wide pip commands
+Python 3.6 is the base, python38 conflicts are no longer relevant.
+The exclusions were workarounds for old repo states.
+Ansible is now installed system-wide vs. user
+Simplified Repository Setup
+- Single code path for Rocky 8 and RHEL 8
+- Clear error messages for unsupported versions
+- Better diagnostic output for PowerTools/CRB repository
+- `libmemcached-devel` is in the PowerTools repository.
+Consolidated package installation into one `dnf install`
+Better Error Handling
+- Version checking with clear error messages
+- Repository verification with diagnostic output
+Cleaner Structure
+- Removed nested case statements
+- Consolidated duplicate code
+- Better comments explaining each section
+- More consistent echo statements for progress tracking every time, not
+just when EPEL is missing
+- Made PowerTools enablement idempotent - Checks if already enabled
+before trying to enable it
+- Added verification after enabling - Confirms PowerTools is actually
+in the enabled repos list
+- Removed the EPEL check wrapper - Repository configuration now runs
+- Separated EPEL installation - EPEL check is now independent of
+PowerTools enablement
+Developer note: you can update your VM while it's running to reflect
+changes made to the Vagrantfile.
+E.g. from your host, invoke
+`vagrant provision app1 --provision-with getmeza`
+Fix for Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `src/scripts/getmeza.sh`
+
+* [edb16345](https://github.com/freephile/meza/commit/edb16345) (2026-01-15) Greg Rundlett: improve Vagrant for better local development - make the same fix in the 'base' role:
+  when creating users do not move_home
+- add scripts and documentation about fixing permission bits, umask,
+  and shares in Vagrant
+Fixes Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Added: `manual/PATH_FIX.md`
+  - Added: `manual/VBOX_755_MIGRATION_COMPLETE.md`
+  - Added: `manual/VBOX_MANUAL_VM.md`
+  - Added: `manual/VBOX_PERMISSIONS.md`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Added: `src/scripts/fix-meza-command.sh`
+  - Added: `src/scripts/fix-vbox-permissions.sh`
+  - Added: `src/scripts/setup-manual-vbox-mount.sh`
+  - Modified: `vagrantconf.default.yml`
+
+* [b8d583df](https://github.com/freephile/meza/commit/b8d583df) (2026-01-15) Greg Rundlett: fix Vagrantfile for permissions, UID, GID Enable it so that you can work and commit from your host while files in the guest also appear correctly.
+For Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `Vagrantfile`
+
+* [b1e9840b](https://github.com/freephile/meza/commit/b1e9840b) (2026-01-15) Greg Rundlett: prevent alt-meza-ansible from blocking deploy Remove the 'move_home' option - it is wrong to include it here.
+Current code will properly "Ensure controller has user alt-meza-ansible
+- If the user doesn't exist: Ansible creates it and sets up the home directory
+- If the user exists: Ansible updates the home path if needed
+- If the directory already exists: Ansible will use it
+(no need to "move" it)
+When the alt-meza-ansible user exists, but you change something about
+the user (like their login config to include traditional system paths
+such as /usr/bin) then a subsequent deploy can block on
+'Ensure controller has user alt-meza-ansible user' due to the 'move_home'
+option which should not be used.
+The move_home parameter is only meaningful when modifying an existing
+user's home directory location.
+For Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `src/playbooks/site.yml`
+
 origin/issue267-faster-deploy
 * [3d05a705](https://github.com/freephile/meza/commit/3d05a705) (2026-01-15) Greg Rundlett: Make meza deploy faster - remove unneccessary and duplicative file mode and ownership conditioning
 - extract file mode and ownership conditioning into 'verify-permissions' role which is then included; and can be run independently

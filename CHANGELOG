@@ -1,3 +1,215 @@
+commit ef7e7c7c4025d4407c0e9bc23349f8866c362cb6
+Merge: 49e7c39e a610b5f7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 20 09:42:56 2026 -0500
+
+    Merge branch 'issue268-better-dev' into dev
+
+commit 49e7c39e52c5b750e3e2aa4e219c86b09a7638c5
+Author: GitHub Action <action@github.com>
+Date:   Tue Jan 20 13:16:50 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
+commit a610b5f79c2ef7e6c35546fb6defe84827d5850c
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Jan 19 23:26:34 2026 -0500
+
+    Add blank known_hosts file to avoid error in dev
+    
+    Probably a code smell. Investigate later. known_hosts is created in
+    multiple other roles that seem loosely organized and definitely not
+    documented.
+    
+    Final fix for Issue #268 Better Dev Environments with Vagrant
+
+commit b2061608f7da1d797c67edc78867ec11354292ec
+Merge: 94efecef 3d05a705
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jan 17 11:41:24 2026 -0500
+
+    Merge remote-tracking branch 'origin/issue267-faster-deploy' into issue268-better-dev
+
+commit 94efeceff263b4eaaef82fc4931b711bacdcb204
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jan 17 09:39:06 2026 -0500
+
+    remove problematic initialization
+    
+    The 'sophisticated' conditioning of the Vagrant box during
+    initialization caused problems with the vagrant-vbguest plugin
+    detecting completion - resulting in a "hung" `vagrant up` because the
+    terminal prompt would not return. The box got created, but the prompt
+    was never released.
+    
+    Fixes Issue #268
+
+commit 158abdf876e12211873419dd651a084c4ed17d75
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jan 17 08:08:28 2026 -0500
+
+    Add comments to Vagrant configuration
+
+commit d2395cf4b1cef523d9d18f657f81aebe388bf188
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jan 17 07:39:17 2026 -0500
+
+    rebuild Vagrant infrastructure
+    
+    In the Vagrantfile...
+    Used generic/rocky8 for baseBox for VirtualBox compatibility.
+    
+    Increased boot time to 10 min for slower systems.
+    
+    Add VBGuest installer hooks before install:
+    - Wait up to 60 seconds for network connectivity (ping 8.8.8.8)
+    - Install build dependencies (with retry)
+    - Pause briefly so system settles and to avoid RockyLinux boot issues.
+    - VirtualBox Guest Additions installer runs (automatic, configured by
+    vbguest plugin)
+    
+    Without these dependencies, VirtualBox Guest Additions compilation fails,
+    causing:
+    - No shared folder support (/opt/meza mount fails)
+    - Poor VM performance (no graphics acceleration)
+    - Time sync issues between host and guest
+    
+    The retry logic specifically addresses Rocky Linux's occasional slow
+    network initialization on first boot.
+    
+    Add graphics controller for VirtualBox compatibility
+    
+    Missing SSH Keys Fix:
+    Modified the Vagrantfile getmeza provisioner to:
+    - Check if files exist before trying to move them
+    - Create .ssh directory before attempting file operations
+    - Show warning messages if keys aren't found (helps debug the issue)
+    - Removed rm -rf commands that were pointlessly trying to remove files
+    that don't exist yet
+    
+    Fix issue #268
+
+commit b65cb79e900e4eab0f6a39c4aee7186c0ae01aea
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 16 13:58:58 2026 -0500
+
+    improve getmeza.sh (setup-env)
+    
+    The setup-env role would pollute the output of `vagrant up` by
+    dumping the entire Ansible 'vars'
+    
+    Now gate it on the value of `m_force_debug`
+    
+    related to Issue #268
+
+commit d80b6e21c1fb52e36586b70d1c1d5612191850a0
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Jan 16 13:38:11 2026 -0500
+
+    improve getmeza.sh
+    
+    The script is now ~40% shorter, easier to maintain, and only supports
+    platforms that are actively maintained and relevant for modern MediaWiki.
+    
+    Complete refactor removing EOL distros CentOS, RHEL 7.x
+    Note: more work to remove related code
+    
+    Remove sed workarounds for old incompatible packages.
+    Modern Rocky/RHEL 8 repos don't have conflicting ansible packages.
+    We install ansible via pip explicitly (not dnf)
+    
+    Add `--root-user-action=ignore` to intentional system-wide pip commands
+    
+    Python 3.6 is the base, python38 conflicts are no longer relevant.
+    The exclusions were workarounds for old repo states.
+    
+    Ansible is now installed system-wide vs. user
+    
+    Simplified Repository Setup
+    - Single code path for Rocky 8 and RHEL 8
+    - Clear error messages for unsupported versions
+    - Better diagnostic output for PowerTools/CRB repository
+    - `libmemcached-devel` is in the PowerTools repository.
+    
+    Consolidated package installation into one `dnf install`
+    
+    Better Error Handling
+    - Version checking with clear error messages
+    - Repository verification with diagnostic output
+    
+    Cleaner Structure
+    - Removed nested case statements
+    - Consolidated duplicate code
+    - Better comments explaining each section
+    - More consistent echo statements for progress tracking every time, not
+    just when EPEL is missing
+    - Made PowerTools enablement idempotent - Checks if already enabled
+    before trying to enable it
+    - Added verification after enabling - Confirms PowerTools is actually
+    in the enabled repos list
+    - Removed the EPEL check wrapper - Repository configuration now runs
+    - Separated EPEL installation - EPEL check is now independent of
+    PowerTools enablement
+    
+    Developer note: you can update your VM while it's running to reflect
+    changes made to the Vagrantfile.
+    E.g. from your host, invoke
+    `vagrant provision app1 --provision-with getmeza`
+    
+    Fix for Issue #268
+
+commit edb163455be8663ccd1fda6d3920dfd6b497bdef
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 15 21:08:47 2026 -0500
+
+    improve Vagrant for better local development
+    
+    - make the same fix in the 'base' role:
+      when creating users do not move_home
+    - add scripts and documentation about fixing permission bits, umask,
+      and shares in Vagrant
+    
+    Fixes Issue #268
+
+commit b8d583df4daa35c7d5cbcfcda9058f9582b70cb5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 15 00:41:40 2026 -0500
+
+    fix Vagrantfile for permissions, UID, GID
+    
+    Enable it so that you can work and commit from your host while files in the guest also appear correctly.
+    
+    For Issue #268
+
+commit b1e9840bebc151ade599940ef37baa06527648a8
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 15 00:25:11 2026 -0500
+
+    prevent alt-meza-ansible from blocking deploy
+    
+    Remove the 'move_home' option - it is wrong to include it here.
+    
+    Current code will properly "Ensure controller has user alt-meza-ansible
+    - If the user doesn't exist: Ansible creates it and sets up the home directory
+    - If the user exists: Ansible updates the home path if needed
+    - If the directory already exists: Ansible will use it
+    (no need to "move" it)
+    
+    When the alt-meza-ansible user exists, but you change something about
+    the user (like their login config to include traditional system paths
+    such as /usr/bin) then a subsequent deploy can block on
+    'Ensure controller has user alt-meza-ansible user' due to the 'move_home'
+    option which should not be used.
+    
+    The move_home parameter is only meaningful when modifying an existing
+    user's home directory location.
+    
+    For Issue #268
+
 commit 269d419d700efb818b3f7e3ed7577904461a375b
 Merge: 4b14ee15 3d05a705
 Author: Greg Rundlett <greg.rundlett@gmail.com>
