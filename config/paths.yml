@@ -25,6 +25,7 @@ m_scripts: "{{ m_meza }}/src/scripts"
 m_test: "{{ m_meza }}/test"
 
 # data dir
+# @FIXME: Consider renaming m_meza_data to m_data for consistency
 m_meza_data: "{{ m_install }}/data-meza"
 m_cache_directory: "{{ m_meza_data }}/cache"
 m_tmp: "{{ m_meza_data }}/tmp"
@@ -120,7 +121,7 @@ m_group: "{{ group_wheel | default('root') }}"
 # FIXME: Later specify read and write permissions only if Ansible supports
 
 
-m_data_mode: "0755"
+m_data_mode: "2775"
 m_data_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_data_group: "{{ group_wheel | default('root') }}"
 
@@ -137,25 +138,26 @@ m_htdocs_group: "{{ group_wheel | default('root') }}"
 m_uploads_dir_mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
 # NOTE: need defaults for apache since this file is directly loaded by meza.py
 
-# Per [1] this should not be accessible from the web and should have mode of
-# 0700. However, we need it to be accessible by apache httpd for page requests
-# but also allow command line scripts to run it, specifically for running jobs.
+# https://www.mediawiki.org/wiki/Manual:$wgCacheDirectory
+# $wgCacheDirectory should NOT be accessible from the web and should have mode of
+# 0775 or 0755. Needs to be accessible by apache httpd for page requests
+# but also allow command line scripts, e.g. for running jobs.
 # Fortunately jobs are run by the meza-ansible user, who is in group "apache"
-# and therefore we'll use mode=0770.
-#
-# [1] https://www.mediawiki.org/wiki/Manual:$wgCacheDirectory
-m_cache_directory_mode: "0770"
+
+m_cache_directory_mode: "2775"
 # NOTE: need defaults for apache since this file is directly loaded by meza.py
 m_cache_directory_owner: "{{ user_apache | default('unknown_apache_user', true) }}"
+m_cache_directory_group: "{{ group_apache | default('unknown_apache_group', true) }}"
 
-m_logs_mode: "0755"
+m_logs_mode: "2775"
 m_logs_owner: "{{ ansible_user | default('meza-ansible') }}"
+m_logs_group: "{{ group_apache | default('unknown_apache_group', true) }}"
 
 # @FIXME: Why is meza-backups group name hard-coded and
 # Why do we even need an alternate group besides 'root' or m_group or group_wheel
 # If it is a "backup" operator, distinct from meza-ansible, then
 # the user too should be a variable (other than m_user)
-m_backups_mode: "0775"
+m_backups_mode: "2775"
 m_backups_owner: "{{ ansible_user | default('meza-ansible') }}"
 m_backups_group: meza-backups
 
