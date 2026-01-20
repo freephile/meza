@@ -75,8 +75,6 @@
 - name: Set meza local public variables
   include_vars:
     file: "{{ m_local_public }}/public.yml"
-  # Ignore errors so this file is not required to be included
-  failed_when: false
 
 # Process declarative wiki configuration
 - name: Set wiki variables from declarative config (if wikis defined)
@@ -129,12 +127,6 @@
 #
 # Secret config
 #
-- name: Set meza-core secret default variables
-  include_vars:
-    file: "{{ m_local_secret }}/secret.yml"
-  # Ignore errors so this file is not required to be included
-  failed_when: false
-
 - name: Set meza environment-specific secret variables for env={{ env }}
   include_vars:
     file: "{{ m_local_secret }}/{{ env }}/secret.yml"
