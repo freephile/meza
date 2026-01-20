@@ -2,6 +2,27 @@
 
 ### Commits
 
+HEAD -> dev origin/dev
+* [d5fa3e62](https://github.com/freephile/meza/commit/d5fa3e62) (2026-01-20) Greg Rundlett: Correct erroneous mentions of namespaced public.yml The 'public.yml' file is shared by ALL wikis in a Meza instance.
+PHP directory structures in 'conf-meza' still allow for customization
+of each wiki.
+The 'secret.yml' files are namespaced by <env> within the Meza instance
+so that you can have separate values or configurations as needed.
+  - Modified: `.github/copilot-instructions.md`
+  - Modified: `manual/meza-cmd/config.md`
+  - Modified: `manual/meza-cmd/deploy-notify.md`
+  - Modified: `manual/meza-cmd/migrate-wikis.md`
+  - Modified: `src/roles/apache-php/README_PROFILING.md`
+  - Modified: `src/roles/logrotate/README.md`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/scripts/cleanup-backups.md`
+
+* [3415e45a](https://github.com/freephile/meza/commit/3415e45a) (2026-01-20) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [49e7c39e](https://github.com/freephile/meza/commit/49e7c39e) (2026-01-20) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
 - Generated RELEASE_NOTES-HEAD.md
 - Automated by GitHub Actions
