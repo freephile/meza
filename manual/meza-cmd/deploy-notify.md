@@ -79,7 +79,7 @@ The command integrates with notification systems through the `autodeployer` role
 - **Failure alerts** if deployment fails
 
 Configuration for notifications is managed through environment-specific settings in:
-- `/opt/conf-meza/public/<env>/public.yml`
+- `/opt/conf-meza/public/public.yml`
 - `/opt/conf-meza/secret/<env>/secret.yml`
 
 ## See Also

@@ -68,7 +68,7 @@ The script performs the following operations in sequence:
 Override default settings in environment configuration:
 
 ```yaml
-# In /opt/conf-meza/public/<env>/public.yml
+# In /opt/conf-meza/public/public.yml
 logrotate_backup_files:
   enabled: true
   frequency: daily

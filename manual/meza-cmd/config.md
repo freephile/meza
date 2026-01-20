@@ -42,7 +42,7 @@ Edit configuration files directly using your preferred editor:
 
 ```bash
 # Edit public (non-sensitive) configuration
-sudo vi /opt/conf-meza/public/monolith/public.yml
+sudo vi /opt/conf-meza/public/public.yml
 
 # Edit secret (sensitive) configuration
 sudo vi /opt/conf-meza/secret/monolith/secret.yml
@@ -69,7 +69,7 @@ meza deploy monolith --tags mediawiki --skip-tags latest,update.php
 Meza uses a layered configuration system where values are resolved in this order:
 
 1. **Environment secrets**: `/opt/conf-meza/secret/<env>/secret.yml` (highest priority)
-2. **Environment public**: `/opt/conf-meza/public/<env>/public.yml`
+2. **Environment public**: `/opt/conf-meza/public/public.yml`
 3. **OS-specific defaults**: `/opt/meza/config/RedHat.yml` or `/opt/meza/config/Debian.yml`
 4. **Global defaults**: `/opt/meza/config/defaults.yml` (lowest priority)
 
@@ -77,13 +77,13 @@ Meza uses a layered configuration system where values are resolved in this order
 
 ### MediaWiki Version
 ```yaml
-# In /opt/conf-meza/public/production/public.yml
+# In /opt/conf-meza/public/public.yml
 mediawiki_version: "1.39.4"
 ```
 
 ### Backup Configuration
 ```yaml
-# In /opt/conf-meza/public/production/public.yml
+# In /opt/conf-meza/public/public.yml
 m_backup_retention_days: 30
 m_backup_enable: true
 ```

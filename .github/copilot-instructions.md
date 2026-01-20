@@ -73,7 +73,7 @@ ANSIBLE_CONFIG=/opt/meza/config/ansible.cfg ansible-playbook /opt/meza/src/playb
 meza deploy <env> --tags mediawiki --skip-tags latest,update.php,verify-wiki
 
 # Force debug mode for troubleshooting
-# Set in /opt/conf-meza/public/<env>/public.yml:
+# Set in /opt/conf-meza/public/public.yml:
 m_force_debug: true
 ```
 
@@ -91,7 +91,7 @@ meza deploy-kill <env>
 
 ### Configuration Hierarchy (Order of Precedence)
 1. Environment-specific: `/opt/conf-meza/secret/<env>/secret.yml`
-2. Public environment: `/opt/conf-meza/public/<env>/public.yml`
+2. Public environment: `/opt/conf-meza/public/public.yml`
 3. OS-specific: `config/RedHat.yml` or `config/Debian.yml`
 4. Core defaults: `config/defaults.yml`
 5. Path definitions: `config/paths.yml`

@@ -63,7 +63,7 @@ m_profiling_file_retention_days: 1
 ### Development Environment (Selective Profiling)
 
 ```yaml
-# /opt/conf-meza/public/dev/public.yml
+# /opt/conf-meza/public/public.yml
 m_setup_php_profiling: true
 m_profiling_output_type: footer
 
@@ -79,8 +79,9 @@ wikis:
 ### Test Environment (Profile Everything)
 
 ```yaml
-# /opt/conf-meza/public/test/public.yml
+# /opt/conf-meza/public/public.yml
 m_setup_php_profiling: true
+
 m_profiling_output_type: file
 m_profiling_file_path: "/opt/data-meza/logs/profiler"
 ```

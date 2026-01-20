@@ -116,7 +116,7 @@ The Meza logrotate role provides comprehensive log rotation and backup file mana
 ## 🛠️ Configuration Variables
 
 All retention policies can be customized by overriding variables in:
-- `/opt/conf-meza/public/<env>/public.yml`
+- `/opt/conf-meza/public/public.yml`
 - `/opt/conf-meza/secret/<env>/secret.yml`
 
 ### Example Customization

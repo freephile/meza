@@ -126,12 +126,6 @@
   set_fact:
     wiki_id_redirects: "{{ wiki_id_redirects | default({}) | combine(wiki_redirects_from_declarative | default({})) }}"
 
-- name: Set meza environment-specific public variables for env={{ env }}
-  include_vars:
-    file: "{{ m_local_public }}/{{ env }}/public.yml"
-  # Ignore errors so this file is not required to be included
-  failed_when: false
-
 #
 # Secret config
 #

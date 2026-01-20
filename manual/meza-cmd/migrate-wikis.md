@@ -83,7 +83,7 @@ After migration, you can:
 
 1. **Review the generated configuration:**
    ```bash
-   cat /opt/conf-meza/public/<environment>/public.yml
+   cat /opt/conf-meza/public/public.yml
    ```
 
 2. **Deploy changes:**
