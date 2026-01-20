@@ -307,6 +307,12 @@ Vagrant.configure("2") do |config|
         echo "⚠ WARNING: /tmp/meza-ansible.id_rsa.pub not found - SSH key not transferred"
       fi
 
+      # Create empty known_hosts file for Ansible roles that expect it
+	  # This was failing on Vagrant dev infrastructure and is probably just covering up other issues. Investigate later.
+      touch #{install_directory}/conf-meza/users/meza-ansible/.ssh/known_hosts
+      chmod 644 #{install_directory}/conf-meza/users/meza-ansible/.ssh/known_hosts
+      chown meza-ansible:meza-ansible #{install_directory}/conf-meza/users/meza-ansible/.ssh/known_hosts
+
       # Change meza-ansible UID and wheel GID to match mount ownership
       usermod -u 10000 meza-ansible
       groupmod -g 10000 wheel
