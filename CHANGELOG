@@ -1,3 +1,25 @@
+commit d5fa3e62cfad1b15451a438dabb0874318bb6f7e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 20 10:32:33 2026 -0500
+
+    Correct erroneous mentions of namespaced public.yml
+    
+    The 'public.yml' file is shared by ALL wikis in a Meza instance.
+    PHP directory structures in 'conf-meza' still allow for customization
+    of each wiki.
+    The 'secret.yml' files are namespaced by <env> within the Meza instance
+    so that you can have separate values or configurations as needed.
+
+commit 3415e45ad61e37564898945f7f3ea3e121da091f
+Author: GitHub Action <action@github.com>
+Date:   Tue Jan 20 15:21:05 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit ef7e7c7c4025d4407c0e9bc23349f8866c362cb6
 Merge: 49e7c39e a610b5f7
 Author: Greg Rundlett <greg.rundlett@gmail.com>
