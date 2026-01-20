@@ -32,7 +32,10 @@ app1:
 #
 # AFTER VAGRANT UP:
 # 1. Provisioning runs automatically (getmeza, setupenv, publicconfig)
-# 2. Deploy: vagrant ssh, then: sudo meza deploy vagrant -vvv
+# 2. Deploy: vagrant ssh to get into the VM then:
+# sudo su - meza-ansible
+# cd /opt/meza/config
+# sudo meza deploy vagrant -vvv
 # 3. Create first wiki: sudo meza create wiki vagrant
 #    - Wiki ID: demo
 #    - Wiki Name: Demo Wiki
