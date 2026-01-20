@@ -63,16 +63,6 @@
 #
 # MEDIAWIKI CORE
 #
-- name: Ensure MediaWiki core ignores submodules
-  blockinfile:
-    path: "{{ m_mediawiki }}/.git/config"
-    block: |
-      [diff]
-          ignoreSubmodules = all
-  failed_when: false
-  tags:
-    - mediawiki-core
-
 - name: Ensure proper MediaWiki git version installed
   become: true
   become_user: "meza-ansible"
@@ -91,14 +81,10 @@
     recursive: false
     umask: "0002"
 
-  # this sucks to have to do this but I'm repeatedly getting submodule errors
-  # so it's this or stop using git (which would also mean changing how
-  # extensions/skins/vendor is stored so it didn't wipe them out each time)
-  failed_when: false
-
   tags:
     - latest
     - mediawiki-core
+
 - name: Ensure MediaWiki core ignores submodules
   blockinfile:
     path: "{{ m_mediawiki }}/.git/config"
@@ -414,44 +400,6 @@
   include_role:
     name: saml
   when: saml_public is defined
-
-#
-# ENSURE DATA DIRECTORY STRUCTURE WITH PROPER PERMISSIONS
-#
-- name: Ensure data-meza directory structure with proper permissions
-  file:
-    path: "{{ item.path }}"
-    state: directory
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-    mode: "{{ item.mode }}"
-  loop:
-    - {path: "{{ m_meza_data }}", owner: "meza-ansible", group: "{{ group_apache }}", mode: "2775"}
-    - {path: "{{ m_cache_directory }}", owner: "{{ user_apache }}", group: "{{ group_apache }}", mode: "2775"}
-    - {path: "{{ m_logs }}", owner: "{{ m_logs_owner }}", group: "{{ group_apache }}", mode: "2775"}
-    - {path: "{{ m_backups }}", owner: "meza-ansible", group: "{{ group_apache }}", mode: "2775"}
-
-#
-# Cache (at this time) for localization caching. Also can be used for caching
-# page contents, but this isn't as necessary for enterprise cases where
-# generally users are always logged in.
-#
-- name: Ensure localization cache root directory exists with proper permissions
-  file:
-    state: directory
-    path: "{{ m_cache_directory }}"
-    owner: "{{ m_cache_directory_owner }}"
-    group: "{{ group_apache }}"
-    mode: "2775"
-
-- name: Ensure meza-ansible can write to cache directory
-  file:
-    state: directory
-    path: "{{ m_cache_directory }}"
-    owner: "{{ m_cache_directory_owner }}"
-    group: "{{ group_apache }}"
-    mode: "2775"
-  when: m_cache_directory_owner != "meza-ansible"
 
 - name: "Ensure root uploads dir configured"
   file:
