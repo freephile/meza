@@ -2,7 +2,40 @@
 
 ### Commits
 
-HEAD -> dev origin/dev
+origin/issue267-faster-deploy
+* [3d05a705](https://github.com/freephile/meza/commit/3d05a705) (2026-01-15) Greg Rundlett: Make meza deploy faster - remove unneccessary and duplicative file mode and ownership conditioning
+- extract file mode and ownership conditioning into 'verify-permissions' role which is then included; and can be run independently
+Handles
+-- Widgets
+-- cache
+-- images
+-- uploads
+as well as other project-wide folders and permissions (@TODO split)
+- use ansible shell module to invoke composer commands with the proper umask so that pesky file permission problems are avoided in restrictive umask environments.
+Example of running verify-permissions playbook:
+ansible-playbook -i localhost, --connection=local  /opt/meza/src/playbooks/verify-permissions.yml -e env=monolith
+For Issue [#267](https://github.com/freephile/meza/issues/267)
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+
+* [f28d3067](https://github.com/freephile/meza/commit/f28d3067) (2026-01-15) Greg Rundlett: enable ansible profiling in ansible.cfg - fix spelling error in callbacks_enabled configuration to regain ansible profiling
+- add commented section with defaults showing how to change profiling report
+- convert comment style to use modern '#' instead of legacy ini-style ';'
+for Issue [#267](https://github.com/freephile/meza/issues/267)
+  - Modified: `config/ansible.cfg`
+
+* [69b12928](https://github.com/freephile/meza/commit/69b12928) (2026-01-13) Greg Rundlett: add link to PROFILING README Ansible profiling is available by default.
+Timings are in the deploy output and logs
+Add link to additional information about profiling Ansible plays
+see Issue [#267](https://github.com/freephile/meza/issues/267)
+  - Modified: `src/roles/apache-php/README_PROFILING.md`
+
+* [4b14ee15](https://github.com/freephile/meza/commit/4b14ee15) (2026-01-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [745068b1](https://github.com/freephile/meza/commit/745068b1) (2026-01-11) Greg Rundlett: fix documentation - fix paths
 - explain how to 'turn off'
 - you do NOT have to 'view source'
