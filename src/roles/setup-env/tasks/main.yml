@@ -3,6 +3,7 @@
 - name: Show all variables
   ansible.builtin.debug:
     var: vars
+  when: m_force_debug | default(false) | bool
 
 - name: Ensure secret config directory exists
   ansible.builtin.file:
