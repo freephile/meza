@@ -75,6 +75,8 @@
 - name: Set meza local public variables
   include_vars:
     file: "{{ m_local_public }}/public.yml"
+  # In the first bootstrap, this file may not exist yet
+  failed_when: false
 
 # Process declarative wiki configuration
 - name: Set wiki variables from declarative config (if wikis defined)

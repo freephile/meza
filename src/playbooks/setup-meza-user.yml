@@ -1,0 +1,35 @@
+---
+# Playbook to create and configure meza-ansible user
+# Replaces: src/scripts/ssh-users/setup-master-user.sh
+# Usage: ansible-playbook setup-meza-user.yml
+
+- name: Setup Meza Ansible user
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  become: true
+
+  # Load Meza variables first
+  pre_tasks:
+    - name: Load OS-specific variables
+      ansible.builtin.include_vars:
+        file: "{{ m_meza }}/config/{{ ansible_os_family }}.yml"
+      tags:
+        - always
+
+    - name: Load Meza paths
+      ansible.builtin.include_vars:
+        file: "{{ m_meza }}/config/paths.yml"
+      tags:
+        - always
+
+    - name: Load Meza defaults
+      ansible.builtin.include_vars:
+        file: "{{ m_meza }}/config/defaults.yml"
+      tags:
+        - always
+
+  roles:
+    - role: meza-user
+      tags:
+        - meza-user

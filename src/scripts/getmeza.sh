@@ -4,6 +4,7 @@
 #
 # @TODO refactor and document this script better
 # @See https://github.com/freephile/meza/issues/172#issuecomment-3141998590
+# We use INSTALL_DIR rather than m_install since this script is run without paths.yml and the set_vars role
 
 if [ "$(whoami)" != "root" ]; then
 	echo "Try running this script with sudo: \"sudo bash getmeza.sh\""
@@ -43,9 +44,11 @@ else
 	checkInternetConnection
 fi
 
-# If you don't do this in a restrictive system (umask 077), it becomes
-# difficult to manage all permissions, AND you constantly have to fix all git
-# clones and checkouts.
+# Set umask to ensure group-writable files during bootstrap
+# Without this, restrictive umask (0022 or 077) causes permission issues
+# for git clones, file creation, and deployment operations
+# This matches m_umask in config/defaults.yml (currently 0002)
+# Ref: https://github.com/freephile/meza/issues/272
 umask 002
 
 # Check distro and version to determine what needs to be installed
@@ -235,8 +238,21 @@ if $ret; then
         usermod -m -d "${INSTALL_DIR}/conf-meza/users/meza-ansible" "meza-ansible"
     fi
 else
-    echo "Creating meza-ansible user..."
-    source "${INSTALL_DIR}/meza/src/scripts/ssh-users/setup-master-user.sh"
+    echo "Creating meza-ansible user with Ansible..."
+
+    # Run the meza-user role via Ansible playbook
+    # This replaces the bash script setup-master-user.sh with a proper Ansible role
+    # Ref: GitHub issue #272
+    ANSIBLE_CONFIG="${INSTALL_DIR}/meza/config/ansible.cfg" \
+    ansible-playbook \
+        -i localhost, \
+        --connection=local \
+        "${INSTALL_DIR}/meza/src/playbooks/setup-meza-user.yml"
+    # @TODO: this script is deprecated and needs to be removed in 6 months
+    if [ $? -ne 0 ]; then
+        echo "WARNING: Ansible user setup failed. Falling back to bash script..."
+        source "${INSTALL_DIR}/meza/src/scripts/ssh-users/setup-master-user.sh"
+    fi
 fi
 
 # Set ownership on meza directories

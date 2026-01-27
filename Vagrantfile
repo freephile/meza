@@ -318,12 +318,19 @@ Vagrant.configure("2") do |config|
       groupmod -g 10000 wheel
 
       # Add meza-ansible to vboxsf group for shared folder access
+      # Note: Apache group membership and shell init files are now handled by
+      # the meza-user Ansible role during getmeza.sh or first deploy
       usermod -aG vboxsf meza-ansible
 
       # Fix permissions on shared folder to be accessible
       # This only affects the guest VM 'view'; host permissions are unaffected
       chown -R meza-ansible:wheel #{install_directory}/meza
       chmod -R u+rwX,g+rwX,o+rX #{install_directory}/meza
+
+      # Verify user configuration
+      echo "meza-ansible user configured"
+      echo "  Groups: $(groups meza-ansible)"
+      echo "  Home: $(getent passwd meza-ansible | cut -d: -f6)"
     SHELL
 
     #

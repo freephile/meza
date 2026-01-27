@@ -1,0 +1,248 @@
+---
+# Role: meza-user
+# Purpose: Create and configure meza-ansible user with proper environment
+# Replaces: linux-user.sh, setup-master-user.sh bash scripts
+# Ref: GitHub issue #272
+
+#
+# DETECT CURRENT USER
+#
+- name: Get current user running the playbook
+  ansible.builtin.command: whoami
+  register: current_user_check
+  changed_when: false
+  check_mode: false
+  tags:
+    - always
+
+- name: Set fact for running as meza-ansible
+  ansible.builtin.set_fact:
+    running_as_meza_ansible: "{{ current_user_check.stdout == ansible_user }}"
+  tags:
+    - always
+
+#
+# USER CREATION
+#
+- name: Ensure meza user base directory exists
+  ansible.builtin.file:
+    path: "{{ m_home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  tags:
+    - meza-user
+    - user-setup
+
+- name: Create meza-ansible user with non-standard home directory
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    home: "{{ meza_ansible_home }}"
+    shell: /bin/bash
+    comment: "Meza Ansible automation user"
+    create_home: true
+    state: present
+    umask: "{{ m_umask }}"
+  when: not running_as_meza_ansible
+  tags:
+    - meza-user
+    - user-setup
+
+#
+# GROUP MEMBERSHIP
+#
+- name: Check if apache/www-data group exists
+  ansible.builtin.getent:
+    database: group
+    key: "{{ group_apache }}"
+  register: apache_group_check
+  failed_when: false
+  when: group_apache is defined
+  tags:
+    - meza-user
+    - user-setup
+    - groups
+
+- name: Add meza-ansible to apache/www-data group for web file access
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: "{{ group_apache }}"
+    append: true
+  when:
+    - not running_as_meza_ansible
+    - group_apache is defined
+    - apache_group_check is defined
+    - apache_group_check.ansible_facts is defined
+    - apache_group_check.ansible_facts.getent_group is defined
+  tags:
+    - meza-user
+    - user-setup
+    - groups
+
+- name: Check if wheel/sudo group exists
+  ansible.builtin.getent:
+    database: group
+    key: "{{ group_wheel }}"
+  register: wheel_group_check
+  failed_when: false
+  when: group_wheel is defined
+  tags:
+    - meza-user
+    - user-setup
+    - groups
+
+- name: Add meza-ansible to wheel group for sudo access
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: "{{ group_wheel }}"
+    append: true
+  when:
+    - not running_as_meza_ansible
+    - group_wheel is defined
+    - wheel_group_check is defined
+    - wheel_group_check.ansible_facts is defined
+    - wheel_group_check.ansible_facts.getent_group is defined
+  tags:
+    - meza-user
+    - user-setup
+    - groups
+
+#
+# SSH CONFIGURATION
+#
+- name: Ensure .ssh directory exists with correct permissions
+  ansible.builtin.file:
+    path: "{{ meza_ansible_home }}/.ssh"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0700"
+  tags:
+    - meza-user
+    - ssh
+
+- name: Check if SSH key pair exists
+  ansible.builtin.stat:
+    path: "{{ meza_ansible_home }}/.ssh/id_rsa"
+  register: ssh_key_check
+  tags:
+    - meza-user
+    - ssh
+
+- name: Generate SSH key pair for meza-ansible
+  ansible.builtin.command:
+    cmd: >
+      ssh-keygen -f {{ meza_ansible_home }}/.ssh/id_rsa
+      -t rsa -N '' -C '{{ ansible_user }}@{{ ansible_hostname }}'
+    creates: "{{ meza_ansible_home }}/.ssh/id_rsa"
+  become: true
+  become_user: "{{ ansible_user }}"
+  when: not ssh_key_check.stat.exists
+  tags:
+    - meza-user
+    - ssh
+
+- name: Ensure SSH key permissions are correct
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "{{ item.mode }}"
+    state: file
+  loop:
+    - {path: "{{ meza_ansible_home }}/.ssh/id_rsa", mode: "0600"}
+    - {path: "{{ meza_ansible_home }}/.ssh/id_rsa.pub", mode: "0644"}
+  tags:
+    - meza-user
+    - ssh
+
+- name: Add meza-ansible public key to authorized_keys (allow self-SSH)
+  ansible.posix.authorized_key:
+    user: "{{ ansible_user }}"
+    key: "{{ lookup('file', meza_ansible_home + '/.ssh/id_rsa.pub') }}"
+    state: present
+  tags:
+    - meza-user
+    - ssh
+
+- name: Create empty known_hosts file
+  ansible.builtin.file:
+    path: "{{ meza_ansible_home }}/.ssh/known_hosts"
+    state: touch
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+    modification_time: preserve
+    access_time: preserve
+  tags:
+    - meza-user
+    - ssh
+
+#
+# SHELL INITIALIZATION FILES
+#
+- name: Create .bash_profile for meza-ansible user
+  ansible.builtin.template:
+    src: bash_profile.j2
+    dest: "{{ meza_ansible_home }}/.bash_profile"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  tags:
+    - meza-user
+    - shell-init
+
+- name: Create .bashrc for meza-ansible user
+  ansible.builtin.template:
+    src: bashrc.j2
+    dest: "{{ meza_ansible_home }}/.bashrc"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  tags:
+    - meza-user
+    - shell-init
+
+#
+# SUDOERS CONFIGURATION
+#
+- name: Ensure sudoers.d directory exists
+  ansible.builtin.file:
+    path: /etc/sudoers.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+  tags:
+    - meza-user
+    - sudo
+
+- name: Configure passwordless sudo for meza-ansible
+  ansible.builtin.copy:
+    content: |
+      # Meza Ansible automation user
+      # Allows passwordless sudo for all commands
+      {{ ansible_user }} ALL=(ALL) NOPASSWD: ALL
+    dest: /etc/sudoers.d/meza-ansible
+    owner: root
+    group: root
+    mode: "0440"
+    validate: /usr/sbin/visudo -cf %s
+  tags:
+    - meza-user
+    - sudo
+
+#
+# VERIFICATION
+#
+- name: Verify meza-ansible user configuration
+  ansible.builtin.debug:
+    msg:
+      - "Meza user: {{ ansible_user }}"
+      - "Home directory: {{ meza_ansible_home }}"
+      - "SSH key: {{ meza_ansible_home }}/.ssh/id_rsa"
+      - "Groups: {{ group_apache | default('N/A') }}, {{ group_wheel | default('N/A') }}"
+  tags:
+    - meza-user
+    - verify

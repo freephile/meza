@@ -1,0 +1,11 @@
+---
+# Default variables for meza-user role
+# These can be overridden in config/defaults.yml or environment-specific configs
+
+# User configuration
+ansible_user: "meza-ansible"
+meza_ansible_home: "{{ m_config }}/users/{{ ansible_user }}"
+
+# Groups (defined in OS-specific vars: RedHat.yml, Debian.yml)
+# group_apache: apache or www-data
+# group_wheel: wheel or sudo

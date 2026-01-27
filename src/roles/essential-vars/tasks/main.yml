@@ -7,7 +7,7 @@
 
 - name: Set ansible_user fact with fallbacks
   ansible.builtin.set_fact:
-    ansible_user: "{{ ansible_user | default('meza-ansible') }}"
+    ansible_user: "meza-ansible"
 
 - name: Debug essential variables
   ansible.builtin.debug:

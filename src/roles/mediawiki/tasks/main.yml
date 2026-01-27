@@ -79,7 +79,7 @@
     refspec: "{{ item.refspec | default('') }}"
     track_submodules: false
     recursive: false
-    umask: "0002"
+    umask: "{{ m_umask }}"
 
   tags:
     - latest
@@ -150,7 +150,7 @@
     force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
-    umask: "0002"
+    umask: "{{ m_umask }}"
   with_items: "{{ meza_core_extensions.list }}"
   when: meza_core_extensions.list[0] is defined and item.repo is defined
   tags:
@@ -196,7 +196,7 @@
     force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
-    umask: "0002"
+    umask: "{{ m_umask }}"
     key_file: "{{ item.key_file | default(None) }}"
   with_items: "{{ meza_local_extensions.list }}"
   when: meza_local_extensions.list[0] is defined and item.repo is defined
@@ -261,7 +261,7 @@
   environment:
     TMPDIR: "{{ m_tmp }}"
   shell: |
-    umask 0002
+    umask {{ m_umask }}
     composer update {{ '--no-dev' if m_disable_composer_dev_dependencies | default(false, true) else '' }} --prefer-source
   args:
     chdir: "{{ m_mediawiki }}"
@@ -374,7 +374,7 @@
     repo: https://github.com/ndc-rkevans/WikiBlender.git
     dest: "{{ m_htdocs }}/WikiBlender"
     version: "master"
-    umask: "0002"
+    umask: "{{ m_umask }}"
 
 - name: Ensure BlenderSettings.php in place
   template:

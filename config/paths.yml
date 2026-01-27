@@ -104,13 +104,13 @@ m_paths:
   install:
     path: "{{ m_install }}"
     mode: "0755"
-    owner: "{{ ansible_user | default('meza-ansible') }}"
+    owner: "meza-ansible"
     group: "{{ group_wheel | default('root') }}"
 
   mw_temp:
     path: "{{ m_meza_data }}/mw-temp"
     mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
-    owner: "{{ user_apache }}"
+    owner: "meza-ansible"
     group: "{{ group_apache }}"
     # recurse: TBD if we want this within m_paths
 
@@ -122,16 +122,17 @@ m_group: "{{ group_wheel | default('root') }}"
 
 
 m_data_mode: "2775"
-m_data_owner: "{{ ansible_user | default('meza-ansible') }}"
+m_data_owner: "meza-ansible"
 m_data_group: "{{ group_wheel | default('root') }}"
 
 
 #
-# Used for many things within htdocs that don't require apache to manipulate
+# Web directory should be owned by meza-ansible since it deploys files there
+# and group-owned by apache so apache can write whatever it needs to write
 #
 m_htdocs_mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
-m_htdocs_owner: "{{ ansible_user | default('meza-ansible') }}"
-m_htdocs_group: "{{ group_wheel | default('root') }}"
+m_htdocs_owner: "meza-ansible"
+m_htdocs_group: "{{ group_apache | default('unknown_apache_group', true) }}"
 
 
 # uploads directory. Note: user meza-ansible is in group "apache"
@@ -146,11 +147,11 @@ m_uploads_dir_mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
 
 m_cache_directory_mode: "2775"
 # NOTE: need defaults for apache since this file is directly loaded by meza.py
-m_cache_directory_owner: "{{ user_apache | default('unknown_apache_user', true) }}"
+m_cache_directory_owner: "meza-ansible"
 m_cache_directory_group: "{{ group_apache | default('unknown_apache_group', true) }}"
 
 m_logs_mode: "2775"
-m_logs_owner: "{{ ansible_user | default('meza-ansible') }}"
+m_logs_owner: "meza-ansible"
 m_logs_group: "{{ group_apache | default('unknown_apache_group', true) }}"
 
 # @FIXME: Why is meza-backups group name hard-coded and
@@ -158,7 +159,7 @@ m_logs_group: "{{ group_apache | default('unknown_apache_group', true) }}"
 # If it is a "backup" operator, distinct from meza-ansible, then
 # the user too should be a variable (other than m_user)
 m_backups_mode: "2775"
-m_backups_owner: "{{ ansible_user | default('meza-ansible') }}"
+m_backups_owner: "meza-ansible"
 m_backups_group: meza-backups
 
 # mode/ownership for anything in /etc/cron.d
@@ -167,14 +168,14 @@ m_crond_owner: root
 m_crond_group: root
 
 m_config_public_mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
-m_config_public_owner: "{{ ansible_user | default('meza-ansible') }}"
-m_config_public_group: "{{ group_wheel | default('root') }}"
+m_config_public_owner: "meza-ansible"
+m_config_public_group: "{{ group_apache | default('unknown_apache_group', true) }}"
 
 m_config_secret_file_mode: "0660"
 m_config_secret_dir_mode: "0775"
-m_config_secret_owner: "{{ ansible_user | default('meza-ansible') }}"
+m_config_secret_owner: "meza-ansible"
 m_config_secret_group: "{{ group_wheel | default('root') }}"
 
 m_simplesamlphp_mode: "u=rwX,g=rwX,o=rX"
-m_simplesamlphp_owner: "{{ ansible_user | default('meza-ansible') }}"
+m_simplesamlphp_owner: "meza-ansible"
 m_simplesamlphp_group: "{{ group_wheel | default('root') }}"

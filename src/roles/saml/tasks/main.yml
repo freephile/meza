@@ -82,7 +82,7 @@
     repo: https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git
     dest: "{{ m_mediawiki }}/extensions/PluggableAuth"
     version: "{{ saml_mw_extension_version }}"
-    umask: "0002"
+    umask: "{{ m_umask }}"
   tags:
     - latest
 
@@ -96,7 +96,7 @@
     repo: https://github.com/wikimedia/mediawiki-extensions-SimpleSAMLphp.git
     dest: "{{ m_mediawiki }}/extensions/SimpleSAMLphp"
     version: "{{ saml_mw_extension_version }}"
-    umask: "0002"
+    umask: "{{ m_umask }}"
   tags:
     - latest
 
@@ -174,7 +174,7 @@
   template:
     src: NonMediaWikiSimpleSamlAuth.php.j2
     dest: "{{ m_htdocs }}/NonMediaWikiSimpleSamlAuth.php"
-    owner: "{{ ansible_user | default('meza-ansible') }}"
+    owner: "meza-ansible"
     group: "{{ group_apache }}"
     mode: '0755'
 

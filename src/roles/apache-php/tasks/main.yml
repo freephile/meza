@@ -4,11 +4,11 @@
     name: "{{ package_apache }}"
     state: present
 
-- name: Make apache own htdocs directory
+- name: Make meza-ansible own htdocs directory
   file:
     state: directory
     path: "{{ m_htdocs }}"
-    owner: "{{ user_apache }}"
+    owner: "meza-ansible"
     group: "{{ group_apache }}"
     mode: '0775'
 

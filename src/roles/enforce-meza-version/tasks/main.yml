@@ -12,5 +12,5 @@
     version: "{{ enforce_meza_version }}"
     track_submodules: false
     recursive: false
-    umask: "0002"
+    umask: "{{ m_umask }}"
   when: enforce_meza_version is defined
