@@ -1,3 +1,186 @@
+commit fc1a74d80b8122687c188f68c64ec3b1fb4ce3d2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 29 04:53:48 2026 +0000
+
+    Use MediaWiki REL1_43 branch v 1.43.6 tag
+    
+    This updates critical issue with PHPUnit
+
+commit d454a1b859f75cb79f5c25bf3735b33f9ae0afc6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Jan 29 04:50:04 2026 +0000
+
+    Fix netdata installation
+    
+    Use POSIX shell, avoid bashism like process substitution
+    
+    Add integrity check on the installer before using it.
+    
+    Fixes issue #279
+
+commit d8377bf467b5cda68f7931e801a4cd70788cef71
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 27 17:32:28 2026 -0500
+
+    Fix permissions and extract user creation
+    
+    Performance benchmarks on Vagrant:
+    - 3 min for vagrant up (first time)
+    - 21:24 for meza deploy (first time)
+    - 43 sec for create wiki (mw-debug perm error on page view)
+    - 4 min for verify-permissions (fixes 'mediawiki' dir)
+    - 3:42 for meza deploy (second time)
+    
+    The `meza-user` Ansible role replaces the previous bash scripts
+    (`linux-user.sh`, `setup-master-user.sh`) for managing the meza-ansible
+    user.
+    This provides better idempotency, testability, and integration with the
+    Ansible deployment workflow.
+    
+    == Specific changes ==
+    src/scripts/getmeza.sh
+    - add setup-meza-user playbook with fallback on
+    setup-master-user.sh script
+    
+    src/scripts/shell-functions/linux-user.sh
+    - enhance by sourcing shell initialization files
+    - also replace tabs with spaces for formatting
+    
+    MEZA_USER_ROLE.md documents the new approach for creating the
+    meza-ansible user.
+    
+    PATH_FIX.md documents how the typical user path is setup on Linux.
+    
+    Vagrantfile
+    print out the 'groups' and home directory configuration of the
+    meza-ansible user
+    
+    paths.yml
+    - use literal meza-ansible in places
+    - use group_apache instead of group_wheel for m_htdocs_group
+    
+    src/playbooks/setup-meza-user.yml
+    - new playbook to setup the meza-ansible service account instead of
+    doing it with shell scripts.
+    
+    src/playbooks/site.yml
+    - Add set-vars to umask-set so that it can use the m_umask variable.
+    - The whole umask-set and umask-unset roles should be avoidable.
+    
+    src/roles/apache-php/tasks/main.yml
+    - use meza-ansible owner of htdocs
+    
+    src/roles/ansible-role-certbot-meza/tasks/main.meza.yml
+    src/roles/base/tasks/main.yml
+    src/roles/cron/tasks/main.yml
+    src/roles/database/tasks/secure-installation.yml
+    src/roles/essential-vars/tasks/main.yml
+    src/roles/saml/tasks/main.yml
+    src/roles/meza-log/tasks/main.yml
+    - use meza-ansible explicitly
+    
+    src/roles/enforce-meza-version/tasks/main.yml
+    src/roles/mediawiki/tasks/main.yml
+    src/roles/saml/tasks/main.yml
+    src/roles/umask-set/templates/umask.profile.sh.j2
+    - use m_umask variable instead of hard-coding it
+    
+    After create wiki, a deploy fails on dubious ownership of 'mediawiki'
+    To correct it, you can run the verify-permissions playbook in 4 minutes,
+    and then deploy but WHY is it failing? The ownership needs to be ironed
+    out.
+    
+    These 4 files were incorrect:
+    and thus later git ops would fail with dubious ownership
+    'mediawiki' dir owned by apache instead of meza-ansible
+    "Changed files: [
+    '/opt/htdocs/mediawiki',
+    '/opt/htdocs/mediawiki/extensions/Widgets/compiled_templates',
+    '/opt/htdocs/mediawiki/extensions/Widgets/compiled_templates/.htaccess',
+    '/opt/htdocs/mediawiki/vendor/microsoft/tolerant-php-parser/php-langspec/spec/php-spec-draft.md']
+    
+    src/roles/init-controller-config/tasks/main.yml
+    - make group_apache group ownership conditional for cases where apache
+    doesn't even exist yet.
+    - Add note that the role needs to be part of a refactor
+    
+    src/roles/mediawiki/templates/LocalSettings.php.j2
+    - move the mw-debug.log file into the logs/mediawiki directory where it
+    can be properly written by apache
+    
+    src/roles/set-vars/tasks/main.yml
+    - make the set-vars role not fail when public.yml does not yet exist
+    
+    Fixes Issue #272
+
+commit 4f3152bb911b1099621d7d79fe9dd8a7fa62b0a2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 20 13:16:49 2026 -0500
+
+    Add better vagrant deploy instructions in comments
+
+commit 926367352b5f82608a7046422878ccedc654dec5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 20 12:58:18 2026 -0500
+
+    public.yml is neccessary
+    
+    Remove the 'failed_when: false" for public.yml
+    public/public.yml is required.
+    Remove include_vars for 'secret/secret.yml' There is no such thing.
+    
+    Addresses Issue #272
+
+commit b5a4fbfde1761cb384e2b7680cae4691fa55e2ab
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 20 12:54:48 2026 -0500
+
+    Extract directory and permissions into role
+    
+    - remove 'ignore submodules' before MediaWiki is installed
+    ignore is repeated on line 88
+    - remove 'failed_when: false' in mediawiki clone
+    - extract directory setup and permission checking for 'data-meza'
+    into the verify-permissions role.
+    - add easy-to-read output for directory setup
+    
+    Addresses Issue #272
+
+commit 3e9dda3436733926fd7a8f30f0abb62a959adddd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 20 12:50:26 2026 -0500
+
+    Fix up paths.yml for permissions mgmt
+    
+    - use 4-digit mode settings
+    - add leading 2 for group sticky bit
+    - avoids problems with leading zero
+    - add missing group `m_cache_directory_group`
+    - add missing `m_logs_group`
+    
+    Addresses Issue #272
+
+commit b0d9ddff3e340df33b22d5e271f8c532b8a0bc10
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Jan 20 12:48:06 2026 -0500
+
+    create new variable m_umask
+    
+    Also, fix up examples of profiling
+    Remove erroneous namespaced public.yml references
+    
+    Addresses Issue #272
+
+commit 1d5f8657f1e723bd277db72d6c6370fbc4a685d4
+Author: GitHub Action <action@github.com>
+Date:   Tue Jan 20 16:24:09 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit d5fa3e62cfad1b15451a438dabb0874318bb6f7e
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Tue Jan 20 10:32:33 2026 -0500
