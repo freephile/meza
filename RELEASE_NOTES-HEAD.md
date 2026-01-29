@@ -3,6 +3,151 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [fc1a74d8](https://github.com/freephile/meza/commit/fc1a74d8) (2026-01-29) Greg Rundlett: Use MediaWiki REL1_43 branch v 1.43.6 tag This updates critical issue with PHPUnit
+  - Modified: `config/defaults.yml`
+
+origin/issue279-netdata
+* [d454a1b8](https://github.com/freephile/meza/commit/d454a1b8) (2026-01-29) Greg Rundlett: Fix netdata installation Use POSIX shell, avoid bashism like process substitution
+Add integrity check on the installer before using it.
+Fixes Issue [#279](https://github.com/freephile/meza/issues/279)
+  - Modified: `src/roles/netdata/tasks/main.yml`
+
+origin/issue272-fix-permissions
+* [d8377bf4](https://github.com/freephile/meza/commit/d8377bf4) (2026-01-27) Greg Rundlett: Fix permissions and extract user creation Performance benchmarks on Vagrant:
+- 3 min for vagrant up (first time)
+- 21:24 for meza deploy (first time)
+- 43 sec for create wiki (mw-debug perm error on page view)
+- 4 min for verify-permissions (fixes 'mediawiki' dir)
+- 3:42 for meza deploy (second time)
+The `meza-user` Ansible role replaces the previous bash scripts
+(`linux-user.sh`, `setup-master-user.sh`) for managing the meza-ansible
+user.
+This provides better idempotency, testability, and integration with the
+Ansible deployment workflow.
+== Specific changes ==
+src/scripts/getmeza.sh
+- add setup-meza-user playbook with fallback on
+setup-master-user.sh script
+src/scripts/shell-functions/linux-user.sh
+- enhance by sourcing shell initialization files
+- also replace tabs with spaces for formatting
+MEZA_USER_ROLE.md documents the new approach for creating the
+meza-ansible user.
+PATH_FIX.md documents how the typical user path is setup on Linux.
+Vagrantfile
+print out the 'groups' and home directory configuration of the
+meza-ansible user
+paths.yml
+- use literal meza-ansible in places
+- use group_apache instead of group_wheel for m_htdocs_group
+src/playbooks/setup-meza-user.yml
+- new playbook to setup the meza-ansible service account instead of
+doing it with shell scripts.
+src/playbooks/site.yml
+- Add set-vars to umask-set so that it can use the m_umask variable.
+- The whole umask-set and umask-unset roles should be avoidable.
+src/roles/apache-php/tasks/main.yml
+- use meza-ansible owner of htdocs
+src/roles/ansible-role-certbot-meza/tasks/main.meza.yml
+src/roles/base/tasks/main.yml
+src/roles/cron/tasks/main.yml
+src/roles/database/tasks/secure-installation.yml
+src/roles/essential-vars/tasks/main.yml
+src/roles/saml/tasks/main.yml
+src/roles/meza-log/tasks/main.yml
+- use meza-ansible explicitly
+src/roles/enforce-meza-version/tasks/main.yml
+src/roles/mediawiki/tasks/main.yml
+src/roles/saml/tasks/main.yml
+src/roles/umask-set/templates/umask.profile.sh.j2
+- use m_umask variable instead of hard-coding it
+After create wiki, a deploy fails on dubious ownership of 'mediawiki'
+To correct it, you can run the verify-permissions playbook in 4 minutes,
+and then deploy but WHY is it failing? The ownership needs to be ironed
+out.
+These 4 files were incorrect:
+and thus later git ops would fail with dubious ownership
+'mediawiki' dir owned by apache instead of meza-ansible
+"Changed files: [
+'/opt/htdocs/mediawiki',
+'/opt/htdocs/mediawiki/extensions/Widgets/compiled_templates',
+'/opt/htdocs/mediawiki/extensions/Widgets/compiled_templates/.htaccess',
+'/opt/htdocs/mediawiki/vendor/microsoft/tolerant-php-parser/php-langspec/spec/php-spec-draft.md']
+src/roles/init-controller-config/tasks/main.yml
+- make group_apache group ownership conditional for cases where apache
+doesn't even exist yet.
+- Add note that the role needs to be part of a refactor
+src/roles/mediawiki/templates/LocalSettings.php.j2
+- move the mw-debug.log file into the logs/mediawiki directory where it
+can be properly written by apache
+src/roles/set-vars/tasks/main.yml
+- make the set-vars role not fail when public.yml does not yet exist
+Fixes Issue [#272](https://github.com/freephile/meza/issues/272)
+  - Modified: `Vagrantfile`
+  - Modified: `config/paths.yml`
+  - Added: `manual/MEZA_USER_ROLE.md`
+  - Modified: `manual/PATH_FIX.md`
+  - Added: `src/playbooks/setup-meza-user.yml`
+  - Modified: `src/playbooks/site.yml`
+  - Modified: `src/roles/ansible-role-certbot-meza/tasks/main.meza.yml`
+  - Modified: `src/roles/apache-php/tasks/main.yml`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Modified: `src/roles/cron/tasks/main.yml`
+  - Modified: `src/roles/database/tasks/secure-installation.yml`
+  - Modified: `src/roles/enforce-meza-version/tasks/main.yml`
+  - Modified: `src/roles/essential-vars/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/roles/meza-log/tasks/main.yml`
+  - Added: `src/roles/meza-user/defaults/main.yml`
+  - Added: `src/roles/meza-user/tasks/main.yml`
+  - Added: `src/roles/meza-user/templates/bash_profile.j2`
+  - Added: `src/roles/meza-user/templates/bashrc.j2`
+  - Modified: `src/roles/saml/tasks/main.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/roles/umask-set/templates/umask.profile.sh.j2`
+  - Modified: `src/scripts/getmeza.sh`
+  - Modified: `src/scripts/shell-functions/linux-user.sh`
+
+* [4f3152bb](https://github.com/freephile/meza/commit/4f3152bb) (2026-01-20) Greg Rundlett: Add better vagrant deploy instructions in comments 
+  - Modified: `vagrantconf.default.yml`
+
+* [92636735](https://github.com/freephile/meza/commit/92636735) (2026-01-20) Greg Rundlett: public.yml is neccessary Remove the 'failed_when: false" for public.yml
+public/public.yml is required.
+Remove include_vars for 'secret/secret.yml' There is no such thing.
+Addresses Issue [#272](https://github.com/freephile/meza/issues/272)
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+
+* [b5a4fbfd](https://github.com/freephile/meza/commit/b5a4fbfd) (2026-01-20) Greg Rundlett: Extract directory and permissions into role - remove 'ignore submodules' before MediaWiki is installed
+ignore is repeated on line 88
+- remove 'failed_when: false' in mediawiki clone
+- extract directory setup and permission checking for 'data-meza'
+into the verify-permissions role.
+- add easy-to-read output for directory setup
+Addresses Issue [#272](https://github.com/freephile/meza/issues/272)
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+
+* [3e9dda34](https://github.com/freephile/meza/commit/3e9dda34) (2026-01-20) Greg Rundlett: Fix up paths.yml for permissions mgmt - use 4-digit mode settings
+- add leading 2 for group sticky bit
+- avoids problems with leading zero
+- add missing group `m_cache_directory_group`
+- add missing `m_logs_group`
+Addresses Issue [#272](https://github.com/freephile/meza/issues/272)
+  - Modified: `config/paths.yml`
+
+* [b0d9ddff](https://github.com/freephile/meza/commit/b0d9ddff) (2026-01-20) Greg Rundlett: create new variable m_umask Also, fix up examples of profiling
+Remove erroneous namespaced public.yml references
+Addresses Issue [#272](https://github.com/freephile/meza/issues/272)
+  - Modified: `config/defaults.yml`
+
+* [1d5f8657](https://github.com/freephile/meza/commit/1d5f8657) (2026-01-20) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [d5fa3e62](https://github.com/freephile/meza/commit/d5fa3e62) (2026-01-20) Greg Rundlett: Correct erroneous mentions of namespaced public.yml The 'public.yml' file is shared by ALL wikis in a Meza instance.
 PHP directory structures in 'conf-meza' still allow for customization
 of each wiki.
