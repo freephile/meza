@@ -1,3 +1,113 @@
+commit c54781e2061b8c87df011a58929a47c2a9b302af
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 3 11:52:00 2026 -0500
+
+    Add audit permissions script for Issue #272
+
+commit eaa233df4feb73287b71cde263e3f5d19f19c944
+Merge: 992b77f2 5d355f9d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 3 11:50:06 2026 -0500
+
+    Merge branch 'issue270-logo' into dev
+    
+    Fixes Issue #270
+
+commit 992b77f2d86c27c00f621a7a06e59b99ae364419
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 3 11:43:56 2026 -0500
+
+    add exports to the lint-files.sh script
+    
+    Adding exports for meza's local Config and Roles path allows linters
+    to find the right sources.
+
+commit a8649f3df69b28757f37da81a852267b39e6b5f3
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 3 11:42:29 2026 -0500
+
+    Update Medik skin repo source and version
+    
+    The Medik skin is now on GitHub and the version is a commit SHA
+    The former bitbucket URL no longer exists.
+
+commit 5d355f9d5eac33c01394f3c5c37e50388decc836
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 3 11:12:29 2026 -0500
+
+    Add back logo.png for legacy references
+    
+    logo.png usage is DEPRECATED however it is being added back for old
+    references that may exist in the wild. Do not rely on this file being
+    present.
+    
+    Fix-up (temporarily) internal project references to 'logo.png'.
+    
+    These playbooks and roles still need to be reviewed and modernized.
+    - check-for-changes
+    - push-backups
+    - autodeployer and slack-notify
+    
+    Fixes Issue #270
+
+commit 19a969fcf4607628ebf02a16e2787631fbbc9ecf
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 3 01:34:17 2026 -0500
+
+    New Feature: custom branding
+    
+    Integrate the htdocs role with the configure-wiki and mediawiki roles
+    so that there is a three-tier override for branding assets:
+    
+    3. Per-wiki customization via upload
+    2. Per-wiki customization version-controlled and distributed fron config
+    file system on the controller.
+    1. Project-wide default set by htdocs role
+    
+    Fixes Issue #270
+
+commit 0796267d035a5ef829564d1ad6d920f50e0a74e1
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Feb 2 23:45:50 2026 -0500
+
+    correct co-pilot instructions
+
+commit bc313c66b2c5780809a8b205a7c6ebb15ba624ca
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Feb 2 23:43:15 2026 -0500
+
+    Improve branding w configure-wiki and htdocs roles
+    
+    - Improve  `configure-wiki` role that sets up wiki configuration
+    scaffolding with wgLogos files.
+      - Added metadata and task header comments improving documentation
+      - Add group write permission for created files and directories.
+    
+    - Add task header comments in `htdocs` role which manages web-accessible
+    content in Apache's document root.
+    - Use FQCN to pass linting
+    
+    - Update `LocalSettings.php` template to use $wgLogos multiple logo sizes.
+    - Add $wgFavicon
+    - Add $wgAppleTouchIcon
+    
+    - Added README documentation for both roles detailing their purpose,
+    usage, and configuration.
+    
+    - Remove deprecated single 'logo.png'
+    
+    Fixes Issue #270
+
+commit 06dad963a32829a7fca05e39c77099026c21e5af
+Author: GitHub Action <action@github.com>
+Date:   Thu Jan 29 04:55:36 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit fc1a74d80b8122687c188f68c64ec3b1fb4ce3d2
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Jan 29 04:53:48 2026 +0000

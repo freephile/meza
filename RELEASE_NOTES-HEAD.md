@@ -3,6 +3,86 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [c54781e2](https://github.com/freephile/meza/commit/c54781e2) (2026-02-03) Greg Rundlett: Add audit permissions script for Issue [#272](https://github.com/freephile/meza/issues/272) 
+  - Added: `src/scripts/audit-permissions.sh`
+
+* [992b77f2](https://github.com/freephile/meza/commit/992b77f2) (2026-02-03) Greg Rundlett: add exports to the lint-files.sh script Adding exports for meza's local Config and Roles path allows linters
+to find the right sources.
+  - Modified: `src/scripts/lint-files.sh`
+
+* [a8649f3d](https://github.com/freephile/meza/commit/a8649f3d) (2026-02-03) Greg Rundlett: Update Medik skin repo source and version The Medik skin is now on GitHub and the version is a commit SHA
+The former bitbucket URL no longer exists.
+  - Modified: `config/MezaCoreSkins.yml`
+
+origin/issue270-logo
+* [5d355f9d](https://github.com/freephile/meza/commit/5d355f9d) (2026-02-03) Greg Rundlett: Add back logo.png for legacy references logo.png usage is DEPRECATED however it is being added back for old
+references that may exist in the wild. Do not rely on this file being
+present.
+Fix-up (temporarily) internal project references to 'logo.png'.
+These playbooks and roles still need to be reviewed and modernized.
+- check-for-changes
+- push-backups
+- autodeployer and slack-notify
+Fixes Issue [#270](https://github.com/freephile/meza/issues/270)
+  - Modified: `config/defaults.yml`
+  - Modified: `src/playbooks/check-for-changes.yml`
+  - Modified: `src/playbooks/push-backup.yml`
+  - Modified: `src/roles/autodeployer/tasks/do-deploy.yml`
+  - Modified: `src/roles/autodeployer/templates/slack-notify.sh.j2`
+  - Added: `src/roles/configure-wiki/files/logo.png`
+
+* [19a969fc](https://github.com/freephile/meza/commit/19a969fc) (2026-02-03) Greg Rundlett: New Feature: custom branding Integrate the htdocs role with the configure-wiki and mediawiki roles
+so that there is a three-tier override for branding assets:
+3. Per-wiki customization via upload
+2. Per-wiki customization version-controlled and distributed fron config
+file system on the controller.
+1. Project-wide default set by htdocs role
+Fixes Issue [#270](https://github.com/freephile/meza/issues/270)
+  - Modified: `src/roles/configure-wiki/templates/preLocalSettings.d/base.php.j2`
+  - Modified: `src/roles/htdocs/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [0796267d](https://github.com/freephile/meza/commit/0796267d) (2026-02-02) Greg Rundlett: correct co-pilot instructions 
+  - Modified: `.github/copilot-instructions.md`
+
+* [bc313c66](https://github.com/freephile/meza/commit/bc313c66) (2026-02-02) Greg Rundlett: Improve branding w configure-wiki and htdocs roles - Improve  `configure-wiki` role that sets up wiki configuration
+scaffolding with wgLogos files.
+  - Added metadata and task header comments improving documentation
+  - Add group write permission for created files and directories.
+- Add task header comments in `htdocs` role which manages web-accessible
+content in Apache's document root.
+- Use FQCN to pass linting
+- Update `LocalSettings.php` template to use $wgLogos multiple logo sizes.
+- Add $wgFavicon
+- Add $wgAppleTouchIcon
+- Added README documentation for both roles detailing their purpose,
+usage, and configuration.
+- Remove deprecated single 'logo.png'
+Fixes Issue [#270](https://github.com/freephile/meza/issues/270)
+  - Modified: `config/defaults.yml`
+  - Added: `src/roles/configure-wiki/README.md`
+  - Added: `src/roles/configure-wiki/files/apple-touch-icon.png`
+  - Modified: `src/roles/configure-wiki/files/favicon.ico`
+  - Deleted: `src/roles/configure-wiki/files/logo.png`
+  - Added: `src/roles/configure-wiki/files/meza-icon-50.svg`
+  - Added: `src/roles/configure-wiki/files/meza-logo-1.5x.png`
+  - Added: `src/roles/configure-wiki/files/meza-logo-135.png`
+  - Added: `src/roles/configure-wiki/files/meza-logo-2x.png`
+  - Added: `src/roles/configure-wiki/files/meza-logo-inkscape.svg`
+  - Added: `src/roles/configure-wiki/meta/main.yml`
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+  - Added: `src/roles/htdocs/README.md`
+  - Added: `src/roles/htdocs/meta/main.yml`
+  - Modified: `src/roles/htdocs/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/scripts/lint-files.sh`
+
+* [06dad963](https://github.com/freephile/meza/commit/06dad963) (2026-01-29) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [fc1a74d8](https://github.com/freephile/meza/commit/fc1a74d8) (2026-01-29) Greg Rundlett: Use MediaWiki REL1_43 branch v 1.43.6 tag This updates critical issue with PHPUnit
   - Modified: `config/defaults.yml`
 
