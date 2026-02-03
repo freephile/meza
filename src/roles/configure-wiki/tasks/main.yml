@@ -83,20 +83,21 @@
     - postLocalSettings.d
     - samlAuthorizations.d
 
-- name: Ensure base templates are present (but do not overwrite)
+- name: Ensure base templates are present (overwrite)
   template:
     src: "templates/{{ item }}.j2"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
-    # local wikis can "manually" customize these files later, so do not overwrite
-    force: false
+    # force update "distribution" content, that instructs user to customize
+    # with their own files
+    force: true
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: '0775'
   with_items:
-    - preLocalSettings.d/base.php
+    - preLocalSettings.d/base.php.dist
     - preLocalSettings.d/README.md
     - postLocalSettings.d/README.md
-    - samlAuthorizations.d/base.php
+    - samlAuthorizations.d/base.php.dist
   delegate_to: localhost
   run_once: true
 
