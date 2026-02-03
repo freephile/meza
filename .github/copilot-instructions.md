@@ -103,7 +103,7 @@ meza deploy-kill <env>
 - **Jinja2 templating**: Extensive use of `{{ m_variable }}` pattern for paths and configs
 
 ### MediaWiki Integration Points
-- **Wiki creation**: `configure-wiki` role handles LocalSettings.php generation
+- **Wiki creation**: `configure-wiki` role generates LocalSettings.php override scaffolding
 - **Extension management**: `config/MezaCoreExtensions.yml` defines default extension set
 - **Local Extension management**: `conf-meza/public/MezaLocalExtensions.yml` defines default *additional* extension set managed by the local instance
 - **Update workflows**: `update.php` role handles MediaWiki database updates
