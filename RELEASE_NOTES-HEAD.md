@@ -3,6 +3,22 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [72833be2](https://github.com/freephile/meza/commit/72833be2) (2026-02-03) Greg Rundlett: switch to 'dist' files for configuration Since the file names are new, pre-existing customizations will be
+safe.
+Since the distributed 'base.php.dist' file is now propagated, users
+will receive new instructions and content for replication in 'config'
+repos.
+Also fix linting with FQCN and
+improve the task key order to: name, delegate_to, run_once, block
+Fixes Issue [#270](https://github.com/freephile/meza/issues/270)
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+
+* [e537e1be](https://github.com/freephile/meza/commit/e537e1be) (2026-02-03) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [c54781e2](https://github.com/freephile/meza/commit/c54781e2) (2026-02-03) Greg Rundlett: Add audit permissions script for Issue [#272](https://github.com/freephile/meza/issues/272) 
   - Added: `src/scripts/audit-permissions.sh`
 
