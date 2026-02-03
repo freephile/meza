@@ -253,19 +253,59 @@ $wgUploadDirectory = "{{ m_uploads_dir }}/$wikiId";
 
 // https://www.mediawiki.org/wiki/Manual:$wgLogos
 // $wgLogo is deprecated since MW 1.36 in favor of $wgLogos array
+//
+// Logo resolution hierarchy:
+// 1. Uploaded files (user-friendly override via Special:Upload)
+// 2. Wiki-specific files in .deploy-meza/public/wikis/$wikiId/ (deployed from controller)
+// 3. Project-wide defaults in web root /
+
+/**
+ * Helper function to get logo path with fallback hierarchy:
+ * 1. Check for uploaded file using MediaWiki's hashed upload directory. e.g. /opt/data-meza/uploads/wiki/4/47/Puncheon.png
+ * 2. Check for wiki-specific file in .deploy-meza/public/wikis/$wikiId/
+ * 3. Fall back to project-wide file in web root /
+ *
+ * Note: MediaWiki's $wgCapitalLinks defaults to true, so uploaded filenames
+ * have their first letter capitalized (e.g., Meza-logo-135.png)
+ */
+function mezaGetLogoPath( $filename, $wikiId ) {
+	// MediaWiki capitalizes first letter of uploaded files by default
+	$uploadFilename = ucfirst( $filename );
+
+	// Calculate MD5 hash for MediaWiki's upload directory structure
+	$hash = md5( $uploadFilename );
+	$hashPath = substr( $hash, 0, 1 ) . '/' . substr( $hash, 0, 2 ) . '/' . $uploadFilename;
+	$uploadedPath = "{{ m_uploads_dir }}/$wikiId/$hashPath";
+
+	// Check if uploaded file exists
+	if ( file_exists( $uploadedPath ) ) {
+		return "/$wikiId/img_auth.php/$hashPath";
+	}
+
+	// Check if wiki-specific file exists
+	// "{{ m_install }}/.deploy-meza/public/wikis/$wikiId/$filename" is routable via 'config' symlink to the .deploy-meza public dir
+	$wikiSpecificPath = "{{ m_install }}/.deploy-meza/public/wikis/$wikiId/$filename";
+	if ( file_exists( $wikiSpecificPath ) ) {
+		return "/wikis/$wikiId/config/$filename";
+	}
+
+	// Fall back to project-wide default in web root
+	return "/$filename";
+}
+
 $wgLogos = [
-	'1x' => "/wikis/$wikiId/config/meza-logo-135.png", // 135x135
+	'1x' => mezaGetLogoPath( 'meza-logo-135.png', $wikiId ), // 135x135
 	// Legacy Vector and MonoBook (could be 155 tall, but is deprecated anyway in favor of the 'icon' key)
-	'1.5x' => "/wikis/$wikiId/config/meza-logo-1.5x.png", // 202x202 retina displays
-	'2x' => "/wikis/$wikiId/config/meza-logo-2x.png", // 270x270 retina displays
-	'svg' => "/wikis/$wikiId/config/meza-logo.svg",
-	'icon' => "/wikis/$wikiId/config/meza-icon-50.svg", // PREFERRED Vector 2022, Timeless, Refreshed, Citizen skins
+	'1.5x' => mezaGetLogoPath( 'meza-logo-1.5x.png', $wikiId ), // 202x202 retina displays
+	'2x' => mezaGetLogoPath( 'meza-logo-2x.png', $wikiId ), // 270x270 retina displays
+	'icon' => mezaGetLogoPath( 'meza-icon-50.svg', $wikiId ), // PREFERRED Vector 2022, Timeless, Refreshed, Citizen skins
 ];
 
 // https://www.mediawiki.org/wiki/Manual:$wgFavicon
-$wgFavicon = "/wikis/$wikiId/config/favicon.ico"; // 16x16, 32x32. 48x48 in layers
+$wgFavicon = mezaGetLogoPath( 'favicon.ico', $wikiId ); // 16x16, 32x32. 48x48 in layers
+
 // https://www.mediawiki.org/wiki/Manual:$wgAppleTouchIcon
-$wgAppleTouchIcon = "/wikis/$wikiId/config/apple-touch-icon.png"; // 180x180
+$wgAppleTouchIcon = mezaGetLogoPath( 'apple-touch-icon.png', $wikiId ); // 180x180
 
 // https://www.mediawiki.org/wiki/Manual:$wgMetaNamespace
 $wgMetaNamespace = str_replace( ' ', '_', $wgSitename );

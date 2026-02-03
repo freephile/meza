@@ -57,6 +57,23 @@
     state: absent
   when: not allow_backup_downloads
 
+# Sync project-wide logo assets to htdocs for wiki branding
+# All branding assets in web root for simplicity
+- name: Ensure project-wide branding assets in web root
+  ansible.builtin.copy:
+    src: "{{ m_meza }}/src/roles/configure-wiki/files/{{ item }}"
+    dest: "{{ m_htdocs }}/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+  with_items:
+    - "apple-touch-icon.png"
+    - "favicon.ico"
+    - "meza-icon-50.svg"
+    - "meza-logo-135.png"
+    - "meza-logo-1.5x.png"
+    - "meza-logo-2x.png"
+
 # @TODO: change explicit owner/group to variables and mode to m_htdocs_mode
 - name: Ensure files configured
   ansible.builtin.template:
