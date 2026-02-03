@@ -30,7 +30,7 @@
 
     - name:
       set_fact:
-        autodeployer_slack_icon_url: "{{ autodeployer.slack_icon_url | default('https://github.com/enterprisemediawiki/meza/raw/master/src/roles/configure-wiki/files/logo.png') }}"
+        autodeployer_slack_icon_url: "{{ autodeployer.slack_icon_url | default('https://github.com/freephile/meza/raw/dev/src/roles/configure-wiki/files/logo.png') }}"
       when: autodeployer is defined
 
     #
