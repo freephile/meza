@@ -103,9 +103,9 @@ list:
     # Documentation: https://www.mediawiki.org/wiki/Skin:Medik
     # Compatibility Policy: Master maintains backwards compatibility.
   - name: Medik
-    repo: https://bitbucket.org/wikiskripta/medik.git
+    repo: https://github.com/wikiskripta/Medik.git
     type: skins
-    version: "master" # tag v5.1.3 is not compatible with REL1_43
+    version: "48f7270eea25e7d357024ace3f325c8956dab23e" # tag v5.1.3 is not compatible with REL1_43
 
     #
     # NOTE - If you'd like to use any other skins it is recommended
