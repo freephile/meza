@@ -1,0 +1,42 @@
+---
+galaxy_info:
+  role_name: htdocs
+  author: Greg Rundlett
+  description: |
+    Manages web-accessible content in Apache document root (/opt/htdocs/).
+
+    This role syncs monitoring dashboards (ServerPerformance), optional backup
+    download interfaces, and generates core web server files (.htaccess, index.php,
+    robots.txt) from templates. Runs on app servers during every deployment.
+
+    Key responsibilities:
+    - ServerPerformance monitoring UI (always deployed)
+    - BackupDownload web interface (conditional on allow_backup_downloads)
+    - Web server configuration files (htaccess, robots.txt)
+    - Landing pages (index.php, office.html)
+
+  company: Greg Rundlett
+  license: GPLv3
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Debian
+      versions:
+        - bookworm
+
+  galaxy_tags:
+    - apache
+    - web
+    - monitoring
+
+dependencies:
+  - role: set-vars
+    when: not vars_set | default(false)
+
+# Configuration variables
+# allow_backup_downloads: false  # Set true to enable backup download web UI
+# m_htdocs: /opt/htdocs           # Apache DocumentRoot path

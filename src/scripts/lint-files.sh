@@ -63,6 +63,10 @@ else
     print_status "Using system-wide Python packages"
 fi
 
+# Export Ansible configuration and roles path for ansible-lint
+# export ANSIBLE_CONFIG="$PROJECT_ROOT/config/ansible.cfg"
+# ort ANSIBLE_ROLES_PATH="$PROJECT_ROOT/src/roles"
+
 # Check if linting tools are available
 check_tools() {
     local missing_tools=()

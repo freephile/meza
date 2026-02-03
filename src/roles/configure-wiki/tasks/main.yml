@@ -1,25 +1,32 @@
 ---
 
-# inputs:
-#   wiki_id
-#   wiki_name
+# ============================================================================
+# Role: configure-wiki
+# ============================================================================
+# Purpose:
+#   Creates configuration scaffold for new wikis in /opt/conf-meza/public/wikis/
 #
-# all this role needs to do is put a directory named whatever wiki_id is at
-# /opt/conf-meza/public/wikis/<wiki_id>
+# Triggered By:
+#   meza create wiki <env>
 #
-# This role DOES NOT actually deploy the wiki to app servers or database
-# servers. It simply puts it into configuration. Subsequently it can be
-# deployed.
+# Required Variables (from prompt):
+#   wiki_id: Short wiki identifier (e.g., 'demo', 'en')
+#   wiki_name: Human-readable name (e.g., 'Demo Wiki')
 #
-# This directory needs to have some minimum requirements:
-#   logo.png (is .jpg also allowed?)
-#   original.png (is .jpg also allowed? Is this really required?)
-#   favicon.ico
-#   preLocalSettings.php
-#   postLocalSettings.php
+# What It Does:
+#   - Creates wiki config directory structure
+#   - Copies default logos, favicons
+#   - Creates PHP customization directories (preLocalSettings.d, etc.)
+#   - Registers wiki in public.yml for declarative configuration
+#
+# What It Does NOT Do:
+#   - Deploy to app/database servers (use 'meza deploy' afterwards)
+#   - Create MediaWiki database tables (handled by setup-wiki role)
+#
+# ============================================================================
 
-# e.g. /opt/conf-meza/public/wikis/foo
-- name: Ensure wiki directory exists in config
+# Create /opt/conf-meza/public/wikis/<wiki_id> directory
+- name: Ensure wiki directory exists in the config hierarchy
   ansible.builtin.file:
     path: "{{ m_local_public }}/wikis/{{ wiki_id }}"
     state: directory
@@ -29,17 +36,8 @@
   delegate_to: localhost
   run_once: true
 
-# @FIXME: do we really need this to be world-writable?
-# Pretty sure that we need to allow apache, meza-ansible, and local 'userx'
-# to run scripts that write to this directory.
-# like update.php or rebuildData.php.
-# We could document proper 'usage' so that any local user running scripts
-# must use sudo -u apache for MediaWiki "web" scripts or sudo -u meza-ansible
-# for Meza shell scripts (but could those create ownership problems?)
-# Need better documentation on the permissions in Meza
-# Note: X in symbolic mode means execute a directory, but not files.
-# Nobody but Apache can write to mw-temp, so it's not suitable for .smw.json
-
+# Give SMW's "setup information file" a home
+# https://www.semantic-mediawiki.org/wiki/Help:Setup_information_file
 - name: Ensure .smw.json file exists in the conf directory
   ansible.builtin.file:
     path: "{{ m_local_public }}/wikis/{{ wiki_id }}/.smw.json"
@@ -56,14 +54,18 @@
   copy:
     src: "files/{{ item }}"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
-    # force=no: this will not overwrite
+    # local wikis can "manually" customize these files later, so do not overwrite
     force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: '0755'
+    mode: '0775'
   with_items:
+    - apple-touch-icon.png
     - favicon.ico
-    - logo.png
+    - meza-icon-50.svg
+    - meza-logo-135.png
+    - meza-logo-1.5x.png
+    - meza-logo-2x.png
   delegate_to: localhost
   run_once: true
 
@@ -73,7 +75,7 @@
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: '0755'
+    mode: '0775'
   delegate_to: localhost
   run_once: true
   with_items:
@@ -85,11 +87,11 @@
   template:
     src: "templates/{{ item }}.j2"
     dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
-    # force=no: Non-default for templates. Destination files will not be overwritten
+    # local wikis can "manually" customize these files later, so do not overwrite
     force: false
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: '0755'
+    mode: '0775'
   with_items:
     - preLocalSettings.d/base.php
     - preLocalSettings.d/README.md
@@ -115,7 +117,7 @@
     dest: "{{ m_local_public }}/public.yml"
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
-    mode: '0644'
+    mode: '0664'
     force: false
   when: not public_yml_exists.stat.exists
   delegate_to: localhost
@@ -158,7 +160,7 @@
         dest: "{{ m_local_public }}/public.yml"
         owner: "{{ user_apache }}"
         group: "{{ group_apache }}"
-        mode: '0644'
+        mode: '0664'
         backup: true
       when: updated_config is defined
       delegate_to: localhost

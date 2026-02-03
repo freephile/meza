@@ -251,12 +251,21 @@ $wgUploadPath = "$wgScriptPath/img_auth.php";
 // https://www.mediawiki.org/wiki/Manual:$wgUploadDirectory
 $wgUploadDirectory = "{{ m_uploads_dir }}/$wikiId";
 
-// https://www.mediawiki.org/wiki/Manual:$wgLogo
-$wgLogo = "/wikis/$wikiId/config/logo.png";
+// https://www.mediawiki.org/wiki/Manual:$wgLogos
+// $wgLogo is deprecated since MW 1.36 in favor of $wgLogos array
+$wgLogos = [
+	'1x' => "/wikis/$wikiId/config/meza-logo-135.png", // 135x135
+	// Legacy Vector and MonoBook (could be 155 tall, but is deprecated anyway in favor of the 'icon' key)
+	'1.5x' => "/wikis/$wikiId/config/meza-logo-1.5x.png", // 202x202 retina displays
+	'2x' => "/wikis/$wikiId/config/meza-logo-2x.png", // 270x270 retina displays
+	'svg' => "/wikis/$wikiId/config/meza-logo.svg",
+	'icon' => "/wikis/$wikiId/config/meza-icon-50.svg", // PREFERRED Vector 2022, Timeless, Refreshed, Citizen skins
+];
 
 // https://www.mediawiki.org/wiki/Manual:$wgFavicon
-$wgFavicon = "/wikis/$wikiId/config/favicon.ico";
-
+$wgFavicon = "/wikis/$wikiId/config/favicon.ico"; // 16x16, 32x32. 48x48 in layers
+// https://www.mediawiki.org/wiki/Manual:$wgAppleTouchIcon
+$wgAppleTouchIcon = "/wikis/$wikiId/config/apple-touch-icon.png"; // 180x180
 
 // https://www.mediawiki.org/wiki/Manual:$wgMetaNamespace
 $wgMetaNamespace = str_replace( ' ', '_', $wgSitename );

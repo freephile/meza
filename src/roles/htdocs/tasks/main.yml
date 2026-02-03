@@ -1,8 +1,35 @@
 ---
 
+# ============================================================================
+# Role: htdocs
+# ============================================================================
+# Purpose:
+#   Manages web-accessible content in Apache DocumentRoot (/opt/htdocs/)
+#
+# Runs On:
+#   App servers (not localhost) during every deployment
+#
+# Key Responsibilities:
+#   - Sync ServerPerformance monitoring dashboard (always)
+#   - Sync BackupDownload interface (conditional on allow_backup_downloads)
+#   - Generate web server files (.htaccess, index.php, robots.txt)
+#
+# File Distribution:
+#   - files/ServerPerformance/ → /opt/htdocs/ServerPerformance/ (rsync)
+#   - files/BackupDownload/ → /opt/htdocs/BackupDownload/ (rsync, conditional)
+#   - templates/*.j2 → /opt/htdocs/*.{php,html,txt,htaccess} (templated)
+#
+# Compare with configure-wiki:
+#   - htdocs: Runtime web content on app servers
+#   - configure-wiki: Creates configuration scaffolding on create-wiki (localhost)
+# ============================================================================
+
+# @TODO: remove ServerPerformance (deprecated since NetData is available)
+# @TODO: remove BackupDownload (risky and backups need separation)
+
 # Take ServerPerformance from controller, put in app server htdocs
 - name: Ensure ServerPerformance configured
-  synchronize:
+  ansible.posix.synchronize:
     src: "files/ServerPerformance/"
     dest: "{{ m_htdocs }}/ServerPerformance"
     recursive: true
@@ -12,7 +39,7 @@
       - "--exclude=.git"
 
 - name: Ensure BackupDownload configured
-  synchronize:
+  ansible.posix.synchronize:
     src: "files/BackupDownload/"
     dest: "{{ m_htdocs }}/BackupDownload"
     recursive: true
@@ -25,13 +52,14 @@
 # In case people change their mind and don't want to offer backup downloads,
 # remove files
 - name: Ensure BackupDownload NOT configured
-  file:
+  ansible.builtin.file:
     path: "{{ m_htdocs }}/BackupDownload"
     state: absent
   when: not allow_backup_downloads
 
+# @TODO: change explicit owner/group to variables and mode to m_htdocs_mode
 - name: Ensure files configured
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ m_htdocs }}/{{ item }}"
     owner: root

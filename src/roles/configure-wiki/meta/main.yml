@@ -1,0 +1,41 @@
+---
+galaxy_info:
+  role_name: configure_wiki
+  author: Greg Rundlett
+  description: |
+    Creates configuration scaffold for a new wiki in Meza.
+
+    This role sets up wiki-specific directories, assets (logos, favicons),
+    and customization hooks (preLocalSettings.d, postLocalSettings.d) in
+    /opt/conf-meza/public/wikis/<wiki_id>/. It also automatically registers
+    the wiki in public.yml for declarative configuration.
+
+    This role does NOT deploy the wiki to servers - it only creates the
+    configuration structure. Run 'meza deploy' afterwards to create the
+    wiki in MediaWiki and sync configs to target servers.
+
+  company: Greg Rundlett
+  license: GPLv3
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Debian
+      versions:
+        - bookworm
+
+  galaxy_tags:
+    - mediawiki
+    - wiki
+    - configuration
+
+dependencies:
+  - role: set-vars
+    when: not vars_set | default(false)
+
+# Required variables (set by meza create wiki <env> command)
+# wiki_id: Short identifier (e.g., 'demo', 'en', 'production')
+# wiki_name: Human-readable name (e.g., 'Demo Wiki', 'English Wikipedia')
