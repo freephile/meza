@@ -3,6 +3,21 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [50657c90](https://github.com/freephile/meza/commit/50657c90) (2026-02-04) Greg Rundlett: use set-vars in setup-meza-user playbook - Prepare for Issue [#287](https://github.com/freephile/meza/issues/287) - splitting the apache-php role
+- Comment paths.yml for Issue [#286](https://github.com/freephile/meza/issues/286) - normalize variable names
+- Simplify group detection in the meza-user role
+- Make FQCN edits to pass linting on set-vars role for Issue [#16](https://github.com/freephile/meza/issues/16)
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/setup-meza-user.yml`
+  - Modified: `src/roles/meza-user/tasks/main.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+
+* [9bd4e14f](https://github.com/freephile/meza/commit/9bd4e14f) (2026-02-03) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [482739a0](https://github.com/freephile/meza/commit/482739a0) (2026-02-03) Greg Rundlett: distribute 'dist' files for configuration Since the file names are new, pre-existing customizations will be
 safe.
 - Needed to rename the template files, not just the target files

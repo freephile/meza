@@ -1,3 +1,24 @@
+commit 50657c9031493602f117059b8d40dd577d724782
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Feb 4 16:04:34 2026 -0500
+
+    use set-vars in setup-meza-user playbook
+    
+    - Prepare for Issue #287 - splitting the apache-php role
+    - Comment paths.yml for Issue #286 - normalize variable names
+    - Simplify group detection in the meza-user role
+    - Make FQCN edits to pass linting on set-vars role for Issue #16
+
+commit 9bd4e14f62a18de7fb483807c7599f69097bd647
+Author: GitHub Action <action@github.com>
+Date:   Tue Feb 3 21:49:34 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 482739a07946407d1d3cfd2483c7eeaa2aa1de3d
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Tue Feb 3 16:47:38 2026 -0500
