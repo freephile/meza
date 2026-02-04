@@ -9,27 +9,12 @@
   gather_facts: true
   become: true
 
-  # Load Meza variables first
-  pre_tasks:
-    - name: Load OS-specific variables
-      ansible.builtin.include_vars:
-        file: "{{ m_meza }}/config/{{ ansible_os_family }}.yml"
-      tags:
-        - always
-
-    - name: Load Meza paths
-      ansible.builtin.include_vars:
-        file: "{{ m_meza }}/config/paths.yml"
-      tags:
-        - always
-
-    - name: Load Meza defaults
-      ansible.builtin.include_vars:
-        file: "{{ m_meza }}/config/defaults.yml"
-      tags:
-        - always
-
   roles:
+    # Load all Meza variables properly
+    - role: set-vars
+      tags:
+        - always
+
     - role: meza-user
       tags:
         - meza-user

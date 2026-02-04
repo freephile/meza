@@ -52,11 +52,12 @@
 #
 # GROUP MEMBERSHIP
 #
+
+# We could use the ansible.builtin.getent: module to check for group existence but the command module makes our 'when' condition much simpler when adding.
 - name: Check if apache/www-data group exists
-  ansible.builtin.getent:
-    database: group
-    key: "{{ group_apache }}"
+  ansible.builtin.command: getent group {{ group_apache }}
   register: apache_group_check
+  changed_when: false
   failed_when: false
   when: group_apache is defined
   tags:
@@ -73,18 +74,16 @@
     - not running_as_meza_ansible
     - group_apache is defined
     - apache_group_check is defined
-    - apache_group_check.ansible_facts is defined
-    - apache_group_check.ansible_facts.getent_group is defined
+    - apache_group_check.rc == 0
   tags:
     - meza-user
     - user-setup
     - groups
 
 - name: Check if wheel/sudo group exists
-  ansible.builtin.getent:
-    database: group
-    key: "{{ group_wheel }}"
+  ansible.builtin.command: getent group {{ group_wheel }}
   register: wheel_group_check
+  changed_when: false
   failed_when: false
   when: group_wheel is defined
   tags:
@@ -100,9 +99,7 @@
   when:
     - not running_as_meza_ansible
     - group_wheel is defined
-    - wheel_group_check is defined
-    - wheel_group_check.ansible_facts is defined
-    - wheel_group_check.ansible_facts.getent_group is defined
+    - wheel_group_check.rc == 0
   tags:
     - meza-user
     - user-setup

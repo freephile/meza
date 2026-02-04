@@ -4,6 +4,29 @@
 # meza install location
 # m_install: "/opt" <-- formerly set here, now determined in set-vars role based on `which meza`
 
+# @TODO: Refactor so m_install is named m_install_dir everywhere for clarity
+# @TODO: Refactor so that m_meza is named m_app_dir (which could even abstract app_name) m_meza is vague and repetitive since 'm' is the prefix for 'meza'.
+# @TODO: Refactor so that m_local_public and m_local_secret are named m_public_dir and m_secret_dir for clarity.
+# Same for m_meza_data to m_data_dir
+# Same for m_cache_directory to m_data_cache_dir
+# Same for m_logs to m_data_logs_dir
+# Same for m_tmp to m_data_tmp_dir
+# Same for m_deploy to m_deploy_dir
+# Same for m_config_core to m_config_dir
+# Same for m_scripts to m_scripts_dir
+# Same for m_test to m_test_dir
+# Same for m_backups to m_data_backups_dir
+# Same for m_mediawiki to m_mediawiki_dir
+# Same for m_htdocs to m_web_root_dir
+# Same for m_i18n to m_i18n_dir
+# Same for m_apache to m_apache_conf_dir
+
+# NOTE: Permission and group definitions must also follow the same naming conventions
+# for clarity, e.g. m_logs_owner to m_data_logs_dir_owner, etc.
+
+# @TODO: Refactor so m_logs_deploy is named m_deploy_log_file for clarity
+# Same for m_logs_create_wiki to m_create_wiki_log_file
+
 # Meza application path
 m_meza: "{{ m_install }}/meza"
 
@@ -25,7 +48,6 @@ m_scripts: "{{ m_meza }}/src/scripts"
 m_test: "{{ m_meza }}/test"
 
 # data dir
-# @FIXME: Consider renaming m_meza_data to m_data for consistency
 m_meza_data: "{{ m_install }}/data-meza"
 m_cache_directory: "{{ m_meza_data }}/cache"
 m_tmp: "{{ m_meza_data }}/tmp"
