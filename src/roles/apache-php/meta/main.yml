@@ -1,0 +1,34 @@
+---
+# DEPRECATED: This role is maintained for backward compatibility only.
+# Please use the 'apache' and 'php' roles directly instead.
+#
+# Old approach:
+#   roles:
+#     - apache-php
+#
+# New approach:
+#   roles:
+#     - apache
+#     - php
+#
+# This role will be removed in a future version of Meza.
+# See: https://github.com/freephile/meza/issues/287
+
+galaxy_info:
+  author: Greg Rundlett
+  description: "[DEPRECATED] Use apache and php roles instead"
+  company: eQuality Technology
+  license: GPL-3.0-or-later
+  min_ansible_version: "2.10"
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+  galaxy_tags:
+    - deprecated
+    - apache
+    - php
+
+dependencies:
+  - role: apache
+  - role: php

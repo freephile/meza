@@ -1,4 +1,36 @@
 ---
+# DEPRECATED: This role is maintained for backward compatibility only.
+# The actual work is now done by the 'apache' and 'php' roles via meta dependencies.
+# See meta/main.yml for the dependency chain.
+#
+# This file is intentionally left minimal to show the deprecation.
+# All tasks have been moved to the apache and php roles.
+#
+# Please update your playbooks to use apache and php roles directly:
+#   Old: - apache-php
+#   New: - apache
+#        - php
+
+- name: Display deprecation warning for apache-php role
+  ansible.builtin.debug:
+    msg:
+      - "⚠️  WARNING: The apache-php role is DEPRECATED"
+      - "Please update your playbooks to use 'apache' and 'php' roles directly."
+      - "This compatibility shim will be removed in a future version."
+      - "See: https://github.com/freephile/meza/issues/287"
+  run_once: true
+
+# The actual Apache and PHP installation is handled by the role dependencies
+# defined in meta/main.yml. No tasks needed here.
+
+# Legacy comment for reference:
+# Old monolithic tasks have been split:
+# - Apache tasks → src/roles/apache/tasks/main.yml
+# - PHP tasks → src/roles/php/tasks/main.yml
+
+# For backward compatibility during migration period, we keep this minimal
+# task file. The meta dependencies will ensure apache and php roles run.
+
 - name: Ensure Apache webserver installed
   package:
     name: "{{ package_apache }}"
@@ -143,17 +175,8 @@
 
 # Set ownership on wikis directory now that apache user exists
 # This completes the setup started in init-controller-config role
-- name: "Set proper ownership on m_local_public/wikis directory"
-  file:
-    path: "{{ m_local_public }}/wikis"
-    state: directory
-    owner: "{{ user_apache }}"
-    group: "{{ group_apache }}"
-    mode: "{{ m_config_public_mode }}"
-    recurse: true
-
-
-# Might need these for SELinux to be turned back on
+# NOTE: This task is deprecated - actual work done by apache role
+# (apache-php role is a compatibility shim as of Issue #287)
 # - name: Configure SELinux to start mysql on any port
 #   seboolean: name=mysql_connect_any state=true persistent=yes
 #   when: sestatus.rc != 0

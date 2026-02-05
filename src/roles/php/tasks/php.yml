@@ -1,0 +1,80 @@
+---
+
+# @TODO: https://github.com/freephile/meza/issues/290 Remove RedHat7
+- name: Install Cent/RHEL7 php dependency packages
+  package:
+    name: "{{ package_php_apache_deps7 }}"
+    state: present
+  when: ansible_distribution_file_variety == "RedHat" and ansible_facts['distribution_major_version'] == "7"
+
+- name: Install Rocky/RHEL8 php dependency packages
+  package:
+    name: "{{ package_php_apache_deps8 }}"
+    state: present
+  when: ansible_distribution_file_variety == "RedHat" and ansible_facts['distribution_major_version'] == "8"
+
+# @TODO: https://github.com/freephile/meza/issues/290 Remove RedHat7
+- name: Install PHP (RedHat/CentOS only)
+  include_tasks: php-redhat7.yml
+  when: ansible_distribution_file_variety == "RedHat" and ansible_facts['distribution_major_version'] == "7"
+
+- name: Install PHP (RedHat/Rocky 8+ only)
+  include_tasks: php-redhat8.yml
+  when: ansible_distribution_file_variety == "RedHat" and ansible_facts['distribution_major_version'] == "8"
+
+- name: Install PHP (Debian only)
+  include_tasks: php-debian.yml
+  when: ansible_distribution_file_variety == "Debian"
+
+- name: Install MS SQL driver for PHP (FIXME RedHat only for now)
+  include_tasks: mssql_driver_for_php.yml
+  when:
+    - install_ms_sql_driver is defined
+    - install_ms_sql_driver
+    - ansible_distribution_file_variety == "RedHat"
+
+- name: Write php.ini file
+  template:
+    src: php.ini.j2
+    dest: "{{ m_php_ini }}"
+  notify:
+    - restart apache
+    - restart php-fpm
+
+- name: Write php.d ini files
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ path_php_conf_d }}/{{ item }}"
+  with_items: "{{ path_php_conf_d_files }}"
+  notify:
+    - restart apache
+    - restart php-fpm
+
+- name: Write xhprof php.d ini file when profiling enabled
+  template:
+    src: "20-xhprof.ini.j2"
+    dest: "{{ path_php_conf_d }}/20-xhprof.ini"
+  when: m_setup_php_profiling
+  notify:
+    - restart apache
+    - restart php-fpm
+
+- name: Remove xhprof php.d ini file when profiling disabled
+  ansible.builtin.file:
+    path: "{{ path_php_conf_d }}/20-xhprof.ini"
+    state: absent
+  when: not m_setup_php_profiling
+  notify:
+    - restart apache
+    - restart php-fpm
+
+# FIXME: Is this left over from old method of supporting MSSQL? Not required now
+#        that MS-provided drivers are used?
+- name: Write freetds.conf file
+  template:
+    src: freetds.conf.j2
+    dest: /etc/freetds.conf
+  notify:
+    - restart apache
+    - restart php-fpm
+  when: ansible_distribution_file_variety == "RedHat"

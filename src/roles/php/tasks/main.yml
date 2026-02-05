@@ -1,0 +1,70 @@
+---
+# PHP and PHP-FPM installation and configuration tasks
+
+- name: Install PHP
+  ansible.builtin.import_tasks: php.yml
+  # http://docs.ansible.com/ansible/playbooks_roles.html#dynamic-versus-static-includes
+
+# Composer must be included AFTER PHP installation (not as meta dependency)
+# because composer installer requires php command to be available
+- name: Ensure Composer configured
+  ansible.builtin.include_role:
+    name: composer
+
+# Apache modules that depend on PHP (Debian only)
+# Note: This is here instead of apache role because the PHP version must be
+# known first (php_debian_version variable)
+- name: Ensure Apache PHP module installed (Debian only)
+  ansible.builtin.apt:
+    name:
+      - "libapache2-mod-php{{ php_debian_version }}"
+    state: present
+  when: ansible_distribution_file_variety == 'Debian'
+  notify:
+    - restart apache
+
+- name: Ensure PHP profiling configured
+  ansible.builtin.import_tasks: profiling.yml
+  when: m_setup_php_profiling
+
+# # If profiling not enabled, disable MongoDB if it exists (e.g. profiling had
+# # previously been enabled)
+# This is commented out because any MongoDB setup is legacy and we don't want
+# to accidentally stop a MongoDB service that is being used for other purposes.
+# @TODO: Remove these tasks entirely in Q3 2026
+# - name: Check if MongoDB service exists
+#   ansible.builtin.stat:
+#     path: /etc/init.d/mongod
+#   register: mongo_service_status
+
+# - name: Stop MongoDB service if profiling is disabled
+#   ansible.builtin.service:
+#     name: mongod
+#     state: stopped
+#   when: mongo_service_status.stat.exists and not m_setup_php_profiling
+
+- name: Setup php-fpm for Rocky/RHEL8
+  ansible.builtin.template:
+    src: www.conf.j2
+    dest: "{{ path_php_fpm_conf }}"
+    backup: true
+  when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
+  notify:
+    - restart php-fpm
+
+- name: Proper php.conf for Rocky/RHEL8 httpd
+  ansible.builtin.template:
+    src: php.conf
+    dest: "{{ path_php_httpd_conf }}"
+    backup: true
+  when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
+  notify:
+    - restart php-fpm
+
+- name: Enable and start php-fpm for Rocky/RHEL8+
+  ansible.builtin.service:
+    name: "{{ service_php_fpm }}"
+    enabled: true
+    state: started
+  when: docker_skip_tasks is not defined or not docker_skip_tasks and
+        ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"

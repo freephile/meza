@@ -1,0 +1,20 @@
+---
+# PHP role default variables
+# Note: Most PHP-specific variables are defined in the set-vars role
+# and vary by OS (RedHat vs Debian) and version
+
+# Server timezone for PHP configuration
+server_default_timezone: "UTC"
+
+# Remi repository configuration (RedHat/Rocky only)
+# yamllint disable-line rule:line-length
+remi_repo_url: "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+# yamllint disable-line rule:line-length
+remi_repo_gpg_key_url: "https://rpms.remirepo.net/enterprise/{{ ansible_distribution_major_version }}/RPM-GPG-KEY-remi"
+
+# PHP profiling with XHProf (disabled by default)
+# When enabled, installs XHProf via PECL and configures MediaWiki's ProfilerXhprof
+m_setup_php_profiling: false
+
+# MS SQL Server driver installation (disabled by default)
+install_ms_sql_driver: false

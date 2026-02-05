@@ -1,0 +1,63 @@
+---
+
+# PHP profiling for developers and performance testing
+# Uses xhprof extension with MediaWiki's ProfilerXhprof
+# Replaced legacy XHGui+MongoDB stack (disabled since Meza 30.x)
+
+- name: Check if xhprof is already installed
+  ansible.builtin.command:
+    cmd: pecl list
+  register: pecl_list
+  changed_when: false
+
+- name: Install xhprof if not present
+  ansible.builtin.command:
+    cmd: pecl install xhprof
+  when: "'xhprof' not in pecl_list.stdout"
+  register: xhprof_pecl_install
+  changed_when: xhprof_pecl_install.rc == 0
+
+- name: Ensure profiler log directory exists when using file output
+  ansible.builtin.file:
+    path: "{{ m_profiling_file_path }}"
+    state: directory
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: '0775'
+  when: m_profiling_output_type == 'file'
+
+- name: Deploy MediaWiki profiler configuration to global postLocalSettings.d
+  ansible.builtin.template:
+    src: postLocalSettings.d/profiling.php.j2
+    dest: "{{ m_local_public }}/postLocalSettings.d/profiling.php"
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: '0664'
+
+- name: Ensure per-wiki postLocalSettings.d directories exist for wikis with profiling enabled
+  ansible.builtin.file:
+    path: "{{ m_local_public }}/wikis/{{ item.id }}/postLocalSettings.d"
+    state: directory
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: '0775'
+  loop: "{{ wikis }}"
+  when: item.enable_profiling | default(false)
+
+- name: Configure logrotate for profiler files
+  ansible.builtin.template:
+    src: logrotate-profiler.j2
+    dest: /etc/logrotate.d/meza-profiler
+    owner: root
+    group: "{{ group_wheel }}"
+    mode: '0664'
+  when: m_profiling_output_type == 'file'
+
+- name: Add cron job for profiler file cleanup
+  ansible.builtin.cron:
+    name: "Meza profiler file cleanup"
+    minute: "0"
+    hour: "2"
+    job: "find {{ m_profiling_file_path }} -type f -mtime +{{ m_profiling_file_retention_days }} -delete"
+    user: root
+    state: "{{ 'present' if m_profiling_output_type == 'file' else 'absent' }}"

@@ -1,0 +1,89 @@
+---
+
+## @TODO remove this, or extract it to a 'clean old host' role?
+- name: Remove IUS Repo since we're at distro 8+
+  package:
+    name: "ius-release"
+    state: absent
+
+# @FIXME just include Jeff Geerling's role in site.yaml
+# https://github.com/geerlingguy/ansible-role-repo-remi
+# Do the same for EPEL
+- name: Import remi GPG key.
+  rpm_key:
+    key: "{{ remi_repo_gpg_key_url }}"
+    state: present
+
+- name: Ensure Remi repo installed
+  dnf:
+    name: "{{ remi_repo_url }}"
+    state: present
+
+# surprisingly, Ansible dnf module doesn't work with 'module' command
+# https://www.reddit.com/r/ansible/comments/13xdt6h/enabling_dnf_modules_through_ansible/
+- name: If no version is installed, install the php stream default profile
+  shell: dnf -y module install php:remi-8.1
+
+- name: Switch to php 8.1 if existing install is older version
+  shell: dnf -y module switch-to php:remi-8.1
+
+- name: Ensure PHP packages for Rocky/RHEL8 installed
+  package:
+    name:
+      - php-cli
+      - php-common
+      - php-devel
+      - php-gd
+      - php-json
+      - php-snmp
+      - php-xml
+      - php-xmlrpc
+      - php-mysqlnd
+      - php-pdo
+      - php-odbc
+      - php-process
+      - php-bcmath
+      - php-intl
+      - php-opcache
+      - php-soap
+      - php-sodium #  required for phpSimpleSAML
+      - php-mbstring
+      - php-ldap
+      - php-fpm
+      - php-pear
+    state: present
+
+- name: install libmemcached-devel
+  dnf:
+    name: libmemcached-devel
+    enablerepo: devel
+
+# PHP memcached extension needed for SAML auth
+- name: Ensure PEAR channel up-to-date
+  shell: pear channel-update pecl.php.net
+
+- name: Check if memcached PECL extension is installed
+  shell: php -m | grep -i memcached
+  register: memcached_pecl_installed
+  changed_when: false
+  failed_when: false
+
+# --configureoptions parameter is not supported in our version of pecl.
+- name: Install memcached PECL packages
+  shell: >
+    printf 'no\nno\nno\nno\nno\nno\nno\nyes\nyes\n' |
+    pecl install memcached
+  when: memcached_pecl_installed.stdout == ""
+  notify:
+    - restart apache
+    - restart php-fpm
+
+- template:
+    src: 40-memcached.ini.j2
+    dest: /etc/php.d/40-memcached.ini
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart apache
+    - restart php-fpm

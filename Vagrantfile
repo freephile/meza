@@ -277,6 +277,8 @@ Vagrant.configure("2") do |config|
 
     #
     # Bootstrap meza on the controlling VM
+    # Note: getmeza.sh now installs Apache before creating meza-ansible user
+    # to ensure apache group exists for group membership (Issue #287)
     #
     app1.vm.provision "getmeza", type: "shell", preserve_order: true, inline: <<-SHELL
       bash #{install_directory}/meza/src/scripts/getmeza.sh

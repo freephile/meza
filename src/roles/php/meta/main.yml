@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  author: Greg Rundlett
+  description: PHP and PHP-FPM installation and configuration for Meza
+  company: eQuality Technology
+  license: GPL-3.0-or-later
+  min_ansible_version: "2.10"
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+    # Debian 11 bullseye support is planned for a future release
+    # - name: Debian
+    #   versions:
+    #     - buster
+  galaxy_tags:
+    - php
+    - php-fpm
+    - mediawiki
+    - web
+
+dependencies:
+  - role: set-vars
+    tags: always
+# Note: composer is included in tasks/main.yml after PHP installation
+# (cannot be a meta dependency because it requires PHP to be installed first)

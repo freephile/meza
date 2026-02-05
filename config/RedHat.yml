@@ -7,6 +7,7 @@ package_firewall: firewalld
 package_openssh_client: openssh-clients
 package_cron: cronie
 package_apache: httpd-devel
+# @FIXME: Issue #290
 package_php_apache_deps7:
   - sendmail
   - sendmail-cf

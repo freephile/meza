@@ -1,0 +1,20 @@
+---
+# Apache role default variables
+# Note: Most Apache-specific variables are defined in the OS-specific config
+# files config/Debian.yml and config/RedHat.yml, which are picked up by the
+# set-vars role
+# @TODO: Consider moving more Apache-specific variables here / aligning with
+# the geerlingguy.apache role vars
+
+# Apache modules to enable (Debian only - RedHat uses different mechanism)
+apache_modules_debian:
+  - proxy_html
+  - ssl
+  - rewrite
+
+# Apache modules to install (RedHat only)
+apache_modules_redhat:
+  - mod_proxy_html
+  - mod_ssl
+  # apparently the mod_rewrite is included in the base httpd package on RedHat
+  # `httpd -t -D DUMP_MODULES | grep rewrite`

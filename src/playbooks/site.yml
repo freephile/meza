@@ -139,8 +139,8 @@
     - set-vars
     - base
     - base-config-scripts
-    # right now remi repo is buried in the apache-php role, but we could do a
-    # general best-practice role re-use in our playbook like this
+    # Note: remi repo for PHP is now configured in the php role
+    # Community role re-use example for future migration:
     # - role: geerlingguy.repo-remi
     #   when:
     #     - ansible_facts['distribution'] == "Rocky"
@@ -180,7 +180,8 @@
       firewall_zone: "{{m_private_networking_zone|default('public')}}"
     - base-extras
     - imagemagick
-    - apache-php
+    - apache
+    - php
     - role: netdata
       when: m_install_netdata
     - role: firewall_port

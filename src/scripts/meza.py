@@ -501,20 +501,24 @@ def request_lock_for_deploy(env):
         f.write(f"{pid}\n{timestamp}")
         f.close()
 
-    # Improved group detection and fallback for lock file permissions
+    # Apache guaranteed to exist due to bootstrap sequencing (Issue #287)
+    # If neither apache nor www-data group exists, system is not properly set up
     try:
         grp.getgrnam('apache')
         meza_chown(lock_file, 'meza-ansible', 'apache')
         os.chmod(lock_file, 0o664)
     except KeyError:
         try:
-            grp.getgrnam('www-data')  # Debian/Ubuntu fallback
+            grp.getgrnam('www-data')  # Debian/Ubuntu
             meza_chown(lock_file, 'meza-ansible', 'www-data')
             os.chmod(lock_file, 0o664)
         except KeyError:
-            print('Neither apache nor www-data group exists. Using "wheel" as fallback.')
-            meza_chown(lock_file, 'meza-ansible', 'wheel')
-            os.chmod(lock_file, 0o664)
+            print("\nERROR: Neither 'apache' nor 'www-data' group exists on this system.")
+            print("This indicates that Meza has not been properly set up on this control host.")
+            print("Apache must be installed before running meza commands.")
+            print("\nPlease follow the installation instructions at:")
+            print("https://www.mediawiki.org/wiki/Meza")
+            sys.exit(1)
 
     return {"pid": pid, "timestamp": timestamp}
 

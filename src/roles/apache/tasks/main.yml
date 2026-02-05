@@ -1,0 +1,78 @@
+---
+# Apache HTTP Server installation and configuration tasks
+
+- name: Ensure Apache webserver installed
+  ansible.builtin.package:
+    name: "{{ package_apache }}"
+    state: present
+
+- name: Make meza-ansible own htdocs directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ m_htdocs }}"
+    owner: "meza-ansible"
+    group: "{{ group_apache }}"
+    mode: '0775'
+
+- name: Ensure mw-temp directory configured
+  ansible.builtin.file:
+    state: directory
+    path: "{{ m_paths.mw_temp.path }}"
+    owner: "{{ m_paths.mw_temp.owner }}"
+    group: "{{ m_paths.mw_temp.group }}"
+    mode: "{{ m_paths.mw_temp.mode }}"
+
+- name: Ensure user meza-ansible and alt-meza-ansible in group "apache"
+  ansible.builtin.user:
+    name: "{{ item }}"
+    # add onto groups
+    groups: "{{ group_apache }}"
+    append: true
+  with_items:
+    - meza-ansible
+    - alt-meza-ansible
+
+- name: write the apache config file for Cent/RHEL7
+  ansible.builtin.template:
+    src: httpd.conf.j2
+    dest: "{{ path_apache_conf }}"
+  notify:
+    - restart apache
+  when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "7"
+
+- name: Write apache config for Rocky/RHEL8 using php-fpm
+  ansible.builtin.template:
+    src: php-fpm-httpd.conf.j2
+    dest: "{{ path_apache_conf }}"
+  notify:
+    - restart apache
+  when: ansible_distribution_file_variety == 'RedHat' and ansible_facts['distribution_major_version'] == "8"
+
+- name: Ensure Apache environment variables set properly
+  ansible.builtin.template:
+    src: etc-sysconfig-httpd.j2
+    dest: "{{ path_apache_startup_config }}"
+  notify:
+    - restart apache
+
+# Apache modules
+- name: Ensure Apache modules installed (RedHat/CentOS only)
+  ansible.builtin.dnf:
+    name: "{{ apache_modules_redhat }}"
+    state: present
+  when: ansible_distribution_file_variety == 'RedHat'
+
+- name: Ensure Apache modules enabled (Debian only)
+  community.general.apache2_module:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ apache_modules_debian }}"
+  when: ansible_distribution_file_variety == 'Debian'
+
+# Now that Apache is installed, start/enable the service
+- name: ensure apache is running (and enable it at boot)
+  ansible.builtin.service:
+    name: "{{ service_apache }}"
+    state: started
+    enabled: true
+  when: docker_skip_tasks is not defined or not docker_skip_tasks

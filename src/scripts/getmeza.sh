@@ -183,7 +183,7 @@ echo "Verifying repository configuration..."
 if dnf repolist enabled | grep -iE '(powertools|crb|codeready)' >/dev/null; then
     echo "✓ Development repository enabled"
 else
-    echo "⚠ WARNING: Development repository may not be enabled"
+    echo "WARNING: Development repository may not be enabled"
     echo "This may cause package installation failures during deployment"
     echo "Enabled repositories:"
     dnf repolist enabled
@@ -224,6 +224,25 @@ fi
 
 # Create data directory for lock files (@TODO: better location? - need write access to enable deploys without sudo)
 mkdir -p ${INSTALL_DIR}/data-meza
+
+# Install Apache web server BEFORE user setup
+# This ensures the apache group exists when meza-ansible user is created
+# and prevents group membership issues during deployment
+# Ref: https://github.com/freephile/meza/issues/287
+echo "Installing Apache web server..."
+case ${distro} in
+    rocky|redhat)
+        if ! rpm -q httpd >/dev/null 2>&1; then
+            dnf install -y httpd
+            echo "Apache (httpd) installed successfully"
+        else
+            echo "Apache (httpd) already installed"
+        fi
+        ;;
+    *)
+        echo "WARNING: Unknown distro - skipping Apache installation"
+        ;;
+esac
 
 # Setup or verify meza-ansible user
 ret=false

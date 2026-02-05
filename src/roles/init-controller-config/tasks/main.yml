@@ -54,20 +54,20 @@
     path: "{{ m_local_public }}"
   register: recheck_controller
 
-- name: Get list of existing groups
-  ansible.builtin.getent:
-    database: group
-  tags:
-    - always
+# Apache guaranteed to exist due to bootstrap sequencing (Issue #287)
+- name: Verify Apache group exists
+  ansible.builtin.command: getent group {{ group_apache }}
+  register: apache_group_check
+  changed_when: false
+  failed_when: apache_group_check.rc != 0
 
-# At this point, whether a m_local directory exists on the controller or not,
-# ensure the directory exists and is configured properly
+# ensure the m_local directory exists on the controller and is configured properly
 - name: Ensure m_local_public configured on controller
   ansible.builtin.file:
     path: "{{ m_local_public }}"
     state: directory
     owner: "{{ m_config_public_owner }}"
-    group: "{{ group_apache if getent_group[group_apache] is defined else ansible_user }}"
+    group: "{{ group_apache }}"
     mode: "{{ m_config_public_mode }}"
   tags:
     - file-perms
@@ -86,9 +86,7 @@
     path: "{{ m_local_public }}/{{ item }}"
     state: directory
     owner: "{{ m_config_public_owner }}"
-    # temporarily hard-code group ownership until we simplify group management, order of execution, and bootstrapping
-    # group: "{{ m_config_public_group }}"
-    group: "{{ group_apache if getent_group[group_apache] is defined else ansible_user }}"
+    group: "{{ m_config_public_group }}"
     mode: "{{ m_config_public_mode }}"
   with_items:
     - preLocalSettings.d
@@ -100,9 +98,7 @@
     src: "templates/{{ item }}.j2"
     dest: "{{ m_local_public }}/{{ item }}"
     owner: "{{ m_config_public_owner }}"
-    # temporarily hard-code group ownership until we simplify group management, order of execution, and bootstrapping
-    # group: "{{ m_config_public_group }}"
-    group: "{{ group_apache if getent_group[group_apache] is defined else ansible_user }}"
+    group: "{{ m_config_public_group }}"
     mode: "{{ m_config_public_mode }}"
     force: false
   with_items:
