@@ -1,22 +1,27 @@
 ---
-# We're called from the site.yml playbook 
+# We're called from the site.yml playbook
 # The haproxy role takes care of front-end and back-end port handling
 
 # Netdata used to install in /opt but now uses packages across the system.
 # "/usr/sbin/netdata" is the main binary.
 - name: Check if Netdata is present
-  stat:
+  ansible.builtin.stat:
     path: "/usr/sbin/netdata"
   register: netdata_present
 
-- ansible.builtin.debug: msg="netdata not installed"
-  when: netdata_present.stat.exists == False
+- name: Debug - Netdata not installed
+  ansible.builtin.debug:
+    msg: "netdata not installed"
+  when: not netdata_present.stat.exists
 
-- ansible.builtin.debug: msg="netdata installed"
-  when: netdata_present.stat.exists == True
+- name: Debug - Netdata installed
+  ansible.builtin.debug:
+    msg: "netdata installed"
+  when: netdata_present.stat.exists
 
 - name: Verify Netdata installer script integrity
   ansible.builtin.shell: |
+    set -o pipefail
     if [ "39321e7a8e05f0054f93df1824189abd" = "$(curl -Ss https://get.netdata.cloud/kickstart.sh | tee /tmp/netdata-kickstart.sh | md5sum | cut -d ' ' -f 1)" ]; then
       echo "OK, VALID: Netdata installer script integrity verified"
       exit 0
@@ -24,9 +29,12 @@
       echo "FAILED, INVALID: Netdata installer script integrity check failed"
       exit 1
     fi
+  args:
+    executable: /bin/bash
   register: netdata_integrity_check
   become: false
-  when: netdata_present.stat.exists == False
+  changed_when: false
+  when: not netdata_present.stat.exists
 
 ## It will be running once installed
 # The default port is 19999, but we do not open any port in HAProxy so it's not
@@ -34,6 +42,13 @@
 # It is recommended to just use port forwarding over SSH to access the Netdata dashboard securely.
 # You can do this in your ssh config, or with VSCode port forwarding.
 - name: Install Intel/AMD 64bit static build of Netdata
-  ansible.builtin.shell: sh /tmp/netdata-kickstart.sh --stable-channel --install-prefix {{ m_install }} --build-only --non-interactive --disable-telemetry
+  ansible.builtin.command: >
+    sh /tmp/netdata-kickstart.sh
+    --stable-channel
+    --install-prefix {{ m_install }}
+    --build-only
+    --non-interactive
+    --disable-telemetry
   become: false
-  when: netdata_present.stat.exists == False and netdata_integrity_check.rc == 0
+  changed_when: true
+  when: not netdata_present.stat.exists and netdata_integrity_check.rc == 0
