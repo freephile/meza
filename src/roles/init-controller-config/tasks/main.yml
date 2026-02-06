@@ -59,6 +59,7 @@
   ansible.builtin.command: getent group {{ group_apache }}
   register: apache_group_check
   changed_when: false
+  check_mode: false
   failed_when: apache_group_check.rc != 0
 
 # ensure the m_local directory exists on the controller and is configured properly

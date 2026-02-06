@@ -1,30 +1,63 @@
 ---
-# Verify meza-ansible group memberships and critical directory permissions
+# Verify {{ m_user }} group memberships and critical directory permissions
 # Also verify and correct MediaWiki directory ownership and permissions
 # The verify-permissions playbook can be run independently to check and fix permissions
-# Usage:
-## If you are in the config directory, it will be picked up automatically
+#
+## Usage:
+## If you are in the config directory, ansible.cfg will be picked up automatically
 # cd /opt/meza/config
-## Run ansible-playbook specifying the config as well as the inventory
+## Otherwise, specify the config with ANSIBLE_CONFIG environment variable
 ## using 'localhost, --connection=local' for local runs
 ## and finally specifying the 'env' extra var to satisfy the 'set-vars' role
 # ANSIBLE_CONFIG=/opt/meza/config/ansible.cfg ansible-playbook -i localhost, --connection=local  /opt/meza/src/playbooks/verify-permissions.yml -e env=monolith
 
-- name: Verify meza-ansible group memberships
-  ansible.builtin.command: groups meza-ansible
+#
+# USER AND GROUP VERIFICATION
+#
+
+- name: Verify {{ m_user }} group memberships
+  ansible.builtin.command: groups {{ m_user }}
   register: meza_groups
   changed_when: false
+  check_mode: false
 
-- name: Display meza-ansible group memberships
+- name: Display {{ m_user }} group memberships
   ansible.builtin.debug:
-    msg: "meza-ansible groups: {{ meza_groups.stdout }}"
+    msg: "{{ m_user }} groups: {{ meza_groups.stdout }}"
+
+- name: Debug {{ m_user }} groups output
+  ansible.builtin.debug:
+    msg:
+      - "Command return code: {{ meza_groups.rc }}"
+      - "Groups stdout: '{{ meza_groups.stdout }}'"
+      - "Groups stderr: '{{ meza_groups.stderr }}'"
+      - "Split result: {{ meza_groups.stdout.split() }}"
+
+- name: Fail if {{ m_user }} is not in {{ group_apache }} group
+  ansible.builtin.fail:
+    msg: "{{ m_user }} user is not in {{ group_apache }} group. Groups: {{ meza_groups.stdout }}"
+  check_mode: false
+  when:
+    - meza_groups.stdout | length > 0
+    - group_apache not in meza_groups.stdout.split()
+
+- name: Fail if group check command returned empty output
+  ansible.builtin.fail:
+    msg:
+    - "Failed to retrieve groups for {{ m_user }} user."
+    - "Command output was empty. "
+    - "rc={{ meza_groups.rc }}, stderr={{ meza_groups.stderr }}"
+  check_mode: false
+  when:
+    - meza_groups.stdout | length == 0
 
 #
 # ENSURE DATA DIRECTORY STRUCTURE WITH PROPER PERMISSIONS
 #
+
 # m_cache_directory is a localization cache directory used by MediaWiki
 - name: Ensure data-meza directory structure with proper permissions
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: "{{ item.owner }}"
@@ -45,8 +78,9 @@
   loop:
     - "{{ m_meza_data }}"
     - "{{ m_cache_directory }}"
-    - "{{ m_uploads_dir }}"
     - "{{ m_logs }}"
+    - "{{ m_backups }}"
+    - "{{ m_uploads_dir }}"
 
 
 - name: Build permissions summary table
@@ -60,28 +94,17 @@
       {% endif %}
       {% endfor %}
 
-- name: Display permissions summary
+- name: Display permissions summary table
   ansible.builtin.debug:
     msg: "{{ perms_summary }}"
 
-- name: Check if meza-ansible user is in apache group
-  ansible.builtin.command: id -Gn meza-ansible
-  register: user_groups
-  changed_when: false
-
-- name: Fail if meza-ansible is not in apache group
-  ansible.builtin.fail:
-    msg: "meza-ansible user is not in apache group. Groups: {{ user_groups.stdout }}"
-  when:
-    - "'apache' not in user_groups.stdout.split()"
-
-- name: Verify cache directory is writable by meza-ansible
+- name: Verify cache directory is writable by {{ m_user }}
   ansible.builtin.file:
     path: "{{ m_cache_directory }}/test-write"
     state: touch
     mode: '0664'
   become: true
-  become_user: meza-ansible
+  become_user: "{{ m_user }}"
   register: cache_write_test
 
 - name: Debug cache write test
@@ -213,8 +236,8 @@
 #
 # MEDIAWIKI EDGE CASES - SPECIAL DIRECTORIES
 #
-# Some directories need special handling because Apache needs write access
-# (not just the standard read access for meza-ansible:apache ownership)
+# Some directories need special handling because {{ group_apache }} needs write access
+# (not just the standard group-read access for {{ m_user }}:{{ group_apache }} ownership)
 
 - name: Check if the Widgets compiled_templates directory exists
   ansible.builtin.stat:
@@ -222,7 +245,7 @@
   register: compiled_templates_folder
   when: m_mediawiki is defined
 
-- name: Ensure Widgets compiled_templates folder is owned by apache with write access
+- name: Ensure Widgets compiled_templates folder is owned by {{ user_apache }} with write access
   ansible.builtin.file:
     path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
     owner: "{{ user_apache }}"
@@ -236,6 +259,9 @@
     - m_mediawiki is defined
     - compiled_templates_folder.stat.exists
 
+# This is a bit of a no-op because Meza doesn't use the default cache directory,
+# and does not use the default images directory for uploads, so these are
+# basically empty directories.
 - name: Ensure MediaWiki cache/images directories have proper group write permissions
   ansible.builtin.file:
     path: "{{ item }}"
@@ -246,7 +272,7 @@
   loop:
     - "{{ m_mediawiki }}/cache"
     - "{{ m_mediawiki }}/images"
-    - "{{ m_uploads_dir }}"
+  # Don't include uploads because it can be huge, and should be handled separately
+  #   - "{{ m_uploads_dir }}"
   when:
     - m_mediawiki is defined
-    - ansible_distribution_file_variety == 'RedHat'

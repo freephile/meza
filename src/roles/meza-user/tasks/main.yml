@@ -58,6 +58,7 @@
   ansible.builtin.command: getent group {{ group_apache }}
   register: apache_group_check
   changed_when: false
+  check_mode: false
   failed_when: false
   when: group_apache is defined
   tags:
@@ -84,6 +85,7 @@
   ansible.builtin.command: getent group {{ group_wheel }}
   register: wheel_group_check
   changed_when: false
+  check_mode: false
   failed_when: false
   when: group_wheel is defined
   tags:

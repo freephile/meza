@@ -1,6 +1,18 @@
 ---
 # Playbook to verify file permissions and group membership are correct
-# Usage: ansible-playbook -i hosts verify-permissions.yml
+# What it does:
+# Verify meza-ansible group memberships and critical directory permissions
+# Also verify and correct MediaWiki directory ownership and permissions
+# The verify-permissions playbook can be run independently to check and fix permissions
+#
+# USAGE:
+#
+# If you are in the config directory, it will be picked up automatically
+# cd /opt/meza/config
+# Run ansible-playbook specifying the config as well as the inventory
+# using 'localhost, --connection=local' for local runs
+# and finally specifying the 'env' extra var to satisfy the 'set-vars' role
+# ANSIBLE_CONFIG=/opt/meza/config/ansible.cfg ansible-playbook -i localhost, --connection=local  /opt/meza/src/playbooks/verify-permissions.yml -e env=monolith
 
 - name: Verify Meza permissions and group membership
   hosts: all

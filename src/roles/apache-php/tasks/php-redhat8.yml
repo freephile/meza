@@ -66,6 +66,7 @@
   shell: php -m | grep -i memcached
   register: memcached_pecl_installed
   changed_when: false
+  check_mode: false
   failed_when: false
 
 # --configureoptions parameter is not supported in our version of pecl.

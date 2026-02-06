@@ -58,6 +58,7 @@
   ansible.builtin.command: awk /127.0.0.1/ /etc/hosts
   register: elasticsearch_checkhostsfile
   changed_when: false
+  check_mode: false
 
 # Add host name per https://github.com/elastic/elasticsearch/issues/6611
 - name: Add localhost to /etc/hosts if needed
