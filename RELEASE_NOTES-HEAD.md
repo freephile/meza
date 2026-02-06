@@ -2,7 +2,152 @@
 
 ### Commits
 
-HEAD -> dev origin/dev
+HEAD -> dev origin/issue287-separate-apache origin/dev
+* [a55e46d3](https://github.com/freephile/meza/commit/a55e46d3) (2026-02-05) Greg Rundlett: Fix linting issues with netdata role Added proper names to the debug tasks instead of 'free-form'
+Added `set -o pipefail` and `executable: /bin/bash` to shell that uses
+pipes.
+Added `change_when` false to integrity-check (read-only) and true to
+install task (it actually installs)
+Switched to the command module for the installer because no shell
+features are actually needed **in the task** and we can still invoke
+the shell (`sh foo.sh`) as the command.
+Fixes Issue [#16](https://github.com/freephile/meza/issues/16)
+  - Modified: `src/roles/netdata/tasks/main.yml`
+
+* [23fdc901](https://github.com/freephile/meza/commit/23fdc901) (2026-02-05) Greg Rundlett: Improve logrotate role based on separate apache In the logrotate configuration file template for
+`/etc/logrotate.d/meza-logs`, remove defensive fallback logic based on
+complicated 'getent_group' since apache is guaranteed to be installed.
+Formerly the 'if' conditions were complicated and the fallbacks would
+introduce permission problems by using 'root' instead of intentional
+variables such as `logrotate_deploy_logs.create_owner`.
+Remove whole duplicate "Fix directory permissions after apache installation"
+because apache is guaranteed to be installed.
+Remove 'ignore errors' flag so we're not silently failing.
+Add whole section in the role README.md on Testing and Deployment
+Fixes Issue [#287](https://github.com/freephile/meza/issues/287)
+  - Modified: `src/roles/logrotate/README.md`
+  - Modified: `src/roles/logrotate/tasks/main.yml`
+  - Modified: `src/roles/logrotate/templates/meza-logs.j2`
+
+* [d0971019](https://github.com/freephile/meza/commit/d0971019) (2026-02-05) Greg Rundlett: Fix deploy with separate apache, php roles Fix profiling per-wiki override logic while also fixing deploys on
+fresh Vagrant infrastructure where `wikis` isn't defined yet. This
+fixes an issue with Vagrant where you used to need to
+- 'deploy'->
+- 'create wiki'->
+- 'deploy' (again)
+to get started.
+Now, the demo wiki is created on first deploy in Vagrant the same as
+before with 'monolith' environments.
+- Add new play "Ensure demo wiki exists if no wikis configured" to site
+playbook which runs **before** app server configuration (before the PHP
+role). This ensures that the `wikis` variable is available when the PHP
+role runs (and invokes the profiling tasks).
+- Remove the same play from the `mediawiki` role; and leave a comment
+in its place.
+Fixes Issue [#287](https://github.com/freephile/meza/issues/287)
+  - Modified: `src/playbooks/site.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/php/templates/postLocalSettings.d/profiling.php.j2`
+
+* [5edb1811](https://github.com/freephile/meza/commit/5edb1811) (2026-02-05) Greg Rundlett: Split apache-php into separate roles - make note in Vagrantfile that getmeza.sh installs Apache
+- add apache installation into getmeza.sh
+- add doc in 'manual' for Apache-PHP split implementation
+- split old role in site.yml
+- change deploy lock file ownership in meza.py to enforce the architectural
+guarantee that Apache is installed during bootstrap. Fail fast with helpful
+guidance if the system isn't properly configured.
+- Add FIXME for removing RedHat 7 Issue [#290](https://github.com/freephile/meza/issues/290)
+- no need for defaults and fallbacks in paths.yml when group_apache is a
+pre-requisite
+- the apache task no longer attempts to create or fix m_public/wikis started in
+init-controller because that is not apache's concern
+- replace complex getent module with simple getent command and return code in
+init-controller-config to fail fast if the prerequisite apache is not present
+then use proper group variable for setting ownership instead of silent fallbacks
+- add new meta file for apache-php role to describe it as deprecated
+- copy prior httpd.conf and php-fpm conf templates into new apache role
+- copy `etc-sysconfig-httpd` template into new apache role
+- add large deprecation notice at the top of the apache-php task file
+- add meta file for apache-php that invokes the separate roles as pre-requisites
+- add README.md for the apache-php role that explains the deprecation
+- add README.md for the meza-user role explaining boostrap sequence
+- fix the  PHP profiling logic for per-wiki overrides
+- copy README_PROFILING.md into new php role
+and the rest of the php role files
+- README.md
+- meta/main.yml
+- README_PROFILING.md
+- handlers/main.yml
+- templates/php.ini.j2
+- templates/10-opcache.ini.j2
+- templates/www.conf.j2
+- templates/postLocalSettings.d/profiling.php.j2
+- templates/20-xhprof.ini.j2
+- templates/20-sqlsrv.ini.j2
+- templates/freetds.conf.j2
+- templates/40-memcached.ini.j2
+- templates/php.conf
+- templates/30-pdo_sqlsrv.ini.j2
+- templates/logrotate-profiler.j2
+- defaults/main.yml
+- tasks/php-redhat8.yml
+- tasks/main.yml
+- tasks/mssql_driver_for_php.yml
+- tasks/php-debian.yml
+- tasks/php-redhat7.yml
+- tasks/profiling.yml
+- tasks/php.yml
+Issue [#287](https://github.com/freephile/meza/issues/287) is ready for testing
+  - Modified: `Vagrantfile`
+  - Modified: `config/RedHat.yml`
+  - Modified: `config/paths.yml`
+  - Added: `manual/APACHE_PHP_SPLIT_IMPLEMENTATION.md`
+  - Modified: `src/playbooks/site.yml`
+  - Added: `src/roles/apache-php/README.md`
+  - Added: `src/roles/apache-php/meta/main.yml`
+  - Modified: `src/roles/apache-php/tasks/main.yml`
+  - Added: `src/roles/apache/README.md`
+  - Added: `src/roles/apache/defaults/main.yml`
+  - Added: `src/roles/apache/handlers/main.yml`
+  - Added: `src/roles/apache/meta/main.yml`
+  - Added: `src/roles/apache/tasks/main.yml`
+  - Added: `src/roles/apache/templates/etc-sysconfig-httpd.j2`
+  - Added: `src/roles/apache/templates/httpd.conf.j2`
+  - Added: `src/roles/apache/templates/php-fpm-httpd.conf.j2`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Added: `src/roles/meza-user/README.md`
+  - Added: `src/roles/php/README.md`
+  - Added: `src/roles/php/README_PROFILING.md`
+  - Added: `src/roles/php/defaults/main.yml`
+  - Added: `src/roles/php/handlers/main.yml`
+  - Added: `src/roles/php/meta/main.yml`
+  - Added: `src/roles/php/tasks/main.yml`
+  - Added: `src/roles/php/tasks/mssql_driver_for_php.yml`
+  - Added: `src/roles/php/tasks/php-debian.yml`
+  - Added: `src/roles/php/tasks/php-redhat7.yml`
+  - Added: `src/roles/php/tasks/php-redhat8.yml`
+  - Added: `src/roles/php/tasks/php.yml`
+  - Added: `src/roles/php/tasks/profiling.yml`
+  - Added: `src/roles/php/templates/10-opcache.ini.j2`
+  - Added: `src/roles/php/templates/20-sqlsrv.ini.j2`
+  - Added: `src/roles/php/templates/20-xhprof.ini.j2`
+  - Added: `src/roles/php/templates/30-pdo_sqlsrv.ini.j2`
+  - Added: `src/roles/php/templates/40-memcached.ini.j2`
+  - Added: `src/roles/php/templates/freetds.conf.j2`
+  - Added: `src/roles/php/templates/logrotate-profiler.j2`
+  - Added: `src/roles/php/templates/php.conf`
+  - Added: `src/roles/php/templates/php.ini.j2`
+  - Added: `src/roles/php/templates/postLocalSettings.d/profiling.php.j2`
+  - Added: `src/roles/php/templates/www.conf.j2`
+  - Modified: `src/scripts/getmeza.sh`
+  - Modified: `src/scripts/meza.py`
+
+* [9effcfd5](https://github.com/freephile/meza/commit/9effcfd5) (2026-02-04) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [50657c90](https://github.com/freephile/meza/commit/50657c90) (2026-02-04) Greg Rundlett: use set-vars in setup-meza-user playbook - Prepare for Issue [#287](https://github.com/freephile/meza/issues/287) - splitting the apache-php role
 - Comment paths.yml for Issue [#286](https://github.com/freephile/meza/issues/286) - normalize variable names
 - Simplify group detection in the meza-user role
