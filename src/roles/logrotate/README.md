@@ -4,6 +4,8 @@
 
 The Meza logrotate role provides comprehensive log rotation and backup file management for the Meza MediaWiki platform. This document outlines the retention policies for different types of logs and files managed by the system.
 
+**Note**: As of Issue #287, the bootstrap sequencing ensures Apache is installed before any Ansible roles run, guaranteeing that all service users and groups exist when logrotate configuration is generated. This eliminates the need for defensive fallback logic.
+
 ## 📋 Retention Policy Summary
 
 ### **Deployment & System Logs**
@@ -102,7 +104,7 @@ The Meza logrotate role provides comprehensive log rotation and backup file mana
 ### Service Integration
 - **Apache/httpd**: Graceful reload after log rotation
 - **PHP-FPM**: Reload to release file handles
-- **File permissions**: Intelligent fallback when apache user/group doesn't exist
+- **Bootstrap sequencing**: Apache guaranteed to exist before logrotate configuration (Issue #287)
 
 ## 📊 Retention Summary by Priority
 
@@ -147,9 +149,10 @@ logrotate_backup_files:
 - **Cleanup**: Automated removal of old compressed backup files
 - **Cron scheduling**: Daily cleanup runs at 2:30 AM
 
-### Fault Tolerance
-- **Missing users**: Falls back to root ownership when apache user doesn't exist
-- **Missing files**: Continues operation if log files are missing
+### Bootstrap Guarantees
+- **User/group availability**: Apache installed before Ansible user setup (Issue #287)
+- **Directory creation**: All log directories created with proper ownership before rotation
+- **Missing files**: Continues operation if log files are missing (notifempty option)
 - **Configuration testing**: Validates logrotate config after deployment
 
 ## 📈 Disk Space Optimization
@@ -161,11 +164,68 @@ This policy balances operational needs with disk space efficiency:
 3. **Critical audit logs** (deployments) are kept for compliance (1 year)
 4. **Backup files** are compressed quickly and cleaned up automatically
 
+## 🧪 Testing and Deployment
+
+### Running the logrotate role independently
+
+```bash
+# Using meza command wrapper (recommended)
+meza deploy <env> --tags logrotate -vvv
+
+# Or using ansible-playbook directly
+cd /opt/meza/config
+ansible-playbook /opt/meza/src/playbooks/site.yml --tags logrotate -vvv
+
+# Dry-run mode to see what would change
+meza deploy <env> --tags logrotate --check -vvv
+```
+
+### Testing logrotate configuration
+
+```bash
+# 1. Check the generated config file syntax
+sudo logrotate -d /etc/logrotate.d/meza-logs
+
+# 2. Force a test rotation (doesn't actually rotate, just tests)
+sudo logrotate -d -f /etc/logrotate.d/meza-logs
+
+# 3. Actually run logrotate manually to test
+sudo logrotate -f /etc/logrotate.d/meza-logs
+
+# 4. Check logrotate's own status
+sudo tail -f /var/lib/logrotate/logrotate.status
+```
+
+### Available tags
+
+The logrotate role has two tags:
+- **`logrotate`** - specific to this role
+- **`logs`** - broader category including meza-log role
+
+```bash
+# Run both log-related roles
+meza deploy <env> --tags logs -vvv
+
+# Run only logrotate
+meza deploy <env> --tags logrotate -vvv
+```
+
+### Quick verification checklist
+
+After running the role, verify:
+
+```bash
+ls -la /etc/logrotate.d/meza-logs          # Config generated
+ls -la /opt/data-meza/logs/                # Log directories exist
+ls -la /opt/meza/scripts/cleanup-backups.sh # Cleanup script generated
+cat /etc/cron.d/meza-cleanup-backups       # Cron job configured
+```
+
 ## 🔍 Monitoring and Alerting
 
 The logrotate configuration includes:
 - **Automatic testing** after configuration changes
-- **Error handling** for missing users/groups during early deployment
+- **Consistent ownership**: All rotated files owned by appropriate service users (apache, elasticsearch)
 - **Cron job scheduling** for backup cleanup automation
 - **Service reload** integration to prevent file handle issues
 

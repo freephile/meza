@@ -4,6 +4,9 @@
     name: "{{ logrotate_package_name }}"
     state: present
 
+# Note: Apache guaranteed to exist due to bootstrap sequencing (Issue #287)
+# getmeza.sh installs Apache before user setup, so {{ user_apache }} and {{ group_apache }} are always available
+
 - name: Ensure log directories exist with proper permissions
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -40,6 +43,7 @@
       owner: elasticsearch
       group: elasticsearch
       mode: '0755'
+      when: false  # Only create when elasticsearch role runs
     - path: "{{ m_logs }}/jobqueue"
       owner: "{{ user_apache }}"
       group: "{{ group_apache }}"
@@ -52,7 +56,6 @@
       owner: meza-ansible
       group: "{{ group_apache }}"
       mode: '0755'
-  ignore_errors: true  # Some users/groups may not exist yet
 
 - name: Ensure backup directory exists with proper permissions
   ansible.builtin.file:
@@ -61,7 +64,6 @@
     owner: meza-ansible
     group: "{{ group_apache }}"
     mode: '0755'
-  ignore_errors: true  # Apache group may not exist yet
 
 - name: Create Meza logrotate configuration
   ansible.builtin.template:
@@ -94,56 +96,3 @@
 
 - name: Force logrotate handlers to run now
   ansible.builtin.meta: flush_handlers
-
-- name: Fix directory permissions after apache installation
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: directory
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-    mode: "{{ item.mode }}"
-  loop:
-    - path: "{{ m_logs }}"
-      owner: meza-ansible
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/deploy-output"
-      owner: meza-ansible
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/deploy"
-      owner: meza-ansible
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/backup"
-      owner: meza-ansible
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/mediawiki"
-      owner: "{{ user_apache }}"
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/apache"
-      owner: "{{ user_apache }}"
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/jobqueue"
-      owner: "{{ user_apache }}"
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/php"
-      owner: "{{ user_apache }}"
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_logs }}/cleanup"
-      owner: meza-ansible
-      group: "{{ group_apache }}"
-      mode: '0755'
-    - path: "{{ m_backups }}"
-      owner: meza-ansible
-      group: "{{ group_apache }}"
-      mode: '0755'
-  when:
-    - ansible_facts['getent_group'] is defined
-    - group_apache in ansible_facts['getent_group']
-  ignore_errors: true
