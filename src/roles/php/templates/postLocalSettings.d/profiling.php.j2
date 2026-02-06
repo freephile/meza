@@ -18,17 +18,20 @@ if ( !extension_loaded( 'xhprof' ) ) {
 	return;
 }
 
-// Check if profiling is globally enabled
+// Determine if profiling should be enabled for this wiki
+// Start with global setting as default
 $enableProfiling = {% if m_setup_php_profiling %}true{% else %}false{% endif %};
 
 // Per-wiki settings override global setting
+{% if wikis is defined and wikis | length > 0 %}
 {% for wiki in wikis %}
 {% if wiki.enable_profiling is defined %}
 if ( $wikiId === '{{ wiki.id }}' ) {
-    $enableProfiling = {% if wiki.enable_profiling %}true{% else %}false{% endif %};
+	$enableProfiling = {% if wiki.enable_profiling %}true{% else %}false{% endif %};
 }
 {% endif %}
 {% endfor %}
+{% endif %}
 
 // Configure MediaWiki profiler if enabled
 if ( $enableProfiling ) {

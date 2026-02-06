@@ -123,6 +123,43 @@
     - autodeployer
     - controller
 
+# Ensure demo wiki configuration exists BEFORE app server setup
+# This ensures the 'wikis' variable is available when PHP role runs
+# (PHP role templates need wikis variable for profiling configuration)
+- name: Ensure demo wiki exists if no wikis configured
+  hosts: localhost
+  become: true
+  tags:
+    - bootstrap
+    - demo-wiki
+  roles:
+    - set-vars
+  tasks:
+    - name: Check if any wikis exist in configuration
+      ansible.builtin.find:
+        paths: "{{ m_local_public }}/wikis"
+        file_type: directory
+      register: wikis_check
+      run_once: true
+      when: docker_skip_tasks is not defined or not docker_skip_tasks
+
+    - name: Create demo wiki configuration if none exist
+      ansible.builtin.include_role:
+        name: configure-wiki
+      vars:
+        wiki_id: demo
+        wiki_name: Demo Wiki
+      when:
+        - docker_skip_tasks is not defined or not docker_skip_tasks
+        - wikis_check.files | length == 0
+
+    - name: Sync demo wiki config to app servers
+      ansible.builtin.include_role:
+        name: sync-configs
+      when:
+        - docker_skip_tasks is not defined or not docker_skip_tasks
+        - wikis_check.files | length == 0
+
 - name: Autodeploy on localhost
   hosts: localhost
   become: true

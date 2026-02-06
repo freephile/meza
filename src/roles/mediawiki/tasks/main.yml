@@ -410,37 +410,12 @@
     group: "{{ group_apache }}"
 
 #
-# DEMO WIKI (if needed)
+# DEMO WIKI CONFIGURATION
 #
-# 1. Check if wikis exist
-# 2. Create Demo Wiki if they don't
-# 3. FIXME #820: create-wiki re-sync configs? Explicit re-sync not req'd?
-#
-- name: Check if any wikis exist
-  find:
-    paths: "{{ m_local_public }}/wikis"
-    file_type: directory
-  delegate_to: localhost
-  register: initial_wikis_dirs_check
-  run_once: true
-  when: docker_skip_tasks is not defined or not docker_skip_tasks
-
-- name: Add Demo Wiki to config if no wikis exist
-  include_role:
-    name: configure-wiki
-  vars:
-    wiki_id: demo
-    wiki_name: Demo Wiki
-  when:
-    - (docker_skip_tasks is not defined or not docker_skip_tasks)
-    - initial_wikis_dirs_check.files|length == 0
-
-- name: Re-sync configuration between controller and app servers if Demo just configured
-  include_role:
-    name: sync-configs
-  when:
-    - (docker_skip_tasks is not defined or not docker_skip_tasks)
-    - initial_wikis_dirs_check.files|length == 0
+# Note: Demo wiki creation has been moved to site.yml (runs before app server setup)
+# This ensures the 'wikis' variable is available when PHP role runs.
+# The demo wiki is created earlier if no wikis exist in configuration.
+# See site.yml "Ensure demo wiki exists if no wikis configured" play.
 
 #
 # VERIFY WIKIS
