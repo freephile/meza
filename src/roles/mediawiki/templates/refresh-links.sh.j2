@@ -30,7 +30,7 @@ _process_wiki_refresh_links() {
 	local wiki_id="$1"
 
 	timestamp=$(date +"%F_%T")
-	out_log="{{ m_logs }}/refresh-links/$wiki_id.$timestamp.log"
+	out_log="{{ m_data_logs_dir }}/refresh-links/$wiki_id.$timestamp.log"
 
 	echo "Start refreshing links for \"$wiki_id\" at $timestamp"
 	echo "  Output log:"

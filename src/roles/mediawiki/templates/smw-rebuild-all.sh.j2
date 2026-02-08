@@ -30,8 +30,8 @@ _process_wiki_smw_rebuild() {
 	local wiki_id="$1"
 
 	timestamp=$(date +"%F_%T")
-	exception_log="{{ m_logs }}/smw-rebuilddata-exceptions-$wiki_id-$timestamp.log"
-	out_log="{{ m_logs }}/smw-rebuilddata/$wiki_id.$timestamp.log"
+	exception_log="{{ m_data_logs_dir }}/smw-rebuilddata-exceptions-$wiki_id-$timestamp.log"
+	out_log="{{ m_data_logs_dir }}/smw-rebuilddata/$wiki_id.$timestamp.log"
 
 	echo "Start rebuilding SMW data for \"$wiki_id\" at $timestamp"
 	echo "  Exception log (if req'd):"
@@ -39,7 +39,7 @@ _process_wiki_smw_rebuild() {
 	echo "  Output log:"
 	echo "    $out_log"
 
-	start_id_file="{{ m_logs }}/custom-rebuild-start-id-file"
+	start_id_file="{{ m_data_logs_dir }}/custom-rebuild-start-id-file"
 
 	# on the first pass, use -f to fully rebuild the SMW structure
 	dependent_option="-f"

@@ -164,7 +164,7 @@ m_setup_php_profiling: false
 m_profiling_output_type: footer
 
 # Directory for profiling log files (when m_profiling_output_type: file)
-m_profiling_file_path: "{{ m_logs }}/profiler"
+m_profiling_file_path: "{{ m_data_logs_dir }}/profiler"
 
 # Number of days to retain profiling log files
 # Log rotation runs daily at 2:00 AM

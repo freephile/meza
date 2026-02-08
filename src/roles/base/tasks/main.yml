@@ -454,17 +454,17 @@
     mode: '0755'
     state: directory
 
-- name: "Ensure {{ m_logs }} exists"
+- name: "Ensure {{ m_data_logs_dir }} exists"
   ansible.builtin.file:
-    path: "{{ m_logs }}"
+    path: "{{ m_data_logs_dir }}"
     owner: "{{ m_logs_owner }}"
     group: "{{ group_wheel }}"
     mode: "{{ m_logs_mode }}"
     state: directory
 
-- name: "Ensure {{ m_logs }} sub directories exist"
+- name: "Ensure {{ m_data_logs_dir }} sub directories exist"
   ansible.builtin.file:
-    path: "{{ m_logs }}/{{ item }}"
+    path: "{{ m_data_logs_dir }}/{{ item }}"
     owner: "{{ m_logs_owner }}"
     group: "{{ group_wheel }}"
     mode: "{{ m_logs_mode }}"

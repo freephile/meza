@@ -3,4 +3,4 @@ SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 MAILTO=root
 
-{{ backups_cleanup.crontime }} root {{ m_config_deploy_dir }}/backups-cleanup.sh > {{ m_logs }}/cleanup/backups-cleanup-`date "+\%Y\%m\%d"`.log 2>&1
+{{ backups_cleanup.crontime }} root {{ m_config_deploy_dir }}/backups-cleanup.sh > {{ m_data_logs_dir }}/cleanup/backups-cleanup-`date "+\%Y\%m\%d"`.log 2>&1

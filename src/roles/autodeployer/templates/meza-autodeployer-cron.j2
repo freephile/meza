@@ -15,13 +15,13 @@ MAILTO=root
 #
 # Auto-deploy on config and Meza changes
 #
-{{ autodeployer.crontime }} root meza autodeploy "{{ env }}" "Deploy" "" >> {{ m_logs }}/deploy/check-for-changes-`date "+\%Y\%m\%d"`.log 2>&1
+{{ autodeployer.crontime }} root meza autodeploy "{{ env }}" "Deploy" "" >> {{ m_data_logs_dir }}/deploy/check-for-changes-`date "+\%Y\%m\%d"`.log 2>&1
 
 
 {% if push_backup is defined and push_backup.crontime is defined %}
 #
 # Push backup (db and uploads) to another server periodically
 #
-{{ push_backup.crontime }} root meza push-backup "{{ env }}" >> {{ m_logs }}/deploy/push-backup-`date "+\%Y\%m\%d"`.log 2>&1
+{{ push_backup.crontime }} root meza push-backup "{{ env }}" >> {{ m_data_logs_dir }}/deploy/push-backup-`date "+\%Y\%m\%d"`.log 2>&1
 {% endif %}
 {% endif %}

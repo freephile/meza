@@ -15,44 +15,44 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   loop:
-    - path: "{{ m_logs }}"
+    - path: "{{ m_data_logs_dir }}"
       owner: meza-ansible
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/deploy-output"
+    - path: "{{ m_data_logs_dir }}/deploy-output"
       owner: meza-ansible
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/deploy"
+    - path: "{{ m_data_logs_dir }}/deploy"
       owner: meza-ansible
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/backup"
+    - path: "{{ m_data_logs_dir }}/backup"
       owner: meza-ansible
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/mediawiki"
+    - path: "{{ m_data_logs_dir }}/mediawiki"
       owner: "{{ user_apache }}"
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/apache"
+    - path: "{{ m_data_logs_dir }}/apache"
       owner: "{{ user_apache }}"
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/elasticsearch"
+    - path: "{{ m_data_logs_dir }}/elasticsearch"
       owner: elasticsearch
       group: elasticsearch
       mode: '0755'
       when: false  # Only create when elasticsearch role runs
-    - path: "{{ m_logs }}/jobqueue"
+    - path: "{{ m_data_logs_dir }}/jobqueue"
       owner: "{{ user_apache }}"
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/php"
+    - path: "{{ m_data_logs_dir }}/php"
       owner: "{{ user_apache }}"
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_logs }}/cleanup"
+    - path: "{{ m_data_logs_dir }}/cleanup"
       owner: meza-ansible
       group: "{{ group_apache }}"
       mode: '0755'

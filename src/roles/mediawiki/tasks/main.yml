@@ -484,7 +484,7 @@
 
 - name: Ensure data rebuilding logs directories exist
   file:
-    path: "{{ m_logs }}/{{ item }}"
+    path: "{{ m_data_logs_dir }}/{{ item }}"
     owner: "{{ m_logs_owner }}"
     group: "{{ group_apache }}"
     mode: "{{ m_logs_mode }}"
@@ -537,9 +537,9 @@
     # Also note: the shell module 'creates' parameter means that the step will NOT be run if the (log) file already exists!
     # @See https://github.com/freephile/meza/issues/80
 - name: "(Re-)build SemanticMediaWiki data for: {{ list_of_wikis | join(', ') }}"
-  shell: 'bash {{ m_config_deploy_dir | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}" > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
+  shell: 'bash {{ m_config_deploy_dir | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}" > {{ m_data_logs_dir }}/smw-rebuilddata/smw-rebuild-all.log'
   args:
-    chdir: "{{ m_logs }}/smw-rebuilddata/"
+    chdir: "{{ m_data_logs_dir }}/smw-rebuilddata/"
     creates: smw-rebuild-all.log
   when: (docker_skip_tasks is not defined or not docker_skip_tasks) and (list_of_wikis|length > 0)
   run_once: true

@@ -146,7 +146,7 @@ def load_defaults_from_paths_yml():
 
         # Extract the specific variables meza.py needs
         required_vars = [
-            "m_config_i18n_dir", "m_data_dir", "m_logs_deploy", "m_data_create_wiki_log_file", "m_logs",
+            "m_config_i18n_dir", "m_data_dir", "m_logs_deploy", "m_data_create_wiki_log_file", "m_data_logs_dir",
             "m_config_secret_dir", "m_home", "m_config_vault"
         ]
 
@@ -634,7 +634,7 @@ def get_create_wiki_log_path(env):
         str: The path to the create-wiki processing log file, or the most recent log file if no operation is active.
 
     """
-    log_dir = os.path.join(defaults['m_logs'], 'create-wiki-output')
+    log_dir = os.path.join(defaults['m_data_logs_dir'], 'create-wiki-output')
 
     if not os.path.isdir(log_dir):
         os.makedirs(log_dir)
@@ -786,7 +786,7 @@ def get_deploy_log_path(env):
         str: The path to the deploy log file, or the most recent log file if no deployment is active.
 
     """
-    log_dir = os.path.join(defaults['m_logs'], 'deploy-output')
+    log_dir = os.path.join(defaults['m_data_logs_dir'], 'deploy-output')
 
     if not os.path.isdir(log_dir):
         os.makedirs(log_dir)
@@ -1556,7 +1556,7 @@ def meza_command_create(argv):
 
         # Execute with processing log (similar to deploy-output)
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
-        log_file = f"{defaults['m_logs']}/create-wiki-output/{env}-{timestamp}.log"
+        log_file = f"{defaults['m_data_logs_dir']}/create-wiki-output/{env}-{timestamp}.log"
         log_dir = os.path.dirname(log_file)
         if not os.path.isdir(log_dir):
             os.makedirs(log_dir)
