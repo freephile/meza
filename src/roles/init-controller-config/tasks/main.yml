@@ -21,7 +21,7 @@
 # subsequent passes the controller is guaranteed to have a local config.
 - name: Does controller have local config
   ansible.builtin.stat:
-    path: "{{ m_config_public_dir }}"
+    path: "{{ m_conf_public_dir }}"
   register: controller_local_config
 
 # If a git repo is defined use that for config
@@ -33,7 +33,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   ansible.builtin.git:
     repo: "{{ local_config_repo.repo }}"
-    dest: "{{ m_config_public_dir }}"
+    dest: "{{ m_conf_public_dir }}"
     version: "{{ local_config_repo.version | default('master') }}"
     force: "{{ local_config_repo.force | default(false) | bool }}"
     umask: "{{ m_umask }}"
@@ -51,7 +51,7 @@
 # GetMeza does too much. Permisions and Bootstrapping must be separate roles. Apache needs to be installed EARLY, and separate from 'mediawiki-app' and 'php'. ansible_user membership in 'group_apache' should be handled when apache is installed, not here.
 - name: Does controller have local config
   ansible.builtin.stat:
-    path: "{{ m_config_public_dir }}"
+    path: "{{ m_conf_public_dir }}"
   register: recheck_controller
 
 # Apache guaranteed to exist due to bootstrap sequencing (Issue #287)
@@ -63,9 +63,9 @@
   failed_when: apache_group_check.rc != 0
 
 # ensure the m_local directory exists on the controller and is configured properly
-- name: Ensure m_config_public_dir configured on controller
+- name: Ensure m_conf_public_dir configured on controller
   ansible.builtin.file:
-    path: "{{ m_config_public_dir }}"
+    path: "{{ m_conf_public_dir }}"
     state: directory
     owner: "{{ m_config_public_owner }}"
     group: "{{ group_apache }}"
@@ -74,17 +74,17 @@
     - file-perms
 
 
-# Ensure that the 'wikis' directory exists within m_config_public_dir
+# Ensure that the 'wikis' directory exists within m_conf_public_dir
 # Note: ownership will be set later after apache user is created
-- name: "Ensure m_config_public_dir/wikis exists"
+- name: "Ensure m_conf_public_dir/wikis exists"
   file:
-    path: "{{ m_config_public_dir }}/wikis"
+    path: "{{ m_conf_public_dir }}/wikis"
     state: directory
     mode: "{{ m_config_public_mode }}"
 
 - name: Ensure pre/post/saml settings directories exists in config
   ansible.builtin.file:
-    path: "{{ m_config_public_dir }}/{{ item }}"
+    path: "{{ m_conf_public_dir }}/{{ item }}"
     state: directory
     owner: "{{ m_config_public_owner }}"
     group: "{{ m_config_public_group }}"
@@ -97,7 +97,7 @@
 - name: "Ensure base files present, do NOT overwrite"
   ansible.builtin.template:
     src: "templates/{{ item }}.j2"
-    dest: "{{ m_config_public_dir }}/{{ item }}"
+    dest: "{{ m_conf_public_dir }}/{{ item }}"
     owner: "{{ m_config_public_owner }}"
     group: "{{ m_config_public_group }}"
     mode: "{{ m_config_public_mode }}"
@@ -117,7 +117,7 @@
   tags:
     - file-perms
 
-- name: "Ensure secret directories properly owned/moded: {{ m_config_secret_dir }}"
+- name: "Ensure secret directories properly owned/moded: {{ m_conf_secret_dir }}"
   ansible.builtin.file:
     path: "{{ item }}"
     owner: "{{ m_config_secret_owner }}"
@@ -127,10 +127,10 @@
   tags:
     - file-perms
   with_items:
-    - "{{ m_config_secret_dir }}"
-    - "{{ m_config_secret_dir }}/{{ env }}"
+    - "{{ m_conf_secret_dir }}"
+    - "{{ m_conf_secret_dir }}/{{ env }}"
 
-- name: "Ensure secret files properly owned/moded: {{ m_config_secret_dir }}"
+- name: "Ensure secret files properly owned/moded: {{ m_conf_secret_dir }}"
   ansible.builtin.file:
     path: "{{ item }}"
     owner: "{{ m_config_secret_owner }}"
@@ -140,5 +140,5 @@
   tags:
     - file-perms
   with_items:
-    - "{{ m_config_secret_dir }}/{{ env }}/secret.yml"
-    - "{{ m_config_secret_dir }}/{{ env }}/hosts"
+    - "{{ m_conf_secret_dir }}/{{ env }}/secret.yml"
+    - "{{ m_conf_secret_dir }}/{{ env }}/hosts"

@@ -30,14 +30,14 @@
 - name: Deploy MediaWiki profiler configuration to global postLocalSettings.d
   ansible.builtin.template:
     src: postLocalSettings.d/profiling.php.j2
-    dest: "{{ m_config_public_dir }}/postLocalSettings.d/profiling.php"
+    dest: "{{ m_conf_public_dir }}/postLocalSettings.d/profiling.php"
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: '0644'
 
 - name: Ensure per-wiki postLocalSettings.d directories exist for wikis with profiling enabled
   ansible.builtin.file:
-    path: "{{ m_config_public_dir }}/wikis/{{ item.id }}/postLocalSettings.d"
+    path: "{{ m_conf_public_dir }}/wikis/{{ item.id }}/postLocalSettings.d"
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"

@@ -281,8 +281,9 @@ Vagrant.configure("2") do |config|
     # to ensure apache group exists for group membership (Issue #287)
     #
     app1.vm.provision "getmeza", type: "shell", preserve_order: true, inline: <<-SHELL
+    # for Vagrant, we'll export env var to avoid error in set-vars which runs before setup-env is run.
+      export env=vagrant
       bash #{install_directory}/meza/src/scripts/getmeza.sh
-
       # Ensure SSH directory exists with correct permissions
       mkdir -p #{install_directory}/conf-meza/users/meza-ansible/.ssh
       chmod 700 #{install_directory}/conf-meza/users/meza-ansible/.ssh

@@ -15,7 +15,7 @@
 - name: Ensure crontab file up-to-date
   template:
     src: meza-ansible.crontab.j2
-    dest: "{{ m_home }}/meza-ansible/.ansible-cronfile"
+    dest: "{{ m_conf_users_dir }}/meza-ansible/.ansible-cronfile"
     owner: "meza-ansible"
     group: "{{ group_wheel }}"
     mode: '0755'
@@ -46,4 +46,4 @@
   when: m_modify_etc_sudoers
 
 - name: Ensure crontab up-to-date from file
-  shell: crontab -u meza-ansible {{ m_home }}/meza-ansible/.ansible-cronfile
+  shell: crontab -u meza-ansible {{ m_conf_users_dir }}/meza-ansible/.ansible-cronfile

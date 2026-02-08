@@ -8,7 +8,7 @@
   become: true
   vars:
     alt_source_backups_dir: /opt/alt/backups
-    m_home: /opt/conf-meza/users
+    m_conf_users_dir: /opt/conf-meza/users
     m_data_tmp_dir: /opt/data-meza/tmp
 
   tasks:
@@ -99,7 +99,7 @@
       authorized_key:
         user: test-user
         state: present
-        key: "{{ lookup('file', '{{ m_home }}/meza-ansible/.ssh/id_rsa.pub') }}"
+        key: "{{ lookup('file', '{{ m_conf_users_dir }}/meza-ansible/.ssh/id_rsa.pub') }}"
 
     - name: Ensure no password on test-user
       shell: passwd --delete test-user

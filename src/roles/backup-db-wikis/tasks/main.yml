@@ -3,7 +3,7 @@
 
 - name: Get individual wikis from controller config
   find:
-    paths: "{{ m_config_public_dir }}/wikis/"
+    paths: "{{ m_conf_public_dir }}/wikis/"
     file_type: directory
   register: wiki_dirs
   delegate_to: localhost

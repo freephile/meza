@@ -14,7 +14,7 @@
 # This is run on all app servers (assuming conditions apply)
 - name: Ensure app servers have config from controller
   synchronize:
-    src: "{{ m_config_public_dir }}/"
+    src: "{{ m_conf_public_dir }}/"
     dest: "{{ m_config_deploy_dir }}/public"
     recursive: true
     delete: true

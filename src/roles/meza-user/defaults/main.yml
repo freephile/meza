@@ -4,7 +4,7 @@
 
 # User configuration
 ansible_user: "meza-ansible"
-meza_ansible_home: "{{ m_config }}/users/{{ ansible_user }}"
+meza_ansible_home: "{{ m_conf_users_dir }}/{{ ansible_user }}"
 
 # Groups (defined in OS-specific vars: RedHat.yml, Debian.yml)
 # group_apache: apache or www-data

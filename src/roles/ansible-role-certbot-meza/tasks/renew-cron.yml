@@ -6,4 +6,4 @@
     minute: "{{ certbot_auto_renew_minute }}"
     hour: "{{ certbot_auto_renew_hour }}"
     user: "{{ certbot_auto_renew_user }}"
- #   cron_file: "{{ m_home }}/meza-ansible/.ansible-cronfile"
+ #   cron_file: "{{ m_conf_users_dir }}/meza-ansible/.ansible-cronfile"

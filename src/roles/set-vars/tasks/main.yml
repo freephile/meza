@@ -57,8 +57,8 @@
 - name: Ensure critical path variables are defined
   ansible.builtin.set_fact:
     m_config_dir: "{{ m_config_dir | default(m_install_dir + '/meza/config') }}"
-    m_config_public_dir: "{{ m_config_public_dir | default(m_install_dir + '/conf-meza/public') }}"
-    m_config_secret_dir: "{{ m_config_secret_dir | default(m_install_dir + '/conf-meza/secret') }}"
+    m_conf_public_dir: "{{ m_conf_public_dir | default(m_install_dir + '/conf-meza/public') }}"
+    m_conf_secret_dir: "{{ m_conf_secret_dir | default(m_install_dir + '/conf-meza/secret') }}"
     m_app_dir: "{{ m_app_dir | default(m_install_dir + '/meza') }}"
 
 #
@@ -74,7 +74,7 @@
 #
 - name: Set meza local public variables
   ansible.builtin.include_vars:
-    file: "{{ m_config_public_dir }}/public.yml"
+    file: "{{ m_conf_public_dir }}/public.yml"
   # In the first bootstrap, this file may not exist yet
   failed_when: false
 
@@ -108,7 +108,7 @@
 # Fallback to directory-based wiki discovery (legacy)
 - name: Get individual wikis dirs from localhost (legacy fallback)
   ansible.builtin.find:
-    paths: "{{ m_config_public_dir }}/wikis"
+    paths: "{{ m_conf_public_dir }}/wikis"
     file_type: directory
   register: wiki_dirs
   delegate_to: localhost
@@ -126,14 +126,18 @@
   ansible.builtin.set_fact:
     wiki_id_redirects: "{{ wiki_id_redirects | default({}) | combine(wiki_redirects_from_declarative | default({})) }}"
 
-#
+- name: Normalize env from Ansible or shell environment
+  ansible.builtin.set_fact:
+    env: "{{ env | default(ansible_env.env | default('')) }}"
+  tags:
+    - always
+
 # Secret config
-#
-- name: Set meza environment-specific secret variables for env={{ env }}
+- name: "Set meza environment-specific secret variables for env={{ env }}"
   ansible.builtin.include_vars:
-    file: "{{ m_config_secret_dir }}/{{ env }}/secret.yml"
-  # Ignore errors so this file is not required to be included
+    file: "{{ m_conf_secret_dir }}/{{ env }}/secret.yml"
   failed_when: false
+  when: env | length > 0
 
 - name: Set path alias variables for deprecated names
   ansible.builtin.include_vars:

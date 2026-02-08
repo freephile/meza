@@ -7,7 +7,7 @@
 #
 - name: "Grant keys to {{ granted_server }}"
   copy:
-    src: "{{ m_home }}/meza-ansible/.ssh/id_rsa"
+    src: "{{ m_conf_users_dir }}/meza-ansible/.ssh/id_rsa"
     dest: /root/meza-ansible-id_rsa
     owner: root
     group: root
@@ -19,7 +19,7 @@
 # so ignore_errors.
 - name: "Copy known_hosts to {{ granted_server }}"
   copy:
-    src: "{{ m_home }}/meza-ansible/.ssh/known_hosts"
+    src: "{{ m_conf_users_dir }}/meza-ansible/.ssh/known_hosts"
     dest: /root/meza-ansible-known_hosts
     owner: root
     group: root

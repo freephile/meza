@@ -93,12 +93,12 @@ src/roles/meza-user/
 Defined in [src/roles/meza-user/defaults/main.yml](../src/roles/meza-user/defaults/main.yml):
 
 - `ansible_user`: Username (default: "meza-ansible")
-- `meza_ansible_home`: Home directory (default: "{{ m_config_vault }}/users/{{ ansible_user }}")
+- `meza_ansible_home`: Home directory (default: "{{ m_conf_users_dir }}/{{ ansible_user }}")
 
 Additional variables from `set-vars` role:
 - `m_umask`: Umask value (default: "0002")
 - `m_app_dir`: Path to meza installation
-- `m_config_vault`: Path to conf-meza directory
+- `m_conf_vault_dir`: Vault sub-directory in conf-meza directory
 - `apache_user`: Web server user (apache/www-data)
 - `wheel_group`: Sudo group (wheel/sudo)
 

@@ -39,7 +39,7 @@ Available variables are listed below, along with default values (see `defaults/m
 ansible_user: meza-ansible
 
 # Home directory for meza-ansible user
-meza_ansible_home: "{{ m_home }}/{{ ansible_user }}"
+meza_ansible_home: "{{ m_conf_users_dir }}/{{ ansible_user }}"
 
 # User groups (apache group requires Apache to be installed first)
 meza_user_groups:

@@ -27,7 +27,7 @@
 #
 - name: Ensure user meza-ansible .ssh dir configured
   file:
-    path: "{{ m_home }}/meza-ansible/.ssh"
+    path: "{{ m_conf_users_dir }}/meza-ansible/.ssh"
     owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: '0700'
@@ -36,8 +36,8 @@
 - name: Copy meza-ansible keys to app servers
   become: true
   copy:
-    src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
-    dest: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
+    src: "{{ m_conf_users_dir }}/meza-ansible/.ssh/{{ item.name }}"
+    dest: "{{ m_conf_users_dir }}/meza-ansible/.ssh/{{ item.name }}"
     owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: "{{ item.mode }}"
@@ -50,8 +50,8 @@
 - name: Copy meza-ansible known_hosts to app_servers
   become: true
   copy:
-    src: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
-    dest: "{{ m_home }}/meza-ansible/.ssh/{{ item.name }}"
+    src: "{{ m_conf_users_dir }}/meza-ansible/.ssh/{{ item.name }}"
+    dest: "{{ m_conf_users_dir }}/meza-ansible/.ssh/{{ item.name }}"
     owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: "{{ item.mode }}"
@@ -107,7 +107,7 @@
 
 - name: Set variable holding list of local skins
   include_vars:
-    file: "{{ m_config_public_dir }}/MezaLocalSkins.yml"
+    file: "{{ m_conf_public_dir }}/MezaLocalSkins.yml"
     name: meza_local_skins
   tags:
     - skins
@@ -161,9 +161,9 @@
 
 - name: Set variable holding list of local extensions
   include_vars:
-    file: "{{ m_config_public_dir | default('/opt/conf-meza/public') }}/MezaLocalExtensions.yml"
+    file: "{{ m_conf_public_dir | default('/opt/conf-meza/public') }}/MezaLocalExtensions.yml"
     name: meza_local_extensions
-  when: m_config_public_dir is defined or ansible_check_mode | default(false)
+  when: m_conf_public_dir is defined or ansible_check_mode | default(false)
   tags:
     - always
 

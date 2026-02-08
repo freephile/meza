@@ -71,7 +71,7 @@
 - name: Copy .my.cnf file with root password credentials
   template:
     src: "root-my.cnf.j2"
-    dest: "{{ m_home }}/meza-ansible/.my.cnf"
+    dest: "{{ m_conf_users_dir }}/meza-ansible/.my.cnf"
     owner: "meza-ansible"
     group: "{{ group_wheel }}"
     mode: '0600'

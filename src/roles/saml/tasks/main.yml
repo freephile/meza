@@ -33,7 +33,7 @@
   become_user: "meza-ansible"
   get_url:
     url: "https://github.com/simplesamlphp/simplesamlphp/releases/download/v{{ simplesamlphp_version }}/simplesamlphp-{{ simplesamlphp_version }}-full.tar.gz"
-    dest: "{{ m_home }}/meza-ansible/"
+    dest: "{{ m_conf_users_dir }}/meza-ansible/"
   register: new_simplesamlphp_archive
 
 - name: Remove simplesamlphp directory if new version available
@@ -62,7 +62,7 @@
 - name: Unarchive simplesamlphp tarball if new
   become: true
   unarchive:
-    src: "{{ m_home }}/meza-ansible/simplesamlphp-{{ simplesamlphp_version }}-full.tar.gz"
+    src: "{{ m_conf_users_dir }}/meza-ansible/simplesamlphp-{{ simplesamlphp_version }}-full.tar.gz"
     dest: "{{ m_simplesamlphp_path }}"
     owner: "{{ m_simplesamlphp_owner }}"
     group: "{{ m_simplesamlphp_group }}"

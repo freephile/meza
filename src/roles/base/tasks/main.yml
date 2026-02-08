@@ -4,14 +4,14 @@
     name: "{{ item }}"
     # primary group
     group: "{{ group_wheel }}"
-    home: "{{ m_home }}/{{ item }}"
+    home: "{{ m_conf_users_dir }}/{{ item }}"
   with_items:
     - meza-ansible
     - alt-meza-ansible
 
 - name: Ensure user alt-meza-ansible .ssh dir configured
   ansible.builtin.file:
-    path: "{{ m_home }}/alt-meza-ansible/.ssh"
+    path: "{{ m_conf_users_dir }}/alt-meza-ansible/.ssh"
     owner: alt-meza-ansible
     group: "{{ group_wheel }}"
     mode: '0700'
@@ -20,12 +20,12 @@
 - name: Copy meza-ansible authorized_keys to alt-meza-ansible
   ansible.builtin.shell: >
     cp
-    {{ m_home }}/meza-ansible/.ssh/authorized_keys
-    {{ m_home }}/alt-meza-ansible/.ssh/authorized_keys
+    {{ m_conf_users_dir }}/meza-ansible/.ssh/authorized_keys
+    {{ m_conf_users_dir }}/alt-meza-ansible/.ssh/authorized_keys
 
 - name: Ensure user meza-ansible and alt-meza-ansible authorized_keys configured
   ansible.builtin.file:
-    path: "{{ m_home }}/{{ item }}/.ssh/authorized_keys"
+    path: "{{ m_conf_users_dir }}/{{ item }}/.ssh/authorized_keys"
     owner: "{{ item }}"
     group: "{{ group_wheel }}"
     mode: '0644'
@@ -37,7 +37,7 @@
   ansible.posix.authorized_key:
     user: alt-meza-ansible
     state: present
-    key: "{{ lookup('file', '{{ m_home }}/meza-ansible/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', '{{ m_conf_users_dir }}/meza-ansible/.ssh/id_rsa.pub') }}"
 
 - name: Ensure no password on alt-meza-ansible user
   ansible.builtin.shell: passwd --delete alt-meza-ansible
@@ -502,7 +502,7 @@
     owner: root
     mode: "0755"
   with_fileglob:
-    - "{{ m_config_public_dir }}/custom-pem-ca-trust/*"
+    - "{{ m_conf_public_dir }}/custom-pem-ca-trust/*"
   register: new_custom_pem_ca_certs
 
 - name: Copy any custom OpenSSL extended-format CA certs into place
@@ -512,7 +512,7 @@
     owner: root
     mode: "0755"
   with_fileglob:
-    - "{{ m_config_public_dir }}/custom-extended-ca-trust/*"
+    - "{{ m_conf_public_dir }}/custom-extended-ca-trust/*"
   register: new_custom_extended_ca_certs
 
 - name: Update CA trust if certs changed
@@ -522,7 +522,7 @@
 - name: Ensure meza-ansible has .gitconfig
   ansible.builtin.template:
     src: "gitconfig.j2"
-    dest: "{{ m_home }}/meza-ansible/.gitconfig"
+    dest: "{{ m_conf_users_dir }}/meza-ansible/.gitconfig"
     owner: "meza-ansible"
     group: "{{ group_wheel }}"
     mode: '0644'

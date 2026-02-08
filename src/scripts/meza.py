@@ -147,7 +147,7 @@ def load_defaults_from_paths_yml():
         # Extract the specific variables meza.py needs
         required_vars = [
             "m_config_i18n_dir", "m_data_dir", "m_data_deploy_log_file", "m_data_create_wiki_log_file", "m_data_logs_dir",
-            "m_config_secret_dir", "m_home", "m_config_vault"
+            "m_conf_secret_dir", "m_conf_users_dir", "m_conf_vault_dir"
         ]
 
         defaults = {}
@@ -1243,7 +1243,7 @@ def meza_command_setup_env(argv, return_not_exit=False):
     # permissions acceptable since this dir will hold secret info, though it's
     # sort of an odd place for a temporary file. Perhaps /root instead?
     extra_vars_file = os.path.join(
-        defaults['m_config_secret_dir'], "temp_vars.json")
+        defaults['m_conf_secret_dir'], "temp_vars.json")
     if os.path.isfile(extra_vars_file):
         os.remove(extra_vars_file)
     with open(extra_vars_file, 'w', encoding='utf-8') as f:
@@ -1253,7 +1253,7 @@ def meza_command_setup_env(argv, return_not_exit=False):
     # Make sure temp_vars.json is accessible. On the first run of deploy it is
     # possible that user meza-ansible will not be able to reach this file,
     # specifically if the system has a restrictive umask set (e.g 077).
-    meza_chown(defaults['m_config_secret_dir'], 'meza-ansible', 'wheel')
+    meza_chown(defaults['m_conf_secret_dir'], 'meza-ansible', 'wheel')
     meza_chown(extra_vars_file, 'meza-ansible', 'wheel')
     os.chmod(extra_vars_file, 0o664)
 
@@ -2204,10 +2204,10 @@ def get_vault_pass_file(env):
         None
 
     """
-    home_dir = defaults['m_home']
+    home_dir = defaults['m_conf_users_dir']
     legacy_file = f'{home_dir}/meza-ansible/.vault-pass-{env}.txt'
 
-    vault_dir = defaults['m_config_vault']
+    vault_dir = defaults['m_conf_vault_dir']
     vault_pass_file = f'{vault_dir}/vault-pass-{env}.txt'
 
     if not os.path.isfile(vault_pass_file):
@@ -2245,7 +2245,7 @@ def write_vault_decryption_tmp_file(env, value):
         str: The path of the temporary file.
 
     """
-    home_dir = defaults['m_home']
+    home_dir = defaults['m_conf_users_dir']
     temp_decrypt_file = f'{home_dir}/meza-ansible/.vault-temp-decrypt-{env}.txt'
 
     with open(temp_decrypt_file, 'w', encoding='utf-8') as filetowrite:
@@ -2265,7 +2265,7 @@ def read_vault_decryption_tmp_file(env):
         str: The contents of the temporary decryption file, or "[decryption error]" if an error
             occurs.
     """
-    home_dir = defaults['m_home']
+    home_dir = defaults['m_conf_users_dir']
     temp_decrypt_file = f'{home_dir}/meza-ansible/.vault-temp-decrypt-{env}.txt'
 
     with open(temp_decrypt_file, encoding='utf-8') as f:

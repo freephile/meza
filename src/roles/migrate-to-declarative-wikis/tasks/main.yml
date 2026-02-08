@@ -5,14 +5,14 @@
 
 - name: Check if wikis directory exists
   ansible.builtin.stat:
-    path: "{{ m_config_public_dir }}/wikis"
+    path: "{{ m_conf_public_dir }}/wikis"
   register: wikis_dir_exists
   delegate_to: localhost
   run_once: true
 
 - name: Find existing wiki directories
   ansible.builtin.find:
-    paths: "{{ m_config_public_dir }}/wikis"
+    paths: "{{ m_conf_public_dir }}/wikis"
     file_type: directory
   register: existing_wiki_dirs
   when: wikis_dir_exists.stat.exists
@@ -133,14 +133,14 @@
 
 - name: Check if public.yml already exists
   ansible.builtin.stat:
-    path: "{{ m_config_public_dir }}/public.yml"
+    path: "{{ m_conf_public_dir }}/public.yml"
   register: public_yml_exists
   delegate_to: localhost
   run_once: true
 
 - name: Read existing public.yml configuration
   ansible.builtin.slurp:
-    src: "{{ m_config_public_dir }}/public.yml"
+    src: "{{ m_conf_public_dir }}/public.yml"
   register: public_yml_content
   when: public_yml_exists.stat.exists
   delegate_to: localhost
@@ -192,7 +192,7 @@
       block:
         - name: Read current public.yml content as text
           ansible.builtin.slurp:
-            src: "{{ m_config_public_dir }}/public.yml"
+            src: "{{ m_conf_public_dir }}/public.yml"
           register: current_yml_text
 
         - name: Generate wikis YAML block
@@ -203,7 +203,7 @@
           ansible.builtin.shell: |
             set -o pipefail
             # Create backup
-            cp "{{ m_config_public_dir }}/public.yml" "{{ m_config_public_dir }}/public.yml.backup-$(date +%Y%m%d-%H%M%S)"
+            cp "{{ m_conf_public_dir }}/public.yml" "{{ m_conf_public_dir }}/public.yml.backup-$(date +%Y%m%d-%H%M%S)"
 
             # Write the wikis YAML to a temporary file first
             cat << 'EOF' > /tmp/wikis_section.yml
@@ -211,14 +211,14 @@
             EOF
 
             # Check if wikis section already exists
-            if grep -q "^wikis:" "{{ m_config_public_dir }}/public.yml"; then
+            if grep -q "^wikis:" "{{ m_conf_public_dir }}/public.yml"; then
               # Use Python to safely replace the wikis section
               python3 << 'PYTHON_SCRIPT'
             import re
             import sys
 
             # Read the original file
-            with open("{{ m_config_public_dir }}/public.yml", 'r') as f:
+            with open("{{ m_conf_public_dir }}/public.yml", 'r') as f:
                 content = f.read()
 
             # Read the new wikis section
@@ -234,13 +234,13 @@
             new_content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
 
             # Write the updated content back
-            with open("{{ m_config_public_dir }}/public.yml", 'w') as f:
+            with open("{{ m_conf_public_dir }}/public.yml", 'w') as f:
                 f.write(new_content)
             PYTHON_SCRIPT
             else
               # Append wikis section to end of file
-              echo "" >> "{{ m_config_public_dir }}/public.yml"
-              cat /tmp/wikis_section.yml >> "{{ m_config_public_dir }}/public.yml"
+              echo "" >> "{{ m_conf_public_dir }}/public.yml"
+              cat /tmp/wikis_section.yml >> "{{ m_conf_public_dir }}/public.yml"
             fi
 
             # Clean up
@@ -257,7 +257,7 @@
           - {{ wiki.id }}: "{{ wiki.name }}"{{ ' (PRIMARY)' if wiki.primary else '' }}
           {% endfor %}
 
-          Configuration saved to {{ m_config_public_dir }}/public.yml
+          Configuration saved to {{ m_conf_public_dir }}/public.yml
           Original file backed up with .backup suffix.
       when: discovered_wikis is defined and discovered_wikis | length > 0 and migration_needed
 
