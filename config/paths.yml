@@ -51,7 +51,7 @@ gluster_brick_name: gluster
 m_data_backups_dir: "{{ m_data_dir }}/backups"
 
 # webserver variables
-m_htdocs: "{{ m_install_dir }}/htdocs"
+m_web_dir: "{{ m_install_dir }}/htdocs"
 # crawl for default or nocrawl to disallow all
 m_robots_rules: nocrawl
 m_mediawiki: "{{ m_install_dir }}/htdocs/mediawiki"

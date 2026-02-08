@@ -38,7 +38,7 @@ content to web application servers.
 ## Requirements
 
 - Apache/httpd installed and running
-- `m_htdocs` directory exists (created by `apache-php` role)
+- `m_web_dir` directory exists (created by `apache-php` role)
 - `set-vars` role must run first for path resolution
 
 ## Role Variables
@@ -48,7 +48,7 @@ content to web application servers.
 allow_backup_downloads: false    # Default: disabled for security
 
 # Paths (typically set by set-vars role)
-m_htdocs: "/opt/htdocs"          # Apache DocumentRoot
+m_web_dir: "/opt/htdocs"          # Apache DocumentRoot
 m_app_dir: "/opt/meza"              # Meza installation directory
 
 # Apache user/group (OS-specific)
@@ -106,7 +106,7 @@ Web server ready with monitoring + wikis
 
 ### Template Variables Available
 Templates in `templates/*.j2` have access to:
-- `{{ m_htdocs }}` - DocumentRoot path
+- `{{ m_web_dir }}` - DocumentRoot path
 - `{{ m_app_dir }}` - Meza installation path
 - `{{ wikis }}` - List of configured wikis (for index.php)
 - `{{ env }}` - Current environment name
@@ -152,7 +152,7 @@ Both roles have **good separation of concerns**:
 - name: Ensure custom page configured
   ansible.builtin.template:
     src: "my-page.html.j2"
-    dest: "{{ m_htdocs }}/my-page.html"
+    dest: "{{ m_web_dir }}/my-page.html"
     owner: root
     group: root
     mode: '0755'

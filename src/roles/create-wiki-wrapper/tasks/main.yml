@@ -35,7 +35,7 @@
 - name: Create symlink to core, to enable short urls
   file:
     src: "{{ m_mediawiki }}"
-    dest: "{{ m_htdocs }}/{{ wiki_id }}"
+    dest: "{{ m_web_dir }}/{{ wiki_id }}"
     state: link
     force: yes
     owner: "{{ user_apache }}"

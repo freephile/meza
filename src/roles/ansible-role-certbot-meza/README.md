@@ -101,7 +101,7 @@ When using the `webroot` creation method, a `webroot` item has to be provided fo
 Default webroot, overwritten by individual per-cert webroot directories
 
 For Meza, you should use 
-    certbot_webroot: "{{ m_htdocs }}"
+    certbot_webroot: "{{ m_web_dir }}"
 
 ### Source Installation from Git
 

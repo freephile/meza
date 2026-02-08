@@ -39,7 +39,7 @@
 - name: Make meza-ansible own htdocs directory
   file:
     state: directory
-    path: "{{ m_htdocs }}"
+    path: "{{ m_web_dir }}"
     owner: "meza-ansible"
     group: "{{ group_apache }}"
     mode: '0775'

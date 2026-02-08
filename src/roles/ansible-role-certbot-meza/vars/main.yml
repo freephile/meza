@@ -30,7 +30,7 @@ certbot_create_standalone_stop_services:
 
 # Default webroot, overwritten by individual per-cert webroot directories
 # certbot_webroot: /var/www/letsencrypt
-certbot_webroot: "{{ m_htdocs }}"
+certbot_webroot: "{{ m_web_dir }}"
 
 
 certbot_certs:

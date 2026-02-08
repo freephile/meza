@@ -245,7 +245,7 @@ try {
 
 	// Handle authentication
 	if (is_file($m_config_deploy_dir . '/SAMLConfig.php')) {
-		$auth_file = $m_htdocs . '/NonMediaWikiSimpleSamlAuth.php';
+		$auth_file = $m_web_dir . '/NonMediaWikiSimpleSamlAuth.php';
 		if (!file_exists($auth_file)) {
 			header('HTTP/1.0 500 Internal Server Error');
 			exit("Unavailable without Authentication. Authentication module not found.");

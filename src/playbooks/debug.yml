@@ -5,7 +5,7 @@
 # Examples:
 #   meza debug monolith                    # Shows list_of_wikis
 #   meza debug monolith ansible_facts      # Shows all facts
-#   meza debug monolith m_htdocs           # Shows m_htdocs path
+#   meza debug monolith m_web_dir           # Shows m_web_dir path
 #   meza debug monolith hostvars           # Shows all host variables
 
 - name: Debug Ansible variables and facts

@@ -195,7 +195,7 @@ class MezaUnifyUserTables extends Maintenance {
 
 	public function checkSetup () {
 
-		global $m_htdocs, $m_config_deploy_dir, $m_app_dir;
+		global $m_web_dir, $m_config_deploy_dir, $m_app_dir;
 
 		// FIXME #826: unifyUserTables.php is currently non-functional
 		die( "user unify needs to be rethought for new meza" );
@@ -211,7 +211,7 @@ class MezaUnifyUserTables extends Maintenance {
 	}
 
 	public function getWikiIDs () {
-		global $m_config_deploy_dir, $m_htdocs;
+		global $m_config_deploy_dir, $m_web_dir;
 
 		// Try to use declarative wiki configuration first
 		$wikiConfigFile = "$m_config_deploy_dir/wiki-config.php";
@@ -220,10 +220,10 @@ class MezaUnifyUserTables extends Maintenance {
 			$this->wikiIDs = getMezaConfiguredWikis();
 		} else {
 			// Fallback to directory-based discovery (legacy)
-			$wikisDirectory = array_slice( scandir( "$m_htdocs/wikis" ), 2 );
+			$wikisDirectory = array_slice( scandir( "$m_web_dir/wikis" ), 2 );
 			$this->wikiIDs = array();
 			foreach( $wikisDirectory as $fileOrDir ) {
-				if ( is_dir( "$m_htdocs/wikis/$fileOrDir" ) ) {
+				if ( is_dir( "$m_web_dir/wikis/$fileOrDir" ) ) {
 					$this->wikiIDs[] = $fileOrDir;
 				}
 			}
@@ -793,7 +793,7 @@ class MezaUnifyUserTables extends Maintenance {
 	}
 
 	public function closeout () {
-		global $m_htdocs, $m_config_deploy_dir;
+		global $m_web_dir, $m_config_deploy_dir;
 
 		// Declare the prime-wiki as prime! Write prime wiki's wiki ID to file
 		if ( file_put_contents( "$m_config_deploy_dir/public/primewiki", $this->primeWiki ) ) {
@@ -813,9 +813,9 @@ class MezaUnifyUserTables extends Maintenance {
 	// this very closely duplicates LocalSettings.php prime wiki check
 	protected function getWikiDbConfig ( $wikiID ) {
 
-		global $m_htdocs, $wgDBuser, $wgDBpassword;
+		global $m_web_dir, $wgDBuser, $wgDBpassword;
 
-		include "$m_htdocs/wikis/$wikiID/config/preLocalSettings.php";
+		include "$m_web_dir/wikis/$wikiID/config/preLocalSettings.php";
 
 		if ( isset( $mezaCustomDBname ) ) {
 			$wikiDBname = $mezaCustomDBname;

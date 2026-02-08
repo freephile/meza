@@ -261,7 +261,7 @@ class DownloadTest extends BaseTestCase
 		$globals = [
 			'm_data_backups_dir',
 			'm_config_deploy_dir', 
-			'm_htdocs',
+			'm_web_dir',
 			'saml_idp_username_attr',
 			'wiki_backup_downloaders',
 			'all_backup_downloaders',
@@ -278,7 +278,7 @@ class DownloadTest extends BaseTestCase
 		// Set test values
 		$GLOBALS['m_data_backups_dir'] = $this->backupsDir;
 		$GLOBALS['m_config_deploy_dir'] = $this->tempDir . '/deploy';
-		$GLOBALS['m_htdocs'] = $this->tempDir . '/htdocs';
+		$GLOBALS['m_web_dir'] = $this->tempDir . '/htdocs';
 		$GLOBALS['saml_idp_username_attr'] = 'uid';
 		$GLOBALS['backups_environment'] = 'prod';
 		
@@ -289,7 +289,7 @@ class DownloadTest extends BaseTestCase
 
 		// Create deploy directory
 		mkdir($GLOBALS['m_config_deploy_dir'], 0755, true);
-		mkdir($GLOBALS['m_htdocs'], 0755, true);
+		mkdir($GLOBALS['m_web_dir'], 0755, true);
 	}
 
 	private function restoreGlobals()

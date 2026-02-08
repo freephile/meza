@@ -31,7 +31,7 @@
 - name: Ensure ServerPerformance configured
   ansible.posix.synchronize:
     src: "files/ServerPerformance/"
-    dest: "{{ m_htdocs }}/ServerPerformance"
+    dest: "{{ m_web_dir }}/ServerPerformance"
     recursive: true
     delete: true
     rsync_opts:
@@ -41,7 +41,7 @@
 - name: Ensure BackupDownload configured
   ansible.posix.synchronize:
     src: "files/BackupDownload/"
-    dest: "{{ m_htdocs }}/BackupDownload"
+    dest: "{{ m_web_dir }}/BackupDownload"
     recursive: true
     delete: true
     rsync_opts:
@@ -53,7 +53,7 @@
 # remove files
 - name: Ensure BackupDownload NOT configured
   ansible.builtin.file:
-    path: "{{ m_htdocs }}/BackupDownload"
+    path: "{{ m_web_dir }}/BackupDownload"
     state: absent
   when: not allow_backup_downloads
 
@@ -62,7 +62,7 @@
 - name: Ensure project-wide branding assets in web root
   ansible.builtin.copy:
     src: "{{ m_app_dir }}/src/roles/configure-wiki/files/{{ item }}"
-    dest: "{{ m_htdocs }}/{{ item }}"
+    dest: "{{ m_web_dir }}/{{ item }}"
     owner: root
     group: root
     mode: '0644'
@@ -78,7 +78,7 @@
 - name: Ensure files configured
   ansible.builtin.template:
     src: "{{ item }}.j2"
-    dest: "{{ m_htdocs }}/{{ item }}"
+    dest: "{{ m_web_dir }}/{{ item }}"
     owner: root
     group: root
     mode: '0755'

@@ -142,8 +142,8 @@ ServerName https://{{ wiki_app_fqdn }}
 # documents. By default, all requests are taken from this directory, but
 # symbolic links and aliases may be used to point to other locations.
 #
-# DocumentRoot "{{ m_htdocs }}"
-# <Directory "{{ m_htdocs }}">
+# DocumentRoot "{{ m_web_dir }}"
+# <Directory "{{ m_web_dir }}">
 #	 #
 #	 # Possible values for the Options directive are "None", "All",
 #	 # or any combination of:
@@ -426,7 +426,7 @@ SSLRandomSeed connect builtin
 Listen 8080
 <VirtualHost *:8080>
 
-	<Directory {{ m_htdocs }}>
+	<Directory {{ m_web_dir }}>
 
 		#
 		AllowOverride All
@@ -441,7 +441,7 @@ Listen 8080
 		Options All -Indexes
 	</Directory>
 
-	DocumentRoot {{ m_htdocs }}
+	DocumentRoot {{ m_web_dir }}
 	# WAS: ServerName https://{{ wiki_app_fqdn }}
 	#      This server name causes issues with SAML setups, ref #794
 	ServerName MezaMainEntrypoint
@@ -517,7 +517,7 @@ Listen 8090
 # Don't allow access to images directories. Will allow access via img_auth.php
 # FIXME #805: No images are here anymore anyway. We actually have no method of NOT
 #             using img_auth.php now. Remove me.
-<DirectoryMatch "^{{ m_htdocs }}/wikis/(.+)/images">
+<DirectoryMatch "^{{ m_web_dir }}/wikis/(.+)/images">
 	Order Allow,Deny
 	Deny From All
 </DirectoryMatch>

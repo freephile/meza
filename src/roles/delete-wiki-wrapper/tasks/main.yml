@@ -14,7 +14,7 @@
 # FIXME: Shouldn't this not be required?
 - name: Delete htdocs directory
   file:
-    path: "{{ m_htdocs }}/wikis/{{ wiki_id }}"
+    path: "{{ m_web_dir }}/wikis/{{ wiki_id }}"
     state: absent
 
 - name: Delete wiki uploads directory and gluster brick

@@ -6,7 +6,7 @@ source "{{ m_install_dir }}/.deploy-meza/config.sh"
 if [ -z "$1" ]; then
 	# Process all configured wikis
 	for wiki_id in $MEZA_WIKIS; do
-		if [ ! -d "{{ m_htdocs }}/wikis/$wiki_id" ]; then
+		if [ ! -d "{{ m_web_dir }}/wikis/$wiki_id" ]; then
 			echo "\"$wiki_id\" not a valid wiki ID (directory missing)"
 			continue
 		fi
@@ -17,7 +17,7 @@ if [ -z "$1" ]; then
 else
 	# Process single specified wiki
 	wiki_id="$1"
-	if [ ! -d "{{ m_htdocs }}/wikis/$wiki_id" ]; then
+	if [ ! -d "{{ m_web_dir }}/wikis/$wiki_id" ]; then
 		echo "\"$wiki_id\" not a valid wiki ID (directory missing)"
 		exit 1
 	fi

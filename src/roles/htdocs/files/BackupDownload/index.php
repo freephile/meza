@@ -40,7 +40,7 @@ require_once($configPath);
 
 // if there's a SAML config file, we need to authenticate with SAML, like, now.
 if ( is_file( $m_config_deploy_dir.'/SAMLConfig.php' ) ) {
-	require_once $m_htdocs.'/NonMediaWikiSimpleSamlAuth.php';
+	require_once $m_web_dir.'/NonMediaWikiSimpleSamlAuth.php';
 }
 else {
 	header('HTTP/1.0 403 Forbidden');

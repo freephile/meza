@@ -59,7 +59,7 @@
 - name: "Ensure wiki htdocs directory in place for {{ wiki_id }}"
   file:
     force: yes
-    path: "{{ m_htdocs }}/wikis/{{ wiki_id }}"
+    path: "{{ m_web_dir }}/wikis/{{ wiki_id }}"
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
@@ -70,7 +70,7 @@
     force: yes
     # dest = symlink, src = dir linked to
     src: "{{ m_config_deploy_dir }}/public/wikis/{{ wiki_id }}"
-    dest: "{{ m_htdocs }}/wikis/{{ wiki_id }}/config"
+    dest: "{{ m_web_dir }}/wikis/{{ wiki_id }}/config"
     state: link
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
