@@ -84,7 +84,7 @@
     - role_is_valid_slave
 
 - name: export dump file on master
-  shell: "mysqldump --databases {{ mysql_content_databases.stdout }} | gzip > {{ m_tmp }}/mysqldump-onmaster.sql.gz"
+  shell: "mysqldump --databases {{ mysql_content_databases.stdout }} | gzip > {{ m_data_tmp_dir }}/mysqldump-onmaster.sql.gz"
   delegate_to: "{{ mysql_replication_master }}"
   when:
     - slave_needs_configuration
@@ -99,8 +99,8 @@
 #
 - name: fetch dump file
   fetch:
-    src: "{{ m_tmp }}/mysqldump-onmaster.sql.gz"
-    dest: "{{ m_tmp }}/mysqldump-oncontrol.sql.gz"
+    src: "{{ m_data_tmp_dir }}/mysqldump-onmaster.sql.gz"
+    dest: "{{ m_data_tmp_dir }}/mysqldump-oncontrol.sql.gz"
     flat: true
   delegate_to: "{{ mysql_replication_master }}"
   when:
@@ -108,8 +108,8 @@
     - role_is_valid_slave
 - name: put dump file
   copy:
-    src: "{{ m_tmp }}/mysqldump-oncontrol.sql.gz"
-    dest: "{{ m_tmp }}/mysqldump-onslave.sql.gz"
+    src: "{{ m_data_tmp_dir }}/mysqldump-oncontrol.sql.gz"
+    dest: "{{ m_data_tmp_dir }}/mysqldump-onslave.sql.gz"
   when:
     - slave_needs_configuration
     - role_is_valid_slave
@@ -121,7 +121,7 @@
   community.mysql.mysql_db:
     state: import
     name: all
-    target: "{{ m_tmp }}/mysqldump-onslave.sql.gz"
+    target: "{{ m_data_tmp_dir }}/mysqldump-onslave.sql.gz"
   when:
     - slave_needs_configuration
     - role_is_valid_slave

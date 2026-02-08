@@ -177,7 +177,7 @@
 #
 - name: "{{ wiki_id }} - Ensure no wiki.sql on DB master"
   file:
-    path: "{{ m_tmp }}/wiki.sql"
+    path: "{{ m_data_tmp_dir }}/wiki.sql"
     state: absent
   run_once: true
   delegate_to: "{{ groups['db_master'][0] }}"
@@ -194,7 +194,7 @@
       remote_server_mysql_pass:      <hidden>
       dump_database:                 wiki_{{ wiki_id | default('<undefined>') }}
       target_server:                 {{ groups['db_master'][0] }}
-      target_server_path:            {{ m_tmp }}/wiki.sql
+      target_server_path:            {{ m_data_tmp_dir }}/wiki.sql
 
 #
 # SECTION: DUMP SQL to DB master
@@ -210,7 +210,7 @@
     remote_server_mysql_pass : "{{ backups_server_db_dump.mysql_pass }}"
     dump_database            : "wiki_{{ wiki_id }}"
     target_server            : "{{ groups['db_master'][0] }}"
-    target_server_path       : "{{ m_tmp }}/wiki.sql"
+    target_server_path       : "{{ m_data_tmp_dir }}/wiki.sql"
     # yamllint enable rule:colons
   run_once: true
   when: do_sql_dump and (not wiki_exists or intend_overwrite_from_backup)
@@ -222,7 +222,7 @@
 - name: "{{ wiki_id }} - Transfer SQL file from backup server to DB master"
   import_tasks: transfer-backup-to-db-master.yml
   vars:
-    m_tmp: "{{ m_tmp }}"
+    m_data_tmp_dir: "{{ m_data_tmp_dir }}"
     intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
     wiki_exists: "{{ wiki_exists }}"
     sql_backup_server: "{{ sql_backup_server }}"
@@ -240,7 +240,7 @@
 - name: "{{ wiki_id }} - Import wiki.sql"
   import_tasks: import-wiki-sql.yml
   vars:
-    m_tmp: "{{ m_tmp }}"
+    m_data_tmp_dir: "{{ m_data_tmp_dir }}"
     intend_overwrite_from_backup: "{{ intend_overwrite_from_backup }}"
     wiki_exists: "{{ wiki_exists }}"
   run_once: true
@@ -252,7 +252,7 @@
 #
 - name: "{{ wiki_id }} - Remove SQL file from master DB"
   file:
-    path: "{{ m_tmp }}/wiki.sql"
+    path: "{{ m_data_tmp_dir }}/wiki.sql"
     state: absent
   run_once: true
   delegate_to: "{{ groups['db_master'][0] }}"

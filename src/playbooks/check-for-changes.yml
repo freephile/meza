@@ -43,7 +43,7 @@
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
-            TMPDIR: "{{ m_tmp }}"
+            TMPDIR: "{{ m_data_tmp_dir }}"
           git:
             repo: "{{ secret_config_repo.repo }}"
             dest: "{{ m_config_secret_dir }}"
@@ -142,7 +142,7 @@
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
-            TMPDIR: "{{ m_tmp }}"
+            TMPDIR: "{{ m_data_tmp_dir }}"
           git:
             repo: "{{ local_config_repo.repo }}"
             dest: "{{ m_config_public_dir }}"
@@ -263,7 +263,7 @@
           become_user: "meza-ansible"
           # Ref #1149 for TMPDIR environment var
           environment:
-            TMPDIR: "{{ m_tmp }}"
+            TMPDIR: "{{ m_data_tmp_dir }}"
           git:
             repo: "{{ meza_repository_url }}"
             dest: "{{ m_app_dir }}"

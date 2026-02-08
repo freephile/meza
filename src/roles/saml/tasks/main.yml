@@ -77,7 +77,7 @@
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git
     dest: "{{ m_mediawiki }}/extensions/PluggableAuth"
@@ -91,7 +91,7 @@
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-SimpleSAMLphp.git
     dest: "{{ m_mediawiki }}/extensions/SimpleSAMLphp"

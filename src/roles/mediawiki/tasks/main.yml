@@ -68,7 +68,7 @@
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: https://github.com/wikimedia/mediawiki.git
     dest: "{{ m_mediawiki }}"
@@ -143,7 +143,7 @@
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
@@ -170,7 +170,7 @@
 - name: Ensure core meza skins installed (non-Composer)
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
@@ -189,7 +189,7 @@
   become_user: "meza-ansible"
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
@@ -209,7 +209,7 @@
 - name: Ensure local meza skins installed (non-Composer)
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
@@ -259,7 +259,7 @@
   #   - meza-ansible needs to update composer dependencies
   # Using shell with explicit umask ensures group-writable files (apache group)
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   shell: |
     umask {{ m_umask }}
     composer update {{ '--no-dev' if m_disable_composer_dev_dependencies | default(false, true) else '' }} --prefer-source
@@ -368,7 +368,7 @@
 - name: Ensure WikiBlender installed
   # Ref #1149 for TMPDIR environment var
   environment:
-    TMPDIR: "{{ m_tmp }}"
+    TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     # ToDo: migrate WikiBlender from ndc-rkevans to nasa
     repo: https://github.com/ndc-rkevans/WikiBlender.git

@@ -7,7 +7,7 @@
 #
 - name: From either dump or transfer, does wiki.sql exist on DB master?
   stat:
-    path: "{{ m_tmp }}/wiki.sql"
+    path: "{{ m_data_tmp_dir }}/wiki.sql"
   register: imported_wiki_sql_on_db_master
   delegate_to: "{{ groups['db_master'][0] }}"
   run_once: true
@@ -35,7 +35,7 @@
 - name: "{{ wiki_id }} - If wiki_sql_file NOT defined, send generic file to master db"
   copy:
     src: templates/mediawiki-tables.sql
-    dest: "{{ m_tmp }}/wiki.sql"
+    dest: "{{ m_data_tmp_dir }}/wiki.sql"
     force: true
   run_once: true
   delegate_to: "{{ groups['db_master'][0] }}"
@@ -61,7 +61,7 @@
   community.mysql.mysql_db:
     name: "wiki_{{ wiki_id }}"
     state: import
-    target: "{{ m_tmp }}/wiki.sql"
+    target: "{{ m_data_tmp_dir }}/wiki.sql"
   run_once: true
   register: did_db_import
   delegate_to: "{{ groups['db_master'][0] }}"

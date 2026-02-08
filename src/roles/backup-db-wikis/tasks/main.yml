@@ -32,14 +32,14 @@
     pulling_to_server: "{{ inventory_hostname }}"
     pulling_to_path: "{{ m_data_backups_dir }}/{{ env }}/{{ item }}/{{ backup_timestamp }}_wiki.sql"
     pulling_from_server: "{{ groups['db_master'][0] }}"
-    pulling_from_path: "{{ m_tmp }}/{{ env }}_{{ item }}.sql"
+    pulling_from_path: "{{ m_data_tmp_dir }}/{{ env }}_{{ item }}.sql"
     pulling_from_user: "meza-ansible"
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
 
 # Remove temp SQL files, only needs to be done on first backup server
-- name: Remove SQL files from DB master {{ m_tmp }}
+- name: Remove SQL files from DB master {{ m_data_tmp_dir }}
   file:
-    path: "{{ m_tmp }}/{{ env }}_{{ item }}.sql"
+    path: "{{ m_data_tmp_dir }}/{{ env }}_{{ item }}.sql"
     state: absent
   delegate_to: "{{ groups['db_master'][0] }}"
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"

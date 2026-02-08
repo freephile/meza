@@ -446,9 +446,9 @@
     group: root
     mode: '0755'
 
-- name: "Ensure {{ m_tmp }} exists"
+- name: "Ensure {{ m_data_tmp_dir }} exists"
   ansible.builtin.file:
-    path: "{{ m_tmp }}"
+    path: "{{ m_data_tmp_dir }}"
     owner: "meza-ansible"
     group: "{{ group_wheel }}"
     mode: '0755'
