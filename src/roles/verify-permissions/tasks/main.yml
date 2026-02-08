@@ -66,7 +66,7 @@
   loop:
   # 2 as the leading digit sets the setgid bit on directories so new files/dirs
   # inherit the group ownership
-    - {path: "{{ m_meza_data }}", owner: "{{ m_data_owner }}", group: "{{ m_data_group }}", mode: "{{ m_data_mode }}"}
+    - {path: "{{ m_data_dir }}", owner: "{{ m_data_owner }}", group: "{{ m_data_group }}", mode: "{{ m_data_mode }}"}
     - {path: "{{ m_cache_directory }}", owner: "{{ m_cache_directory_owner }}", group: "{{ m_cache_directory_group }}", mode: "{{ m_cache_directory_mode }}"}
     - {path: "{{ m_logs }}", owner: "{{ m_logs_owner }}", group: "{{ m_logs_group }}", mode: "{{ m_logs_mode }}"}
     - {path: "{{ m_backups }}", owner: "{{ m_backups_owner }}", group: "{{ m_backups_group }}", mode: "{{ m_backups_mode }}"}
@@ -76,7 +76,7 @@
     path: "{{ item }}"
   register: dir_perms
   loop:
-    - "{{ m_meza_data }}"
+    - "{{ m_data_dir }}"
     - "{{ m_cache_directory }}"
     - "{{ m_logs }}"
     - "{{ m_backups }}"

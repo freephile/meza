@@ -28,12 +28,12 @@ node.name: "{{ elasticsearch_node_name }}"
 
 # Path to directory where to store index data allocated for this node.
 #
-path.data: {{ m_meza_data }}/elasticsearch/data
+path.data: {{ m_data_dir }}/elasticsearch/data
 
 
 # Path to log files:
 #
-path.logs: {{ m_meza_data }}/elasticsearch/log
+path.logs: {{ m_data_dir }}/elasticsearch/log
 
 # Workaround for openjdk policy update which breaks elasticsearch's ability
 # to read /etc/pki/ca-trust/extracted/java/cacerts.

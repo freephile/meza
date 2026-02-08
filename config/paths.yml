@@ -29,26 +29,26 @@ m_app_scripts_dir: "{{ m_app_dir }}/src/scripts"
 m_app_tests_dir: "{{ m_app_dir }}/tests"
 
 # data dir
-m_meza_data: "{{ m_install_dir }}/data-meza"
-m_cache_directory: "{{ m_meza_data }}/cache"
-m_tmp: "{{ m_meza_data }}/tmp"
-m_logs: "{{ m_meza_data }}/logs"
-m_logs_deploy: "{{ m_meza_data }}/logs/deploy/deploy.log"
-m_logs_create_wiki: "{{ m_meza_data }}/logs/create-wiki/create-wiki.log"
+m_data_dir: "{{ m_install_dir }}/data-meza"
+m_cache_directory: "{{ m_data_dir }}/cache"
+m_tmp: "{{ m_data_dir }}/tmp"
+m_logs: "{{ m_data_dir }}/logs"
+m_logs_deploy: "{{ m_data_dir }}/logs/deploy/deploy.log"
+m_logs_create_wiki: "{{ m_data_dir }}/logs/create-wiki/create-wiki.log"
 
 # uploads dir. This WILL BE OVERIDDEN if multiple app servers are used, and
 # instead will use /opt/data-meza/uploads-gluster to use GlusterFS distributed
 # file system.
-m_uploads_dir: "{{ m_meza_data }}/uploads"
+m_uploads_dir: "{{ m_data_dir }}/uploads"
 
 # GlusterFS vars
-gluster_mount_dir: "{{ m_meza_data }}/uploads-gluster"
-gluster_brick_dir: "{{ m_meza_data }}/gluster/brick"
+gluster_mount_dir: "{{ m_data_dir }}/uploads-gluster"
+gluster_brick_dir: "{{ m_data_dir }}/gluster/brick"
 gluster_brick_name: gluster
 
 # Location where backups will go, specified by environment, e.g.
 # /opt/data-meza/backups/prod for "prod" environment
-m_backups: "{{ m_meza_data }}/backups"
+m_backups: "{{ m_data_dir }}/backups"
 
 # webserver variables
 m_htdocs: "{{ m_install_dir }}/htdocs"
@@ -74,16 +74,16 @@ m_parsoid_service_path: /etc/init.d/parsoid
 
 # files
 m_config_i18n_dir: "{{ m_config_dir }}/i18n"
-m_db_replication_dump_file: "{{ m_meza_data }}/db_master_for_replication.sql"
-m_db_replication_log_file: "{{ m_meza_data }}/db_master_log_file"
-m_db_replication_log_pos: "{{ m_meza_data }}/db_master_log_pos"
+m_db_replication_dump_file: "{{ m_data_dir }}/db_master_for_replication.sql"
+m_db_replication_log_file: "{{ m_data_dir }}/db_master_log_file"
+m_db_replication_log_pos: "{{ m_data_dir }}/db_master_log_pos"
 
 # Netdata needs  a certificate to bind to port 20000
 ssl_certificate_file: "/etc/haproxy/certs/meza.pem"
 
 # Deviation from geerlinguy role "database" (this was in database role's defaults/main.yml)
 # mysql_datadir: /var/lib/mysql
-mysql_datadir: "{{ m_meza_data }}/mariadb"
+mysql_datadir: "{{ m_data_dir }}/mariadb"
 
 
 #
@@ -111,7 +111,7 @@ m_paths:
     group: "{{ group_wheel | default('root') }}"
 
   mw_temp:
-    path: "{{ m_meza_data }}/mw-temp"
+    path: "{{ m_data_dir }}/mw-temp"
     mode: "u=rwX,g=rwX,o=rX" # 0775 for dirs 0664 for files
     owner: "meza-ansible"
     group: "{{ group_apache }}"

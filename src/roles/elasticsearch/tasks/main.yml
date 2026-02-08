@@ -80,9 +80,9 @@
     owner: elasticsearch
     recurse: true
   with_items:
-    - "{{ m_meza_data }}/elasticsearch/data"
-    - "{{ m_meza_data }}/elasticsearch/scripts"
-    - "{{ m_meza_data }}/elasticsearch/log"
+    - "{{ m_data_dir }}/elasticsearch/data"
+    - "{{ m_data_dir }}/elasticsearch/scripts"
+    - "{{ m_data_dir }}/elasticsearch/log"
 
 # Copy java cacerts to /etc/elasticsearch to resolve issue with openjdk RPM
 # update. See: https://discuss.elastic.co/t/elasticsearch-is-incompatible-with-new-versions-of-openjdk-from-redhat/318928/7

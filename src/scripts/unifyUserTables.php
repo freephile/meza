@@ -206,7 +206,7 @@ class MezaUnifyUserTables extends Maintenance {
 		// prime wiki ID and database name
 		$this->primeWiki = trim( $this->getOption( "prime-wiki" ) );
 
-		$this->recordDir = "$m_meza_data/logs/user-unify-" . date( "YmdHis" );
+		$this->recordDir = "$m_data_dir/logs/user-unify-" . date( "YmdHis" );
 
 	}
 

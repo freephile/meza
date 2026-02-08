@@ -432,7 +432,7 @@
 
 - name: Ensure data directory configured
   ansible.builtin.file:
-    path: "{{ m_meza_data }}"
+    path: "{{ m_data_dir }}"
     state: directory
     owner: "{{ m_data_owner }}"
     group: "{{ m_data_group }}"

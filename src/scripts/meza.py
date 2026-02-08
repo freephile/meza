@@ -146,7 +146,7 @@ def load_defaults_from_paths_yml():
 
         # Extract the specific variables meza.py needs
         required_vars = [
-            "m_config_i18n_dir", "m_meza_data", "m_logs_deploy", "m_logs_create_wiki", "m_logs",
+            "m_config_i18n_dir", "m_data_dir", "m_logs_deploy", "m_logs_create_wiki", "m_logs",
             "m_config_secret_dir", "m_home", "m_config_vault"
         ]
 
@@ -552,7 +552,7 @@ def get_lock_file_path(env):
         str: The path of the lock file.
     """
     lock_file = os.path.join(
-        defaults['m_meza_data'], f"env-{env}-deploy.lock")
+        defaults['m_data_dir'], f"env-{env}-deploy.lock")
     return lock_file
 
 

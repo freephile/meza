@@ -25,9 +25,9 @@
         state: absent
       when: seriously_delete_elasticsearch == "yes"
 
-    - name: Remove {{ m_meza_data }}/elasticsearch
+    - name: Remove {{ m_data_dir }}/elasticsearch
       file:
-        path: "{{ m_meza_data }}/elasticsearch"
+        path: "{{ m_data_dir }}/elasticsearch"
         state: absent
       when: seriously_delete_elasticsearch == "yes"
 
