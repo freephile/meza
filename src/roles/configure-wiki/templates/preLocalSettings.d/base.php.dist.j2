@@ -99,8 +99,8 @@ function mezaGetCustomLogoPath( $filename, $wikiId, $customFilename = null ) {
 	}
 
 	// 2. Check for wiki-specific custom file (deployed from controller)
-	// "{{ m_install }}/.deploy-meza/public/wikis/$wikiId/$customFilename" is routable via 'config' symlink to the .deploy-meza public dir
-	$wikiCustomPath = "{{ m_install }}/.deploy-meza/public/wikis/$wikiId/$customFilename";
+	// "{{ m_install_dir }}/.deploy-meza/public/wikis/$wikiId/$customFilename" is routable via 'config' symlink to the .deploy-meza public dir
+	$wikiCustomPath = "{{ m_install_dir }}/.deploy-meza/public/wikis/$wikiId/$customFilename";
 	if ( file_exists( $wikiCustomPath ) ) {
 		return "/wikis/$wikiId/config/$customFilename";
 	}

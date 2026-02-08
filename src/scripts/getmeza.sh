@@ -4,7 +4,7 @@
 #
 # @TODO refactor and document this script better
 # @See https://github.com/freephile/meza/issues/172#issuecomment-3141998590
-# We use INSTALL_DIR rather than m_install since this script is run without paths.yml and the set_vars role
+# We use INSTALL_DIR rather than m_install_dir since this script is run without paths.yml and the set_vars role
 
 if [ "$(whoami)" != "root" ]; then
 	echo "Try running this script with sudo: \"sudo bash getmeza.sh\""

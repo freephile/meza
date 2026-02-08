@@ -15,7 +15,7 @@ meza debug <environment> <variable_name>
 ```bash
 # Debug specific variables
 meza debug monolith m_wikis
-meza debug production m_install
+meza debug production m_install_dir
 meza debug development mediawiki_version
 
 # Debug environment paths
@@ -36,7 +36,7 @@ meza debug monolith m_conf_meza_public
 | Variable | Description |
 |----------|-------------|
 | `list_of_wikis` | List of configured wikis |
-| `m_install` | Meza installation directory |
+| `m_install_dir` | Meza installation directory |
 | `m_uploads_dir` | Wiki uploads directory |
 | `mediawiki_version` | MediaWiki version |
 | `m_conf_meza_public` | Public configuration directory |

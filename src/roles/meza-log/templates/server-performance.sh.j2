@@ -12,7 +12,7 @@ if [[ $PATH != *"/usr/local/bin"* ]]; then
 	PATH="/usr/local/bin:$PATH"
 fi
 
-source "{{ m_install }}/.deploy-meza/config.sh"
+source "{{ m_install_dir }}/.deploy-meza/config.sh"
 
 if [ -z "$slack_webhook_token_server_performance" ]; then
 	slack_token=""
@@ -44,7 +44,7 @@ topdata=$(top -b -n 1)
 
 jobs=0
 
-cd {{ m_install }}/htdocs/wikis
+cd {{ m_install_dir }}/htdocs/wikis
 for d in */
 do
 	wiki_id=${d%/}

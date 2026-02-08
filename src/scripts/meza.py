@@ -136,9 +136,9 @@ def load_defaults_from_paths_yml():
         if not isinstance(raw_config, dict):
             raise ValueError("paths.yml must contain a YAML dictionary")
 
-        # Set up initial context with m_install
+        # Set up initial context with m_install_dir
         initial_context = {
-            "m_install": install_dir
+            "m_install_dir": install_dir
         }
 
         # Resolve all template variables

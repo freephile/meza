@@ -21,7 +21,7 @@
 
 - name: Set install path with fallback
   ansible.builtin.set_fact:
-    m_install: "{{ register_install_path.stdout | default('/opt', true) }}"
+    m_install_dir: "{{ register_install_path.stdout | default('/opt', true) }}"
   tags:
     - always
 
@@ -31,7 +31,7 @@
 #
 - name: Set OS-family specific variables
   ansible.builtin.include_vars:
-    file: "{{ m_install }}/meza/config/{{ ansible_distribution_file_variety | default('RedHat') }}.yml"
+    file: "{{ m_install_dir }}/meza/config/{{ ansible_distribution_file_variety | default('RedHat') }}.yml"
   failed_when: false
   tags:
     - always
@@ -41,14 +41,14 @@
 #
 - name: Set meza-core path variables
   ansible.builtin.include_vars:
-    file: "{{ m_install }}/meza/config/paths.yml"
+    file: "{{ m_install_dir }}/meza/config/paths.yml"
   failed_when: false
   tags:
     - always
 
 - name: Set meza-core default variables
   ansible.builtin.include_vars:
-    file: "{{ m_install }}/meza/config/defaults.yml"
+    file: "{{ m_install_dir }}/meza/config/defaults.yml"
   failed_when: false
   tags:
     - always
@@ -56,10 +56,10 @@
 # Add safety check for critical variables (always ensure they're defined)
 - name: Ensure critical path variables are defined
   ansible.builtin.set_fact:
-    m_config_core: "{{ m_config_core | default(m_install + '/meza/config') }}"
-    m_local_public: "{{ m_local_public | default(m_install + '/conf-meza/public') }}"
-    m_local_secret: "{{ m_local_secret | default(m_install + '/conf-meza/secret') }}"
-    m_meza: "{{ m_meza | default(m_install + '/meza') }}"
+    m_config_core: "{{ m_config_core | default(m_install_dir + '/meza/config') }}"
+    m_local_public: "{{ m_local_public | default(m_install_dir + '/conf-meza/public') }}"
+    m_local_secret: "{{ m_local_secret | default(m_install_dir + '/conf-meza/secret') }}"
+    m_meza: "{{ m_meza | default(m_install_dir + '/meza') }}"
 
 #
 # Gluster mods
@@ -134,3 +134,10 @@
     file: "{{ m_local_secret }}/{{ env }}/secret.yml"
   # Ignore errors so this file is not required to be included
   failed_when: false
+
+- name: Set path alias variables for deprecated names
+  ansible.builtin.include_vars:
+    file: "{{ m_install_dir }}/meza/config/path_alias.yml"
+  failed_when: false
+  tags:
+    - always

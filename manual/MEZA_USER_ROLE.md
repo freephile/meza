@@ -41,9 +41,9 @@ The role handles all aspects of the meza-ansible user configuration:
 The role is called during initial installation via [src/scripts/getmeza.sh](../src/scripts/getmeza.sh):
 
 ```bash
-ANSIBLE_CONFIG="${m_install}/meza/config/ansible.cfg" \
+ANSIBLE_CONFIG="${m_install_dir}/meza/config/ansible.cfg" \
 ansible-playbook -i localhost, --connection=local \
-    "${m_install}/meza/src/playbooks/setup-meza-user.yml"
+    "${m_install_dir}/meza/src/playbooks/setup-meza-user.yml"
 ```
 
 **Fallback**: If Ansible fails, the script falls back to the legacy bash scripts (EOL 7/2026).

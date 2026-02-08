@@ -45,7 +45,7 @@
   ansible.builtin.command: >
     sh /tmp/netdata-kickstart.sh
     --stable-channel
-    --install-prefix {{ m_install }}
+    --install-prefix {{ m_install_dir }}
     --build-only
     --non-interactive
     --disable-telemetry

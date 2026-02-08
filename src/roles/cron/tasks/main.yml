@@ -23,7 +23,7 @@
 - name: Ensure runAllJobs.php in place
   template:
     src: runAllJobs.php.j2
-    dest: "{{ m_install }}/.deploy-meza/runAllJobs.php"
+    dest: "{{ m_install_dir }}/.deploy-meza/runAllJobs.php"
     owner: "meza-ansible"
     group: "{{ group_wheel }}"
     mode: '0755'

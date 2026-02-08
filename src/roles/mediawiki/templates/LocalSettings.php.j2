@@ -34,7 +34,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
  * from the WIKI environment variable (for command line scripts).
  */
 
-require '{{ m_install }}/.deploy-meza/config.php';
+require '{{ m_install_dir }}/.deploy-meza/config.php';
 
 /**
  * Fix ENV vars getting prepended with 'REDIRECT_' by Apache
@@ -283,8 +283,8 @@ function mezaGetLogoPath( $filename, $wikiId ) {
 	}
 
 	// Check if wiki-specific file exists
-	// "{{ m_install }}/.deploy-meza/public/wikis/$wikiId/$filename" is routable via 'config' symlink to the .deploy-meza public dir
-	$wikiSpecificPath = "{{ m_install }}/.deploy-meza/public/wikis/$wikiId/$filename";
+	// "{{ m_install_dir }}/.deploy-meza/public/wikis/$wikiId/$filename" is routable via 'config' symlink to the .deploy-meza public dir
+	$wikiSpecificPath = "{{ m_install_dir }}/.deploy-meza/public/wikis/$wikiId/$filename";
 	if ( file_exists( $wikiSpecificPath ) ) {
 		return "/wikis/$wikiId/config/$filename";
 	}

@@ -119,7 +119,7 @@ meza deploy-kill <env>
 
 ### When Creating Ansible Roles
 - Always include `set-vars` as dependency or include it in main playbook
-- Use `{{ m_install }}/meza/` prefix for all Meza-related paths
+- Use `{{ m_install_dir }}/meza/` prefix for all Meza-related paths
 - Follow the sync-configs pattern for multi-server deployments
 - Test with both single server and multi-server inventories
 

@@ -472,7 +472,7 @@
 - name: Ensure data rebuilding scripts in place on app servers
   template:
     src: "{{ item }}.j2"
-    dest: "{{ m_install }}/.deploy-meza/{{ item }}"
+    dest: "{{ m_install_dir }}/.deploy-meza/{{ item }}"
     owner: meza-ansible
     group: "{{ group_wheel }}"
     mode: '0755'

@@ -2,44 +2,21 @@
 # Meza default config file
 
 # meza install location
-# m_install: "/opt" <-- formerly set here, now determined in set-vars role based on `which meza`
-
-# @TODO: Refactor so m_install is named m_install_dir everywhere for clarity
-# @TODO: Refactor so that m_meza is named m_app_dir (which could even abstract app_name) m_meza is vague and repetitive since 'm' is the prefix for 'meza'.
-# @TODO: Refactor so that m_local_public and m_local_secret are named m_public_dir and m_secret_dir for clarity.
-# Same for m_meza_data to m_data_dir
-# Same for m_cache_directory to m_data_cache_dir
-# Same for m_logs to m_data_logs_dir
-# Same for m_tmp to m_data_tmp_dir
-# Same for m_deploy to m_deploy_dir
-# Same for m_config_core to m_config_dir
-# Same for m_scripts to m_scripts_dir
-# Same for m_test to m_test_dir
-# Same for m_backups to m_data_backups_dir
-# Same for m_mediawiki to m_mediawiki_dir
-# Same for m_htdocs to m_web_root_dir
-# Same for m_i18n to m_i18n_dir
-# Same for m_apache to m_apache_conf_dir
-
-# NOTE: Permission and group definitions must also follow the same naming conventions
-# for clarity, e.g. m_logs_owner to m_data_logs_dir_owner, etc.
-
-# @TODO: Refactor so m_logs_deploy is named m_deploy_log_file for clarity
-# Same for m_logs_create_wiki to m_create_wiki_log_file
+# m_install_dir: "/opt" <-- formerly set here, now determined in set-vars role based on `which meza`
 
 # Meza application path
-m_meza: "{{ m_install }}/meza"
+m_meza: "{{ m_install_dir }}/meza"
 
 # config dir
 m_config_core: "{{ m_meza }}/config"
-m_local_secret: "{{ m_install }}/conf-meza/secret"
-m_local_public: "{{ m_install }}/conf-meza/public"
-m_config_vault: "{{ m_install }}/conf-meza/vault"
-m_home: "{{ m_install }}/conf-meza/users"
+m_local_secret: "{{ m_install_dir }}/conf-meza/secret"
+m_local_public: "{{ m_install_dir }}/conf-meza/public"
+m_config_vault: "{{ m_install_dir }}/conf-meza/vault"
+m_home: "{{ m_install_dir }}/conf-meza/users"
 
 # Config files written by Ansible which need a place to live on non-controller
 # nodes.
-m_deploy: "{{ m_install }}/.deploy-meza"
+m_deploy: "{{ m_install_dir }}/.deploy-meza"
 
 # scripts dir
 m_scripts: "{{ m_meza }}/src/scripts"
@@ -48,7 +25,7 @@ m_scripts: "{{ m_meza }}/src/scripts"
 m_test: "{{ m_meza }}/test"
 
 # data dir
-m_meza_data: "{{ m_install }}/data-meza"
+m_meza_data: "{{ m_install_dir }}/data-meza"
 m_cache_directory: "{{ m_meza_data }}/cache"
 m_tmp: "{{ m_meza_data }}/tmp"
 m_logs: "{{ m_meza_data }}/logs"
@@ -70,10 +47,10 @@ gluster_brick_name: gluster
 m_backups: "{{ m_meza_data }}/backups"
 
 # webserver variables
-m_htdocs: "{{ m_install }}/htdocs"
+m_htdocs: "{{ m_install_dir }}/htdocs"
 # crawl for default or nocrawl to disallow all
 m_robots_rules: nocrawl
-m_mediawiki: "{{ m_install }}/htdocs/mediawiki"
+m_mediawiki: "{{ m_install_dir }}/htdocs/mediawiki"
 m_cert_private: "/etc/pki/tls/private/meza.key"
 m_cert_public: "/etc/pki/tls/certs/meza.crt"
 m_ca_cert: "/etc/pki/tls/certs/meza-ca.crt"
@@ -82,8 +59,8 @@ m_ca_cert: "/etc/pki/tls/certs/meza-ca.crt"
 # app locations
 m_apache: "/etc/httpd"
 m_php_ini: "/etc/php.ini"
-m_simplesamlphp_path: "{{ m_install }}/simplesamlphp"
-m_profiling_xhgui_directory: "{{ m_install }}/xhgui"
+m_simplesamlphp_path: "{{ m_install_dir }}/simplesamlphp"
+m_profiling_xhgui_directory: "{{ m_install_dir }}/xhgui"
 
 # Obsolete: Parsoid is now part of MediaWiki. This path is maintained here for now
 # to allow existing Meza servers to clean it up.
@@ -124,7 +101,7 @@ mysql_datadir: "{{ m_meza_data }}/mariadb"
 #
 m_paths:
   install:
-    path: "{{ m_install }}"
+    path: "{{ m_install_dir }}"
     mode: "0755"
     owner: "meza-ansible"
     group: "{{ group_wheel | default('root') }}"

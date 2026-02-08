@@ -12,7 +12,7 @@ REPO="$1"
 DEST="$2"
 VERSION="$3"
 
-source {{ m_install }}/.deploy-meza/config.sh
+source {{ m_install_dir }}/.deploy-meza/config.sh
 
 sudo TMPDIR="$m_tmp" -u meza-ansible ansible localhost -m git -a "repo=$REPO dest=$DEST version=$VERSION"
 
