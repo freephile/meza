@@ -7,7 +7,7 @@
 
 - name: "Check if SAML MW extension exists"
   stat:
-    path: "{{ m_mediawiki }}/extensions/SimpleSAMLphp"
+    path: "{{ m_mediawiki_install_path }}/extensions/SimpleSAMLphp"
   register: simplesamlextension_exists
 
 - name: Ensure good permissions on simplesamlphp directory and subs (if dir exists)
@@ -21,7 +21,7 @@
 
 - name: Ensure good permissions on Extension:SimpleSAMLphp directory and subs (if dir exists)
   file:
-    path: "{{ m_mediawiki }}/extensions/SimpleSAMLphp"
+    path: "{{ m_mediawiki_install_path }}/extensions/SimpleSAMLphp"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"
@@ -80,7 +80,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git
-    dest: "{{ m_mediawiki }}/extensions/PluggableAuth"
+    dest: "{{ m_mediawiki_install_path }}/extensions/PluggableAuth"
     version: "{{ saml_mw_extension_version }}"
     umask: "{{ m_umask }}"
   tags:
@@ -94,7 +94,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: https://github.com/wikimedia/mediawiki-extensions-SimpleSAMLphp.git
-    dest: "{{ m_mediawiki }}/extensions/SimpleSAMLphp"
+    dest: "{{ m_mediawiki_install_path }}/extensions/SimpleSAMLphp"
     version: "{{ saml_mw_extension_version }}"
     umask: "{{ m_umask }}"
   tags:
@@ -159,7 +159,7 @@
 # owner and group with user_apache and group_apache variables
 - name: Ensure _still_ good permissions on Extension:SimpleSamlAuth directory and subs
   file:
-    path: "{{ m_mediawiki }}/extensions/SimpleSamlAuth"
+    path: "{{ m_mediawiki_install_path }}/extensions/SimpleSamlAuth"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ m_htdocs_group }}"

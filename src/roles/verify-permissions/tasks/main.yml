@@ -123,25 +123,25 @@
 - name: Check for MediaWiki files with incorrect ownership
   ansible.builtin.shell: |
     set -o pipefail
-    find "{{ m_mediawiki }}" \( ! -user {{ m_htdocs_owner }} -o ! -group {{ group_apache }} \) -print | head -100
+    find "{{ m_mediawiki_install_path }}" \( ! -user {{ m_htdocs_owner }} -o ! -group {{ group_apache }} \) -print | head -100
   args:
     executable: /bin/bash
   register: mediawiki_bad_ownership
   changed_when: false
   failed_when: false
-  when: m_mediawiki is defined
+  when: m_mediawiki_install_path is defined
 
 - name: Display files with incorrect ownership (first 100)
   ansible.builtin.debug:
     msg: "Found {{ mediawiki_bad_ownership.stdout_lines | length }} files with incorrect ownership (showing max 100)"
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - mediawiki_bad_ownership.stdout_lines | length > 0
 
 - name: Fix ownership on MediaWiki files
   ansible.builtin.shell: |
     set -o pipefail
-    find "{{ m_mediawiki }}" \( ! -user {{ m_htdocs_owner }} -o ! -group {{ group_apache }} \) \
+    find "{{ m_mediawiki_install_path }}" \( ! -user {{ m_htdocs_owner }} -o ! -group {{ group_apache }} \) \
       -exec chown {{ m_htdocs_owner }}:{{ group_apache }} '{}' \; \
       -print
   args:
@@ -149,7 +149,7 @@
   register: mediawiki_ownership_fixed
   changed_when: mediawiki_ownership_fixed.stdout_lines | length > 0
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - mediawiki_bad_ownership.stdout_lines | length > 0
 
 - name: Report ownership changes
@@ -158,7 +158,7 @@
       - "Fixed ownership on {{ mediawiki_ownership_fixed.stdout_lines | length }} files"
       - "Changed files: {{ mediawiki_ownership_fixed.stdout_lines[:100] }}"
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - mediawiki_ownership_fixed.stdout_lines | default([]) | length > 0
 
 # Now that composer umask is fixed (line ~265 in mediawiki role), we only need
@@ -168,29 +168,29 @@
 - name: Check for MediaWiki files without group-write permission
   ansible.builtin.shell: >
     set -o pipefail &&
-    find "{{ m_mediawiki }}" -type f \! -perm -g+w -print | head -100
+    find "{{ m_mediawiki_install_path }}" -type f \! -perm -g+w -print | head -100
   args:
     executable: /bin/bash
   register: mediawiki_bad_file_perms
   changed_when: false
   failed_when: false
-  when: m_mediawiki is defined
+  when: m_mediawiki_install_path is defined
 
 - name: Check for MediaWiki directories without proper permissions
   ansible.builtin.shell: >
     set -o pipefail &&
-    find "{{ m_mediawiki }}" -type d \! -perm -g+rwx -print | head -100
+    find "{{ m_mediawiki_install_path }}" -type d \! -perm -g+rwx -print | head -100
   args:
     executable: /bin/bash
   register: mediawiki_bad_dir_perms
   changed_when: false
   failed_when: false
-  when: m_mediawiki is defined
+  when: m_mediawiki_install_path is defined
 
 - name: Add group-write permission to MediaWiki files (preserves execute bits)
   ansible.builtin.shell: >
     set -o pipefail &&
-    find "{{ m_mediawiki }}" -type f \! -perm -g+w
+    find "{{ m_mediawiki_install_path }}" -type f \! -perm -g+w
     -exec chmod g+w '{}' \;
     -print
   args:
@@ -198,7 +198,7 @@
   register: mediawiki_file_perms_fixed
   changed_when: mediawiki_file_perms_fixed.stdout_lines | length > 0
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - mediawiki_bad_file_perms.stdout_lines | length > 0
 
 - name: Report file permission changes
@@ -207,13 +207,13 @@
       - "Fixed permissions on {{ mediawiki_file_perms_fixed.stdout_lines | length }} files"
       - "Changed files (first 100): {{ mediawiki_file_perms_fixed.stdout_lines[:100] }}"
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - mediawiki_file_perms_fixed.stdout_lines | default([]) | length > 0
 
 - name: Add group-rwx permission to MediaWiki directories
   ansible.builtin.shell: >
     set -o pipefail &&
-    find "{{ m_mediawiki }}" -type d \! -perm -g+rwx
+    find "{{ m_mediawiki_install_path }}" -type d \! -perm -g+rwx
     -exec chmod g+rwx '{}' \;
     -print
   args:
@@ -221,7 +221,7 @@
   register: mediawiki_dir_perms_fixed
   changed_when: mediawiki_dir_perms_fixed.stdout_lines | length > 0
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - mediawiki_bad_dir_perms.stdout_lines | length > 0
 
 - name: Report directory permission changes
@@ -230,7 +230,7 @@
       - "Fixed permissions on {{ mediawiki_dir_perms_fixed.stdout_lines | length }} directories"
       - "Changed directories (first 100): {{ mediawiki_dir_perms_fixed.stdout_lines[:100] }}"
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - mediawiki_dir_perms_fixed.stdout_lines | default([]) | length > 0
 
 #
@@ -241,13 +241,13 @@
 
 - name: Check if the Widgets compiled_templates directory exists
   ansible.builtin.stat:
-    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
+    path: "{{ m_mediawiki_install_path }}/extensions/Widgets/compiled_templates/"
   register: compiled_templates_folder
-  when: m_mediawiki is defined
+  when: m_mediawiki_install_path is defined
 
 - name: Ensure Widgets compiled_templates folder is owned by {{ user_apache }} with write access
   ansible.builtin.file:
-    path: "{{ m_mediawiki }}/extensions/Widgets/compiled_templates/"
+    path: "{{ m_mediawiki_install_path }}/extensions/Widgets/compiled_templates/"
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: "u=rwX,g=rwX,o=rX"
@@ -256,7 +256,7 @@
     modification_time: preserve
     access_time: preserve
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined
     - compiled_templates_folder.stat.exists
 
 # This is a bit of a no-op because Meza doesn't use the default cache directory,
@@ -270,9 +270,9 @@
     mode: "g+rwX"
     recurse: true
   loop:
-    - "{{ m_mediawiki }}/cache"
-    - "{{ m_mediawiki }}/images"
+    - "{{ m_mediawiki_install_path }}/cache"
+    - "{{ m_mediawiki_install_path }}/images"
   # Don't include uploads because it can be huge, and should be handled separately
   #   - "{{ m_uploads_dir }}"
   when:
-    - m_mediawiki is defined
+    - m_mediawiki_install_path is defined

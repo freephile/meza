@@ -26,6 +26,6 @@
 # https://meta.wikimedia.org/wiki/Password_policy
 - name: Create Admin user on new wiki
   ansible.builtin.shell: >
-    WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run createAndPromote --force --sysop --bureaucrat Admin {{ admin_password | quote }}
+    WIKI={{ wiki_id | quote }} {{ m_mediawiki_install_path | quote }}/maintenance/run createAndPromote --force --sysop --bureaucrat Admin {{ admin_password | quote }}
   run_once: true
   no_log: true

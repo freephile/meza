@@ -54,7 +54,7 @@ _process_wiki_smw_rebuild() {
 		previous_start_id="$start_id"
 
 		WIKI="$wiki_id" \
-		{{ m_mediawiki | quote }}/maintenance/run SemanticMediaWiki:rebuildData \
+		{{ m_mediawiki_install_path | quote }}/maintenance/run SemanticMediaWiki:rebuildData \
 		-d 5 -v $dependent_option --ignore-exceptions \
 		--debug \
 		--report-runtime \

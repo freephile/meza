@@ -36,7 +36,7 @@ _process_wiki_refresh_links() {
 	echo "  Output log:"
 	echo "    $out_log"
 
-	num_pages=$(WIKI="$wiki_id" {{ m_mediawiki | quote }}/maintenance/run showSiteStats | grep "Total pages" | sed 's/[^0-9]*//g')
+	num_pages=$(WIKI="$wiki_id" {{ m_mediawiki_install_path | quote }}/maintenance/run showSiteStats | grep "Total pages" | sed 's/[^0-9]*//g')
 	end_id=0
 	delta=2000
 
@@ -48,7 +48,7 @@ _process_wiki_refresh_links() {
 		start_id=$(($end_id + 1))
 		end_id=$(($end_id + $delta))
 		echo "Running refreshLinks.php from $start_id to $end_id for $wiki_id"
-		WIKI="$wiki_id" {{ m_mediawiki | quote }}/maintenance/run refreshLinks --e "$end_id" -- "$start_id" >> "$out_log" 2>&1
+		WIKI="$wiki_id" {{ m_mediawiki_install_path | quote }}/maintenance/run refreshLinks --e "$end_id" -- "$start_id" >> "$out_log" 2>&1
 
 		# If the above command had a failing exit code
 		if [[ $? -ne 0 ]]; then
@@ -64,7 +64,7 @@ _process_wiki_refresh_links() {
 	# one more unbounded refreshLinks.php starting at the last ID previously done
 	start_id=$(($end_id + 1))
 	echo "Running final refreshLinks.php for $wiki_id in case there are more pages beyond $num_pages"
-	WIKI="$wiki_id" {{ m_mediawiki | quote }}/maintenance/run refreshLinks "$start_id" >> "$out_log" 2>&1
+	WIKI="$wiki_id" {{ m_mediawiki_install_path | quote }}/maintenance/run refreshLinks "$start_id" >> "$out_log" 2>&1
 
 	# If the above command had a failing exit code
 	if [[ $? -ne 0 ]]; then

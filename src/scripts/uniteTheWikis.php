@@ -79,7 +79,7 @@ class UniteTheWikis extends Maintenance {
 
 		parent::__construct();
 		$this->mDescription = "Merge some wikis into one wiki";
-		$this->maintDir = "$m_mediawiki/maintenance/";
+		$this->maintDir = "$m_mediawiki_install_path/maintenance/";
 
 		$DIR = "/tmp";
 		$this->fileDisambig = "$DIR/disambig.mediawiki";

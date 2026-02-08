@@ -30,26 +30,7 @@ m_data_deploy_log_file: "{{ m_logs_deploy }}"
 # Web
 m_web_dir: "{{ m_htdocs }}"
 m_web_conf_dir: "{{ m_apache }}"
-m_web_mediawiki_dir: "{{ m_mediawiki }}"
-
-# @TODO: Refactor so m_install is named m_install_dir everywhere for clarity
-# @TODO: Refactor so that m_meza is named m_app_dir (which could even abstract app_name) m_meza is vague and repetitive since 'm' is the prefix for 'meza'.
-# @TODO: Refactor so that m_local_public and m_local_secret are named m_config_public_dir and m_config_secret_dir for clarity.
-# Same for m_meza_data to m_data_dir
-# Same for m_cache_directory to m_data_cache_dir
-# Same for m_logs to m_data_logs_dir
-# Same for m_tmp to m_data_tmp_dir
-# Same for m_deploy to m_config_deploy_dir
-# Same for m_config_core to m_config_dir
-# Same for m_scripts to m_app_scripts_dir
-# Same for m_test to m_app_test_dir
-# Same for m_backups to m_data_backups_dir
-# Same for m_mediawiki to m_web_mediawiki_dir
-# Same for m_htdocs to m_web_dir
-# Same for m_i18n to m_config_i18n_dir
-# Same for m_apache to m_web_conf_dir
-# @TODO: Refactor so m_logs_deploy is named m_data_deploy_log_file for clarity
-# Same for m_logs_create_wiki to m_data_create_wiki_log_file
+m_mediawiki_install_path: "{{ m_mediawiki }}"
 
 # NOTE: Permission and group definitions must also follow the same naming conventions
 # for clarity, e.g. m_logs_owner to m_data_logs_dir_owner, etc.

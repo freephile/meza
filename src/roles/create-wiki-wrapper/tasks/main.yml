@@ -34,7 +34,7 @@
 # This is needed for new wikis created individually (not during full deploy)
 - name: Create symlink to core, to enable short urls
   file:
-    src: "{{ m_mediawiki }}"
+    src: "{{ m_mediawiki_install_path }}"
     dest: "{{ m_web_dir }}/{{ wiki_id }}"
     state: link
     force: yes

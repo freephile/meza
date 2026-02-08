@@ -71,7 +71,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: https://github.com/wikimedia/mediawiki.git
-    dest: "{{ m_mediawiki }}"
+    dest: "{{ m_mediawiki_install_path }}"
     force: "{{ overwrite_local_changes }}"
     version: "{{ mediawiki_version }}"
     single_branch: true
@@ -87,7 +87,7 @@
 
 - name: Ensure MediaWiki core ignores submodules
   blockinfile:
-    path: "{{ m_mediawiki }}/.git/config"
+    path: "{{ m_mediawiki_install_path }}/.git/config"
     block: |
       [diff]
           ignoreSubmodules = all
@@ -146,7 +146,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
-    dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
+    dest: "{{ m_mediawiki_install_path }}/extensions/{{ item.name }}"
     force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
@@ -173,7 +173,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
-    dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
+    dest: "{{ m_mediawiki_install_path }}/skins/{{ item.name }}"
     force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
@@ -192,7 +192,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
-    dest: "{{ m_mediawiki }}/extensions/{{ item.name }}"
+    dest: "{{ m_mediawiki_install_path }}/extensions/{{ item.name }}"
     force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
@@ -212,7 +212,7 @@
     TMPDIR: "{{ m_data_tmp_dir }}"
   git:
     repo: "{{ item.repo }}"
-    dest: "{{ m_mediawiki }}/skins/{{ item.name }}"
+    dest: "{{ m_mediawiki_install_path }}/skins/{{ item.name }}"
     force: "{{ overwrite_local_changes }}"
     version: "{{ item.version }}"
     refspec: "{{ item.refspec | default('') }}"
@@ -238,7 +238,7 @@
 - name: Ensure composer.local.json in place to load composer-based extensions
   template:
     src: composer.local.json.j2
-    dest: "{{ m_mediawiki }}/composer.local.json"
+    dest: "{{ m_mediawiki_install_path }}/composer.local.json"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ group_apache }}"
@@ -264,7 +264,7 @@
     umask {{ m_umask }}
     composer update {{ '--no-dev' if m_disable_composer_dev_dependencies | default(false, true) else '' }} --prefer-source
   args:
-    chdir: "{{ m_mediawiki }}"
+    chdir: "{{ m_mediawiki_install_path }}"
   register: composer_result
   changed_when: "'Nothing to install, update or remove' not in composer_result.stdout"
   tags:
@@ -280,7 +280,7 @@
   become: true
   become_user: "meza-ansible"
   shell: |
-    cd "{{ m_mediawiki }}/extensions/{{ item.name }}"
+    cd "{{ m_mediawiki_install_path }}/extensions/{{ item.name }}"
     git submodule update --init
   with_items: "{{ meza_core_extensions.list }}"
   when: meza_core_extensions.list[0] is defined and item.git_submodules is defined and item.git_submodules == True
@@ -293,7 +293,7 @@
   become: true
   become_user: "meza-ansible"
   shell: |
-    cd "{{ m_mediawiki }}/extensions/{{ item.name }}"
+    cd "{{ m_mediawiki_install_path }}/extensions/{{ item.name }}"
     git submodule update --init
   with_items: "{{ meza_local_extensions.list }}"
   when: meza_local_extensions.list[0] is defined and item.git_submodules is defined and item.git_submodules == True
@@ -305,7 +305,7 @@
 # Are there skins that have submodules?
 - name: Ensure Git submodule requirements met for core meza skins
   shell: |
-    cd "{{ m_mediawiki }}/skins/{{ item.name }}"
+    cd "{{ m_mediawiki_install_path }}/skins/{{ item.name }}"
     git submodule update --init
   with_items: "{{ meza_core_skins.list }}"
   when: meza_core_skins.list[0] is defined and item.git_submodules is defined and item.git_submodules == True
@@ -317,7 +317,7 @@
 
 - name: Ensure Git submodule requirements met for local meza skins
   shell: |
-    cd "{{ m_mediawiki }}/skins/{{ item.name }}"
+    cd "{{ m_mediawiki_install_path }}/skins/{{ item.name }}"
     git submodule update --init
   with_items: "{{ meza_local_skins.list }}"
   when: meza_local_skins.list[0] is defined and item.git_submodules is defined and item.git_submodules == True
@@ -351,7 +351,7 @@
 - name: Ensure LocalSettings.php in place
   template:
     src: LocalSettings.php.j2
-    dest: "{{ m_mediawiki }}/LocalSettings.php"
+    dest: "{{ m_mediawiki_install_path }}/LocalSettings.php"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ group_apache }}"
@@ -443,7 +443,7 @@
 # wiki creation outside of full deploys.
 - name: Create symlink to core, to enable short urls
   file:
-    src: "{{ m_mediawiki }}"
+    src: "{{ m_mediawiki_install_path }}"
     dest: "{{ m_web_dir }}/{{ item }}"
     state: link
   with_items:

@@ -54,7 +54,8 @@ m_data_backups_dir: "{{ m_data_dir }}/backups"
 m_web_dir: "{{ m_install_dir }}/htdocs"
 # crawl for default or nocrawl to disallow all
 m_robots_rules: nocrawl
-m_mediawiki: "{{ m_install_dir }}/htdocs/mediawiki"
+# like define( 'MW_INSTALL_PATH', $IP ); in MediaWiki itself
+m_mediawiki_install_path: "{{ m_install_dir }}/htdocs/mediawiki"
 m_cert_private: "/etc/pki/tls/private/meza.key"
 m_cert_public: "/etc/pki/tls/certs/meza.crt"
 m_ca_cert: "/etc/pki/tls/certs/meza-ca.crt"

@@ -62,7 +62,7 @@
 
     - name: Run update.php on this wiki
       ansible.builtin.shell: >
-        WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run update --quick --doshared >> {{ update_php_log }} 2>&1
+        WIKI={{ wiki_id | quote }} {{ m_mediawiki_install_path | quote }}/maintenance/run update --quick --doshared >> {{ update_php_log }} 2>&1
       # run_once see [1]
       run_once: true
 
@@ -94,14 +94,14 @@
 
     - name: Run populateContentTables.php to fix Multi-Content Revisions issue
       ansible.builtin.shell: >
-        WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run populateContentTables >> {{ update_php_log }} 2>&1
+        WIKI={{ wiki_id | quote }} {{ m_mediawiki_install_path | quote }}/maintenance/run populateContentTables >> {{ update_php_log }} 2>&1
       # run_once see [1]
       run_once: true
       when: '"Main slot of revision not found in database" in update_php_log_output'
 
     - name: Retry update.php after populateContentTables.php
       ansible.builtin.shell: >
-        WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run update --quick >> {{ update_php_log }} 2>&1
+        WIKI={{ wiki_id | quote }} {{ m_mediawiki_install_path | quote }}/maintenance/run update --quick >> {{ update_php_log }} 2>&1
       # run_once see [1]
       run_once: true
       when: '"Main slot of revision not found in database" in update_php_log_output'
