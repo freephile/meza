@@ -107,7 +107,7 @@
 
 - name: Set variable holding list of local skins
   include_vars:
-    file: "{{ m_local_public }}/MezaLocalSkins.yml"
+    file: "{{ m_config_public_dir }}/MezaLocalSkins.yml"
     name: meza_local_skins
   tags:
     - skins
@@ -161,9 +161,9 @@
 
 - name: Set variable holding list of local extensions
   include_vars:
-    file: "{{ m_local_public | default('/opt/conf-meza/public') }}/MezaLocalExtensions.yml"
+    file: "{{ m_config_public_dir | default('/opt/conf-meza/public') }}/MezaLocalExtensions.yml"
     name: meza_local_extensions
-  when: m_local_public is defined or ansible_check_mode | default(false)
+  when: m_config_public_dir is defined or ansible_check_mode | default(false)
   tags:
     - always
 

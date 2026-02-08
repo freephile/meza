@@ -57,7 +57,7 @@
 - name: Ensure critical path variables are defined
   ansible.builtin.set_fact:
     m_config_dir: "{{ m_config_dir | default(m_install_dir + '/meza/config') }}"
-    m_local_public: "{{ m_local_public | default(m_install_dir + '/conf-meza/public') }}"
+    m_config_public_dir: "{{ m_config_public_dir | default(m_install_dir + '/conf-meza/public') }}"
     m_local_secret: "{{ m_local_secret | default(m_install_dir + '/conf-meza/secret') }}"
     m_app_dir: "{{ m_app_dir | default(m_install_dir + '/meza') }}"
 
@@ -74,7 +74,7 @@
 #
 - name: Set meza local public variables
   ansible.builtin.include_vars:
-    file: "{{ m_local_public }}/public.yml"
+    file: "{{ m_config_public_dir }}/public.yml"
   # In the first bootstrap, this file may not exist yet
   failed_when: false
 
@@ -108,7 +108,7 @@
 # Fallback to directory-based wiki discovery (legacy)
 - name: Get individual wikis dirs from localhost (legacy fallback)
   ansible.builtin.find:
-    paths: "{{ m_local_public }}/wikis"
+    paths: "{{ m_config_public_dir }}/wikis"
     file_type: directory
   register: wiki_dirs
   delegate_to: localhost

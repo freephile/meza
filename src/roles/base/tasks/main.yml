@@ -502,7 +502,7 @@
     owner: root
     mode: "0755"
   with_fileglob:
-    - "{{ m_local_public }}/custom-pem-ca-trust/*"
+    - "{{ m_config_public_dir }}/custom-pem-ca-trust/*"
   register: new_custom_pem_ca_certs
 
 - name: Copy any custom OpenSSL extended-format CA certs into place
@@ -512,7 +512,7 @@
     owner: root
     mode: "0755"
   with_fileglob:
-    - "{{ m_local_public }}/custom-extended-ca-trust/*"
+    - "{{ m_config_public_dir }}/custom-extended-ca-trust/*"
   register: new_custom_extended_ca_certs
 
 - name: Update CA trust if certs changed

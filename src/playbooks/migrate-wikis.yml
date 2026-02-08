@@ -21,7 +21,7 @@
           ============================================================
 
           Your existing wikis have been migrated to declarative
-          configuration in {{ m_local_public }}/public.yml
+          configuration in {{ m_config_public_dir }}/public.yml
 
           NEXT STEPS:
           1. Review the generated configuration file
@@ -41,7 +41,7 @@
           ============================================================
 
           Your wikis are already properly configured in declarative
-          format in {{ m_local_public }}/public.yml
+          format in {{ m_config_public_dir }}/public.yml
 
           The migration is idempotent - no changes were made to your
           configuration as it already matches the discovered wikis.

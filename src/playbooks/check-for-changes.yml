@@ -145,7 +145,7 @@
             TMPDIR: "{{ m_tmp }}"
           git:
             repo: "{{ local_config_repo.repo }}"
-            dest: "{{ m_local_public }}"
+            dest: "{{ m_config_public_dir }}"
             version: "{{ local_config_repo.version }}"
             track_submodules: false
             recursive: false
@@ -166,14 +166,14 @@
         #
         - name: Get diff of public config change
           shell: >
-            cd {{ m_local_public }} &&
+            cd {{ m_config_public_dir }} &&
             git diff "{{ public_config_git_operation.before }}" "{{ public_config_git_operation.after }}" 2>&1
           register: public_config_git_diff
           when: public_config_git_operation.changed
 
         - name: Get commits in public config change
           shell: >
-            cd {{ m_local_public }} &&
+            cd {{ m_config_public_dir }} &&
             git log --oneline "{{ public_config_git_operation.before }}...{{ public_config_git_operation.after }}" 2>&1
           register: public_config_git_commits
           when: public_config_git_operation.changed

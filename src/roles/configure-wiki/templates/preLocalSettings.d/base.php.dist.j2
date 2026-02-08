@@ -58,7 +58,7 @@ $mezaEnableWikiEmail = {{ enable_wiki_emails }};
  *    The system checks for uploaded files first before falling back to defaults.
  *
  * 2. DEPLOY-BASED: Place custom logo files in:
- *    {{ m_local_public }}/wikis/{{ wiki_id }}/
+ *    {{ m_config_public_dir }}/wikis/{{ wiki_id }}/
  *
  *    During deployment, these files sync to app servers at /opt/.deploy-meza/public/wikis/{{ wiki_id }}/
  *    and are routable via the 'config' symlink at:

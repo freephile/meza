@@ -2,7 +2,7 @@
 
 - name: Delete wiki from controller
   file:
-    path: "{{ m_local_public }}/wikis/{{ wiki_id }}"
+    path: "{{ m_config_public_dir }}/wikis/{{ wiki_id }}"
     state: absent
   delegate_to: localhost
 
@@ -29,14 +29,14 @@
 # Auto-remove from declarative wiki configuration
 - name: Check if using declarative wiki configuration
   stat:
-    path: "{{ m_local_public }}/public.yml"
+    path: "{{ m_config_public_dir }}/public.yml"
   register: public_yml_exists
   delegate_to: localhost
   run_once: true
 
 - name: Read current public.yml configuration
   slurp:
-    src: "{{ m_local_public }}/public.yml"
+    src: "{{ m_config_public_dir }}/public.yml"
   register: public_yml_content
   when: public_yml_exists.stat.exists
   delegate_to: localhost
@@ -63,7 +63,7 @@
     - name: Write updated public.yml configuration
       copy:
         content: "{{ updated_config | to_nice_yaml(indent=2) }}"
-        dest: "{{ m_local_public }}/public.yml"
+        dest: "{{ m_config_public_dir }}/public.yml"
         owner: "{{ user_apache }}"
         group: "{{ group_apache }}"
         mode: '0644'

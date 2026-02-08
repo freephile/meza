@@ -40,7 +40,7 @@ wiki_id: "demo"           # Short identifier (alphanumeric, no spaces)
 wiki_name: "Demo Wiki"    # Human-readable display name
 
 # Inherited from set-vars/defaults
-m_local_public: "/opt/conf-meza/public"
+m_config_public_dir: "/opt/conf-meza/public"
 user_apache: "apache"     # or "www-data" on Debian
 group_apache: "apache"
 ```

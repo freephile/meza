@@ -137,7 +137,7 @@
   tasks:
     - name: Check if any wikis exist in configuration
       ansible.builtin.find:
-        paths: "{{ m_local_public }}/wikis"
+        paths: "{{ m_config_public_dir }}/wikis"
         file_type: directory
       register: wikis_check
       run_once: true

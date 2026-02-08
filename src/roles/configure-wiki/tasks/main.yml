@@ -28,7 +28,7 @@
 # Create /opt/conf-meza/public/wikis/<wiki_id> directory
 - name: Ensure wiki directory exists in the config hierarchy
   ansible.builtin.file:
-    path: "{{ m_local_public }}/wikis/{{ wiki_id }}"
+    path: "{{ m_config_public_dir }}/wikis/{{ wiki_id }}"
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
@@ -40,7 +40,7 @@
 # https://www.semantic-mediawiki.org/wiki/Help:Setup_information_file
 - name: Ensure .smw.json file exists in the conf directory
   ansible.builtin.file:
-    path: "{{ m_local_public }}/wikis/{{ wiki_id }}/.smw.json"
+    path: "{{ m_config_public_dir }}/wikis/{{ wiki_id }}/.smw.json"
     state: touch
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
@@ -53,7 +53,7 @@
 - name: Ensure base files are in place (but do not overwrite)
   ansible.builtin.copy:
     src: "files/{{ item }}"
-    dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
+    dest: "{{ m_config_public_dir }}/wikis/{{ wiki_id }}/{{ item }}"
     # local wikis can "manually" customize these files later, so do not overwrite
     force: false
     owner: "{{ user_apache }}"
@@ -71,7 +71,7 @@
 
 - name: Ensure wiki pre/post settings directories exists in config
   ansible.builtin.file:
-    path: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
+    path: "{{ m_config_public_dir }}/wikis/{{ wiki_id }}/{{ item }}"
     state: directory
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
@@ -86,7 +86,7 @@
 - name: Ensure base templates are present (overwrite)
   ansible.builtin.template:
     src: "templates/{{ item }}.j2"
-    dest: "{{ m_local_public }}/wikis/{{ wiki_id }}/{{ item }}"
+    dest: "{{ m_config_public_dir }}/wikis/{{ wiki_id }}/{{ item }}"
     # force update "distribution" content, that instructs user to customize
     # with their own files
     force: true
@@ -104,7 +104,7 @@
 # Auto-add to declarative wiki configuration
 - name: Check if using declarative wiki configuration
   ansible.builtin.stat:
-    path: "{{ m_local_public }}/public.yml"
+    path: "{{ m_config_public_dir }}/public.yml"
   register: public_yml_exists
   delegate_to: localhost
   run_once: true
@@ -115,7 +115,7 @@
       ---
       # Auto-created public.yml for declarative wiki configuration
       # Add environment-specific configuration here
-    dest: "{{ m_local_public }}/public.yml"
+    dest: "{{ m_config_public_dir }}/public.yml"
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
     mode: '0664'
@@ -126,7 +126,7 @@
 
 - name: Read current public.yml configuration
   ansible.builtin.slurp:
-    src: "{{ m_local_public }}/public.yml"
+    src: "{{ m_config_public_dir }}/public.yml"
   register: public_yml_content
   delegate_to: localhost
   run_once: true
@@ -161,7 +161,7 @@
     - name: Write updated public.yml configuration
       ansible.builtin.copy:
         content: "{{ updated_config | to_nice_yaml(indent=2) }}"
-        dest: "{{ m_local_public }}/public.yml"
+        dest: "{{ m_config_public_dir }}/public.yml"
         owner: "{{ user_apache }}"
         group: "{{ group_apache }}"
         mode: '0664'
@@ -174,6 +174,6 @@
       ansible.builtin.debug:
         msg: |
           Wiki '{{ wiki_id }}' has been automatically added to declarative configuration.
-          If you want to make it the primary wiki, edit {{ m_local_public }}/public.yml
+          If you want to make it the primary wiki, edit {{ m_config_public_dir }}/public.yml
           and set 'primary: true' for this wiki.
       when: current_config is defined
