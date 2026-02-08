@@ -59,7 +59,7 @@
     m_config_core: "{{ m_config_core | default(m_install_dir + '/meza/config') }}"
     m_local_public: "{{ m_local_public | default(m_install_dir + '/conf-meza/public') }}"
     m_local_secret: "{{ m_local_secret | default(m_install_dir + '/conf-meza/secret') }}"
-    m_meza: "{{ m_meza | default(m_install_dir + '/meza') }}"
+    m_app_dir: "{{ m_app_dir | default(m_install_dir + '/meza') }}"
 
 #
 # Gluster mods

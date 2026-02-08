@@ -107,9 +107,9 @@
     - MezaLocalSkins.yml
     - public.yml
 
-- name: "Ensure meza directory properly owned: {{ m_meza }}"
+- name: "Ensure meza directory properly owned: {{ m_app_dir }}"
   ansible.builtin.file:
-    path: "{{ m_meza }}"
+    path: "{{ m_app_dir }}"
     owner: "meza-ansible"
     group: "{{ m_group }}"
     state: directory

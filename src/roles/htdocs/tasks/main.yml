@@ -61,7 +61,7 @@
 # All branding assets in web root for simplicity
 - name: Ensure project-wide branding assets in web root
   ansible.builtin.copy:
-    src: "{{ m_meza }}/src/roles/configure-wiki/files/{{ item }}"
+    src: "{{ m_app_dir }}/src/roles/configure-wiki/files/{{ item }}"
     dest: "{{ m_htdocs }}/{{ item }}"
     owner: root
     group: root

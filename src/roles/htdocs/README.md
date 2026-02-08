@@ -49,7 +49,7 @@ allow_backup_downloads: false    # Default: disabled for security
 
 # Paths (typically set by set-vars role)
 m_htdocs: "/opt/htdocs"          # Apache DocumentRoot
-m_meza: "/opt/meza"              # Meza installation directory
+m_app_dir: "/opt/meza"              # Meza installation directory
 
 # Apache user/group (OS-specific)
 user_apache: "apache"            # RedHat/Rocky
@@ -107,7 +107,7 @@ Web server ready with monitoring + wikis
 ### Template Variables Available
 Templates in `templates/*.j2` have access to:
 - `{{ m_htdocs }}` - DocumentRoot path
-- `{{ m_meza }}` - Meza installation path
+- `{{ m_app_dir }}` - Meza installation path
 - `{{ wikis }}` - List of configured wikis (for index.php)
 - `{{ env }}` - Current environment name
 - All variables from `config/defaults.yml` and environment configs

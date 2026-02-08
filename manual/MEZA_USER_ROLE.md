@@ -97,7 +97,7 @@ Defined in [src/roles/meza-user/defaults/main.yml](../src/roles/meza-user/defaul
 
 Additional variables from `set-vars` role:
 - `m_umask`: Umask value (default: "0002")
-- `m_meza`: Path to meza installation
+- `m_app_dir`: Path to meza installation
 - `m_config_vault`: Path to conf-meza directory
 - `apache_user`: Web server user (apache/www-data)
 - `wheel_group`: Sudo group (wheel/sudo)

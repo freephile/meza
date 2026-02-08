@@ -266,7 +266,7 @@
             TMPDIR: "{{ m_tmp }}"
           git:
             repo: "{{ meza_repository_url }}"
-            dest: "{{ m_meza }}"
+            dest: "{{ m_app_dir }}"
             version: "{{ enforce_meza_version }}"
             track_submodules: false
             recursive: false
@@ -287,7 +287,7 @@
         #
         - name: Get commits in Meza change
           shell: >
-            cd {{ m_meza }} &&
+            cd {{ m_app_dir }} &&
             git log --oneline "{{ meza_git_operation.before }}...{{ meza_git_operation.after }}" 2>&1
           register: meza_git_commits
           when: meza_git_operation.changed

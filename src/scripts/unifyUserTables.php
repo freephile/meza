@@ -195,7 +195,7 @@ class MezaUnifyUserTables extends Maintenance {
 
 	public function checkSetup () {
 
-		global $m_htdocs, $m_deploy, $m_meza;
+		global $m_htdocs, $m_deploy, $m_app_dir;
 
 		// FIXME #826: unifyUserTables.php is currently non-functional
 		die( "user unify needs to be rethought for new meza" );

@@ -5,10 +5,10 @@
 # m_install_dir: "/opt" <-- formerly set here, now determined in set-vars role based on `which meza`
 
 # Meza application path
-m_meza: "{{ m_install_dir }}/meza"
+m_app_dir: "{{ m_install_dir }}/meza"
 
 # config dir
-m_config_core: "{{ m_meza }}/config"
+m_config_core: "{{ m_app_dir }}/config"
 m_local_secret: "{{ m_install_dir }}/conf-meza/secret"
 m_local_public: "{{ m_install_dir }}/conf-meza/public"
 m_config_vault: "{{ m_install_dir }}/conf-meza/vault"
@@ -19,10 +19,10 @@ m_home: "{{ m_install_dir }}/conf-meza/users"
 m_deploy: "{{ m_install_dir }}/.deploy-meza"
 
 # scripts dir
-m_scripts: "{{ m_meza }}/src/scripts"
+m_scripts: "{{ m_app_dir }}/src/scripts"
 
 # test dir
-m_test: "{{ m_meza }}/test"
+m_test: "{{ m_app_dir }}/test"
 
 # data dir
 m_meza_data: "{{ m_install_dir }}/data-meza"

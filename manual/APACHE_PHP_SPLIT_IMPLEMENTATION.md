@@ -310,7 +310,7 @@ No immediate action required. The `apache-php` role continues to work via the de
 
 ## Related Issues and PRs
 
-- **Issue #287**: Setup meza-user.yml fails with undefined m_meza
+- **Issue #287**: Setup meza-user.yml fails with undefined m_app_dir
   - Root cause identified: apache group didn't exist during user creation
   - Solution: Split apache-php role, install Apache in getmeza.sh
 - **Issue #272**: Umask and user setup improvements
