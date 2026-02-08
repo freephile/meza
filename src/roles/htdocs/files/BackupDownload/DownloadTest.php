@@ -259,7 +259,7 @@ class DownloadTest extends BaseTestCase
 	private function setTestGlobals()
 	{
 		$globals = [
-			'm_backups',
+			'm_data_backups_dir',
 			'm_config_deploy_dir', 
 			'm_htdocs',
 			'saml_idp_username_attr',
@@ -276,7 +276,7 @@ class DownloadTest extends BaseTestCase
 		}
 
 		// Set test values
-		$GLOBALS['m_backups'] = $this->backupsDir;
+		$GLOBALS['m_data_backups_dir'] = $this->backupsDir;
 		$GLOBALS['m_config_deploy_dir'] = $this->tempDir . '/deploy';
 		$GLOBALS['m_htdocs'] = $this->tempDir . '/htdocs';
 		$GLOBALS['saml_idp_username_attr'] = 'uid';
@@ -389,10 +389,10 @@ class DownloadTest extends BaseTestCase
 
 	public function testGetEnvironment()
 	{
-		$result = $this->callGetEnvironment($GLOBALS['m_backups'], null);
+		$result = $this->callGetEnvironment($GLOBALS['m_data_backups_dir'], null);
 		$this->assertSame('prod', $result, 'Should auto-detect environment');
 
-		$result = $this->callGetEnvironment($GLOBALS['m_backups'], 'prod');
+		$result = $this->callGetEnvironment($GLOBALS['m_data_backups_dir'], 'prod');
 		$this->assertSame('prod', $result, 'Should use specified environment');
 	}
 
@@ -400,13 +400,13 @@ class DownloadTest extends BaseTestCase
 	{
 		$this->expectException('Exception');
 		$this->expectExceptionMessage('Invalid environment');
-		$this->callGetEnvironment($GLOBALS['m_backups'], '../malicious');
+		$this->callGetEnvironment($GLOBALS['m_data_backups_dir'], '../malicious');
 	}
 
 	public function testBuildSecureFilePath()
 	{
 		$result = $this->callBuildSecureFilePath(
-			$GLOBALS['m_backups'], 
+			$GLOBALS['m_data_backups_dir'], 
 			'prod', 
 			'testwiki', 
 			null, 
@@ -420,7 +420,7 @@ class DownloadTest extends BaseTestCase
 	public function testBuildSecureFilePathWithDirectory()
 	{
 		$result = $this->callBuildSecureFilePath(
-			$GLOBALS['m_backups'], 
+			$GLOBALS['m_data_backups_dir'], 
 			'prod', 
 			'testwiki', 
 			'daily', 
@@ -436,7 +436,7 @@ class DownloadTest extends BaseTestCase
 		$this->expectException('Exception');
 		$this->expectExceptionMessage('Wiki not found');
 		$this->callBuildSecureFilePath(
-			$GLOBALS['m_backups'], 
+			$GLOBALS['m_data_backups_dir'], 
 			'prod', 
 			'nonexistent', 
 			null, 
@@ -449,7 +449,7 @@ class DownloadTest extends BaseTestCase
 		$this->expectException('Exception');
 		$this->expectExceptionMessage('Environment not found');
 		$this->callBuildSecureFilePath(
-			$GLOBALS['m_backups'], 
+			$GLOBALS['m_data_backups_dir'], 
 			'nonexistent', 
 			'testwiki', 
 			null, 
@@ -673,13 +673,13 @@ class DownloadTest extends BaseTestCase
 		];
 	}
 
-	private function callGetEnvironment($m_backups, $backups_environment = null)
+	private function callGetEnvironment($m_data_backups_dir, $backups_environment = null)
 	{
 		if (isset($backups_environment)) {
 			$env = $backups_environment;
 		} else {
 			$undesiredStrings = array(".", "..", ".DS_Store", ".htaccess", "README");
-			$envs = array_diff(scandir($m_backups), $undesiredStrings);
+			$envs = array_diff(scandir($m_data_backups_dir), $undesiredStrings);
 			$env = array_pop($envs);
 		}
 
@@ -691,10 +691,10 @@ class DownloadTest extends BaseTestCase
 		return $env;
 	}
 
-	private function callBuildSecureFilePath($m_backups, $env, $wiki, $directory, $file_name)
+	private function callBuildSecureFilePath($m_data_backups_dir, $env, $wiki, $directory, $file_name)
 	{
 		// Build base path
-		$base_path = realpath($m_backups . '/' . $env);
+		$base_path = realpath($m_data_backups_dir . '/' . $env);
 		if ($base_path === false) {
 			throw new Exception("Environment not found");
 		}

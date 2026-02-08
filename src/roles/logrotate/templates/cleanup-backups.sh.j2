@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # Configuration
-BACKUP_DIR="{{ m_backups }}"
+BACKUP_DIR="{{ m_data_backups_dir }}"
 LOG_FILE="{{ m_logs }}/cleanup/backup-cleanup.log"
 COMPRESS_AFTER_DAYS="{{ logrotate_backup_files.compress_after_days }}"
 KEEP_DAYS="{{ logrotate_backup_files.rotate }}"

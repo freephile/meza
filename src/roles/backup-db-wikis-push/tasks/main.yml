@@ -20,7 +20,7 @@
 
 - name: Set remote_server_base_path if NOT set in configuration
   set_fact:
-    remote_server_base_path: "{{ m_backups }}/{{ env }}/<id>/"
+    remote_server_base_path: "{{ m_data_backups_dir }}/{{ env }}/<id>/"
   when:
     - push_backup.db.path is not defined
 

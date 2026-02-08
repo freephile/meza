@@ -59,7 +59,7 @@
 
 - name: Ensure backup directory exists with proper permissions
   ansible.builtin.file:
-    path: "{{ m_backups }}"
+    path: "{{ m_data_backups_dir }}"
     state: directory
     owner: meza-ansible
     group: "{{ group_apache }}"

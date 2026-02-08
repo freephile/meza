@@ -15,7 +15,7 @@
 
 - name: Ensure backups directory exists
   file:
-    path: "{{ m_backups }}"
+    path: "{{ m_data_backups_dir }}"
     state: directory
     mode: "{{ m_backups_mode }}"
     owner: "{{ m_backups_owner }}"
@@ -23,7 +23,7 @@
 
 - name: Ensure backups directory exists for environment
   file:
-    path: "{{ m_backups }}/{{ env }}"
+    path: "{{ m_data_backups_dir }}/{{ env }}"
     state: directory
     mode: "{{ m_backups_mode }}"
     owner: "{{ m_backups_owner }}"
@@ -38,7 +38,7 @@
 
 - name: Ensure backups directory exists for each wiki
   file:
-    path: "{{ m_backups }}/{{ env }}/{{ item }}"
+    path: "{{ m_data_backups_dir }}/{{ env }}/{{ item }}"
     state: directory
     mode: "{{ m_backups_mode }}"
     owner: "{{ m_backups_owner }}"
@@ -47,7 +47,7 @@
 
 - name: Ensure backups uploads directory exists for each wiki
   file:
-    path: "{{ m_backups }}/{{ env }}/{{ item }}/uploads"
+    path: "{{ m_data_backups_dir }}/{{ env }}/{{ item }}/uploads"
     state: directory
     mode: "{{ m_backups_mode }}"
     owner: "{{ m_backups_owner }}"

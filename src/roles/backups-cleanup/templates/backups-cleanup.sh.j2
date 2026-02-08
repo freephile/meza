@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # change directory to backups location
-cd {{ m_backups }}/{{ env }}
+cd {{ m_data_backups_dir }}/{{ env }}
 
 # remove all odd-numbered days (keep only even-numbered days)
 {% if backups_cleanup.removal_rules is defined %}

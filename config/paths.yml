@@ -48,7 +48,7 @@ gluster_brick_name: gluster
 
 # Location where backups will go, specified by environment, e.g.
 # /opt/data-meza/backups/prod for "prod" environment
-m_backups: "{{ m_data_dir }}/backups"
+m_data_backups_dir: "{{ m_data_dir }}/backups"
 
 # webserver variables
 m_htdocs: "{{ m_install_dir }}/htdocs"

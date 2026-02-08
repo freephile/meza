@@ -124,12 +124,12 @@ function validateInputs() {
 /**
  * Get the environment directory safely
  */
-function getEnvironment($m_backups, $backups_environment = null) {
+function getEnvironment($m_data_backups_dir, $backups_environment = null) {
 	if (isset($backups_environment)) {
 		$env = $backups_environment;
 	} else {
 		$undesiredStrings = array(".", "..", ".DS_Store", ".htaccess", "README");
-		$envs = array_diff(scandir($m_backups), $undesiredStrings);
+		$envs = array_diff(scandir($m_data_backups_dir), $undesiredStrings);
 		$env = array_pop($envs);
 	}
 
@@ -145,9 +145,9 @@ function getEnvironment($m_backups, $backups_environment = null) {
 /**
  * Build and validate the complete file path
  */
-function buildSecureFilePath($m_backups, $env, $wiki, $directory, $file_name) {
+function buildSecureFilePath($m_data_backups_dir, $env, $wiki, $directory, $file_name) {
 	// Build base path
-	$base_path = realpath($m_backups . '/' . $env);
+	$base_path = realpath($m_data_backups_dir . '/' . $env);
 	if ($base_path === false) {
 		header("HTTP/1.0 404 Not Found");
 		exit("Environment not found");
@@ -235,10 +235,10 @@ try {
 	$file_ext = $inputs['file_ext'];
 
 	// Get environment
-	$env = getEnvironment($m_backups, $backups_environment ?? null);
+	$env = getEnvironment($m_data_backups_dir, $backups_environment ?? null);
 
 	// Build secure file path
-	$file_path = buildSecureFilePath($m_backups, $env, $wiki, $directory, $file_name);
+	$file_path = buildSecureFilePath($m_data_backups_dir, $env, $wiki, $directory, $file_name);
 
 	// Check if streaming or attachment
 	$is_attachment = !isset($_REQUEST['stream']);

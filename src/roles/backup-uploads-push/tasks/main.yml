@@ -28,7 +28,7 @@
   set_fact:
     # Likely path if pushing to a Meza backups directory:
     #                        /opt/data-meza/backups/<env>/<wiki_id>/uploads/
-    remote_server_base_path: "{{ m_backups }}/{{ env }}/<id>/uploads/"
+    remote_server_base_path: "{{ m_data_backups_dir }}/{{ env }}/<id>/uploads/"
   when:
     - push_backup.uploads.path is not defined
 

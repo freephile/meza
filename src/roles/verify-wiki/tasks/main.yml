@@ -158,7 +158,7 @@
   set_fact:
     sql_backup_server: "{{ groups['backup_servers'][0] }}"
     do_sql_dump: false
-    sql_dir_path: "{{ m_backups }}/{{ env }}/{{ wiki_id }}"
+    sql_dir_path: "{{ m_data_backups_dir }}/{{ env }}/{{ wiki_id }}"
     sql_file_match: "*.sql"
     sql_file_push_match: "*push.sql"
     sql_backup_server_set: true
@@ -313,7 +313,7 @@
 - name: "{{ wiki_id }} - Set uploads-source-from-backup facts IF SOURCING FROM backup_servers"
   set_fact:
     uploads_backup_server: "{{ groups['backup_servers'][0] }}"
-    uploads_backup_dir_path: "{{ m_backups }}/{{ env }}/{{ wiki_id }}/uploads"
+    uploads_backup_dir_path: "{{ m_data_backups_dir }}/{{ env }}/{{ wiki_id }}/uploads"
     uploads_backup_server_set: true
   when: "not uploads_backup_server_set and 'backup_servers' in groups and groups['backup_servers']|length|int > 0"
 
