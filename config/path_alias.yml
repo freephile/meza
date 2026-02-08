@@ -15,8 +15,12 @@ m_app_tests_dir: "{{ m_test }}"
 m_config_dir: "{{ m_config_core }}"
 m_config_deploy_dir: "{{ m_deploy }}"
 m_config_i18n_dir: "{{ m_i18n }}"
-m_config_public_dir: "{{ m_local_public }}"
-m_config_secret_dir: "{{ m_local_secret }}"
+
+# conf-meza directories
+m_conf_public_dir: "{{ m_local_public }}"
+m_conf_secret_dir: "{{ m_local_secret }}"
+m_conf_vault_dir: "{{ m_config_vault }}"
+m_conf_users_dir: "{{ m_home }}"
 
 # Data
 m_data_dir: "{{ m_meza_data }}"
