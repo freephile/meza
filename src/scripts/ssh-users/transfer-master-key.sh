@@ -11,10 +11,10 @@ MEZA_INSTALL_PATH=$(dirname $(dirname $(dirname $(dirname $(realpath $(which mez
 # meza since we can't be certain of consistent method of accessing install.sh.
 source "${MEZA_INSTALL_PATH}/.deploy-meza/config.sh"
 
-source "$m_scripts/shell-functions/base.sh"
+source "$m_app_scripts_dir/shell-functions/base.sh"
 rootCheck
 
-source "$m_scripts/shell-functions/linux-user.sh"
+source "$m_app_scripts_dir/shell-functions/linux-user.sh"
 
 echo "Type space-separated list of minions to copy SSH"
 read -e minions

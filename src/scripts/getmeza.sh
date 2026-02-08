@@ -219,7 +219,7 @@ mkdir -p ${INSTALL_DIR}/.deploy-meza
 chmod 755 ${INSTALL_DIR}/.deploy-meza
 
 if [ ! -f ${INSTALL_DIR}/.deploy-meza/config.sh ]; then
-    echo "m_scripts='${INSTALL_DIR}/meza/src/scripts'; ansible_user='meza-ansible';" > ${INSTALL_DIR}/.deploy-meza/config.sh
+    echo "m_app_scripts_dir='${INSTALL_DIR}/meza/src/scripts'; ansible_user='meza-ansible';" > ${INSTALL_DIR}/.deploy-meza/config.sh
 fi
 
 # Create data directory for lock files (@TODO: better location? - need write access to enable deploys without sudo)

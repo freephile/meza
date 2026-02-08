@@ -19,7 +19,7 @@ m_home: "{{ m_install_dir }}/conf-meza/users"
 m_deploy: "{{ m_install_dir }}/.deploy-meza"
 
 # scripts dir
-m_scripts: "{{ m_app_dir }}/src/scripts"
+m_app_scripts_dir: "{{ m_app_dir }}/src/scripts"
 
 # test dir
 m_test: "{{ m_app_dir }}/test"

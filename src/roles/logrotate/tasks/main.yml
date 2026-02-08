@@ -78,7 +78,7 @@
 - name: Create backup cleanup script for SQL files
   ansible.builtin.template:
     src: cleanup-backups.sh.j2
-    dest: "{{ m_scripts }}/cleanup-backups.sh"
+    dest: "{{ m_app_scripts_dir }}/cleanup-backups.sh"
     owner: root
     group: root
     mode: '0755'
@@ -88,7 +88,7 @@
   ansible.builtin.cron:
     name: "Meza backup cleanup"
     user: root
-    job: "{{ m_scripts }}/cleanup-backups.sh > /dev/null 2>&1"
+    job: "{{ m_app_scripts_dir }}/cleanup-backups.sh > /dev/null 2>&1"
     minute: "30"
     hour: "2"
     state: present

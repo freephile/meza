@@ -70,22 +70,22 @@ fi
 
 
 echo -e "\nBefore doing anything, run a cleanup..."
-WIKI="$wiki_id" php "$m_scripts/uniteTheWikis.php" --cleanup
+WIKI="$wiki_id" php "$m_app_scripts_dir/uniteTheWikis.php" --cleanup
 
 
 echo -e "\nSetting up merge"
-WIKI="$wiki_id" php "$m_scripts/uniteTheWikis.php" "--mergedwiki=$wiki_id" "--sourcewikis=$wikis"
+WIKI="$wiki_id" php "$m_app_scripts_dir/uniteTheWikis.php" "--mergedwiki=$wiki_id" "--sourcewikis=$wikis"
 
 
 # Each pass of this loop checks to see how many imports are remaining
 # This is broken out this way because PHP CLI has a memory leak (I think), and
 # letting bash control repeated calls to the script gets around this.
-while [[ `WIKI="$wiki_id" php "$m_scripts/uniteTheWikis.php" --imports-remaining` != "0" ]]; do
+while [[ `WIKI="$wiki_id" php "$m_app_scripts_dir/uniteTheWikis.php" --imports-remaining` != "0" ]]; do
 	echo -e "\n\n*********************\nANOTHER ROUND\n******************\n"
 	echo "Clean out hoards of temp files"
 	find /tmp -name "importupload*" -print0 | xargs -0 rm -f
 	echo "run uniteTheWikis.php again"
-	WIKI="$wiki_id" php "$m_scripts/uniteTheWikis.php"
+	WIKI="$wiki_id" php "$m_app_scripts_dir/uniteTheWikis.php"
 done;
 
 # for wiki in $(echo $wikis | sed "s/,/ /g")
@@ -131,11 +131,11 @@ WIKI={{ wiki_id | quote }} {{ m_mediawiki | quote }}/maintenance/run refreshLink
 
 # Merge watchlists
 echo -e "\nMerging watchlists..."
-WIKI="$wiki_id" php "$m_scripts/uniteTheWikis.php" --merge-watchlists
+WIKI="$wiki_id" php "$m_app_scripts_dir/uniteTheWikis.php" --merge-watchlists
 
 # Don't clean up merge table until rebuild all and images are imported. That
 # way if this needs to stop and restart it won't try to reimport.
 echo -e "\nCleaning up..."
-WIKI="$wiki_id" php "$m_scripts/uniteTheWikis.php" --cleanup
+WIKI="$wiki_id" php "$m_app_scripts_dir/uniteTheWikis.php" --cleanup
 
 echo -e "\nCOMPLETE!"

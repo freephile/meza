@@ -18,10 +18,10 @@ if [ -z "$ansible_user" ]; then
 	echo "Ansible user: $ansible_user"
 fi
 
-source "$m_scripts/shell-functions/base.sh"
+source "$m_app_scripts_dir/shell-functions/base.sh"
 rootCheck
 
-source "$m_scripts/shell-functions/linux-user.sh"
+source "$m_app_scripts_dir/shell-functions/linux-user.sh"
 
 # Create $ansible_user user with a new private key
 mf_add_ssh_user_with_private_key "$ansible_user"
