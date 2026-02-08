@@ -72,7 +72,7 @@ mf_user_exists() {
 rootCheck
 
 # i18n message file not included here due to [1] above.
-# source "$m_i18n/$m_language.sh"
+# source "$m_config_i18n_dir/$m_language.sh"
 
 # Was `mf_add_ssh_user "$ansible_user"` but hard-coding user due to [1] above
 mf_add_ssh_user "meza-ansible"

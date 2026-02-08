@@ -146,7 +146,7 @@ def load_defaults_from_paths_yml():
 
         # Extract the specific variables meza.py needs
         required_vars = [
-            "m_i18n", "m_meza_data", "m_logs_deploy", "m_logs_create_wiki", "m_logs",
+            "m_config_i18n_dir", "m_meza_data", "m_logs_deploy", "m_logs_create_wiki", "m_logs",
             "m_local_secret", "m_home", "m_config_vault"
         ]
 
@@ -224,7 +224,7 @@ def load_yaml(filepath):
 
 # Hard-coded for now, because I'm not sure where to set it yet
 LANGUAGE = "en"
-i18n = load_yaml(os.path.join(defaults['m_i18n'], LANGUAGE + ".yml"))
+i18n = load_yaml(os.path.join(defaults['m_config_i18n_dir'], LANGUAGE + ".yml"))
 
 
 def main(argv):

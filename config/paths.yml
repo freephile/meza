@@ -73,7 +73,7 @@ m_parsoid_path: /etc/parsoid
 m_parsoid_service_path: /etc/init.d/parsoid
 
 # files
-m_i18n: "{{ m_config_dir }}/i18n"
+m_config_i18n_dir: "{{ m_config_dir }}/i18n"
 m_db_replication_dump_file: "{{ m_meza_data }}/db_master_for_replication.sql"
 m_db_replication_log_file: "{{ m_meza_data }}/db_master_log_file"
 m_db_replication_log_pos: "{{ m_meza_data }}/db_master_log_pos"
