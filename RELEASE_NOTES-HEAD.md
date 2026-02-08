@@ -2,7 +2,49 @@
 
 ### Commits
 
-HEAD -> dev origin/issue287-separate-apache origin/dev
+HEAD -> dev origin/dev
+* [c54bb580](https://github.com/freephile/meza/commit/c54bb580) (2026-02-07) Greg Rundlett: Add new 'reminder' provisioner to Vagrantfile Echo instructions so it's very easy to get the first deploy done.
+Addresses Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `Vagrantfile`
+
+* [ddfe42b4](https://github.com/freephile/meza/commit/ddfe42b4) (2026-02-06) Greg Rundlett: Set `check_mode: false` (meaning always run) The pattern:
+For tasks that DO NOT HAVE SIDE-EFFECTS, such as read-only tasks, that
+register a variable or set a fact, which is then used to DO something
+and possibly FAIL, be sure to use `check_mode: false` on the read-only
+task. This way the task runs always; even when you test a playbook by
+using `--check` mode (aka **`--dry-run`** in other software)
+Without this pattern, trying to test your playbooks in `--check` mode
+can cause them to fail for no good reason since the read-only task
+would be skipped and the registered variable would be empty.
+For example: "check if user is in group_apache"
+Also, Format verify-permissions role
+Place the user/group checks first
+Use variable `{{ m_user }}` instead of hard-coded 'meza-ansible'
+Use variable `{{ user_apache }}` and `{{ group_apache }}` instead of
+hard-coded 'apache'
+Comment/disable `{{ m_uploads_dir }}` in permission fix because it can
+be huge, should not fail, and is not a routine operation.
+It should be handled separately.
+Remove extraneous 'when: RedHat'
+Add USAGE instructions at the top of the verify-permissions playbook,
+just like the role, for quick reference.
+  - Modified: `src/playbooks/verify-permissions.yml`
+  - Modified: `src/roles/apache-php/tasks/php-redhat8.yml`
+  - Modified: `src/roles/apache-php/tasks/profiling.yml`
+  - Modified: `src/roles/database/tasks/secure-installation.yml`
+  - Modified: `src/roles/elasticsearch/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/meza-user/tasks/main.yml`
+  - Modified: `src/roles/php/tasks/profiling.yml`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+
+* [b0792e05](https://github.com/freephile/meza/commit/b0792e05) (2026-02-06) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
+origin/issue287-separate-apache
 * [a55e46d3](https://github.com/freephile/meza/commit/a55e46d3) (2026-02-05) Greg Rundlett: Fix linting issues with netdata role Added proper names to the debug tasks instead of 'free-form'
 Added `set -o pipefail` and `executable: /bin/bash` to shell that uses
 pipes.
