@@ -386,6 +386,39 @@ EOL
     SHELL
 
     #
+    # Reminder: manual deploy steps
+    #
+    app1.vm.provision "reminder", type: "shell", preserve_order: true, inline: <<-SHELL
+      cat <<'EOL'
+
+Next steps (copy/paste):
+
+  # ssh into the local VM
+  vagrant ssh app1
+
+  # switch user to the service account
+  sudo su - meza-ansible
+
+  # change to the project's ansible config dir
+  cd /opt/meza/config
+
+  # create a demo wiki on the VM
+  sudo meza deploy vagrant -vvv
+
+Then browse:
+  https://192.168.56.56/demo
+
+  # when done, `sudo shutdown now` to exit the VM; or from outside the VM run:
+  vagrant halt
+  # to stop the VM, or:
+  vagrant destroy
+  # to remove the VM and all associated data
+
+  # You can also run `vagrant up` again to restart the VM with the same configuration and data (unless you ran `destroy`)
+EOL
+    SHELL
+
+    #
     # If multi-app: turn off hostkey checking
     #
     if configuration.key?("app2") || configuration.key?("db2")
