@@ -49,7 +49,7 @@ exec 200>"$LOCKFILE"
 flock -n 200 || { echo "Another index build is running for $wiki_id; exiting."; exit 1; }
 trap 'echo "Caught signal, releasing lock"; flock -u 200; rm -f "$LOCKFILE"; exit 1' INT TERM EXIT
 
-disable_search_file="{{ m_deploy }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
+disable_search_file="{{ m_config_deploy_dir }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
 
 # disable search update in wiki-specific settings
 echo -e "<?php\n\$wgDisableSearchUpdate = true;\n" > "$disable_search_file"

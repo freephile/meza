@@ -228,7 +228,7 @@
 - name: Ensure Extensions.php in place
   template:
     src: Extensions.php.j2
-    dest: "{{ m_deploy }}/Extensions.php"
+    dest: "{{ m_config_deploy_dir }}/Extensions.php"
     mode: "{{ m_htdocs_mode }}"
     owner: "{{ m_htdocs_owner }}"
     group: "{{ group_apache }}"
@@ -522,7 +522,7 @@
 # Wikis are totally built at this point, but SMW and search need rebuilding
 # FIXME #811: Will this work when controller is not an app server?
 - name: "(Re-)build search index for {{ list_of_wikis | join(', ') }}"
-  shell: 'bash {{ m_deploy | quote }}/elastic-rebuild-all.sh "{{ list_of_wikis | join('' '') }}"'
+  shell: 'bash {{ m_config_deploy_dir | quote }}/elastic-rebuild-all.sh "{{ list_of_wikis | join('' '') }}"'
   when: (docker_skip_tasks is not defined or not docker_skip_tasks) and (list_of_wikis|length > 0)
   # FIXME: REMOVE? and (not es_do_upgrade)
   run_once: true
@@ -537,7 +537,7 @@
     # Also note: the shell module 'creates' parameter means that the step will NOT be run if the (log) file already exists!
     # @See https://github.com/freephile/meza/issues/80
 - name: "(Re-)build SemanticMediaWiki data for: {{ list_of_wikis | join(', ') }}"
-  shell: 'bash {{ m_deploy | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}" > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
+  shell: 'bash {{ m_config_deploy_dir | quote }}/smw-rebuild-all.sh "{{ list_of_wikis | join('' '') }}" > {{ m_logs }}/smw-rebuilddata/smw-rebuild-all.log'
   args:
     chdir: "{{ m_logs }}/smw-rebuilddata/"
     creates: smw-rebuild-all.log

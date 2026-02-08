@@ -123,10 +123,10 @@ $mezaAuthType = '{{ meza_auth_type }}';
  * (1) Load all PHP files in preLocalSettings.d for all wikis
  * (2) Load all PHP files in preLocalSettings.d for this wiki
  */
-foreach ( glob( "$m_deploy/public/preLocalSettings.d/*.php" ) as $filename ) {
+foreach ( glob( "$m_config_deploy_dir/public/preLocalSettings.d/*.php" ) as $filename ) {
 	require_once $filename;
 }
-foreach ( glob( "$m_deploy/public/wikis/$wikiId/preLocalSettings.d/*.php" ) as $filename ) {
+foreach ( glob( "$m_config_deploy_dir/public/wikis/$wikiId/preLocalSettings.d/*.php" ) as $filename ) {
 	require_once $filename;
 }
 
@@ -588,7 +588,7 @@ $wgDefaultSkin = 'chameleon';
 /**
  * Enabled skins.
  * No need to call wfLoadSkin() as this is handled automatically.
- * @see {{ m_deploy }}/Extensions.php
+ * @see {{ m_config_deploy_dir }}/Extensions.php
  */
 
 // Allows users to remove the page title.
@@ -808,7 +808,7 @@ if ( $mezaAuthType === 'anon-edit' ) {
  * below.
  */
 
-require_once "{{ m_deploy }}/Extensions.php";
+require_once "{{ m_config_deploy_dir }}/Extensions.php";
 
 
 /**
@@ -853,9 +853,9 @@ $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$f
  * (1) Load all PHP files in postLocalSettings.d for all wikis
  * (2) Load all PHP files in postLocalSettings.d for this wiki
  */
-foreach ( glob( "$m_deploy/public/postLocalSettings.d/*.php" ) as $filename ) {
+foreach ( glob( "$m_config_deploy_dir/public/postLocalSettings.d/*.php" ) as $filename ) {
 	require_once $filename;
 }
-foreach ( glob( "$m_deploy/public/wikis/$wikiId/postLocalSettings.d/*.php" ) as $filename ) {
+foreach ( glob( "$m_config_deploy_dir/public/wikis/$wikiId/postLocalSettings.d/*.php" ) as $filename ) {
 	require_once $filename;
 }

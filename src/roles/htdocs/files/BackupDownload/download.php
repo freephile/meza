@@ -244,7 +244,7 @@ try {
 	$is_attachment = !isset($_REQUEST['stream']);
 
 	// Handle authentication
-	if (is_file($m_deploy . '/SAMLConfig.php')) {
+	if (is_file($m_config_deploy_dir . '/SAMLConfig.php')) {
 		$auth_file = $m_htdocs . '/NonMediaWikiSimpleSamlAuth.php';
 		if (!file_exists($auth_file)) {
 			header('HTTP/1.0 500 Internal Server Error');

@@ -16,7 +16,7 @@ m_home: "{{ m_install_dir }}/conf-meza/users"
 
 # Config files written by Ansible which need a place to live on non-controller
 # nodes.
-m_deploy: "{{ m_install_dir }}/.deploy-meza"
+m_config_deploy_dir: "{{ m_install_dir }}/.deploy-meza"
 
 # scripts dir
 m_app_scripts_dir: "{{ m_app_dir }}/src/scripts"

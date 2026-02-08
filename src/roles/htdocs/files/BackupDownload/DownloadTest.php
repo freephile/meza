@@ -260,7 +260,7 @@ class DownloadTest extends BaseTestCase
 	{
 		$globals = [
 			'm_backups',
-			'm_deploy', 
+			'm_config_deploy_dir', 
 			'm_htdocs',
 			'saml_idp_username_attr',
 			'wiki_backup_downloaders',
@@ -277,7 +277,7 @@ class DownloadTest extends BaseTestCase
 
 		// Set test values
 		$GLOBALS['m_backups'] = $this->backupsDir;
-		$GLOBALS['m_deploy'] = $this->tempDir . '/deploy';
+		$GLOBALS['m_config_deploy_dir'] = $this->tempDir . '/deploy';
 		$GLOBALS['m_htdocs'] = $this->tempDir . '/htdocs';
 		$GLOBALS['saml_idp_username_attr'] = 'uid';
 		$GLOBALS['backups_environment'] = 'prod';
@@ -288,7 +288,7 @@ class DownloadTest extends BaseTestCase
 		$GLOBALS['all_backup_downloaders'] = ['globaladmin'];
 
 		// Create deploy directory
-		mkdir($GLOBALS['m_deploy'], 0755, true);
+		mkdir($GLOBALS['m_config_deploy_dir'], 0755, true);
 		mkdir($GLOBALS['m_htdocs'], 0755, true);
 	}
 

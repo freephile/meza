@@ -44,7 +44,7 @@
 # Wikis are totally built at this point, but search needs rebuilding?
 # Pretty sure this is taken care of in the MedidaWiki role.
 - name: (Re-)build search index for each wiki
-  shell: "bash {{ m_deploy }}/elastic-rebuild-all.sh {{ wiki_id }}"
+  shell: "bash {{ m_config_deploy_dir }}/elastic-rebuild-all.sh {{ wiki_id }}"
   run_once: true
   tags:
     - search-index

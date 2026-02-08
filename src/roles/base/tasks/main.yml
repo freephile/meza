@@ -440,7 +440,7 @@
 
 - name: Ensure deploy directory in place
   ansible.builtin.file:
-    path: "{{ m_deploy }}"
+    path: "{{ m_config_deploy_dir }}"
     state: directory
     owner: root
     group: root

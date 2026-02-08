@@ -3,7 +3,7 @@
 - name: Ensure config variables available in PHP and shell files
   template:
     src: "config.{{ item }}.j2"
-    dest: "{{ m_deploy }}/config.{{ item }}"
+    dest: "{{ m_config_deploy_dir }}/config.{{ item }}"
     owner: root
     group: root
     mode: '0755'
@@ -14,7 +14,7 @@
 - name: Create wiki configuration file for PHP scripts
   template:
     src: "wiki-config.php.j2"
-    dest: "{{ m_deploy }}/wiki-config.php"
+    dest: "{{ m_config_deploy_dir }}/wiki-config.php"
     owner: root
     group: root
     mode: '0644'

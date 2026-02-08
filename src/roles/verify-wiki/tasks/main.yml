@@ -69,7 +69,7 @@
   file:
     force: yes
     # dest = symlink, src = dir linked to
-    src: "{{ m_deploy }}/public/wikis/{{ wiki_id }}"
+    src: "{{ m_config_deploy_dir }}/public/wikis/{{ wiki_id }}"
     dest: "{{ m_htdocs }}/wikis/{{ wiki_id }}/config"
     state: link
     owner: "{{ user_apache }}"

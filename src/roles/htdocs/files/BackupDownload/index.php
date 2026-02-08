@@ -39,7 +39,7 @@ if (!file_exists($configPath)) {
 require_once($configPath);
 
 // if there's a SAML config file, we need to authenticate with SAML, like, now.
-if ( is_file( $m_deploy.'/SAMLConfig.php' ) ) {
+if ( is_file( $m_config_deploy_dir.'/SAMLConfig.php' ) ) {
 	require_once $m_htdocs.'/NonMediaWikiSimpleSamlAuth.php';
 }
 else {

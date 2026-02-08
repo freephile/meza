@@ -80,7 +80,7 @@
 - name: Ensure logging scripts in place
   template:
     src: "{{ item }}.j2"
-    dest: "{{ m_deploy }}/{{ item }}"
+    dest: "{{ m_config_deploy_dir }}/{{ item }}"
     mode: '0755'
   with_items:
     - server-performance.sh

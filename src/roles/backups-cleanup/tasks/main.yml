@@ -3,7 +3,7 @@
 - name: Ensure backups cleanup script in place
   template:
     src: "backups-cleanup.sh.j2"
-    dest: "{{ m_deploy }}/backups-cleanup.sh"
+    dest: "{{ m_config_deploy_dir }}/backups-cleanup.sh"
     owner: root
     group: root
     mode: "0744"
