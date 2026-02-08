@@ -100,7 +100,7 @@
 
 - name: Set variable holding list of core skins
   include_vars:
-    file: "{{ m_config_core }}/MezaCoreSkins.yml"
+    file: "{{ m_config_dir }}/MezaCoreSkins.yml"
     name: meza_core_skins
   tags:
     - skins
@@ -114,9 +114,9 @@
 
 - name: Set variable holding list of core extensions
   include_vars:
-    file: "{{ m_config_core | default('/opt/meza/config') }}/MezaCoreExtensions.yml"
+    file: "{{ m_config_dir | default('/opt/meza/config') }}/MezaCoreExtensions.yml"
     name: meza_core_extensions
-  when: m_config_core is defined or ansible_check_mode | default(false)
+  when: m_config_dir is defined or ansible_check_mode | default(false)
   tags:
     - always
 

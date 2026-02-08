@@ -56,7 +56,7 @@
 # Add safety check for critical variables (always ensure they're defined)
 - name: Ensure critical path variables are defined
   ansible.builtin.set_fact:
-    m_config_core: "{{ m_config_core | default(m_install_dir + '/meza/config') }}"
+    m_config_dir: "{{ m_config_dir | default(m_install_dir + '/meza/config') }}"
     m_local_public: "{{ m_local_public | default(m_install_dir + '/conf-meza/public') }}"
     m_local_secret: "{{ m_local_secret | default(m_install_dir + '/conf-meza/secret') }}"
     m_app_dir: "{{ m_app_dir | default(m_install_dir + '/meza') }}"
