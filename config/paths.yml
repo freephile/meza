@@ -33,7 +33,7 @@ m_data_dir: "{{ m_install_dir }}/data-meza"
 m_data_cache_dir: "{{ m_data_dir }}/cache"
 m_data_tmp_dir: "{{ m_data_dir }}/tmp"
 m_data_logs_dir: "{{ m_data_dir }}/logs"
-m_logs_deploy: "{{ m_data_dir }}/logs/deploy/deploy.log"
+m_data_deploy_log_file: "{{ m_data_dir }}/logs/deploy/deploy.log"
 m_data_create_wiki_log_file: "{{ m_data_dir }}/logs/create-wiki/create-wiki.log"
 
 # uploads dir. This WILL BE OVERIDDEN if multiple app servers are used, and

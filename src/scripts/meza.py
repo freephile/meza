@@ -146,7 +146,7 @@ def load_defaults_from_paths_yml():
 
         # Extract the specific variables meza.py needs
         required_vars = [
-            "m_config_i18n_dir", "m_data_dir", "m_logs_deploy", "m_data_create_wiki_log_file", "m_data_logs_dir",
+            "m_config_i18n_dir", "m_data_dir", "m_data_deploy_log_file", "m_data_create_wiki_log_file", "m_data_logs_dir",
             "m_config_secret_dir", "m_home", "m_config_vault"
         ]
 
@@ -570,7 +570,7 @@ def write_deploy_log(timestamp, env, unique, condition, args_string):
     Returns:
         None
     """
-    deploy_log = defaults['m_logs_deploy']
+    deploy_log = defaults['m_data_deploy_log_file']
 
     line = (f"{timestamp}\t{env}\t{unique}\t{condition}\t"
             f"{get_git_describe_tags(f'{install_dir}/meza')}\t"
