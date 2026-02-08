@@ -55,7 +55,7 @@
 # ENSURE DATA DIRECTORY STRUCTURE WITH PROPER PERMISSIONS
 #
 
-# m_cache_directory is a localization cache directory used by MediaWiki
+# m_data_cache_dir is a localization cache directory used by MediaWiki
 - name: Ensure data-meza directory structure with proper permissions
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -67,7 +67,7 @@
   # 2 as the leading digit sets the setgid bit on directories so new files/dirs
   # inherit the group ownership
     - {path: "{{ m_data_dir }}", owner: "{{ m_data_owner }}", group: "{{ m_data_group }}", mode: "{{ m_data_mode }}"}
-    - {path: "{{ m_cache_directory }}", owner: "{{ m_cache_directory_owner }}", group: "{{ m_cache_directory_group }}", mode: "{{ m_cache_directory_mode }}"}
+    - {path: "{{ m_data_cache_dir }}", owner: "{{ m_cache_directory_owner }}", group: "{{ m_cache_directory_group }}", mode: "{{ m_cache_directory_mode }}"}
     - {path: "{{ m_logs }}", owner: "{{ m_logs_owner }}", group: "{{ m_logs_group }}", mode: "{{ m_logs_mode }}"}
     - {path: "{{ m_data_backups_dir }}", owner: "{{ m_backups_owner }}", group: "{{ m_backups_group }}", mode: "{{ m_backups_mode }}"}
 
@@ -77,7 +77,7 @@
   register: dir_perms
   loop:
     - "{{ m_data_dir }}"
-    - "{{ m_cache_directory }}"
+    - "{{ m_data_cache_dir }}"
     - "{{ m_logs }}"
     - "{{ m_data_backups_dir }}"
     - "{{ m_uploads_dir }}"
@@ -100,7 +100,7 @@
 
 - name: Verify cache directory is writable by {{ m_user }}
   ansible.builtin.file:
-    path: "{{ m_cache_directory }}/test-write"
+    path: "{{ m_data_cache_dir }}/test-write"
     state: touch
     mode: '0664'
   become: true
@@ -113,7 +113,7 @@
 
 - name: Remove test file
   ansible.builtin.file:
-    path: "{{ m_cache_directory }}/test-write"
+    path: "{{ m_data_cache_dir }}/test-write"
     state: absent
   when: cache_write_test is succeeded
 

@@ -42,7 +42,7 @@
 - name: Ensure localization cache directory exists for this wiki
   file:
     state: directory
-    path: "{{ m_cache_directory }}/{{ wiki_id }}"
+    path: "{{ m_data_cache_dir }}/{{ wiki_id }}"
     owner: "{{ m_cache_directory_owner }}"
     group: "{{ group_apache }}"
     mode: "{{ m_cache_directory_mode }}"

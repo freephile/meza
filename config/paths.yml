@@ -30,7 +30,7 @@ m_app_tests_dir: "{{ m_app_dir }}/tests"
 
 # data dir
 m_data_dir: "{{ m_install_dir }}/data-meza"
-m_cache_directory: "{{ m_data_dir }}/cache"
+m_data_cache_dir: "{{ m_data_dir }}/cache"
 m_tmp: "{{ m_data_dir }}/tmp"
 m_logs: "{{ m_data_dir }}/logs"
 m_logs_deploy: "{{ m_data_dir }}/logs/deploy/deploy.log"
