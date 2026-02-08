@@ -9,7 +9,7 @@ m_install_dir: "{{ m_install }}"
 # App
 m_app_dir: "{{ m_meza }}"
 m_app_scripts_dir: "{{ m_scripts }}"
-m_app_test_dir: "{{ m_test }}"
+m_app_tests_dir: "{{ m_test }}"
 
 # Config
 m_config_dir: "{{ m_config_core }}"

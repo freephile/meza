@@ -21,8 +21,12 @@ m_deploy: "{{ m_install_dir }}/.deploy-meza"
 # scripts dir
 m_app_scripts_dir: "{{ m_app_dir }}/src/scripts"
 
-# test dir
-m_test: "{{ m_app_dir }}/test"
+# tests dir
+# @FIXME: I fixed the variable name here to be consistent with others (plural 'tests', 'scripts', 'logs')
+# AND point to the directory properly which was already plural.
+# But the variable isn't referenced anywhere.
+# @DELETE ?
+m_app_tests_dir: "{{ m_app_dir }}/tests"
 
 # data dir
 m_meza_data: "{{ m_install_dir }}/data-meza"
