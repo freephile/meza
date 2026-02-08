@@ -9,7 +9,7 @@ m_app_dir: "{{ m_install_dir }}/meza"
 
 # config dir
 m_config_dir: "{{ m_app_dir }}/config"
-m_local_secret: "{{ m_install_dir }}/conf-meza/secret"
+m_config_secret_dir: "{{ m_install_dir }}/conf-meza/secret"
 m_config_public_dir: "{{ m_install_dir }}/conf-meza/public"
 m_config_vault: "{{ m_install_dir }}/conf-meza/vault"
 m_home: "{{ m_install_dir }}/conf-meza/users"

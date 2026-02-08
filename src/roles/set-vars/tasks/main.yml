@@ -58,7 +58,7 @@
   ansible.builtin.set_fact:
     m_config_dir: "{{ m_config_dir | default(m_install_dir + '/meza/config') }}"
     m_config_public_dir: "{{ m_config_public_dir | default(m_install_dir + '/conf-meza/public') }}"
-    m_local_secret: "{{ m_local_secret | default(m_install_dir + '/conf-meza/secret') }}"
+    m_config_secret_dir: "{{ m_config_secret_dir | default(m_install_dir + '/conf-meza/secret') }}"
     m_app_dir: "{{ m_app_dir | default(m_install_dir + '/meza') }}"
 
 #
@@ -131,7 +131,7 @@
 #
 - name: Set meza environment-specific secret variables for env={{ env }}
   ansible.builtin.include_vars:
-    file: "{{ m_local_secret }}/{{ env }}/secret.yml"
+    file: "{{ m_config_secret_dir }}/{{ env }}/secret.yml"
   # Ignore errors so this file is not required to be included
   failed_when: false
 

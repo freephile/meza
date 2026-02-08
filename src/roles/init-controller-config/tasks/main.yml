@@ -117,7 +117,7 @@
   tags:
     - file-perms
 
-- name: "Ensure secret directories properly owned/moded: {{ m_local_secret }}"
+- name: "Ensure secret directories properly owned/moded: {{ m_config_secret_dir }}"
   ansible.builtin.file:
     path: "{{ item }}"
     owner: "{{ m_config_secret_owner }}"
@@ -127,10 +127,10 @@
   tags:
     - file-perms
   with_items:
-    - "{{ m_local_secret }}"
-    - "{{ m_local_secret }}/{{ env }}"
+    - "{{ m_config_secret_dir }}"
+    - "{{ m_config_secret_dir }}/{{ env }}"
 
-- name: "Ensure secret files properly owned/moded: {{ m_local_secret }}"
+- name: "Ensure secret files properly owned/moded: {{ m_config_secret_dir }}"
   ansible.builtin.file:
     path: "{{ item }}"
     owner: "{{ m_config_secret_owner }}"
@@ -140,5 +140,5 @@
   tags:
     - file-perms
   with_items:
-    - "{{ m_local_secret }}/{{ env }}/secret.yml"
-    - "{{ m_local_secret }}/{{ env }}/hosts"
+    - "{{ m_config_secret_dir }}/{{ env }}/secret.yml"
+    - "{{ m_config_secret_dir }}/{{ env }}/hosts"

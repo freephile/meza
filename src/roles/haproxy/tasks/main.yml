@@ -76,14 +76,14 @@
 #
 - name: Check if secret config on CONTROLLER has SSL keys
   stat:
-    path: "{{ m_local_secret }}/{{ env }}/ssl/meza.key"
+    path: "{{ m_config_secret_dir }}/{{ env }}/ssl/meza.key"
   register: ssl_cert_stat_result
   delegate_to: localhost
   run_once: true
 
 - name: Ensure config SSL directory exists
   file:
-    path: "{{ m_local_secret }}/{{ env }}/ssl"
+    path: "{{ m_config_secret_dir }}/{{ env }}/ssl"
     state: directory
     owner: "{{ m_config_secret_owner }}"
     group: "{{ m_config_secret_group }}"
@@ -99,8 +99,8 @@
   command: |
     openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
       -subj "/C=US/ST=TX/L=Houston/O=EnterpriseMediaWiki/CN={{ wiki_app_fqdn}}" \
-      -keyout {{ m_local_secret }}/{{ env }}/ssl/meza.key \
-      -out {{ m_local_secret }}/{{ env }}/ssl/meza.crt
+      -keyout {{ m_config_secret_dir }}/{{ env }}/ssl/meza.key \
+      -out {{ m_config_secret_dir }}/{{ env }}/ssl/meza.crt
   when: ssl_cert_stat_result.stat.exists == False
   delegate_to: localhost
   run_once: true
@@ -116,15 +116,15 @@
   delegate_to: localhost
   run_once: true
   with_items:
-    - "{{ m_local_secret }}/{{ env }}/ssl/meza.key"
-    - "{{ m_local_secret }}/{{ env }}/ssl/meza.crt"
+    - "{{ m_config_secret_dir }}/{{ env }}/ssl/meza.key"
+    - "{{ m_config_secret_dir }}/{{ env }}/ssl/meza.crt"
 
 - name: Read SSL key into variable
   become: yes
   become_user: root
   shell: >
     ansible-vault view
-    {{ m_local_secret }}/{{ env }}/ssl/meza.key
+    {{ m_config_secret_dir }}/{{ env }}/ssl/meza.key
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_key
   delegate_to: localhost
@@ -135,7 +135,7 @@
   become_user: root
   shell: >
     ansible-vault view
-    {{ m_local_secret }}/{{ env }}/ssl/meza.crt
+    {{ m_config_secret_dir }}/{{ env }}/ssl/meza.crt
     --vault-password-file {{ m_config_vault }}/vault-pass-{{ env }}.txt
   register: decrypted_cert
   delegate_to: localhost

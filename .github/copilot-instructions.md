@@ -152,7 +152,7 @@ meza deploy-kill <env>
 - **Certbot/Let's Encrypt**: SSL certificate automation
 
 ## Common Pitfalls
-- Don't modify files in `/opt/meza/` during deployment (use `m_local_secret` paths)
+- Don't modify files in `/opt/meza/` during deployment (use `m_config_secret_dir` paths)
 - Always use absolute paths in Ansible (relative paths cause issues)
 - Lock files must be cleaned up on deployment interruption
 - Environment-specific secrets should never be committed to git

@@ -147,7 +147,7 @@ def load_defaults_from_paths_yml():
         # Extract the specific variables meza.py needs
         required_vars = [
             "m_config_i18n_dir", "m_meza_data", "m_logs_deploy", "m_logs_create_wiki", "m_logs",
-            "m_local_secret", "m_home", "m_config_vault"
+            "m_config_secret_dir", "m_home", "m_config_vault"
         ]
 
         defaults = {}
@@ -1243,7 +1243,7 @@ def meza_command_setup_env(argv, return_not_exit=False):
     # permissions acceptable since this dir will hold secret info, though it's
     # sort of an odd place for a temporary file. Perhaps /root instead?
     extra_vars_file = os.path.join(
-        defaults['m_local_secret'], "temp_vars.json")
+        defaults['m_config_secret_dir'], "temp_vars.json")
     if os.path.isfile(extra_vars_file):
         os.remove(extra_vars_file)
     with open(extra_vars_file, 'w', encoding='utf-8') as f:
@@ -1253,7 +1253,7 @@ def meza_command_setup_env(argv, return_not_exit=False):
     # Make sure temp_vars.json is accessible. On the first run of deploy it is
     # possible that user meza-ansible will not be able to reach this file,
     # specifically if the system has a restrictive umask set (e.g 077).
-    meza_chown(defaults['m_local_secret'], 'meza-ansible', 'wheel')
+    meza_chown(defaults['m_config_secret_dir'], 'meza-ansible', 'wheel')
     meza_chown(extra_vars_file, 'meza-ansible', 'wheel')
     os.chmod(extra_vars_file, 0o664)
 

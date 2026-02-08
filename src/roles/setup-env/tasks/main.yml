@@ -7,7 +7,7 @@
 
 - name: Ensure secret config directory exists
   ansible.builtin.file:
-    path: "{{ m_local_secret }}"
+    path: "{{ m_config_secret_dir }}"
     state: directory
     owner: "{{ m_config_secret_owner }}"
     group: "{{ m_config_secret_group }}"
@@ -15,7 +15,7 @@
 
 - name: Ensure secret config environment directory exists
   ansible.builtin.file:
-    path: "{{ m_local_secret }}/{{ env }}"
+    path: "{{ m_config_secret_dir }}/{{ env }}"
     state: directory
     owner: "{{ m_config_secret_owner }}"
     group: "{{ m_config_secret_group }}"
@@ -25,7 +25,7 @@
 - name: Ensure hosts file configured
   ansible.builtin.template:
     src: hosts.j2
-    dest: "{{ m_local_secret }}/{{ env }}/hosts"
+    dest: "{{ m_config_secret_dir }}/{{ env }}/hosts"
     owner: "{{ m_config_secret_owner }}"
     group: "{{ m_config_secret_group }}"
     mode: "{{ m_config_secret_file_mode }}"
@@ -36,7 +36,7 @@
 - name: Ensure secret.yml configured
   ansible.builtin.template:
     src: secret.yml.j2
-    dest: "{{ m_local_secret }}/{{ env }}/secret.yml"
+    dest: "{{ m_config_secret_dir }}/{{ env }}/secret.yml"
     owner: "{{ m_config_secret_owner }}"
     group: "{{ m_config_secret_group }}"
     mode: "{{ m_config_secret_file_mode }}"

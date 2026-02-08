@@ -46,7 +46,7 @@
             TMPDIR: "{{ m_tmp }}"
           git:
             repo: "{{ secret_config_repo.repo }}"
-            dest: "{{ m_local_secret }}"
+            dest: "{{ m_config_secret_dir }}"
             version: "{{ secret_config_repo.version }}"
             track_submodules: false
             recursive: false
