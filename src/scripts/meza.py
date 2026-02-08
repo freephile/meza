@@ -146,7 +146,7 @@ def load_defaults_from_paths_yml():
 
         # Extract the specific variables meza.py needs
         required_vars = [
-            "m_config_i18n_dir", "m_data_dir", "m_logs_deploy", "m_logs_create_wiki", "m_logs",
+            "m_config_i18n_dir", "m_data_dir", "m_logs_deploy", "m_data_create_wiki_log_file", "m_logs",
             "m_config_secret_dir", "m_home", "m_config_vault"
         ]
 
@@ -604,7 +604,7 @@ def write_create_wiki_log(timestamp, env, unique, condition, wiki_id, wiki_name,
     Returns:
         None
     """
-    create_wiki_log = defaults['m_logs_create_wiki']
+    create_wiki_log = defaults['m_data_create_wiki_log_file']
 
     line = (f"{timestamp}\t{env}\t{unique}\t{condition}\t"
             f"{wiki_id}\t{wiki_name}\t"
