@@ -1,3 +1,229 @@
+commit 4d0fc94a045f9939a28aec843221b41b373b0579
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    update paths.yml and path_alias.yml
+    
+    Addresses Issue #286
+
+commit dde5c1f8dafc81949bd7562346d5c275654316dd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_config_secret_dir with m_conf_secret_dir
+    replaced m_config_public_dir with m_conf_public_dir
+    replaced m_config_vault with m_conf_vault_dir
+    replaced m_home with m_conf_users_dir
+    
+    Addresses Issue #286
+
+commit 442a78d356ad490f06b1b90d08ed2d5136e04395
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_mediawiki with m_mediawiki_install_path
+    variable name is consistent with MediaWiki's own $IP and MW_INSTALL_PATH
+    
+    Addresses Issue #286
+
+commit dc21db81c50b1dabe1e6e02e78f85d08e248385a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_apache with m_web_conf_dir
+    
+    Addresses Issue #286
+
+commit d6e4c2f12f9cd86db4c69d859479dc65bf0eaeaf
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_htdocs with m_web_dir
+    
+    Addresses Issue #286
+
+commit 58b070196fe558ef50b8047a66836a3fdd462db6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_logs_deploy with m_data_deploy_log_file
+    
+    Addresses Issue #286
+
+commit 9e651e69946518b58a9fe17385e25bd4f8fefb58
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_tmp with m_data_tmp_dir
+    
+    Addresses Issue #286
+
+commit 280f25785419bf47b81e448a78493cf45ea3d668
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_logs with m_data_logs_dir
+    
+    Addresses Issue #286
+
+commit 4b099b3d0404a9c130776673af6378ac5f38e7c2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_cache_directory with m_data_cache_dir
+    
+    Addresses Issue #286
+
+commit 153f5fcabfaf2ff77ba47d38ac580c95d1d27a67
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_backups with m_data_backups_dir
+    
+    Addresses Issue #286
+
+commit dd62a84afe03800d4171d4a60d367900c87acdb6
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_logs_create_wiki with m_data_create_wiki_log_file
+    
+    Addresses Issue #286
+
+commit 397298aea5e558a0e88cd84ace946ba5fc371d85
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_meza_data with m_data_dir
+    
+    Addresses Issue #286
+
+commit 669d68e2d9e511f68f698db4956cf21d6a49c9e5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_local_secret with m_config_secret_dir
+    
+    Addresses Issue #286
+
+commit f6325884352a0bce5a331aefde9e00a086204592
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_local_public with m_config_public_dir
+    
+    Addresses Issue #286
+
+commit d4e0b410cb19919a21ea070e83ecf1a9236fe5d0
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_i18n with m_config_i18n_dir
+    
+    Addresses Issue #286
+
+commit 2e250f246736a9878a5f31b4454c12e15eaf9ab9
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_deploy with m_config_deploy_dir
+    
+    Addresses Issue #286
+
+commit 50dbfa3ab335e958411612ba17deb64ca75507bd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_config_core with m_config_dir
+    
+    Addresses Issue #286
+
+commit 81c2671847bc370766dfcece3236749cf9a28f95
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_test with m_app_tests_dir
+    
+    Addresses Issue #286
+
+commit db561daf387c51e5f1e5737bd9d037e1c8eb616d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 09:28:48 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_scripts with m_app_scripts_dir
+    
+    Addresses Issue #286
+
+commit bbc151cadd7594444d107b49469d361654862146
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 08:53:08 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_meza with m_app_dir
+    
+    Addresses Issue #286
+
+commit ed048685ab4be6fc9985bce6ae1315e7c5b20cbd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Feb 8 08:46:41 2026 -0500
+
+    Normalize meza variables
+    
+    replaced m_install with m_install_dir
+    removed TODO comments from paths.yml
+    created path_alias.yml with variable map
+    
+    Addresses Issue #286
+
+commit e39ddc92fac91c7280bbf6b16f725487372c01dc
+Author: GitHub Action <action@github.com>
+Date:   Sun Feb 8 02:42:32 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit c54bb580f674891103b56c0c1cb2f3d060cf6d6c
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Sat Feb 7 21:40:11 2026 -0500

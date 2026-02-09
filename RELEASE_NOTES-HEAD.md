@@ -3,6 +3,368 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [4d0fc94a](https://github.com/freephile/meza/commit/4d0fc94a) (2026-02-08) Greg Rundlett: Normalize meza variables update paths.yml and path_alias.yml
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/path_alias.yml`
+  - Modified: `config/paths.yml`
+
+* [dde5c1f8](https://github.com/freephile/meza/commit/dde5c1f8) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_config_secret_dir with m_conf_secret_dir
+replaced m_config_public_dir with m_conf_public_dir
+replaced m_config_vault with m_conf_vault_dir
+replaced m_home with m_conf_users_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `.github/copilot-instructions.md`
+  - Modified: `Vagrantfile`
+  - Modified: `config/paths.yml`
+  - Modified: `manual/MEZA_USER_ROLE.md`
+  - Modified: `src/playbooks/check-for-changes.yml`
+  - Modified: `src/playbooks/cleanup-upload-stash.yml`
+  - Modified: `src/playbooks/migrate-wikis.yml`
+  - Modified: `src/playbooks/run-maintenance.yml`
+  - Modified: `src/playbooks/site.yml`
+  - Modified: `src/roles/ansible-role-certbot-meza/tasks/renew-cron.yml`
+  - Modified: `src/roles/apache-php/tasks/profiling.yml`
+  - Modified: `src/roles/backup-config/tasks/main.yml`
+  - Modified: `src/roles/backup-db-wikis-push/tasks/main.yml`
+  - Modified: `src/roles/backup-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/backup-uploads-push/tasks/main.yml`
+  - Modified: `src/roles/backup-uploads/tasks/main.yml`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Modified: `src/roles/configure-wiki/README.md`
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+  - Modified: `src/roles/configure-wiki/templates/preLocalSettings.d/base.php.dist.j2`
+  - Modified: `src/roles/cron/tasks/main.yml`
+  - Modified: `src/roles/database/tasks/secure-installation.yml`
+  - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/dump-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/key-transfer/tasks/grant-keys.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/meza-user/README.md`
+  - Modified: `src/roles/meza-user/defaults/main.yml`
+  - Modified: `src/roles/meza-user/tasks/main.yml`
+  - Modified: `src/roles/migrate-to-declarative-wikis/tasks/main.yml`
+  - Modified: `src/roles/php/tasks/profiling.yml`
+  - Modified: `src/roles/saml/tasks/main.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/roles/setup-env/tasks/main.yml`
+  - Modified: `src/roles/sync-configs/tasks/main.yml`
+  - Modified: `src/scripts/meza.py`
+  - Modified: `tests/deploys/setup-alt-source-backup.yml`
+
+* [442a78d3](https://github.com/freephile/meza/commit/442a78d3) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_mediawiki with m_mediawiki_install_path
+variable name is consistent with MediaWiki's own $IP and MW_INSTALL_PATH
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/path_alias.yml`
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/cleanup-upload-stash.yml`
+  - Modified: `src/playbooks/run-maintenance.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/configure-wiki/templates/preLocalSettings.d/base.php.dist.j2`
+  - Modified: `src/roles/create-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/cron/templates/runAllJobs.php.j2`
+  - Modified: `src/roles/mediawiki/tasks/cirrus_metastore_upgrade.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/elastic-build-index.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/smw-rebuild-all.sh.j2`
+  - Modified: `src/roles/meza-log/templates/server-performance.sh.j2`
+  - Modified: `src/roles/saml/tasks/main.yml`
+  - Modified: `src/roles/update.php/tasks/main.yml`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/create-admin-account.yml`
+  - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`
+  - Modified: `src/scripts/unite-the-wikis.sh`
+  - Modified: `src/scripts/uniteTheWikis.php`
+
+* [dc21db81](https://github.com/freephile/meza/commit/dc21db81) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_apache with m_web_conf_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+
+* [d6e4c2f1](https://github.com/freephile/meza/commit/d6e4c2f1) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_htdocs with m_web_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/debug.yml`
+  - Modified: `src/roles/ansible-role-certbot-meza/README.md`
+  - Modified: `src/roles/ansible-role-certbot-meza/vars/main.yml`
+  - Modified: `src/roles/apache-php/tasks/main.yml`
+  - Modified: `src/roles/apache-php/templates/httpd.conf.j2`
+  - Modified: `src/roles/apache-php/templates/php-fpm-httpd.conf.j2`
+  - Modified: `src/roles/apache/tasks/main.yml`
+  - Modified: `src/roles/apache/templates/httpd.conf.j2`
+  - Modified: `src/roles/apache/templates/php-fpm-httpd.conf.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/create-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/htdocs/README.md`
+  - Modified: `src/roles/htdocs/files/BackupDownload/DownloadTest.php`
+  - Modified: `src/roles/htdocs/files/BackupDownload/download.php`
+  - Modified: `src/roles/htdocs/files/BackupDownload/index.php`
+  - Modified: `src/roles/htdocs/meta/main.yml`
+  - Modified: `src/roles/htdocs/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/BlenderSettings.php.j2`
+  - Modified: `src/roles/mediawiki/templates/elastic-rebuild-all.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/smw-rebuild-all.sh.j2`
+  - Modified: `src/roles/saml/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/main.yml`
+  - Modified: `src/scripts/unifyUserTables.php`
+
+* [58b07019](https://github.com/freephile/meza/commit/58b07019) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_logs_deploy with m_data_deploy_log_file
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/scripts/meza.py`
+
+* [9e651e69](https://github.com/freephile/meza/commit/9e651e69) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_tmp with m_data_tmp_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/check-for-changes.yml`
+  - Modified: `src/roles/autodeployer/templates/git-fetch.sh.j2`
+  - Modified: `src/roles/backup-db-wikis-push/tasks/main.yml`
+  - Modified: `src/roles/backup-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Modified: `src/roles/database/tasks/replication.yml`
+  - Modified: `src/roles/dump-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/enforce-meza-version/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/saml/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`
+  - Modified: `src/roles/verify-wiki/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/transfer-backup-to-db-master.yml`
+  - Modified: `tests/deploys/setup-alt-source-backup.yml`
+
+* [280f2578](https://github.com/freephile/meza/commit/280f2578) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_logs with m_data_logs_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/defaults.yml`
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/rebuild-smw-and-index.yml`
+  - Modified: `src/roles/apache-php/templates/php.ini.j2`
+  - Modified: `src/roles/autodeployer/templates/meza-autodeployer-cron.j2`
+  - Modified: `src/roles/backups-cleanup/templates/meza-cron-backups-cleanup.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Modified: `src/roles/cron/templates/meza-ansible.crontab.j2`
+  - Modified: `src/roles/elasticsearch/tasks/es_reindex.yml`
+  - Modified: `src/roles/logrotate/tasks/main.yml`
+  - Modified: `src/roles/logrotate/templates/cleanup-backups.sh.j2`
+  - Modified: `src/roles/logrotate/templates/meza-logs.j2`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/roles/mediawiki/templates/elastic-rebuild-all.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/smw-rebuild-all.sh.j2`
+  - Modified: `src/roles/php/templates/php.ini.j2`
+  - Modified: `src/roles/update.php/tasks/main.yml`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+  - Modified: `src/scripts/meza.py`
+
+* [4b099b3d](https://github.com/freephile/meza/commit/4b099b3d) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_cache_directory with m_data_cache_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/main.yml`
+
+* [153f5fca](https://github.com/freephile/meza/commit/153f5fca) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_backups with m_data_backups_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/backup-config/tasks/main.yml`
+  - Modified: `src/roles/backup-db-wikis-push/tasks/main.yml`
+  - Modified: `src/roles/backup-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/backup-uploads-push/tasks/main.yml`
+  - Modified: `src/roles/backup-uploads/tasks/main.yml`
+  - Modified: `src/roles/backups-cleanup/templates/backups-cleanup.sh.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/htdocs/files/BackupDownload/DownloadTest.php`
+  - Modified: `src/roles/htdocs/files/BackupDownload/download.php`
+  - Modified: `src/roles/htdocs/files/BackupDownload/index.php`
+  - Modified: `src/roles/logrotate/tasks/main.yml`
+  - Modified: `src/roles/logrotate/templates/cleanup-backups.sh.j2`
+  - Modified: `src/roles/sql-backup-cleanup/tasks/main.yml`
+  - Modified: `src/roles/update.php/tasks/main.yml`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/main.yml`
+
+* [dd62a84a](https://github.com/freephile/meza/commit/dd62a84a) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_logs_create_wiki with m_data_create_wiki_log_file
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/scripts/meza.py`
+
+* [397298ae](https://github.com/freephile/meza/commit/397298ae) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_meza_data with m_data_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/delete-elasticsearch.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Modified: `src/roles/elasticsearch/tasks/main.yml`
+  - Modified: `src/roles/elasticsearch/templates/elasticsearch.yml.j2`
+  - Modified: `src/roles/mediawiki/tasks/cirrus_metastore_upgrade.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+  - Modified: `src/scripts/meza.py`
+  - Modified: `src/scripts/unifyUserTables.php`
+
+* [669d68e2](https://github.com/freephile/meza/commit/669d68e2) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_local_secret with m_config_secret_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `.github/copilot-instructions.md`
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/check-for-changes.yml`
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/roles/setup-env/tasks/main.yml`
+  - Modified: `src/scripts/meza.py`
+
+* [f6325884](https://github.com/freephile/meza/commit/f6325884) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_local_public with m_config_public_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/check-for-changes.yml`
+  - Modified: `src/playbooks/cleanup-upload-stash.yml`
+  - Modified: `src/playbooks/migrate-wikis.yml`
+  - Modified: `src/playbooks/run-maintenance.yml`
+  - Modified: `src/playbooks/site.yml`
+  - Modified: `src/roles/apache-php/tasks/profiling.yml`
+  - Modified: `src/roles/backup-config/tasks/main.yml`
+  - Modified: `src/roles/backup-db-wikis-push/tasks/main.yml`
+  - Modified: `src/roles/backup-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/backup-uploads-push/tasks/main.yml`
+  - Modified: `src/roles/backup-uploads/tasks/main.yml`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Modified: `src/roles/configure-wiki/README.md`
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+  - Modified: `src/roles/configure-wiki/templates/preLocalSettings.d/base.php.dist.j2`
+  - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/dump-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/migrate-to-declarative-wikis/tasks/main.yml`
+  - Modified: `src/roles/php/tasks/profiling.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/roles/sync-configs/tasks/main.yml`
+
+* [d4e0b410](https://github.com/freephile/meza/commit/d4e0b410) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_i18n with m_config_i18n_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/scripts/meza.py`
+  - Modified: `src/scripts/ssh-users/setup-minion-user.sh`
+
+* [2e250f24](https://github.com/freephile/meza/commit/2e250f24) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_deploy with m_config_deploy_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/rebuild-smw-and-index.yml`
+  - Modified: `src/roles/backups-cleanup/tasks/main.yml`
+  - Modified: `src/roles/backups-cleanup/templates/meza-cron-backups-cleanup.j2`
+  - Modified: `src/roles/base-config-scripts/tasks/main.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Modified: `src/roles/create-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/cron/templates/meza-ansible.crontab.j2`
+  - Modified: `src/roles/elasticsearch/tasks/es_reindex.yml`
+  - Modified: `src/roles/htdocs/files/BackupDownload/DownloadTest.php`
+  - Modified: `src/roles/htdocs/files/BackupDownload/download.php`
+  - Modified: `src/roles/htdocs/files/BackupDownload/index.php`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/roles/mediawiki/templates/elastic-build-index.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/elastic-rebuild-all.sh.j2`
+  - Modified: `src/roles/meza-log/tasks/main.yml`
+  - Modified: `src/roles/saml/tasks/main.yml`
+  - Modified: `src/roles/saml/templates/NonMediaWikiSimpleSamlAuth.php.j2`
+  - Modified: `src/roles/saml/templates/samlLocalSettings.php.j2`
+  - Modified: `src/roles/sync-configs/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/main.yml`
+  - Modified: `src/scripts/unifyUserTables.php`
+
+* [50dbfa3a](https://github.com/freephile/meza/commit/50dbfa3a) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_config_core with m_config_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+
+* [81c26718](https://github.com/freephile/meza/commit/81c26718) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_test with m_app_tests_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/path_alias.yml`
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+
+* [db561daf](https://github.com/freephile/meza/commit/db561daf) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_scripts with m_app_scripts_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/logrotate/tasks/main.yml`
+  - Modified: `src/scripts/getmeza.sh`
+  - Modified: `src/scripts/ssh-users/setup-master-user.sh`
+  - Modified: `src/scripts/ssh-users/transfer-master-key.sh`
+  - Modified: `src/scripts/unite-the-wikis.sh`
+
+* [bbc151ca](https://github.com/freephile/meza/commit/bbc151ca) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_meza with m_app_dir
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `config/paths.yml`
+  - Modified: `manual/APACHE_PHP_SPLIT_IMPLEMENTATION.md`
+  - Modified: `manual/MEZA_USER_ROLE.md`
+  - Modified: `src/playbooks/check-for-changes.yml`
+  - Modified: `src/roles/autodeployer/templates/git-fetch.sh.j2`
+  - Modified: `src/roles/autodeployer/templates/slack-notify.sh.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/enforce-meza-version/tasks/main.yml`
+  - Modified: `src/roles/htdocs/README.md`
+  - Modified: `src/roles/htdocs/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/meza-log/tasks/main.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/scripts/unifyUserTables.php`
+
+* [ed048685](https://github.com/freephile/meza/commit/ed048685) (2026-02-08) Greg Rundlett: Normalize meza variables replaced m_install with m_install_dir
+removed TODO comments from paths.yml
+created path_alias.yml with variable map
+Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Modified: `.github/copilot-instructions.md`
+  - Added: `config/path_alias.yml`
+  - Modified: `config/paths.yml`
+  - Modified: `manual/MEZA_USER_ROLE.md`
+  - Modified: `manual/meza-cmd/debug.md`
+  - Modified: `src/roles/autodeployer/templates/git-fetch.sh.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.php.j2`
+  - Modified: `src/roles/base-config-scripts/templates/config.sh.j2`
+  - Modified: `src/roles/configure-wiki/templates/preLocalSettings.d/base.php.dist.j2`
+  - Modified: `src/roles/cron/tasks/main.yml`
+  - Modified: `src/roles/htdocs/templates/index.php.j2`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+  - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
+  - Modified: `src/roles/mediawiki/templates/smw-rebuild-all.sh.j2`
+  - Modified: `src/roles/meza-log/templates/disk-space-usage.sh.j2`
+  - Modified: `src/roles/meza-log/templates/server-performance.sh.j2`
+  - Modified: `src/roles/netdata/tasks/main.yml`
+  - Modified: `src/roles/saml/templates/SAMLConfig.php.j2`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+  - Modified: `src/roles/setup-env/templates/secret.yml.j2`
+  - Modified: `src/scripts/getmeza.sh`
+  - Modified: `src/scripts/meza.py`
+
+* [e39ddc92](https://github.com/freephile/meza/commit/e39ddc92) (2026-02-08) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [c54bb580](https://github.com/freephile/meza/commit/c54bb580) (2026-02-07) Greg Rundlett: Add new 'reminder' provisioner to Vagrantfile Echo instructions so it's very easy to get the first deploy done.
 Addresses Issue [#268](https://github.com/freephile/meza/issues/268)
   - Modified: `Vagrantfile`
