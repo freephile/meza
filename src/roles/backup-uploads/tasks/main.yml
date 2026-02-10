@@ -2,7 +2,7 @@
 
 
 - name: Get individual wikis from controller config
-  find:
+  ansible.builtin.find:
     paths: "{{ m_conf_public_dir }}/wikis/"
     file_type: directory
   register: wiki_dirs
@@ -11,7 +11,7 @@
 # FIXME #805: option to delete existing uploads backups initially (clean slate)
 
 - name: Ensure backups directory exists for environment
-  file:
+  ansible.builtin.file:
     path: "{{ m_data_backups_dir }}/{{ env }}"
     state: directory
     mode: '0755'
@@ -19,7 +19,7 @@
     group: root
 
 - name: Ensure backups directory exists for each wiki
-  file:
+  ansible.builtin.file:
     path: "{{ m_data_backups_dir }}/{{ env }}/{{ item }}"
     state: directory
     mode: '0755'
@@ -28,7 +28,7 @@
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
 
 - name: Ensure backups uploads directory exists for each wiki
-  file:
+  ansible.builtin.file:
     path: "{{ m_data_backups_dir }}/{{ env }}/{{ item }}/uploads"
     state: directory
     mode: '0755'
@@ -37,7 +37,7 @@
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
 
 - name: "Run role:rsync - Copy uploads directory to backups"
-  include_role:
+  ansible.builtin.include_role:
     name: rsync
   vars:
     pulling_to_server: "{{ inventory_hostname }}"

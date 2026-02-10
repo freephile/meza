@@ -2,14 +2,14 @@
 
 
 - name: Get individual wikis from controller config
-  find:
+  ansible.builtin.find:
     paths: "{{ m_conf_public_dir }}/wikis/"
     file_type: directory
   register: wiki_dirs
   delegate_to: localhost
 
 - name: Ensure backups directory exists for environment
-  file:
+  ansible.builtin.file:
     path: "{{ m_data_backups_dir }}/{{ env }}"
     state: directory
     mode: "{{ m_backups_mode }}"
@@ -17,7 +17,7 @@
     group: "{{ m_backups_group }}"
 
 - name: Ensure backups directory exists for each wiki
-  file:
+  ansible.builtin.file:
     path: "{{ m_data_backups_dir }}/{{ env }}/{{ item }}"
     state: directory
     mode: "{{ m_backups_mode }}"
@@ -26,7 +26,7 @@
   with_items: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | list }}"
 
 - name: "Run role:rsync - Copy SQL files to backups"
-  include_role:
+  ansible.builtin.include_role:
     name: rsync
   vars:
     pulling_to_server: "{{ inventory_hostname }}"
@@ -38,7 +38,7 @@
 
 # Remove temp SQL files, only needs to be done on first backup server
 - name: Remove SQL files from DB master {{ m_data_tmp_dir }}
-  file:
+  ansible.builtin.file:
     path: "{{ m_data_tmp_dir }}/{{ env }}_{{ item }}.sql"
     state: absent
   delegate_to: "{{ groups['db_master'][0] }}"
@@ -46,7 +46,7 @@
   run_once: true
 
 - name: "Clean out all but the latest SQL backup file for {{ item }} IF DESIRED"
-  include_role:
+  ansible.builtin.include_role:
     name: sql-backup-cleanup
   vars:
     cleanup_wiki: "{{ item }}"

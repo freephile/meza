@@ -1,6 +1,6 @@
 ---
 - name: Get individual wikis from controller config
-  find:
+  ansible.builtin.find:
     paths: "{{ m_conf_public_dir }}/wikis/"
     file_type: directory
   register: wiki_dirs
@@ -11,7 +11,7 @@
 # - name: Lock DB
 
 - name: Remove any existing database dumps
-  file:
+  ansible.builtin.file:
     path: "{{ m_data_tmp_dir }}/{{ env }}_{{ item }}.sql"
     state: absent
   # see role "mediawiki" for explanation of filters below

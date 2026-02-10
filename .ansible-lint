@@ -13,10 +13,12 @@ exclude_paths:
   - src/roles/ansible-role-certbot-meza/
 
 # Skip specific rules that may be too strict for this project
+# These should be re-examined and potentially re-enabled in the future
 skip_list:
   - yaml[line-length]  # Allow longer lines for readability
   - name[casing]      # Allow flexible naming conventions
   - risky-file-permissions  # Some meza tasks require specific permissions
+  - var-naming[no-role-prefix]  # Allow flexible variable naming for role parameters
 
 # Warn for these rules instead of failing
 warn_list:

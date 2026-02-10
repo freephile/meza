@@ -13,7 +13,7 @@
 
   post_tasks:
     - name: Remind user to test configuration (when changes were made)
-      debug:
+      ansible.builtin.debug:
         msg: |
 
           ============================================================
@@ -33,7 +33,7 @@
       when: migration_was_performed | default(false)
 
     - name: Remind user about idempotent state (when no changes were needed)
-      debug:
+      ansible.builtin.debug:
         msg: |
 
           ============================================================
