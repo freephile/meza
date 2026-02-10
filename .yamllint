@@ -3,6 +3,7 @@
 extends: default
 ignore:
   - 'collections/'
+  - '.github/workflows/'
 rules:
   # make yamllint behave the same as ansible-lint (and prettier's yaml parser)
   # https://ansible.readthedocs.io/projects/lint/rules/yaml/

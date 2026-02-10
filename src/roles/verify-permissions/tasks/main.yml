@@ -44,9 +44,9 @@
 - name: Fail if group check command returned empty output
   ansible.builtin.fail:
     msg:
-    - "Failed to retrieve groups for {{ m_user }} user."
-    - "Command output was empty. "
-    - "rc={{ meza_groups.rc }}, stderr={{ meza_groups.stderr }}"
+      - "Failed to retrieve groups for {{ m_user }} user."
+      - "Command output was empty. "
+      - "rc={{ meza_groups.rc }}, stderr={{ meza_groups.stderr }}"
   check_mode: false
   when:
     - meza_groups.stdout | length == 0
