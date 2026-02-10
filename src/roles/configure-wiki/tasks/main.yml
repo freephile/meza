@@ -60,6 +60,9 @@
     group: "{{ group_apache }}"
     mode: '0775'
   with_items:
+    # the logo file has been updated, but we don't force it to update here, because the wiki may have customized it
+    # already. Delete the file on the controller if you want to receive the new logo.
+    - logo.png
     - apple-touch-icon.png
     - favicon.ico
     - meza-icon-50.svg
