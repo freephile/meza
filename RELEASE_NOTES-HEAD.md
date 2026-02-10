@@ -3,6 +3,21 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [a4c8a14c](https://github.com/freephile/meza/commit/a4c8a14c) (2026-02-10) Greg Rundlett: Remove obsolete Parsoid code This just removes the obsolete ansible variables and the
+'cleanup-parsoid' role that was coupled into 'base'.
+Other 'cleanup' would involve the ServerPerformance and cron roles.
+See Issue [#19](https://github.com/freephile/meza/issues/19)
+Fixes Issue [#45](https://github.com/freephile/meza/issues/45)
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/base/tasks/main.yml`
+  - Deleted: `src/roles/base/tasks/parsoid-cleanup.yml`
+
+* [a725e5b9](https://github.com/freephile/meza/commit/a725e5b9) (2026-02-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [f938ab2c](https://github.com/freephile/meza/commit/f938ab2c) (2026-02-10) Greg Rundlett: Fix remaining Ansible Lint issues == Config ==
 paths.yml - fix long comment lines
 REMOVE .travis.yml - we don't use Travis CI
