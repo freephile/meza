@@ -6,7 +6,7 @@
 # Determine if a backup wiki.sql file has been written to DB master
 #
 - name: From either dump or transfer, does wiki.sql exist on DB master?
-  stat:
+  ansible.builtin.stat:
     path: "{{ m_data_tmp_dir }}/wiki.sql"
   register: imported_wiki_sql_on_db_master
   delegate_to: "{{ groups['db_master'][0] }}"
@@ -19,12 +19,12 @@
 # Set facts to clarify if overwriting data should actually occur
 #
 - name: "{{ wiki_id }} - Set fact if SHOULD overwrite data (only possible if backup exists)"
-  set_fact:
+  ansible.builtin.set_fact:
     do_overwrite_db_from_backup: true
   when: intend_overwrite_from_backup and imported_wiki_sql_on_db_master.stat.exists
 
 - name: "{{ wiki_id }} - Set fact if SHOULD NOT overwrite data"
-  set_fact:
+  ansible.builtin.set_fact:
     do_overwrite_db_from_backup: false
   when: not intend_overwrite_from_backup or not imported_wiki_sql_on_db_master.stat.exists
 
@@ -33,7 +33,7 @@
 # New wiki & no backup SQL? Use generic SQL
 #
 - name: "{{ wiki_id }} - If wiki_sql_file NOT defined, send generic file to master db"
-  copy:
+  ansible.builtin.copy:
     src: templates/mediawiki-tables.sql
     dest: "{{ m_data_tmp_dir }}/wiki.sql"
     force: true
@@ -75,18 +75,18 @@
 # Set fact if new wiki was created
 #
 - name: SET FACT - New wiki was created (truly new, not from backup)
-  set_fact:
+  ansible.builtin.set_fact:
     created_new_wiki: true
   when: (not wiki_exists) and (not imported_wiki_sql_on_db_master.stat.exists)
 
 - name: SET FACT - Wiki created but from backup/import
-  set_fact:
+  ansible.builtin.set_fact:
     created_new_wiki: false
     created_from_backup: true
   when: (not wiki_exists) and (imported_wiki_sql_on_db_master.stat.exists)
 
 - name: SET FACT - Wiki already existed
-  set_fact:
+  ansible.builtin.set_fact:
     created_new_wiki: false
     created_from_backup: false
   when: wiki_exists
@@ -95,20 +95,21 @@
 # Do rebuild scripts (SMW and search index) need to run?
 #
 - name: Initiate wikis_to_rebuild_data if not exists
-  set_fact:
+  ansible.builtin.set_fact:
     wikis_to_rebuild_data: []
   when: wikis_to_rebuild_data is not defined
 
 - name: Add wiki to list of DB-imported wikis if required
-  set_fact:
-    wikis_to_rebuild_data: "{{ wikis_to_rebuild_data + [ wiki_id ] }}"
+  ansible.builtin.set_fact:
+    wikis_to_rebuild_data: "{{ wikis_to_rebuild_data + [wiki_id] }}"
   when: did_db_import is defined and did_db_import.changed is defined and did_db_import.changed
 
 
 - name: Setup SMW Store
-  shell: >
+  ansible.builtin.shell: >
     WIKI={{ wiki_id | quote }} {{ m_mediawiki_install_path | quote }}/maintenance/run SemanticMediaWiki:setupStore
   run_once: true
+  changed_when: true
   when: created_new_wiki
 
 
@@ -116,7 +117,7 @@
 # SECTION: update.php
 #
 - name: "{{ wiki_id }} - Update database"
-  import_role:
+  ansible.builtin.import_role:
     name: update.php
   tags:
     - update.php
@@ -149,7 +150,7 @@
 # SECTION: Create list_of_new_wikis
 #
 - name: "{{ wiki_id }} - Create list of new wikis if not exist"
-  set_fact:
+  ansible.builtin.set_fact:
     list_of_new_wikis: []
   when: list_of_new_wikis is not defined
 
@@ -159,6 +160,6 @@
 #             totally new or an overwrite. Above "new" means not-an-import,
 #             just a clean-slate wiki.
 - name: "{{ wiki_id }} - Update list of new wikis"
-  set_fact:
+  ansible.builtin.set_fact:
     list_of_new_wikis: "{{ list_of_new_wikis }} + [ '{{ wiki_id }}' ]"
   when: not wiki_exists or do_overwrite_db_from_backup
