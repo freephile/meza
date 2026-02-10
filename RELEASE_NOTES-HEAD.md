@@ -3,6 +3,46 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [31d0dbff](https://github.com/freephile/meza/commit/31d0dbff) (2026-02-10) Greg Rundlett: Fix remaining Ansible Lint issues Add `var-naming[no-role-prefix]` to 'skip_list' in .ansible-lint
+configuration
+== Playbooks ==
+backup.yml - Fixed FQCN for set_fact, jinja spacing
+migrate-wikis.yml - Fixed FQCN for debug
+rebuild-smw-and-index.yml - Fixed FQCN, no-changed-when, added noqa
+when intentionally using shell module
+== Roles ==
+backup-db-wikis - Fixed FQCN
+dump-db-wikis - Fixed FQCN
+backup-uploads - Fixed FQCN
+delete-wiki-wrapper - Fixed FQCN; re-order keys in block;
+use uri module rather than shell for curl commands
+Fixes Issue [#16](https://github.com/freephile/meza/issues/16)
+  - Modified: `.ansible-lint`
+  - Modified: `src/playbooks/backup.yml`
+  - Modified: `src/playbooks/migrate-wikis.yml`
+  - Modified: `src/playbooks/rebuild-smw-and-index.yml`
+  - Modified: `src/roles/backup-db-wikis/tasks/main.yml`
+  - Modified: `src/roles/backup-uploads/tasks/main.yml`
+  - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/dump-db-wikis/tasks/main.yml`
+
+* [3fb8a2f5](https://github.com/freephile/meza/commit/3fb8a2f5) (2026-02-10) Greg Rundlett: Cleanup with Ansible Lint Fix indentation of msg block
+Add ignore for .github/workflows to .yamllint config
+GitHub Actions workflow files use `on:` as a required top-level keyword
+(not a boolean value), which triggers yamllint's truthy rule.
+Since these are GitHub-specific YAML files (not Ansible), excluding
+them from yamllint checks is appropriate. The workflows will still be
+validated by GitHub's own workflow syntax checker.
+Fixes Issue [#16](https://github.com/freephile/meza/issues/16)
+  - Modified: `.yamllint`
+  - Modified: `src/roles/verify-permissions/tasks/main.yml`
+
+* [69cf237e](https://github.com/freephile/meza/commit/69cf237e) (2026-02-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [aada3bec](https://github.com/freephile/meza/commit/aada3bec) (2026-02-10) Greg Rundlett: Cleanup with Ansible Lint Fix FQCN and Jinja spacing in import-wiki-sql.yml
 Addresses Issue [#16](https://github.com/freephile/meza/issues/16)
   - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`

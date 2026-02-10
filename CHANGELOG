@@ -1,3 +1,54 @@
+commit 31d0dbff331c076828e11b83dc5e63bb0eb2c4cd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 10 10:59:08 2026 -0500
+
+    Fix remaining Ansible Lint issues
+    
+    Add `var-naming[no-role-prefix]` to 'skip_list' in .ansible-lint
+    configuration
+    
+    == Playbooks ==
+    backup.yml - Fixed FQCN for set_fact, jinja spacing
+    migrate-wikis.yml - Fixed FQCN for debug
+    rebuild-smw-and-index.yml - Fixed FQCN, no-changed-when, added noqa
+    when intentionally using shell module
+    
+    == Roles ==
+    backup-db-wikis - Fixed FQCN
+    dump-db-wikis - Fixed FQCN
+    backup-uploads - Fixed FQCN
+    delete-wiki-wrapper - Fixed FQCN; re-order keys in block;
+    use uri module rather than shell for curl commands
+    
+    Fixes Issue #16
+
+commit 3fb8a2f5b8ae61d2d0d1840df647cb6155f5241e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Feb 10 09:47:31 2026 -0500
+
+    Cleanup with Ansible Lint
+    
+    Fix indentation of msg block
+    Add ignore for .github/workflows to .yamllint config
+    
+    GitHub Actions workflow files use `on:` as a required top-level keyword
+    (not a boolean value), which triggers yamllint's truthy rule.
+    Since these are GitHub-specific YAML files (not Ansible), excluding
+    them from yamllint checks is appropriate. The workflows will still be
+    validated by GitHub's own workflow syntax checker.
+    
+    Fixes Issue #16
+
+commit 69cf237e3c989083add5a3bb49d888cc7836420e
+Author: GitHub Action <action@github.com>
+Date:   Tue Feb 10 14:33:58 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit aada3bec0ef40679c1afd6ea5767283b56011384
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Tue Feb 10 09:31:09 2026 -0500
