@@ -3,6 +3,44 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [f938ab2c](https://github.com/freephile/meza/commit/f938ab2c) (2026-02-10) Greg Rundlett: Fix remaining Ansible Lint issues == Config ==
+paths.yml - fix long comment lines
+REMOVE .travis.yml - we don't use Travis CI
+== Playbooks ==
+check-for-changes.yml - reorder keys for blocks; add noqa comments for git operations; FQCN
+== Roles ==
+autodeployer - Fixed FQCN, add missing 'name:'; jinja spacing
+umask-set - Fixed FQCN
+umask-unset - Fixed FQCN
+yamllint comments for exceptions
+use [true, false] for truthy values
+Fixes Issue [#16](https://github.com/freephile/meza/issues/16)
+  - Deleted: `.travis.yml`
+  - Modified: `config/paths.yml`
+  - Modified: `src/playbooks/check-for-changes.yml`
+  - Modified: `src/playbooks/example-block.yaml`
+  - Modified: `src/playbooks/push-backup.yml`
+  - Modified: `src/roles/autodeployer/tasks/do-deploy.yml`
+  - Modified: `src/roles/autodeployer/tasks/main.yml`
+  - Modified: `src/roles/database/defaults/main.yml`
+  - Modified: `src/roles/database/tasks/main.yml`
+  - Modified: `src/roles/database/tasks/replication.yml`
+  - Modified: `src/roles/gluster/defaults/main.yml`
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/roles/netdata/tasks/main.yml`
+  - Modified: `src/roles/umask-set/tasks/main.yml`
+  - Modified: `src/roles/umask-unset/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/create-admin-account.yml`
+  - Modified: `src/roles/verify-wiki/tasks/main.yml`
+
+* [b7035d54](https://github.com/freephile/meza/commit/b7035d54) (2026-02-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [31d0dbff](https://github.com/freephile/meza/commit/31d0dbff) (2026-02-10) Greg Rundlett: Fix remaining Ansible Lint issues Add `var-naming[no-role-prefix]` to 'skip_list' in .ansible-lint
 configuration
 == Playbooks ==
