@@ -17,6 +17,7 @@
 
     - name: Set Slack icon URL fact
       ansible.builtin.set_fact:
+        # yamllint disable-line rule:line-length
         autodeployer_slack_icon_url: "{{ autodeployer.slack_icon_url | default('https://github.com/freephile/meza/raw/dev/src/roles/configure-wiki/files/logo.png') }}"
       when: autodeployer is defined
 
@@ -65,6 +66,7 @@
 
     - name: Set Slack icon URL fact
       ansible.builtin.set_fact:
+        # yamllint disable-line rule:line-length
         autodeployer_slack_icon_url: "{{ autodeployer.slack_icon_url | default('https://github.com/freephile/meza/raw/dev/src/roles/configure-wiki/files/logo.png') }}"
       when: autodeployer is defined
 

@@ -19,6 +19,7 @@
     msg: "netdata installed"
   when: netdata_present.stat.exists
 
+# yamllint disable rule:line-length
 - name: Verify Netdata installer script integrity
   ansible.builtin.shell: |
     set -o pipefail
@@ -35,6 +36,7 @@
   become: false
   changed_when: false
   when: not netdata_present.stat.exists
+# yamllint enable rule:line-length
 
 ## It will be running once installed
 # The default port is 19999, but we do not open any port in HAProxy so it's not

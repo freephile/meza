@@ -10,7 +10,9 @@ m_app_dir: "{{ m_install_dir }}/meza"
 # config dir
 m_config_dir: "{{ m_app_dir }}/config"
 m_config_i18n_dir: "{{ m_config_dir }}/i18n"
-# conf-meza directories for public and secret config files. These are outside of the meza app dir since they need to be on all nodes, including non-controller nodes which don't have the full meza app dir.
+# conf-meza directories for public and secret config files.
+# These are outside of the meza app dir since they need to be
+# on all nodes, including non-controller nodes which don't have the full meza app dir.
 m_conf_secret_dir: "{{ m_install_dir }}/conf-meza/secret"
 m_conf_public_dir: "{{ m_install_dir }}/conf-meza/public"
 m_conf_vault_dir: "{{ m_install_dir }}/conf-meza/vault"

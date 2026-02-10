@@ -28,8 +28,9 @@
           enforce_meza_version is not defined
         )
 
-    - name:
-      set_fact:
+    - name: Set autodeployer Slack icon URL
+      ansible.builtin.set_fact:
+        # yamllint disable-line rule:line-length
         autodeployer_slack_icon_url: "{{ autodeployer.slack_icon_url | default('https://github.com/freephile/meza/raw/dev/src/roles/configure-wiki/files/logo.png') }}"
       when: autodeployer is defined
 
@@ -37,6 +38,10 @@
     # SECRET CONFIG
     #
     - name: Do secret config
+      when:
+        - secret_config_repo is defined
+        - secret_config_repo.repo is defined
+        - secret_config_repo.version is defined
       block:
         - name: Ensure proper secret config
           become: true
@@ -44,7 +49,7 @@
           # Ref #1149 for TMPDIR environment var
           environment:
             TMPDIR: "{{ m_data_tmp_dir }}"
-          git:
+          ansible.builtin.git:
             repo: "{{ secret_config_repo.repo }}"
             dest: "{{ m_conf_secret_dir }}"
             version: "{{ secret_config_repo.version }}"
@@ -58,7 +63,7 @@
             var: secret_config_git_operation
 
         - name: Reset vars if secret config changed
-          include_role:
+          ansible.builtin.include_role:
             name: set-vars
           when: secret_config_git_operation.changed
 
@@ -66,7 +71,7 @@
         # Send notification for Meza changes
         #
         - name: Send notification via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: |
               Secret config changed versions:
@@ -90,7 +95,7 @@
             - autodeployer_slack_icon_url is defined
 
         - name: Send notification via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: "Secret config slack notification error"
             channel: "{{ autodeployer.slack_channel }}"
@@ -110,7 +115,7 @@
 
       rescue:
         - name: Send secret config warning via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: "Error with secret config git operations"
             channel: "{{ autodeployer.slack_channel }}"
@@ -123,18 +128,16 @@
           ansible.builtin.debug:
             msg: "Secret config Git failure"
 
-        - meta: end_play
-
-
-      when:
-        - secret_config_repo is defined
-        - secret_config_repo.repo is defined
-        - secret_config_repo.version is defined
+        - ansible.builtin.meta: end_play
 
     #
     # PUBLIC CONFIG
     #
     - name: Do public config
+      when:
+        - local_config_repo is defined
+        - local_config_repo.repo is defined
+        - local_config_repo.version is defined
       block:
 
         - name: Ensure proper public config
@@ -143,7 +146,7 @@
           # Ref #1149 for TMPDIR environment var
           environment:
             TMPDIR: "{{ m_data_tmp_dir }}"
-          git:
+          ansible.builtin.git:
             repo: "{{ local_config_repo.repo }}"
             dest: "{{ m_conf_public_dir }}"
             version: "{{ local_config_repo.version }}"
@@ -157,29 +160,29 @@
             var: public_config_git_operation
 
         - name: Reset vars if public config changed
-          include_role:
+          ansible.builtin.include_role:
             name: set-vars
           when: public_config_git_operation.changed
 
         #
         # Send notification for public config changes
         #
-        - name: Get diff of public config change
-          shell: >
+        - name: Get diff of public config change  # noqa: no-changed-when
+          ansible.builtin.shell: >
             cd {{ m_conf_public_dir }} &&
             git diff "{{ public_config_git_operation.before }}" "{{ public_config_git_operation.after }}" 2>&1
           register: public_config_git_diff
           when: public_config_git_operation.changed
 
-        - name: Get commits in public config change
-          shell: >
+        - name: Get commits in public config change  # noqa: no-changed-when
+          ansible.builtin.shell: >
             cd {{ m_conf_public_dir }} &&
             git log --oneline "{{ public_config_git_operation.before }}...{{ public_config_git_operation.after }}" 2>&1
           register: public_config_git_commits
           when: public_config_git_operation.changed
 
         - name: Send notification via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: |
               Public config changed versions:
@@ -211,7 +214,7 @@
             - autodeployer_slack_icon_url is defined
 
         - name: Send notification via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: "Public config slack notification error"
             channel: "{{ autodeployer.slack_channel }}"
@@ -231,7 +234,7 @@
 
       rescue:
         - name: Send public config warning via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: "Error with public config git operations"
             channel: "{{ autodeployer.slack_channel }}"
@@ -244,17 +247,13 @@
           ansible.builtin.debug:
             msg: "Public config Git failure"
 
-        - meta: end_play
-
-      when:
-        - local_config_repo is defined
-        - local_config_repo.repo is defined
-        - local_config_repo.version is defined
+        - ansible.builtin.meta: end_play
 
     #
     # MEZA
     #
     - name: Do Meza
+      when: enforce_meza_version is defined
       block:
 
 
@@ -264,7 +263,7 @@
           # Ref #1149 for TMPDIR environment var
           environment:
             TMPDIR: "{{ m_data_tmp_dir }}"
-          git:
+          ansible.builtin.git:
             repo: "{{ meza_repository_url }}"
             dest: "{{ m_app_dir }}"
             version: "{{ enforce_meza_version }}"
@@ -278,22 +277,22 @@
             var: meza_git_operation
 
         - name: Reset vars if Meza changed
-          include_role:
+          ansible.builtin.include_role:
             name: set-vars
           when: meza_git_operation.changed
 
         #
         # Send notification for Meza changes
         #
-        - name: Get commits in Meza change
-          shell: >
+        - name: Get commits in Meza change  # noqa: no-changed-when
+          ansible.builtin.shell: >
             cd {{ m_app_dir }} &&
             git log --oneline "{{ meza_git_operation.before }}...{{ meza_git_operation.after }}" 2>&1
           register: meza_git_commits
           when: meza_git_operation.changed
 
         - name: Send notification via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: |
               Meza changed versions:
@@ -320,7 +319,7 @@
             - autodeployer_slack_icon_url is defined
 
         - name: Send notification via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: "Meza application slack notification error"
             channel: "{{ autodeployer.slack_channel }}"
@@ -340,7 +339,7 @@
 
       rescue:
         - name: Send Meza application warning via Slack
-          slack:
+          community.general.slack:
             token: "{{ autodeployer.slack_token }}"
             msg: "Error with Meza application git operations"
             channel: "{{ autodeployer.slack_channel }}"
@@ -353,34 +352,33 @@
           ansible.builtin.debug:
             msg: "Meza Git failure"
 
-        - meta: end_play
-
-      when: enforce_meza_version is defined
+        - ansible.builtin.meta: end_play
 
     #
     # Not doing deploy? End play
     #
-    - block:
-        - name: "End autodeployer if no changes made"
-          ansible.builtin.debug:
-            msg: "Nothing new to deploy"
-
-        - meta: end_play
+    - name: End autodeployer if no changes made
       when:
         - ( secret_config_git_operation is not defined or not secret_config_git_operation.changed )
         - ( public_config_git_operation is not defined or not public_config_git_operation.changed )
         - ( meza_git_operation is not defined          or not meza_git_operation.changed )
+      block:
+        - name: "End autodeployer if no changes made"
+          ansible.builtin.debug:
+            msg: "Nothing new to deploy"
+
+        - ansible.builtin.meta: end_play
 
 
     #
     # Do the deploy
     #
     - name: Do deploy
-      include_role:
+      ansible.builtin.include_role:
         name: autodeployer
         tasks_from: do-deploy
 
 
     - name: Remove umask setting
-      include_role:
+      ansible.builtin.include_role:
         name: umask-unset

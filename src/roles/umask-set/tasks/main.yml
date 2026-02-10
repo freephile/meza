@@ -1,7 +1,7 @@
 ---
 
 - name: Set umask for duration of deploy
-  template:
+  ansible.builtin.template:
     src: umask.profile.sh.j2
     dest: /etc/profile.d/umask.profile.sh
     owner: root

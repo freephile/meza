@@ -106,7 +106,7 @@
   run_once: true
 
 - name: Ensure SSL cert and key are encrypted
-  become: yes
+  become: true
   become_user: root
   shell: >
     ansible-vault encrypt
@@ -120,7 +120,7 @@
     - "{{ m_conf_secret_dir }}/{{ env }}/ssl/meza.crt"
 
 - name: Read SSL key into variable
-  become: yes
+  become: true
   become_user: root
   shell: >
     ansible-vault view
@@ -131,7 +131,7 @@
   run_once: true
 
 - name: Read SSL cert into variable
-  become: yes
+  become: true
   become_user: root
   shell: >
     ansible-vault view
@@ -228,28 +228,27 @@
 
 
 # Allow http and https through firewall
-#- name: Configure firewalld for haproxy via {{ item }}
-#  firewalld:
-#    service: "haproxy-{{ item }}"
-#    permanent: true
-#    immediate: true
-#    state: enabled
-#    zone: public
-#  with_items:
-#    - http
-#    - https
+# - name: Configure firewalld for haproxy via {{ item }}
+#   firewalld:
+#     service: "haproxy-{{ item }}"
+#     permanent: true
+#     immediate: true
+#     state: enabled
+#     zone: public
+#   with_items:
+#     - http
+#     - https
 
 - name: Create list of ports to open to the world
   set_fact:
     fully_open_ports:
       - 80
       - 443
-      - 20000
 
-#- name: Add port 20000 to world-accessible list if installing netdata
-#  set_fact:
-#    fully_open_ports: "{{ fully_open_ports }} + [ 20000 ]"
-#  when: m_install_netdata
+# - name: Add port 20000 to world-accessible list if installing netdata
+#   set_fact:
+#     fully_open_ports: "{{ fully_open_ports }} + [ 20000 ]"
+#   when: m_install_netdata
 
 - name: Ensure port {{ fully_open_ports | join(', ') }} open to the world for haproxy
   include_role:

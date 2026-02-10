@@ -3,6 +3,7 @@
 # this task is duplicated from check-for-changes.yml
 - name: Set autodeployer slack icon URL
   ansible.builtin.set_fact:
+    # yamllint disable-line rule:line-length
     autodeployer_slack_icon_url: "{{ autodeployer.slack_icon_url | default('https://github.com/freephile/meza/raw/dev/src/roles/configure-wiki/files/logo.png') }}"
   when: autodeployer is defined
 

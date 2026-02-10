@@ -76,6 +76,7 @@
 # to be (re-)setup
 #
 - name: fetch list of wikis on master
+  # yamllint disable-line rule:line-length
   command: mysql -NBe "SELECT DISTINCT(TABLE_SCHEMA) FROM information_schema.tables WHERE TABLE_SCHEMA NOT IN ('information_schema', 'performance_schema', 'mysql')"
   register: mysql_content_databases
   delegate_to: "{{ mysql_replication_master }}"

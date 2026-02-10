@@ -8,19 +8,19 @@
 #   extra_options: "--skip-tags smw-data,search-index"
 
 
-- name:
-  set_fact:
+- name: Set force deploy overwrite fact
+  ansible.builtin.set_fact:
     _force_deploy_notify_prefix: "Backup"
-    _force_deploy_options: "--overwrite {{ force_deploy.extra_options|default('') }}"
+    _force_deploy_options: "--overwrite {{ force_deploy.extra_options | default('') }}"
   when:
     - force_deploy is defined
     - force_deploy.overwrite is defined
     - force_deploy.overwrite
 
-- name:
-  set_fact:
+- name: Set force deploy fact
+  ansible.builtin.set_fact:
     _force_deploy_notify_prefix: "Deploy"
-    _force_deploy_options: "{{ force_deploy.extra_options|default('') }}"
+    _force_deploy_options: "{{ force_deploy.extra_options | default('') }}"
   when:
     - force_deploy is defined
     - >
@@ -28,7 +28,7 @@
       or (force_deploy.overwrite is defined and not force_deploy.overwrite)
 
 - name: Ensure autodeployer cron in place
-  template:
+  ansible.builtin.template:
     src: "meza-autodeployer-cron.j2"
     dest: "/etc/cron.d/meza-autodeployer-cron-{{ env }}"
     owner: "{{ m_crond_owner }}"

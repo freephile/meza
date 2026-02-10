@@ -48,7 +48,8 @@
 # Also, the role name should be refactored because it runs on every play and
 # every server, not just the controller.
 # This role might be eliminated entirely as part of a larger refactor.
-# GetMeza does too much. Permisions and Bootstrapping must be separate roles. Apache needs to be installed EARLY, and separate from 'mediawiki-app' and 'php'. ansible_user membership in 'group_apache' should be handled when apache is installed, not here.
+# GetMeza does too much. Permisions and Bootstrapping must be separate roles. Apache needs to be installed EARLY,
+# and separate from 'mediawiki-app' and 'php'. ansible_user membership in 'group_apache' should be handled when apache is installed, not here.
 - name: Does controller have local config
   ansible.builtin.stat:
     path: "{{ m_conf_public_dir }}"

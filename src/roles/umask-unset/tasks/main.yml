@@ -1,6 +1,6 @@
 ---
 
 - name: Unset umask at end of deploy
-  file:
+  ansible.builtin.file:
     path: /etc/profile.d/umask.profile.sh
     state: absent
