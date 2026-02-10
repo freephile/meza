@@ -184,3 +184,28 @@ m_config_secret_group: "{{ group_wheel | default('root') }}"
 m_simplesamlphp_mode: "u=rwX,g=rwX,o=rX"
 m_simplesamlphp_owner: "meza-ansible"
 m_simplesamlphp_group: "{{ group_wheel | default('root') }}"
+
+#
+# DEPRECATED VARIABLE NAMES - Backward compatibility aliases
+# These map old variable names to new canonical names for gradual migration
+# New code should use the canonical names defined above
+# Issue #286
+m_install: "{{ m_install_dir }}"
+m_meza: "{{ m_app_dir }}"
+m_config_core: "{{ m_config_dir }}"
+m_local_public: "{{ m_config_public_dir }}"
+m_local_secret: "{{ m_config_secret_dir }}"
+m_meza_data: "{{ m_data_dir }}"
+m_cache_directory: "{{ m_data_cache_dir }}"
+m_logs: "{{ m_data_logs_dir }}"
+m_tmp: "{{ m_data_tmp_dir }}"
+m_deploy: "{{ m_config_deploy_dir }}"
+m_scripts: "{{ m_app_scripts_dir }}"
+m_test: "{{ m_app_test_dir }}"
+m_backups: "{{ m_data_backups_dir }}"
+m_mediawiki: "{{ m_web_mediawiki_dir }}"
+m_htdocs: "{{ m_web_dir }}"
+m_i18n: "{{ m_config_i18n_dir }}"
+m_apache: "{{ m_web_conf_dir }}"
+m_logs_deploy: "{{ m_data_deploy_log_file }}"
+m_logs_create_wiki: "{{ m_data_create_wiki_log_file }}"

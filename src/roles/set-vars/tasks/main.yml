@@ -138,10 +138,3 @@
     file: "{{ m_conf_secret_dir }}/{{ env }}/secret.yml"
   failed_when: false
   when: env | length > 0
-
-- name: Set path alias variables for deprecated names
-  ansible.builtin.include_vars:
-    file: "{{ m_install_dir }}/meza/config/path_alias.yml"
-  failed_when: false
-  tags:
-    - always
