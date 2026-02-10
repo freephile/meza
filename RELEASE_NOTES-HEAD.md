@@ -3,6 +3,33 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [aada3bec](https://github.com/freephile/meza/commit/aada3bec) (2026-02-10) Greg Rundlett: Cleanup with Ansible Lint Fix FQCN and Jinja spacing in import-wiki-sql.yml
+Addresses Issue [#16](https://github.com/freephile/meza/issues/16)
+  - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`
+
+* [e485c4d3](https://github.com/freephile/meza/commit/e485c4d3) (2026-02-10) Greg Rundlett: Fix Admin password logic in create wiki create-wiki.yml playbook for User interaction
+create-wiki-wrapper role = presentation of Admin password at the end of workflow (fixed FQCN)
+ensure-admin-password.yml = verify wiki business logic
+import-wiki-sql.yml = verify wiki orchestration
+Fixes Issue [#269](https://github.com/freephile/meza/issues/269)
+  - Modified: `src/playbooks/create-wiki.yml`
+  - Modified: `src/roles/create-wiki-wrapper/tasks/main.yml`
+  - Modified: `src/roles/verify-wiki/tasks/create-admin-account.yml`
+  - Added: `src/roles/verify-wiki/tasks/ensure-admin-password.yml`
+  - Modified: `src/roles/verify-wiki/tasks/import-wiki-sql.yml`
+
+* [1fe0e7bb](https://github.com/freephile/meza/commit/1fe0e7bb) (2026-02-10) Greg Rundlett: Normalize meza variables replace path_alias.yml with definitions in paths.yml
+Closes Issue [#286](https://github.com/freephile/meza/issues/286)
+  - Deleted: `config/path_alias.yml`
+  - Modified: `config/paths.yml`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+
+* [54578f39](https://github.com/freephile/meza/commit/54578f39) (2026-02-09) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [4d0fc94a](https://github.com/freephile/meza/commit/4d0fc94a) (2026-02-08) Greg Rundlett: Normalize meza variables update paths.yml and path_alias.yml
 Addresses Issue [#286](https://github.com/freephile/meza/issues/286)
   - Modified: `config/path_alias.yml`
