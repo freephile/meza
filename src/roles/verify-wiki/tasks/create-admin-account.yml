@@ -9,16 +9,20 @@
   ansible.builtin.fail:
     msg: |
       Password does not meet MediaWiki requirements:
-      - Must be at least 8 characters long
+      - Must be at least 10 characters long
       - Must contain uppercase, lowercase, number, and special character
       - Cannot contain spaces
   when: >
-    admin_password | length < 8 or
-    admin_password is not regex('[A-Z]') or
-    admin_password is not regex('[a-z]') or
-    admin_password is not regex('[0-9]') or
-    admin_password is not regex('[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]') or
-    ' ' in admin_password
+    admin_password is defined and
+    admin_password | length > 0 and
+    (
+      admin_password | length < 10 or
+      admin_password is not regex('[A-Z]') or
+      admin_password is not regex('[a-z]') or
+      admin_password is not regex('[0-9]') or
+      admin_password is not regex('[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]') or
+      ' ' in admin_password
+    )
   run_once: true
 
 # Create an admin user for the new wiki with the provided secure password
@@ -29,3 +33,4 @@
     WIKI={{ wiki_id | quote }} {{ m_mediawiki_install_path | quote }}/maintenance/run createAndPromote --force --sysop --bureaucrat Admin {{ admin_password | quote }}
   run_once: true
   no_log: true
+  changed_when: true

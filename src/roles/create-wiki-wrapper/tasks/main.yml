@@ -3,48 +3,69 @@
 # Perform checks on user input
 # FIXME #179: This isn't working: spaces and dashes getting through
 # FIXME #298: Dashes break MariaDB. Figure out how to allow them.
-- assert:
+- ansible.builtin.assert:
     that: 'wiki_id is search("[a-zA-Z0-9_]")'
     msg: "Your wiki ID may only include letters, numbers and underscores"
 
 # Required to fix scope of wiki_id variable when set via prompt. Ref #954.
 - name: Set fact - wiki_id
-  set_fact:
+  ansible.builtin.set_fact:
     wiki_id: "{{ wiki_id }}"
 
 - name: Sync configurations (FIXME do we need this)
-  include_role:
+  ansible.builtin.include_role:
     name: sync-configs
 
 - name: Add wiki to configuration
-  include_role:
+  ansible.builtin.include_role:
     name: configure-wiki
 
 - name: Re-sync config to app servers
-  include_role:
+  ansible.builtin.include_role:
     name: sync-configs
 
 # This whole role needs inspection. It does way too much.
 # Was breaking 'create wiki' because the mediawiki-tables.SQL was stale
 - name: Use verify-wiki to make sure new wiki is setup
-  include_role:
+  ansible.builtin.include_role:
     name: verify-wiki
+
+- name: Display generated admin password with instructions
+  ansible.builtin.debug:
+    msg: |
+      ===================================================================
+      IMPORTANT: Your wiki has been created with an auto-generated password!
+      ===================================================================
+
+      Wiki ID: {{ wiki_id }}
+      Admin username: Admin
+      Admin password: {{ admin_password }}
+
+      !!  SAVE THIS PASSWORD NOW! It will not be shown again.
+
+      To change the Admin password later, use:
+      WIKI={{ wiki_id }} {{ m_mediawiki_install_path }}/maintenance/run createAndPromote --force --sysop --bureaucrat Admin NEW_PASSWORD
+
+      ===================================================================
+  when: admin_password_was_generated | default(false)
+  run_once: true
 
 # Create symlink to core for short urls (from mediawiki role)
 # This is needed for new wikis created individually (not during full deploy)
 - name: Create symlink to core, to enable short urls
-  file:
+  ansible.builtin.file:
     src: "{{ m_mediawiki_install_path }}"
     dest: "{{ m_web_dir }}/{{ wiki_id }}"
     state: link
-    force: yes
+    force: true
     owner: "{{ user_apache }}"
     group: "{{ group_apache }}"
 
 # Wikis are totally built at this point, but search needs rebuilding?
 # Pretty sure this is taken care of in the MedidaWiki role.
 - name: (Re-)build search index for each wiki
-  shell: "bash {{ m_config_deploy_dir }}/elastic-rebuild-all.sh {{ wiki_id }}"
+  ansible.builtin.command: "bash {{ m_config_deploy_dir }}/elastic-rebuild-all.sh {{ wiki_id }}"
   run_once: true
+  changed_when: false
   tags:
     - search-index

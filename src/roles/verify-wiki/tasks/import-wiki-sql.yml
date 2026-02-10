@@ -127,7 +127,7 @@
 # SECTION: init new wiki
 #
 - name: Debug wiki creation status
-  debug:
+  ansible.builtin.debug:
     msg: |
       Wiki creation status for {{ wiki_id }}:
       - wiki_exists: {{ wiki_exists | default('undefined') }}
@@ -136,8 +136,12 @@
       - created_from_backup: {{ created_from_backup | default('undefined') }}
       - Will create admin account: {{ created_new_wiki | default(false) }}
 
+- name: Ensure admin password exists and is valid for new wiki
+  ansible.builtin.include_tasks: ensure-admin-password.yml
+  when: created_new_wiki
+
 - name: "Include create-admin-account.yml for a new (not imported) wiki - {{ wiki_id }}"
-  include_tasks: create-admin-account.yml
+  ansible.builtin.include_tasks: create-admin-account.yml
   when: created_new_wiki
 
 
