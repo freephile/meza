@@ -3,6 +3,42 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [677c3572](https://github.com/freephile/meza/commit/677c3572) (2026-02-11) Greg Rundlett: Replace WikiBlender with simple htdocs task remove Blender from .htaccess
+remove Blender variables from MediaWiki role defaults
+remove Blender tasks from `mediawiki` role
+remove BlenderSettings.php from `mediawiki` role
+create new meza-landing-page.php that replaces the functionality of
+WikiBlender in the `htdocs` role
+use favicon from primary wiki, or default to project favicon
+add meza-landing-page.php to htdocs templating task
+`require` meza-landing-page.php from index.php (instead of WikiBlender)
+add default vars for htdocs role that should be overridden in public.yml
+add blender vars in the public.yml template for new controllers
+Fixes Issue [#206](https://github.com/freephile/meza/issues/206)
+  - Added: `src/roles/htdocs/defaults/main.yml`
+  - Modified: `src/roles/htdocs/tasks/main.yml`
+  - Modified: `src/roles/htdocs/templates/.htaccess.j2`
+  - Modified: `src/roles/htdocs/templates/index.php.j2`
+  - Added: `src/roles/htdocs/templates/meza-landing-page.php.j2`
+  - Modified: `src/roles/init-controller-config/templates/public.yml.j2`
+  - Modified: `src/roles/mediawiki/defaults/main.yml`
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Deleted: `src/roles/mediawiki/templates/BlenderSettings.php.j2`
+
+* [46e8238a](https://github.com/freephile/meza/commit/46e8238a) (2026-02-10) Greg Rundlett: Update logo - add to task Follow-up commit 5d355f9 by actually adding the logo file to the
+'distribution' task "Ensure base files are in place (but do not
+overwrite)"
+Remember: usage of 'logo.png' is deprecated, but at least it's there
+for use and override in conf-meza/public/wikis/<wiki>/
+Fixes Issue [#270](https://github.com/freephile/meza/issues/270)
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+
+* [0f56e190](https://github.com/freephile/meza/commit/0f56e190) (2026-02-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [a4c8a14c](https://github.com/freephile/meza/commit/a4c8a14c) (2026-02-10) Greg Rundlett: Remove obsolete Parsoid code This just removes the obsolete ansible variables and the
 'cleanup-parsoid' role that was coupled into 'base'.
 Other 'cleanup' would involve the ServerPerformance and cron roles.
