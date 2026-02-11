@@ -311,7 +311,7 @@
                         // Build tooltip with top contributors
                         if (activeUsers.length > 0) {
                             let tooltipHtml = '<div class="tooltiptext">';
-                            tooltipHtml += '<strong>Most Active Users (Last 30 Days)</strong>';
+                            tooltipHtml += '<strong>Most Active Users (Last 500 edits)</strong>';
                             tooltipHtml += '<ol class="user-list">';
                             activeUsers.slice(0, 10).forEach(user => {
                                 tooltipHtml += `<li>${user.name}: ${user.recenteditcount} edits</li>`;
