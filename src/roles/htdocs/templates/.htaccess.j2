@@ -22,9 +22,6 @@
     # and settings are located)
     RewriteRule ^wikis(?:/|$)(.*)$ - [L]
 
-    # Allow access to WikiBlender landing page and support files
-    RewriteRule ^WikiBlender(?:/|$)(.*)$ - [L]
-
     # Allow access to ServerPerformance plot page and support files
     RewriteRule ^ServerPerformance(?:/|$)(.*)$ - [L]
 
@@ -33,7 +30,7 @@
     RewriteRule ^BackupDownload/.*Test\.php$ - [F,L]
     RewriteRule ^BackupDownload/README\.md$ - [F,L]
     RewriteRule ^BackupDownload/.*\.md$ - [F,L]
-    
+
     # Allow access to BackupDownload function
     RewriteRule ^BackupDownload(?:/|$)(.*)$ - [L]
     {% endif %}
@@ -47,5 +44,5 @@
 
     # Don't expose any files or folders with .git in the path
     RedirectMatch 404 /\.git
-    
+
 </IfModule>

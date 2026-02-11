@@ -16,8 +16,6 @@ m_opcache_production_mode: {{ m_opcache_production_mode | default(true, true) }}
 # meza_auth_type: "viewer-read"
 meza_auth_type: "anon-read"
 
-blender_landing_page_title: Test of Meza Wikis
-
 ## List of extension names to exclude (must match names in MezaCoreExtensions.yml exactly)
 # m_excluded_extension_names:
 #   - Wiretap
@@ -49,23 +47,27 @@ blender_landing_page_title: Test of Meza Wikis
 wgPasswordSender: "admin@example.com"
 # wgEmergencyContact = "another.email@example.com" # defaults to wgPassword Sender
 
-# blender_header_wiki_title: Top row wikis
+# Big title for the landing page
+blender_landing_page_title: "Meza Wikis"
 
-# blender_header_wikis:
-#   - wiki_id_1
-#   - wiki_id_2
+# Optional top row of wikis with or without a title
+blender_header_wiki_title: false
+blender_header_wikis: []
 
-# blender_middle_wiki_title: Middle row wikis
+# All wikis that aren't specified in header or footer row will be placed in
+# middle row. Specify a title as desired.
+blender_middle_wiki_title: false
 
-# blender_footer_wiki_title: Bottom row wikis
+# Optional bottom row of wikis with or without a title
+blender_footer_wiki_title: false
+blender_footer_wikis: []
 
-# blender_footer_wikis:
-#   - wiki_id_z
-#   - wiki_id_y
-
+# Below all the wikis, links to stuff
 # blender_footer_links:
-#   - '<a href="">...</a>'
+#   - "<a href='https://github.com/nasa/meza'>meza on github</a>"
+#   - "<a href='https://mediawiki.org/wiki/Meza'>Project Page on MediaWiki.org</a>"
 
+blender_admins: []
 # blender_admins:
 #   - name: Adam
 #     email: adam@example.com

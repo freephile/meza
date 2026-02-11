@@ -362,38 +362,6 @@
 # cache, images, and uploads directories.
 
 #
-# LANDING PAGE
-#
-
-- name: Ensure WikiBlender installed
-  # Ref #1149 for TMPDIR environment var
-  environment:
-    TMPDIR: "{{ m_data_tmp_dir }}"
-  git:
-    # ToDo: migrate WikiBlender from ndc-rkevans to nasa
-    repo: https://github.com/ndc-rkevans/WikiBlender.git
-    dest: "{{ m_web_dir }}/WikiBlender"
-    version: "master"
-    umask: "{{ m_umask }}"
-
-- name: Ensure BlenderSettings.php in place
-  template:
-    src: BlenderSettings.php.j2
-    dest: "{{ m_web_dir }}/WikiBlender/BlenderSettings.php"
-    mode: "{{ m_htdocs_mode }}"
-    owner: "{{ m_htdocs_owner }}"
-    group: "{{ group_apache }}"
-
-- name: Ensure WikiBlender properly owned
-  file:
-    path: "{{ m_web_dir }}/WikiBlender"
-    mode: "{{ m_htdocs_mode }}"
-    owner: "{{ m_htdocs_owner }}"
-    group: "{{ group_apache }}"
-    state: directory
-    recurse: true
-
-#
 # Authentication roles
 #
 - name: Include SAML role if SAML configured

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blender_landing_page_title }}</title>
+{% if primary_wiki_id is defined %}
+    <link rel="shortcut icon" href="/wikis/{{ primary_wiki_id }}/config/favicon.ico">
+{% else %}
+    <link rel="shortcut icon" href="/favicon.ico">
+{% endif %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+        }
+        .header {
+            background: #0a425e; /* logo blue */
+            color: #fef8ec; /* logo cream */
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        .wiki-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .wiki-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: visible;
+        }
+        .wiki-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .wiki-card a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .wiki-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1rem;
+            object-fit: contain;
+        }
+        .wiki-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .wiki-stats {
+            font-size: 0.9rem;
+            color: #0a425e;
+            line-height: 1.6;
+            min-height: 60px;
+            padding: 0.5rem;
+        }
+        .loading {
+            color: #999;
+            font-style: italic;
+        }
+        .footer {
+            background: #fef8ec; /* logo cream */
+            border-top: 1px solid #ddd;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .footer-links span {
+            color: #ccc;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 280px;
+            max-width: calc(100vw - 2rem);
+            background-color: #0a425e; /* logo blue */
+            color: #fef8ec; /* logo cream */
+            text-align: left;
+            border-radius: 6px;
+            padding: 1rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: 75px;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #0a425e transparent transparent transparent; /* logo blue */
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .user-list {
+            list-style-position: inside;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ blender_landing_page_title }}</h1>
+    </div>
+
+    <div class="container">
+        <?php
+        // Configuration
+        $wikiBaseUrl = "https://{{ wiki_app_fqdn }}/";
+        $wikisDir = "{{ m_web_dir }}/wikis";
+
+        // Define wiki groupings from Ansible variables
+        $headerWikis = [{% for wiki in blender_header_wikis %}'{{ wiki }}'{{ ', ' if not loop.last else '' }}{% endfor %}];
+        $footerWikis = [{% for wiki in blender_footer_wikis %}'{{ wiki }}'{{ ', ' if not loop.last else '' }}{% endfor %}];
+
+        // Section titles
+        $headerTitle = {{ '"' + blender_header_wiki_title + '"' if blender_header_wiki_title else 'false' }};
+        $middleTitle = {{ '"' + blender_middle_wiki_title + '"' if blender_middle_wiki_title else 'false' }};
+        $footerTitle = {{ '"' + blender_footer_wiki_title + '"' if blender_footer_wiki_title else 'false' }};
+
+        // Get all wiki directories
+        function getWikis($wikisDir) {
+            if (!is_dir($wikisDir)) {
+                return [];
+            }
+            $dirs = array_diff(scandir($wikisDir), ['.', '..']);
+            return array_filter($dirs, function($dir) use ($wikisDir) {
+                return is_dir("$wikisDir/$dir");
+            });
+        }
+
+        // Get wiki display name from config
+        function getWikiName($wikisDir, $wikiId) {
+            $basePhpPath = "$wikisDir/$wikiId/config/preLocalSettings.d/base.php";
+            $preLocalPath = "$wikisDir/$wikiId/config/preLocalSettings.php";
+
+            // Try new location first
+            if (file_exists($basePhpPath)) {
+                include $basePhpPath;
+                if (isset($wgSitename)) {
+                    return $wgSitename;
+                }
+            }
+
+            // Fall back to legacy location
+            if (file_exists($preLocalPath)) {
+                include $preLocalPath;
+                if (isset($wgSitename)) {
+                    return $wgSitename;
+                }
+            }
+
+            return ucfirst($wikiId);
+        }
+
+        // Categorize wikis into sections
+        $allWikis = getWikis($wikisDir);
+        $wikiSections = [
+            'header' => [],
+            'middle' => [],
+            'footer' => []
+        ];
+
+        foreach ($allWikis as $wikiId) {
+            $wikiData = [
+                'id' => $wikiId,
+                'name' => getWikiName($wikisDir, $wikiId),
+                'logo' => "/wikis/$wikiId/config/meza-logo-135.png"
+            ];
+
+            if (in_array($wikiId, $headerWikis)) {
+                $wikiSections['header'][] = $wikiData;
+            } elseif (in_array($wikiId, $footerWikis)) {
+                $wikiSections['footer'][] = $wikiData;
+            } else {
+                $wikiSections['middle'][] = $wikiData;
+            }
+        }
+
+        // Render a section of wikis
+        function renderSection($title, $wikis, $wikiBaseUrl) {
+            if (empty($wikis)) {
+                return;
+            }
+
+            if ($title !== false) {
+                echo "<h2 class='section-title'>" . htmlspecialchars($title) . "</h2>";
+            }
+
+            echo "<div class='wiki-grid'>";
+            foreach ($wikis as $wiki) {
+                echo "<div class='wiki-card'>";
+                echo "<a href='{$wikiBaseUrl}{$wiki['id']}/'>";
+                echo "<img src='{$wiki['logo']}' alt='{$wiki['name']} logo' class='wiki-logo' onerror=\"this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 fill=%22%23999%22 font-size=%2214%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Logo%3C/text%3E%3C/svg%3E'\">";
+                echo "<div class='wiki-name'>" . htmlspecialchars($wiki['name']) . "</div>";
+                echo "</a>";
+                echo "<div class='wiki-stats loading' data-wiki-id='{$wiki['id']}'>Loading wiki stats...</div>";
+                echo "</div>";
+            }
+            echo "</div>";
+        }
+
+        // Render all sections
+        renderSection($headerTitle, $wikiSections['header'], $wikiBaseUrl);
+        renderSection($middleTitle, $wikiSections['middle'], $wikiBaseUrl);
+        renderSection($footerTitle, $wikiSections['footer'], $wikiBaseUrl);
+        ?>
+    </div>
+
+    <div class="footer">
+        <div class="footer-links">
+{% for link in blender_footer_links %}
+            {{ link | safe }}{{ '<span>|</span>' if not loop.last else '' }}
+{% endfor %}
+{% if blender_admins %}
+            <span>|</span>
+            <a href="mailto:{% for admin in blender_admins %}{{ admin.email }}{{ ';' if not loop.last else '' }}{% endfor %}"
+               title="{% for admin in blender_admins %}{{ admin.name }}{{ '&#10;' if not loop.last else '' }}{% endfor %}">
+                Administrators
+            </a>
+{% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Fetch wiki statistics from MediaWiki API
+        const wikiBaseUrl = "{{ wiki_app_fqdn | default('') }}";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const statElements = document.querySelectorAll('.wiki-stats');
+
+            statElements.forEach(function(element) {
+                const wikiId = element.getAttribute('data-wiki-id');
+                const apiUrl = `https://${wikiBaseUrl}/${wikiId}/api.php?action=query&meta=siteinfo&siprop=statistics&list=allusers&auactiveusers=1&aulimit=500&format=json&origin=*`;
+
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const stats = data.query.statistics;
+                        const activeUsers = data.query.allusers || [];
+
+                        // Sort users by recent edit count
+                        activeUsers.sort((a, b) => (b.recenteditcount || 0) - (a.recenteditcount || 0));
+
+                        // Build stats text
+                        let statsHtml = `${stats.articles.toLocaleString()} articles, ${stats.images.toLocaleString()} files<br>`;
+                        if (stats.views) {
+                            statsHtml += `${stats.views.toLocaleString()} views, `;
+                        }
+                        statsHtml += `${stats.edits.toLocaleString()} edits<br>`;
+                        statsHtml += `${activeUsers.length} active contributors`;
+
+                        element.innerHTML = statsHtml;
+                        element.classList.remove('loading');
+
+                        // Build tooltip with top contributors
+                        if (activeUsers.length > 0) {
+                            let tooltipHtml = '<div class="tooltiptext">';
+                            tooltipHtml += '<strong>Most Active Users (Last 30 Days)</strong>';
+                            tooltipHtml += '<ol class="user-list">';
+                            activeUsers.slice(0, 10).forEach(user => {
+                                tooltipHtml += `<li>${user.name}: ${user.recenteditcount} edits</li>`;
+                            });
+                            tooltipHtml += '</ol></div>';
+
+                            element.classList.add('tooltip');
+                            element.innerHTML = statsHtml + tooltipHtml;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching stats for ' + wikiId, error);
+                        element.innerHTML = 'Stats unavailable';
+                        element.classList.remove('loading');
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -85,5 +85,6 @@
   with_items:
     - ".htaccess"
     - "index.php"
+    - "meza-landing-page.php"
     - "office.html"
     - "robots.txt"
