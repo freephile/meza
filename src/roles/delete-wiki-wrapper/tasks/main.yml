@@ -1,5 +1,6 @@
 ---
 
+# Remove the conf directory hierarchy from the controller
 - name: Delete wiki from controller
   ansible.builtin.file:
     path: "{{ m_conf_public_dir }}/wikis/{{ wiki_id }}"
@@ -11,10 +12,16 @@
   ansible.builtin.include_role:
     name: sync-configs
 
-# FIXME: Shouldn't this not be required?
+# Remove the web directory hierarchy from app servers
 - name: Delete htdocs directory
   ansible.builtin.file:
     path: "{{ m_web_dir }}/wikis/{{ wiki_id }}"
+    state: absent
+
+# Remove the symlink to mediawiki
+- name: Remove symlink to mediawiki directory (short urls)
+  ansible.builtin.file:
+    path: "{{ m_web_dir }}/{{ wiki_id }}"
     state: absent
 
 - name: Delete wiki uploads directory and gluster brick
