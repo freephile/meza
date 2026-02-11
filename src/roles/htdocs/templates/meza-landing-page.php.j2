@@ -93,7 +93,6 @@
             background: #fef8ec; /* logo cream */
             border-top: 1px solid #ddd;
             padding: 2rem;
-            margin-top: 3rem;
             text-align: center;
         }
         .footer-links {
@@ -106,7 +105,6 @@
         .footer-links a {
             color: #667eea;
             text-decoration: none;
-            padding: 0.5rem 1rem;
         }
         .footer-links a:hover {
             text-decoration: underline;
@@ -190,19 +188,10 @@
         // Get wiki display name from config
         function getWikiName($wikisDir, $wikiId) {
             $basePhpPath = "$wikisDir/$wikiId/config/preLocalSettings.d/base.php";
-            $preLocalPath = "$wikisDir/$wikiId/config/preLocalSettings.php";
 
-            // Try new location first
+            // Read site name from base.php
             if (file_exists($basePhpPath)) {
                 include $basePhpPath;
-                if (isset($wgSitename)) {
-                    return $wgSitename;
-                }
-            }
-
-            // Fall back to legacy location
-            if (file_exists($preLocalPath)) {
-                include $preLocalPath;
                 if (isset($wgSitename)) {
                     return $wgSitename;
                 }
@@ -289,24 +278,32 @@
 
             statElements.forEach(function(element) {
                 const wikiId = element.getAttribute('data-wiki-id');
-                const apiUrl = `https://${wikiBaseUrl}/${wikiId}/api.php?action=query&meta=siteinfo&siprop=statistics&list=allusers&auactiveusers=1&aulimit=500&format=json&origin=*`;
+                const apiUrl = `https://${wikiBaseUrl}/${wikiId}/api.php?action=query&meta=siteinfo&siprop=statistics&list=recentchanges&rcprop=user&rclimit=500&format=json&origin=*`;
 
                 fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
                         const stats = data.query.statistics;
-                        const activeUsers = data.query.allusers || [];
+                        const recentChanges = data.query.recentchanges || [];
+                        const userEditsMap = recentChanges.reduce((acc, change) => {
+                            if (!change.user) {
+                                return acc;
+                            }
+                            acc[change.user] = (acc[change.user] || 0) + 1;
+                            return acc;
+                        }, {});
+                        const activeUsers = Object.keys(userEditsMap).map(user => ({
+                            name: user,
+                            recenteditcount: userEditsMap[user]
+                        }));
 
                         // Sort users by recent edit count
                         activeUsers.sort((a, b) => (b.recenteditcount || 0) - (a.recenteditcount || 0));
 
                         // Build stats text
                         let statsHtml = `${stats.articles.toLocaleString()} articles, ${stats.images.toLocaleString()} files<br>`;
-                        if (stats.views) {
-                            statsHtml += `${stats.views.toLocaleString()} views, `;
-                        }
                         statsHtml += `${stats.edits.toLocaleString()} edits<br>`;
-                        statsHtml += `${activeUsers.length} active contributors`;
+                        statsHtml += `${stats.activeusers.toLocaleString()} active contributors (30 days)`;
 
                         element.innerHTML = statsHtml;
                         element.classList.remove('loading');
