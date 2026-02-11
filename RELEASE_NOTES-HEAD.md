@@ -3,6 +3,18 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [3f76e403](https://github.com/freephile/meza/commit/3f76e403) (2026-02-11) Greg Rundlett: Replace WikiBlender fix excess margin and padding in footer
+remove fake "legacy location" lookup for wgSitename
+fix api query to get correct editor counts
+Fixes Issue [#206](https://github.com/freephile/meza/issues/206)
+  - Modified: `src/roles/htdocs/templates/meza-landing-page.php.j2`
+
+* [3e97cc2c](https://github.com/freephile/meza/commit/3e97cc2c) (2026-02-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [2ad3b611](https://github.com/freephile/meza/commit/2ad3b611) (2026-02-11) Greg Rundlett: Deletes symlink for Issue [#50](https://github.com/freephile/meza/issues/50) 
   - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
 
