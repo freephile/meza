@@ -3,6 +3,18 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [2ad3b611](https://github.com/freephile/meza/commit/2ad3b611) (2026-02-11) Greg Rundlett: Deletes symlink for Issue [#50](https://github.com/freephile/meza/issues/50) 
+  - Modified: `src/roles/delete-wiki-wrapper/tasks/main.yml`
+
+* [5719dfbd](https://github.com/freephile/meza/commit/5719dfbd) (2026-02-11) Greg Rundlett: clarify some config command in docs 
+  - Modified: `manual/meza-cmd/config.md`
+
+* [fb96617a](https://github.com/freephile/meza/commit/fb96617a) (2026-02-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [677c3572](https://github.com/freephile/meza/commit/677c3572) (2026-02-11) Greg Rundlett: Replace WikiBlender with simple htdocs task remove Blender from .htaccess
 remove Blender variables from MediaWiki role defaults
 remove Blender tasks from `mediawiki` role
