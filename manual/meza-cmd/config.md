@@ -41,13 +41,13 @@ Remember that it is fast and useful to just grep the two config hierarchies:
 Edit configuration files directly using your preferred editor:
 
 ```bash
-# Edit public (non-sensitive) configuration
+# Edit public (non-sensitive) farm configuration
 sudo vi /opt/conf-meza/public/public.yml
 
-# Edit secret (sensitive) configuration
+# Edit secret (sensitive) configuration namespaced by environment target
 sudo vi /opt/conf-meza/secret/monolith/secret.yml
 
-# Edit global defaults (affects all environments)
+# Edit global app defaults (affects all environments)
 # This is only for changes to the project itself
 sudo vi /opt/meza/config/defaults.yml
 ```
