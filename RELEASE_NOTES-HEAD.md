@@ -3,6 +3,19 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [090f72e4](https://github.com/freephile/meza/commit/090f72e4) (2026-02-11) Greg Rundlett: remove the "Last 500 edits" label `rclimit=500` means the query can only return 500 maximum,
+and we need rclimit so we don't get the default 10;
+but most times the API will return fewer than 500 results -
+even when there are more than 500 edits
+Polish Issue [#206](https://github.com/freephile/meza/issues/206)
+  - Modified: `src/roles/htdocs/templates/meza-landing-page.php.j2`
+
+* [aa55f5ea](https://github.com/freephile/meza/commit/aa55f5ea) (2026-02-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [607fea55](https://github.com/freephile/meza/commit/607fea55) (2026-02-11) Greg Rundlett: Correct the tooltip label - tally the last 500 edits Fixes Issue [#206](https://github.com/freephile/meza/issues/206)
   - Modified: `src/roles/htdocs/templates/meza-landing-page.php.j2`
 
