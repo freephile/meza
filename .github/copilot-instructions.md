@@ -19,7 +19,7 @@
 ```
 
 ## Project Overview
-Meza is the leading MediaWiki deployment automation platform built with Ansible. It provides a single `meza` command-line interface to deploy, manage, and maintain complex MediaWiki environments across multiple servers with features like VisualEditor, CirrusSearch, and many other carefully selected extensions.
+Meza is the leading MediaWiki deployment automation platform built with Ansible. Using Python, it provides a single `meza` command-line interface to deploy, manage, and maintain complex MediaWiki environments across multiple servers with features like VisualEditor, CirrusSearch, and many other carefully selected extensions.
 
 ## Architecture & Key Components
 
@@ -73,6 +73,10 @@ ANSIBLE_CONFIG=/opt/meza/config/ansible.cfg ansible-playbook /opt/meza/src/playb
 meza deploy <env> --tags mediawiki --skip-tags latest,update.php,verify-wiki
 
 # Force debug mode for troubleshooting
+# You should almost never need this because it is set automatically
+# when developing in Vagrant
+# And you can request it on-demand with ?requestDebug=true query param in the web interface
+# If you are truly using a 'dev' environment, you can set this in the public.yml for that environment to always have it on
 # Set in /opt/conf-meza/public/public.yml:
 m_force_debug: true
 ```
@@ -143,6 +147,29 @@ meza deploy-kill <env>
 - For security changes: test image access permissions with anonymous users
 - Use Docker test framework: `tests/docker/run-tests.sh monolith-from-scratch` (NOTE: this is experimental)
 
+## Whitespace Standards (Critical for Linting)
+
+**NEVER create lines containing only whitespace characters:**
+- ❌ Lines with only spaces
+- ❌ Lines with only tabs
+- ❌ Trailing whitespace at the end of lines
+
+**Required practices:**
+- ✅ Use completely empty lines (zero characters) for blank lines
+- ✅ Remove all trailing whitespace from line endings
+- ✅ Properly indent code but never leave orphaned indentation
+
+**Why this matters:**
+- yamllint will reject files with lines containing only spaces
+- ansible-lint requires clean whitespace
+- Git and linters flag trailing whitespace as errors
+- Inconsistent whitespace causes merge conflicts
+
+**When editing files:**
+- If creating blank lines within indented blocks, use completely empty lines (no spaces/tabs)
+- Never preserve spacing on "empty" lines even if trying to match indentation context
+- Use editor settings that strip trailing whitespace automatically
+
 ## External Dependencies & Integration
 - **MediaWiki Core**: Git SEMVER, submodules, and composer dependencies for version management
 - **Composer**: PHP dependency management for MediaWiki extensions
@@ -202,6 +229,7 @@ ansible-lint <playbook.yml>            # For Ansible best practices
 **For YAML/Ansible Files:**
 - [ ] Use 2-space indentation consistently
 - [ ] Use FQCN for all Ansible modules
+- [ ] No lines with only whitespace (spaces/tabs)
 - [ ] No trailing whitespace
 - [ ] Line length under 140 chars
 - [ ] Run: `./src/scripts/lint-files.sh <file>`
@@ -357,6 +385,8 @@ ansible-playbook site.yml --tags <role-name> --check
 ```
 
 ## Standards and References
+
+Tip for users: Run `sed -i 's/[[:space:]]\+$//' filename` to strip trailing whitespace
 
 ### Python
 - **PEP 8** – Style Guide for Python Code: https://pep8.org/
