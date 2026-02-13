@@ -125,14 +125,50 @@ lint_ansible() {
     fi
 }
 
+# Function to build directory exclusion pattern from .gitignore
+build_exclusion_pattern() {
+    local base_dirs="\.venv|vendor|\.cache|\.git|tests/docker|collections|node_modules"
+
+    # Try to read additional patterns from .gitignore
+    if [ -f "$PROJECT_ROOT/.gitignore" ]; then
+        while IFS= read -r line; do
+            # Skip comments and empty lines
+            [[ "$line" =~ ^#.*$ ]] && continue
+            [[ -z "$line" ]] && continue
+
+            # Handle directory patterns (ending with /)
+            if [[ "$line" =~ /$ ]]; then
+                # Remove trailing slash and escape dots
+                local dir="${line%/}"
+                dir="${dir//./\\.}"
+                base_dirs="${base_dirs}|${dir}"
+            fi
+        done < "$PROJECT_ROOT/.gitignore"
+    fi
+
+    echo "$base_dirs"
+}
+
 # Function to determine file type and run appropriate linter
 lint_file() {
     local file="$1"
     local exit_code=0
 
+    # Build exclusion pattern once per script run (cached via static variable pattern)
+    if [ -z "$EXCLUSION_PATTERN" ]; then
+        EXCLUSION_PATTERN="^($(build_exclusion_pattern))/"
+    fi
+
     # Skip files in excluded directories
-    if [[ "$file" =~ ^\.venv/ ]] || [[ "$file" =~ ^vendor/ ]] || [[ "$file" =~ ^\.cache/ ]]; then
-        print_status "Skipping excluded file: $file"
+    if [[ "$file" =~ $EXCLUSION_PATTERN ]]; then
+        print_status "Skipping excluded directory: $file"
+        return 0
+    fi
+
+    # Skip binary and image files
+    local binary_pattern="\.(svg|png|jpg|jpeg|gif|ico|pdf|zip|tar|gz|bz2)$"
+    if [[ "$file" =~ $binary_pattern ]]; then
+        print_status "Skipping binary/image file: $file"
         return 0
     fi
 
