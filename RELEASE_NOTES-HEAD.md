@@ -3,6 +3,75 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [452ea649](https://github.com/freephile/meza/commit/452ea649) (2026-02-13) Greg Rundlett: Try to give spaced out CoPilot more brains 
+  - Modified: `.github/copilot-instructions.md`
+
+* [5cfa18a4](https://github.com/freephile/meza/commit/5cfa18a4) (2026-02-13) Greg Rundlett: improve lint-files.sh to respect .gitignore The lint-files.sh script tries to detect directory entries in .gitignore
+and adds them to the base set of directories that it already skips:
+.venv
+vendor
+.cache
+.git
+tests/docker
+collections
+node_modules
+Also avoid linting SVG (and common binaries)
+SVGs are technically text files and so were being modified.
+For Issue [#306](https://github.com/freephile/meza/issues/306)
+  - Modified: `src/scripts/lint-files.sh`
+
+* [a85c9982](https://github.com/freephile/meza/commit/a85c9982) (2026-02-13) Greg Rundlett: minor correction to the `meza setup dev` doc #304 Currently, you can either:
+`meza setup dev`
+or
+`meza setup env <env>`
+In the first form (special case) no extra arg is required.
+In the second form, 'env' directive, an environment name is required.
+Special handling occurs for the environment names
+'monolith', or 'vagrant'.
+`meza setup env vagrant` and
+`meza setup env monolith` are normally handled for you by bootstrapping
+from the Vagrantfile and/or 'getmeza.sh' so users only ever need to
+`meza setup env staging` for example
+For Issue [#304](https://github.com/freephile/meza/issues/304)
+  - Modified: `manual/meza-cmd/setup.md`
+
+* [2493f4de](https://github.com/freephile/meza/commit/2493f4de) (2026-02-13) Greg Rundlett: Improve script to document playbooks #306 Add option `--with-tasks` to invoke `ansible-playbook-grapher --include-role-tasks`
+This will change the SVG title and the output filename accordingly
+For Issue [#306](https://github.com/freephile/meza/issues/306)
+  - Modified: `src/scripts/generate-playbook-graphs.sh`
+
+* [69eff908](https://github.com/freephile/meza/commit/69eff908) (2026-02-13) Greg Rundlett: Add svg files to document playbooks #306 Add script to generate (update) the SVGs on-demand for easy
+periodic updating.
+For Issue [#306](https://github.com/freephile/meza/issues/306)
+  - Added: `src/playbooks/backup.svg`
+  - Added: `src/playbooks/check-for-changes.svg`
+  - Added: `src/playbooks/cleanup-upload-stash.svg`
+  - Added: `src/playbooks/create-wiki-promptless.svg`
+  - Added: `src/playbooks/create-wiki.svg`
+  - Added: `src/playbooks/debug.svg`
+  - Added: `src/playbooks/delete-elasticsearch.svg`
+  - Added: `src/playbooks/delete-wiki-promptless.svg`
+  - Added: `src/playbooks/delete-wiki.svg`
+  - Added: `src/playbooks/deploy-notify.svg`
+  - Added: `src/playbooks/getdocker.svg`
+  - Added: `src/playbooks/migrate-wikis.svg`
+  - Added: `src/playbooks/push-backup.svg`
+  - Added: `src/playbooks/rebuild-smw-and-index.svg`
+  - Added: `src/playbooks/run-maintenance.svg`
+  - Added: `src/playbooks/setbaseconfig.svg`
+  - Added: `src/playbooks/setup-env.svg`
+  - Added: `src/playbooks/setup-meza-user.svg`
+  - Added: `src/playbooks/site.svg`
+  - Added: `src/playbooks/test-certbot.svg`
+  - Added: `src/playbooks/verify-permissions.svg`
+  - Added: `src/scripts/generate-playbook-graphs.sh`
+
+* [34eae490](https://github.com/freephile/meza/commit/34eae490) (2026-02-12) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [090f72e4](https://github.com/freephile/meza/commit/090f72e4) (2026-02-11) Greg Rundlett: remove the "Last 500 edits" label `rclimit=500` means the query can only return 500 maximum,
 and we need rclimit so we don't get the default 10;
 but most times the API will return fewer than 500 results -
