@@ -1,3 +1,87 @@
+commit 452ea64977e4084eadda6211606fe2b9e117f0c4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 11:11:25 2026 -0500
+
+    Try to give spaced out CoPilot more brains
+
+commit 5cfa18a417a1263b54b6690fedf5e5a105a99a2a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 11:00:07 2026 -0500
+
+    improve lint-files.sh to respect .gitignore
+    
+    The lint-files.sh script tries to detect directory entries in .gitignore
+    and adds them to the base set of directories that it already skips:
+    .venv
+    vendor
+    .cache
+    .git
+    tests/docker
+    collections
+    node_modules
+    
+    Also avoid linting SVG (and common binaries)
+    SVGs are technically text files and so were being modified.
+    
+    For issue #306
+
+commit a85c99824ba8f6751347b44f29aa203878b42bea
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 10:29:07 2026 -0500
+
+    minor correction to the `meza setup dev` doc #304
+    
+    Currently, you can either:
+    `meza setup dev`
+    or
+    `meza setup env <env>`
+    
+    In the first form (special case) no extra arg is required.
+    
+    In the second form, 'env' directive, an environment name is required.
+    
+    Special handling occurs for the environment names
+    'monolith', or 'vagrant'.
+    
+    `meza setup env vagrant` and
+    `meza setup env monolith` are normally handled for you by bootstrapping
+    from the Vagrantfile and/or 'getmeza.sh' so users only ever need to
+    `meza setup env staging` for example
+    
+    For Issue #304
+
+commit 2493f4dee5eb85d4f9286b4052cc409c82391439
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 10:18:14 2026 -0500
+
+    Improve script to document playbooks #306
+    
+    Add option `--with-tasks` to invoke `ansible-playbook-grapher --include-role-tasks`
+    This will change the SVG title and the output filename accordingly
+    
+    For Issue #306
+
+commit 69eff90851bc0367b5ee1446662afc6eaab2899f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 09:24:27 2026 -0500
+
+    Add svg files to document playbooks #306
+    
+    Add script to generate (update) the SVGs on-demand for easy
+    periodic updating.
+    
+    For Issue #306
+
+commit 34eae4909aa6a85e53c8e9df7449327f66bf6629
+Author: GitHub Action <action@github.com>
+Date:   Thu Feb 12 01:23:32 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 090f72e4cff1cf6bc9fc89ca0c650c0b194b8205
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Feb 11 20:23:19 2026 -0500
