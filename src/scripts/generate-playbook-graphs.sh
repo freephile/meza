@@ -70,7 +70,7 @@ for playbook in *.yml; do
         --open-protocol-handler vscode
         --collapsible-nodes
         --title "${title}"
-        --output-filename "${output_file}"
+        -o "${output_file}"
     )
 
     # Add --include-role-tasks if requested
@@ -78,7 +78,9 @@ for playbook in *.yml; do
         grapher_cmd+=(--include-role-tasks)
     fi
 
-    grapher_cmd+=(-vvv "${playbook}")
+    grapher_cmd+=( "${playbook}")
+    # debug problems by using triple verbose mode
+    # grapher_cmd+=(-vvv "${playbook}")
 
     # Run ansible-playbook-grapher
     ANSIBLE_CONFIG="${ANSIBLE_CONFIG}" "${grapher_cmd[@]}"
