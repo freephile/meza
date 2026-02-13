@@ -51,7 +51,7 @@ meza setup dev
 
 | Argument | Description | Required |
 |----------|-------------|----------|
-| `[directive]` | Setup operation to perform | No |
+| `[directive]` | Setup operation to perform | Yes |
 | `<environment_name>` | Environment name (for env directive) | ✓ (for env) |
 
 ## Notes
