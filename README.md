@@ -9,6 +9,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/freephile/meza.svg)](https://github.com/freephile/meza/issues)
 [![GitHub closed issues](https://img.shields.io/github/issues-closed/freephile/meza.svg)](https://github.com/freephile/meza/issues/?q=is%3Aissue+is%3Aclosed)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/freephile/meza/total)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 
 
 <img src="https://raw.githubusercontent.com/enterprisemediawiki/meza/master/manual/commands.gif">
