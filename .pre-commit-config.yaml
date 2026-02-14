@@ -6,6 +6,12 @@ repos:
     rev: v3.2.0
     hooks:
       - id: trailing-whitespace
+        exclude: '\.(svg|png|jpg|jpeg|gif)$'
       - id: end-of-file-fixer
+        exclude: '\.(svg|png|jpg|jpeg|gif)$'
       - id: check-yaml
       - id: check-added-large-files
+      # Could not get this to work on Ubuntu 24.04 with Python 3.12, so skipping for now. Can test directly on RockyLinux 8
+      # - id: check-ast
+      #   language_version: python3.6.8
+      - id: check-executables-have-shebangs
