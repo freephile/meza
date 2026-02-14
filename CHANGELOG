@@ -1,3 +1,76 @@
+commit 5df4eb80881e70c690c97a7db1df53814de67624
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 22:27:48 2026 -0500
+
+    Add pre-commit badge to README
+    
+    We use pre-commit, so might as well advertise it.
+    
+    Part of Issue #304
+
+commit 19ec6aa50db09140a90e4f6b7c4632be102303e3
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 22:26:45 2026 -0500
+
+    Remove meza setup dev command and ref
+    
+    Issue #304
+
+commit 6c278c8e81407cd99730694aa5bd56f158f03a72
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 22:24:16 2026 -0500
+
+    update CONTRIBUTING.md with link to DEVELOPING.md
+    
+    new DEVELOPING.md focused on development workflow.
+    
+    part of Issue #304
+
+commit 341646200d6f3e59ab73ced0819990fc49eef76a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 21:31:25 2026 -0500
+
+    update git pre-commit hook to match lint-files.sh
+    
+    using pre-commit: https://pre-commit.com
+    exclude svg from 'trailing-whitespace' rule
+    exclude svg from 'end-of-file-fixer' rule
+    check that non-binary executables have shebangs
+    
+    update/install with (.venv) `pre-commit install` when making changes
+    
+    NOTE: Although I tried valiantly, I could not enable the check-ast
+    hook for Python files with the specification that language_version
+    be 3.6.8 which is what we need on RockyLinux 8 because I could not
+    intall it with pyenv on Ubuntu 24.04 no matter what I tried. So,
+    skipping any check-ast commit hook for now.
+    
+    See
+    - https://github.com/pre-commit/pre-commit
+    - https://github.com/pre-commit/pre-commit-hooks
+    
+    part of Issue #304
+
+commit 598a89809e0d5e96c4ed731e92e461de88c9f4f4
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Feb 13 13:08:34 2026 -0500
+
+    Add README and detailed set of graphs #306
+    
+    See README.md in the playbooks directory
+    
+    Fixes Issue #306
+
+commit f27e66b014f8b3b5476b5f65e9b1ce2aca97e578
+Author: GitHub Action <action@github.com>
+Date:   Fri Feb 13 16:11:59 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 452ea64977e4084eadda6211606fe2b9e117f0c4
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Fri Feb 13 11:11:25 2026 -0500
