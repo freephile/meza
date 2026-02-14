@@ -3,6 +3,70 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [5df4eb80](https://github.com/freephile/meza/commit/5df4eb80) (2026-02-13) Greg Rundlett: Add pre-commit badge to README We use pre-commit, so might as well advertise it.
+Part of Issue [#304](https://github.com/freephile/meza/issues/304)
+  - Modified: `README.md`
+
+* [19ec6aa5](https://github.com/freephile/meza/commit/19ec6aa5) (2026-02-13) Greg Rundlett: Remove meza setup dev command and ref Issue [#304](https://github.com/freephile/meza/issues/304)
+  - Modified: `config/i18n/en.yml`
+  - Modified: `manual/meza-cmd/help.md`
+  - Modified: `manual/meza-cmd/index.md`
+  - Modified: `manual/meza-cmd/setup.md`
+  - Modified: `src/scripts/meza.py`
+
+* [6c278c8e](https://github.com/freephile/meza/commit/6c278c8e) (2026-02-13) Greg Rundlett: update CONTRIBUTING.md with link to DEVELOPING.md new DEVELOPING.md focused on development workflow.
+part of Issue [#304](https://github.com/freephile/meza/issues/304)
+  - Modified: `CONTRIBUTING.md`
+  - Added: `manual/DEVELOPING.md`
+
+* [34164620](https://github.com/freephile/meza/commit/34164620) (2026-02-13) Greg Rundlett: update git pre-commit hook to match lint-files.sh using pre-commit: https://pre-commit.com
+exclude svg from 'trailing-whitespace' rule
+exclude svg from 'end-of-file-fixer' rule
+check that non-binary executables have shebangs
+update/install with (.venv) `pre-commit install` when making changes
+NOTE: Although I tried valiantly, I could not enable the check-ast
+hook for Python files with the specification that language_version
+be 3.6.8 which is what we need on RockyLinux 8 because I could not
+intall it with pyenv on Ubuntu 24.04 no matter what I tried. So,
+skipping any check-ast commit hook for now.
+See
+- https://github.com/pre-commit/pre-commit
+- https://github.com/pre-commit/pre-commit-hooks
+part of Issue [#304](https://github.com/freephile/meza/issues/304)
+  - Modified: `.pre-commit-config.yaml`
+
+* [598a8980](https://github.com/freephile/meza/commit/598a8980) (2026-02-13) Greg Rundlett: Add README and detailed set of graphs #306 See README.md in the playbooks directory
+Fixes Issue [#306](https://github.com/freephile/meza/issues/306)
+  - Added: `src/playbooks/README.md`
+  - Added: `src/playbooks/backup-w-tasks.svg`
+  - Added: `src/playbooks/check-for-changes-w-tasks.svg`
+  - Added: `src/playbooks/cleanup-upload-stash-w-tasks.svg`
+  - Added: `src/playbooks/create-wiki-promptless-w-tasks.svg`
+  - Added: `src/playbooks/create-wiki-w-tasks.svg`
+  - Added: `src/playbooks/debug-w-tasks.svg`
+  - Added: `src/playbooks/delete-elasticsearch-w-tasks.svg`
+  - Added: `src/playbooks/delete-wiki-promptless-w-tasks.svg`
+  - Added: `src/playbooks/delete-wiki-w-tasks.svg`
+  - Added: `src/playbooks/deploy-notify-w-tasks.svg`
+  - Added: `src/playbooks/getdocker-w-tasks.svg`
+  - Added: `src/playbooks/migrate-wikis-w-tasks.svg`
+  - Added: `src/playbooks/push-backup-w-tasks.svg`
+  - Added: `src/playbooks/rebuild-smw-and-index-w-tasks.svg`
+  - Added: `src/playbooks/run-maintenance-w-tasks.svg`
+  - Added: `src/playbooks/setbaseconfig-w-tasks.svg`
+  - Added: `src/playbooks/setup-env-w-tasks.svg`
+  - Added: `src/playbooks/setup-meza-user-w-tasks.svg`
+  - Added: `src/playbooks/site-w-tasks.svg`
+  - Added: `src/playbooks/test-certbot-w-tasks.svg`
+  - Added: `src/playbooks/verify-permissions-w-tasks.svg`
+  - Modified: `src/scripts/generate-playbook-graphs.sh`
+
+* [f27e66b0](https://github.com/freephile/meza/commit/f27e66b0) (2026-02-13) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [452ea649](https://github.com/freephile/meza/commit/452ea649) (2026-02-13) Greg Rundlett: Try to give spaced out CoPilot more brains 
   - Modified: `.github/copilot-instructions.md`
 
