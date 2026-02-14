@@ -5,7 +5,7 @@ There are several ways you can help contribute to meza.
 
 ## Report bugs
 
-You may help us by reporting bugs and feature request via the [issue tracker](/issues). 
+You may help us by reporting bugs and feature request via the [issue tracker](/issues).
 
 ## Improve documentation
 
@@ -15,6 +15,21 @@ Meza documentation may not be in lock-step with the actual code or features. Ple
 
 We have a long list of features to add and bugs to fix. We'd greatly appreciate any assistance making Meza better.
 
+## Development workflow
+
+See [manual/DEVELOPING.md](manual/DEVELOPING.md) for the Vagrant-based workflow
+and pre-commit usage.
+
+Even without Vagrant, you should still use a Python virtual environment for
+the pre-commit tooling, and linting tools; activate it first and then install
+pre-commit:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pre-commit install
+```
+
 ## Testing
 
 Meza pulls together many complex systems. To ensure higher quality, we've begun
@@ -23,8 +38,8 @@ and automated quality gates such as commit-hooks and GitHub Actions.
 
 For Ansible, there are [test strategies](https://docs.ansible.com/ansible/latest/reference_appendices/test_strategies.html) that should be followed in this project.
 
-The first line of testing is "linting". We use ansible-lint and 
-yamllint via a convenient script: [lint-files.sh](/src/scripts/lint-files.sh) 
+The first line of testing is "linting". We use ansible-lint and
+yamllint via a convenient script: [lint-files.sh](/src/scripts/lint-files.sh)
 See the documentation at [LINTING.md](/LINTING.md)
 
 Call it like so:
@@ -42,7 +57,7 @@ source .venv/bin/activate
 Then, simply running `lint-files.sh` will check for the linters and install them
 for you. (ie. `pip install ansible-lint yamllint`)
 
-Any time you need to re-establish your Python Virtual Environment, just 
+Any time you need to re-establish your Python Virtual Environment, just
 
 ```bash
 cd /opt/meza
@@ -108,7 +123,7 @@ We've started to use GitHub Actions to run automated tests on commits and merges
 
 ### Testinfra?
 We probably don't want to go down the path of Py.test and Testinfra until all
-the "low-hanging fruit" of testing Ansible with Ansible is complete. 
+the "low-hanging fruit" of testing Ansible with Ansible is complete.
 But maybe it's a future goal.
 
 ### Testing suggestions
