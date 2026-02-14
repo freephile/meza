@@ -56,8 +56,7 @@ meza deploy-check production
 | Command | Directives | Description |
 |---------|------------|-------------|
 | **setup** | `env` | Setup a new environment |
-| | `dev-networking` | Configure VirtualBox VM networking |
-| | `docker` | Install Docker (CentOS only) |
+| | `docker` | Install Docker (obsolete) |
 | **deploy** | `<environment>` | Deploy MediaWiki to environment |
 | **update** | `[version]` | Update Meza to version or branch |
 

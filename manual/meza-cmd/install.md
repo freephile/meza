@@ -22,18 +22,6 @@ meza deploy monolith
 - Configures single-server environment
 - Creates the complete MediaWiki deployment
 
-### VirtualBox VM Networking Setup
-
-To configure networking for VirtualBox VMs (formerly `install dev-networking`):
-
-```bash
-meza setup dev-networking
-```
-
-**What it does:**
-- Configures VM network interfaces
-- Sets up development-friendly networking
-- Enables proper host-guest communication
 
 ### Docker Installation
 

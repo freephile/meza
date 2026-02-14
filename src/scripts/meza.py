@@ -975,9 +975,7 @@ def get_git_describe_tags(directory):
         return "not-a-git-repo"
 
 # env
-# dev-networking --> vbox-networking ??
 # docker
-
 
 def meza_command_setup(argv):
     """
@@ -993,8 +991,6 @@ def meza_command_setup(argv):
     if sub_command == "dev":
         print("setup dev is removed; configure developer tools manually")
         sys.exit(1)
-    if sub_command == "dev-networking":
-        sub_command = "dev_networking"  # hyphen not a valid function character
     command_fn = "meza_command_setup_" + sub_command
 
     # if command_fn is a valid Python function, pass it all remaining args
@@ -1275,19 +1271,7 @@ def meza_command_setup_env(argv, return_not_exit=False):
     else:
         sys.exit(rc)
 
-def meza_command_setup_dev_networking(argv):  # pylint: disable=unused-argument
-    """
-    Legacy function - functionality removed.
-
-    Args:
-        argv (list): Command line arguments (unused).
-    """
-    print("Function removed. Instead do:")
-    print("  sudo bash /opt/meza/src/scripts/dev-networking.sh")
-    sys.exit(1)
-
 # @FIXME this is obsolete (because it's for CentOS) but should be updated
-
 
 def meza_command_setup_docker(argv):  # pylint: disable=unused-argument
     """
@@ -2060,9 +2044,6 @@ def playbook_cmd(playbook, env=False, more_extra_vars=False):
                 f"'{json.dumps(extra_vars)}'".replace('"', '\\"')]
 
     return command
-
-# FIXME install --> setup dev-networking, setup docker, deploy monolith
-# (special case)
 
 
 def meza_shell_exec(shell_cmd, print_command=True, log_file=False):

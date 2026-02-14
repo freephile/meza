@@ -33,19 +33,6 @@ meza setup env staging
 - Prepares secret and public configuration files
 - Initializes environment-specific settings
 
-### `dev-networking` - VM Networking Setup
-
-Configure VirtualBox VM networking for local development.
-
-```bash
-meza setup dev-networking
-```
-
-**What it does:**
-- Configures VM network interfaces
-- Sets up development-friendly networking
-- Enables proper host-guest communication
-
 ### `docker` - Docker Installation
 
 Install Docker runtime on supported systems.
