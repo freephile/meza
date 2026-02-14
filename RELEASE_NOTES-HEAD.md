@@ -3,6 +3,20 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [382f5b5c](https://github.com/freephile/meza/commit/382f5b5c) (2026-02-13) Greg Rundlett: Remove `meza setup dev-networking` and ref. #304 setup dev-networking was obsolete
+Fixes Issue [#304](https://github.com/freephile/meza/issues/304)
+  - Modified: `manual/meza-cmd/help.md`
+  - Modified: `manual/meza-cmd/install.md`
+  - Modified: `manual/meza-cmd/setup.md`
+  - Deleted: `src/scripts/dev-networking.sh`
+  - Modified: `src/scripts/meza.py`
+
+* [f931e4d3](https://github.com/freephile/meza/commit/f931e4d3) (2026-02-14) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [5df4eb80](https://github.com/freephile/meza/commit/5df4eb80) (2026-02-13) Greg Rundlett: Add pre-commit badge to README We use pre-commit, so might as well advertise it.
 Part of Issue [#304](https://github.com/freephile/meza/issues/304)
   - Modified: `README.md`
