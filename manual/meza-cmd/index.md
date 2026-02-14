@@ -55,10 +55,11 @@ Meza is a comprehensive MediaWiki deployment automation platform. Use these comm
 ```bash
 # Download and install Meza first
 sudo bash src/scripts/getmeza.sh
-meza setup dev                    # Set up development tools
 meza deploy monolith             # Deploy local environment
 meza create wiki monolith        # Create test wiki
 ```
+
+For Vagrant-based development, see [manual/DEVELOPING.md](../DEVELOPING.md).
 
 ### Production Deployment
 ```bash

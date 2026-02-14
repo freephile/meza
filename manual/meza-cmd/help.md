@@ -56,13 +56,12 @@ meza deploy-check production
 | Command | Directives | Description |
 |---------|------------|-------------|
 | **setup** | `env` | Setup a new environment |
-| | `dev` | Setup development tools (Git, FTP) |
 | | `dev-networking` | Configure VirtualBox VM networking |
 | | `docker` | Install Docker (CentOS only) |
 | **deploy** | `<environment>` | Deploy MediaWiki to environment |
 | **update** | `[version]` | Update Meza to version or branch |
 
-### Wiki Operations  
+### Wiki Operations
 | Command | Directives | Description |
 |---------|------------|-------------|
 | **create** | `wiki` | Create a new wiki (interactive) |

@@ -2,7 +2,7 @@
 
 ## Description
 
-Set up and configure Meza environments and development tools.
+Set up and configure Meza environments and system components.
 
 ## Usage
 
@@ -33,19 +33,32 @@ meza setup env staging
 - Prepares secret and public configuration files
 - Initializes environment-specific settings
 
-### `dev` - Development Setup
+### `dev-networking` - VM Networking Setup
 
-Set up development tools and configuration for easier development workflow.
+Configure VirtualBox VM networking for local development.
 
 ```bash
-meza setup dev
+meza setup dev-networking
 ```
 
 **What it does:**
-- Configures Git user settings
-- Sets up FTP access for development
-- Prepares development environment tools
-- Streamlines developer workflow
+- Configures VM network interfaces
+- Sets up development-friendly networking
+- Enables proper host-guest communication
+
+### `docker` - Docker Installation
+
+Install Docker runtime on supported systems.
+
+```bash
+meza setup docker
+```
+
+**What it does:**
+- Installs Docker engine
+- Configures Docker service
+- Sets up container environment
+- **Note:** Currently supported on CentOS only
 
 ## Arguments
 
@@ -58,7 +71,7 @@ meza setup dev
 
 - Environment names should be descriptive (production, development, staging, etc.)
 - Each environment gets its own configuration in `/opt/conf-meza/`
-- Development setup is typically run once per developer workstation
+- Development setup for Vagrant is documented in [manual/DEVELOPING.md](../DEVELOPING.md)
 - Environment setup is required before deploying to a new environment
 
 ## See Also

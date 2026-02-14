@@ -975,7 +975,6 @@ def get_git_describe_tags(directory):
         return "not-a-git-repo"
 
 # env
-# dev
 # dev-networking --> vbox-networking ??
 # docker
 
@@ -991,6 +990,9 @@ def meza_command_setup(argv):
         None
     """
     sub_command = argv[0]
+    if sub_command == "dev":
+        print("setup dev is removed; configure developer tools manually")
+        sys.exit(1)
     if sub_command == "dev-networking":
         sub_command = "dev_networking"  # hyphen not a valid function character
     command_fn = "meza_command_setup_" + sub_command
@@ -1272,57 +1274,6 @@ def meza_command_setup_env(argv, return_not_exit=False):
         return rc
     else:
         sys.exit(rc)
-
-
-def meza_command_setup_dev(argv):  # pylint: disable=unused-argument
-    """
-    Set up development environment for Meza.
-
-    This function prompts for dev_users, dev_git_user, and dev_git_user_email.
-    It then configures git settings for each dev_user, installs and configures vsftpd,
-    and sets up firewall rules. Finally, it prints a message with instructions to
-    setup SFTP in Sublime Text and exits the script.
-
-    Args:
-        argv: The command line arguments passed to the script.
-
-    Returns:
-        None
-    """
-    dev_users = prompt("dev_users")
-    dev_git_user = prompt("dev_git_user")
-    dev_git_user_email = prompt("dev_git_user_email")
-
-    for dev_user in dev_users.split(' '):
-        os.system(
-            f"sudo -u {dev_user} git config --global user.name '{dev_git_user}'")
-        os.system(
-            f"sudo -u {dev_user} git config --global user.email {dev_git_user_email}")
-        os.system(
-            f"sudo -u {dev_user} git config --global color.ui true")
-
-    # ref:
-    # https://www.liquidweb.com/kb/how-to-install-and-configure-vsftpd-on-centos-7/
-    os.system("yum -y install vsftpd")
-    os.system(
-        "sed -r -i 's/anonymous_enable=YES/anonymous_enable=NO/g;' /etc/vsftpd/vsftpd.conf")
-    os.system(
-        "sed -r -i 's/local_enable=NO/local_enable=YES/g;' /etc/vsftpd/vsftpd.conf")
-    os.system(
-        "sed -r -i 's/write_enable=NO/write_enable=YES/g;' /etc/vsftpd/vsftpd.conf")
-
-    # Start FTP and setup firewall
-    os.system("systemctl restart vsftpd")
-    os.system("systemctl enable vsftpd")
-    os.system("firewall-cmd --permanent --add-port=21/tcp")
-    os.system("firewall-cmd --reload")
-
-    print("To setup SFTP in Sublime Text, see:")
-    print("https://wbond.net/sublime_packages/sftp/settings#Remote_Server_Settings")
-    sys.exit()
-
-# Remove in 32.x
-
 
 def meza_command_setup_dev_networking(argv):  # pylint: disable=unused-argument
     """
