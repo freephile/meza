@@ -1,3 +1,29 @@
+commit 17b64402325f7689bd2ee034eec0d3c453c9020e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Feb 14 21:08:59 2026 -0500
+
+    Fix regression bug: Elasticsearch advanced #311
+    
+    MediaWiki 1.43 requires Elasticsearch to be at 7.10.2
+    fixed the elasticsearch install task
+    Apparently it broke due to the 'name' of the package being a version test:
+       ` name: "elasticsearch <= {{ elasticsearch_version }}"`
+    Added downgrade if system has advanced beyone pinned package version
+    added `elasticsearch_versionlock_enabled: true` to role defaults
+    created role README.md
+    
+    Fixes Issue #311
+
+commit 9c4a615a0a013df21e902089ad3f561c7292999b
+Author: GitHub Action <action@github.com>
+Date:   Sat Feb 14 03:43:33 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 382f5b5c95c0dd0b6cd8ad1842f93b9afe6b5539
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Fri Feb 13 22:41:46 2026 -0500
