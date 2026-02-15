@@ -3,6 +3,21 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [c46a2932](https://github.com/freephile/meza/commit/c46a2932) (2026-02-14) Greg Rundlett: Fix regression bug: Elasticsearch advanced #311 improve the elastic-build-index.sh script
+It was possibly contributing to failed indexing because the throwaway
+`jq` pipe was just putting errors in the log instead of giving good
+information on whether setting were successfully set.
+Now we retrieve and report the HTTP status code on the interaction
+with elasticsearch.
+Fixes Issue [#311](https://github.com/freephile/meza/issues/311)
+  - Modified: `src/roles/mediawiki/templates/elastic-build-index.sh.j2`
+
+* [575fab5c](https://github.com/freephile/meza/commit/575fab5c) (2026-02-15) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [17b64402](https://github.com/freephile/meza/commit/17b64402) (2026-02-14) Greg Rundlett: Fix regression bug: Elasticsearch advanced #311 MediaWiki 1.43 requires Elasticsearch to be at 7.10.2
 fixed the elasticsearch install task
 Apparently it broke due to the 'name' of the package being a version test:
