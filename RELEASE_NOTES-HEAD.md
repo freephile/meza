@@ -3,6 +3,24 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [17b64402](https://github.com/freephile/meza/commit/17b64402) (2026-02-14) Greg Rundlett: Fix regression bug: Elasticsearch advanced #311 MediaWiki 1.43 requires Elasticsearch to be at 7.10.2
+fixed the elasticsearch install task
+Apparently it broke due to the 'name' of the package being a version test:
+   ` name: "elasticsearch <= {{ elasticsearch_version }}"`
+Added downgrade if system has advanced beyone pinned package version
+added `elasticsearch_versionlock_enabled: true` to role defaults
+created role README.md
+Fixes Issue [#311](https://github.com/freephile/meza/issues/311)
+  - Added: `src/roles/elasticsearch/README.md`
+  - Modified: `src/roles/elasticsearch/defaults/main.yml`
+  - Modified: `src/roles/elasticsearch/tasks/main.yml`
+
+* [9c4a615a](https://github.com/freephile/meza/commit/9c4a615a) (2026-02-14) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [382f5b5c](https://github.com/freephile/meza/commit/382f5b5c) (2026-02-13) Greg Rundlett: Remove `meza setup dev-networking` and ref. #304 setup dev-networking was obsolete
 Fixes Issue [#304](https://github.com/freephile/meza/issues/304)
   - Modified: `manual/meza-cmd/help.md`
