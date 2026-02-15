@@ -38,7 +38,7 @@ run_with_retries() {
 	return 1
 }
 
-echo "******* Generating elasticsearch index for $wiki_id *******"
+echo "******* Generating Elasticsearch index for $wiki_id *******"
 
 # Lock to prevent concurrent rebuilds for the same wiki
 LOCKFILE="/var/lock/meza-elastic-build-${wiki_id}.lock"
@@ -67,7 +67,10 @@ if [ -n "$indices" ]; then
 	echo "Setting refresh_interval=-1 and number_of_replicas=0 for indices matching $index_pattern"
 	for idx in $indices; do
 		echo "  $idx"
-		curl -s -XPUT "localhost:9200/$idx/_settings" -H 'Content-Type: application/json' -d '{"index":{"refresh_interval":"-1","number_of_replicas":0}}' | jq -r '. || true' >/dev/null 2>&1 || true
+		status=$(curl -s -o /dev/null -w '%{http_code}' -XPUT "localhost:9200/$idx/_settings" -H 'Content-Type: application/json' -d '{"index":{"refresh_interval":"-1","number_of_replicas":0}}' || true)
+		if [ "$status" != "200" ]; then
+			echo "  Warning: failed to update settings for $idx (HTTP $status)"
+		fi
 	done
 else
 	echo "No existing indices matching $index_pattern found; will create during indexing"
@@ -87,19 +90,22 @@ run_with_retries "WIKI=$wiki_id {{ m_mediawiki_install_path | quote }}/maintenan
 # Recompute indices again to capture any additional indices created during indexing
 indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
 
-# Restore index settings (refresh interval and replicas) so Es can serve searches normally
+# Restore index settings (refresh interval and replicas) so Elasticsearch can serve searches normally
 if [ -n "$indices" ]; then
 	echo "Restoring refresh_interval and number_of_replicas for indices matching $index_pattern"
 	for idx in $indices; do
 		echo "  $idx"
-		curl -s -XPUT "localhost:9200/$idx/_settings" -H 'Content-Type: application/json' -d '{"index":{"refresh_interval":"1s","number_of_replicas":1}}' | jq -r '. || true' >/dev/null 2>&1 || true
+		status=$(curl -s -o /dev/null -w '%{http_code}' -XPUT "localhost:9200/$idx/_settings" -H 'Content-Type: application/json' -d '{"index":{"refresh_interval":"1s","number_of_replicas":1}}' || true)
+		if [ "$status" != "200" ]; then
+			echo "  Warning: failed to restore settings for $idx (HTTP $status)"
+		fi
 	done
 fi
 
 # Remove search-update disable in wiki-specific settings
 rm -f "$disable_search_file"
 
-echo "******* Elastic Search build index complete! *******"
+echo "******* Elasticsearch build index complete! *******"
 
 # Release lock and cleanup
 flock -u 200 || true
