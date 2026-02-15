@@ -42,11 +42,65 @@
     mode: '0644'
   when: ansible_distribution_file_variety == 'RedHat'
 
-# sudo dnf install --enablerepo=elasticsearch elasticsearch
-- name: Ensure elasticsearch installed
-  ansible.builtin.package:
-    name: "elasticsearch <= {{ elasticsearch_version }}"
+- name: Ensure DNF versionlock plugin is installed
+  ansible.builtin.dnf:
+    name: dnf-plugin-versionlock
+    state: present
+  when: elasticsearch_versionlock_enabled | default(true) | bool
+
+- name: Check whether Elasticsearch versionlock is already set
+  ansible.builtin.command: dnf versionlock list
+  register: elasticsearch_versionlock_list
+  changed_when: false
+  failed_when: false
+  when: elasticsearch_versionlock_enabled | default(true) | bool
+
+- name: Add Elasticsearch versionlock for pinned version
+  ansible.builtin.command: >-
+    dnf versionlock add elasticsearch-{{ elasticsearch_version }}
+  changed_when: true
+  when:
+    - elasticsearch_versionlock_enabled | default(true) | bool
+    - elasticsearch_versionlock_list.stdout is not search(
+        'elasticsearch-' ~ elasticsearch_version
+      )
+
+- name: Gather installed package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Set installed Elasticsearch version fact
+  ansible.builtin.set_fact:
+    elasticsearch_installed_version: "{{ ansible_facts.packages.elasticsearch[0].version }}"
+  when:
+    - ansible_facts.packages.elasticsearch is defined
+    - ansible_facts.packages.elasticsearch | length > 0
+
+- name: Report Elasticsearch downgrade decision
+  ansible.builtin.debug:
+    msg: >-
+      Downgrading Elasticsearch from {{ elasticsearch_installed_version }} to
+      {{ elasticsearch_version }}.
+  when:
+    - elasticsearch_installed_version is defined
+    - elasticsearch_installed_version is version(elasticsearch_version, '>')
+
+- name: Downgrade Elasticsearch when installed version is higher than target
+  ansible.builtin.dnf:
+    name: "elasticsearch-{{ elasticsearch_version }}"
     enablerepo: elasticsearch
+    allow_downgrade: true
+    state: present
+  when:
+    - elasticsearch_installed_version is defined
+    - elasticsearch_installed_version is version(elasticsearch_version, '>')
+
+# sudo dnf install --enablerepo=elasticsearch elasticsearch-{{ elasticsearch_version }}
+- name: Ensure Elasticsearch installed at pinned version
+  ansible.builtin.dnf:
+    name: "elasticsearch-{{ elasticsearch_version }}"
+    enablerepo: elasticsearch
+    allow_downgrade: true
     state: present
 
 # Need to perform this check so `lineinfile` doesn't run in Docker. /etc/hosts

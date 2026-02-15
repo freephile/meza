@@ -17,6 +17,9 @@ elasticsearch_username: "elastic"
 
 elasticsearch_version: "7.10.2"
 
+# Disable in dev/test when planning upgrades (e.g., MediaWiki 1.44+).
+elasticsearch_versionlock_enabled: true
+
 # Setup the discovery.type (relates to security)
 # and also relates to bootstrap checks and whether or not Elasticsearch
 # considers itself to be "production" or "development".
