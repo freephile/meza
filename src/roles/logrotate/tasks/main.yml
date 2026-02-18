@@ -39,7 +39,7 @@
       owner: "{{ user_apache }}"
       group: "{{ group_apache }}"
       mode: '0755'
-    - path: "{{ m_data_logs_dir }}/elasticsearch"
+    - path: "{{ m_data_dir }}/elasticsearch/log"
       owner: elasticsearch
       group: elasticsearch
       mode: '0755'

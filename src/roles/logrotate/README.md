@@ -6,6 +6,10 @@ The Meza logrotate role provides comprehensive log rotation and backup file mana
 
 **Note**: As of Issue #287, the bootstrap sequencing ensures Apache is installed before any Ansible roles run, guaranteeing that all service users and groups exist when logrotate configuration is generated. This eliminates the need for defensive fallback logic.
 
+Some assumptions put Elasticsearch logs into the 'logs' directory under `m_data_dir` while the actual Elasticsearch role
+puts logs under `m_data_dir`/elasticsearch along with data and config for the component. The approach of putting the
+entire component into a parent directory makes much more sense than distributing files across different trees.
+
 ## 📋 Retention Policy Summary
 
 ### **Deployment & System Logs**
@@ -77,7 +81,7 @@ The Meza logrotate role provides comprehensive log rotation and backup file mana
 - **Purpose**: Web server access and error logs
 
 #### Elasticsearch Logs
-- **Location**: `/opt/data-meza/logs/elasticsearch/*.log`
+- **Location**: `/opt/data-meza/elasticsearch/log/*.log`
 - **Retention**: 📅 **14 days**
 - **Rotation**: Daily
 - **Compression**: 🗜️ After 1 day
