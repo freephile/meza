@@ -3,6 +3,23 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [fe95d559](https://github.com/freephile/meza/commit/fe95d559) (2026-02-18) Greg Rundlett: Comment about the logo used in Chameleon Chameleon skin uses the 1x 'meza-logo-135.png' file.
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [99b8f074](https://github.com/freephile/meza/commit/99b8f074) (2026-02-18) Greg Rundlett: Adjust logrotate to actual elasticsearch logs Elasticsearch logs are in the m_data_dir/elasticsearch/log directory
+They are NOT in the m_data_log_dir/elasticsearch directory
+  - Modified: `src/roles/logrotate/README.md`
+  - Modified: `src/roles/logrotate/tasks/main.yml`
+
+* [b9643cf9](https://github.com/freephile/meza/commit/b9643cf9) (2026-02-18) Greg Rundlett: These variables do not belong to this role #42 These variables are used in the init-controller and htdocs roles. The verify-wiki role needs to be factored into component parts because what it does is not exactly clear.
+  - Deleted: `src/roles/verify-wiki/defaults/main.yml`
+
+* [d0c4b9b9](https://github.com/freephile/meza/commit/d0c4b9b9) (2026-02-15) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [c46a2932](https://github.com/freephile/meza/commit/c46a2932) (2026-02-14) Greg Rundlett: Fix regression bug: Elasticsearch advanced #311 improve the elastic-build-index.sh script
 It was possibly contributing to failed indexing because the throwaway
 `jq` pipe was just putting errors in the log instead of giving good
