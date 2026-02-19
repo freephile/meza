@@ -3,6 +3,25 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [21e45c2e](https://github.com/freephile/meza/commit/21e45c2e) (2026-02-19) Greg Rundlett: Doc each role #321 in preparation for #42 Adds a brief explanation for each of the 56 roles
+Categorized as follows:
+- Third-party / vendor roles
+- Infrastructure / system roles
+- Meza orchestration roles
+- Wiki lifecycle roles
+- Backup roles
+- Utility / library roles
+  - Added: `src/roles/README.md`
+
+* [22bf91c9](https://github.com/freephile/meza/commit/22bf91c9) (2026-02-19) Greg Rundlett: Add README for update.php role #320 
+  - Added: `src/roles/update.php/README.md`
+
+* [1f5f0d37](https://github.com/freephile/meza/commit/1f5f0d37) (2026-02-18) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [fe95d559](https://github.com/freephile/meza/commit/fe95d559) (2026-02-18) Greg Rundlett: Comment about the logo used in Chameleon Chameleon skin uses the 1x 'meza-logo-135.png' file.
   - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
 
