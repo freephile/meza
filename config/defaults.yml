@@ -31,8 +31,8 @@ m_disable_composer_dev_dependencies: false
 # Toggle this to 'false' for any development.
 m_opcache_production_mode: false
 
-m_httpd_server_admin: "admin@example.com"
-m_timezone: "America/New_York"
+m_httpd_server_admin: admin@example.com
+m_timezone: America/New_York
 
 # Poorly documented and not really used method to specify networking zone
 m_private_networking_zone: public
@@ -223,7 +223,7 @@ overwrite_local_changes: true
 # PHP version
 php_ius_version: "php81"
 php_debian_version: "8.1"
-php_memory_limit: "128M" # 128M is default
+php_memory_limit: "128M"  # 128M is default
 
 # See Extension:CirrusSearch for ElasticSearch requirements
 # Meza before 31.x had ElasticSearch 1.6 or 2.x
@@ -364,6 +364,12 @@ php_opcache_revalidate_freq: 0
 
 # Port to use
 memcached_port: 11211
+
+# Address memcached should listen on. For monolith/single-server use 127.0.0.1.
+# For multi-server deployments where app_servers connect to a dedicated
+# memcached host, set this to the private network IP of the memcached server
+# (e.g. 10.0.1.5). Binding to 0.0.0.0 is insecure and enables amplification attacks.
+memcached_listen: "127.0.0.1"
 
 # Limit the number of simultaneous incoming connections.
 memcached_max_connections: 1024

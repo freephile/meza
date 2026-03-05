@@ -1,9 +1,13 @@
 ---
 
 extends: default
-ignore:
-  - 'collections/'
-  - '.github/workflows/'
+ignore: |
+  collections/
+  .github/workflows/
+  .venv/
+  vendor/
+  tests/docker/
+  **/roles/external/
 rules:
   # make yamllint behave the same as ansible-lint (and prettier's yaml parser)
   # https://ansible.readthedocs.io/projects/lint/rules/yaml/

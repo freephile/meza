@@ -14,11 +14,14 @@ exclude_paths:
 
 # Skip specific rules that may be too strict for this project
 # These should be re-examined and potentially re-enabled in the future
+# https://docs.ansible.com/projects/lint/rules/risky-file-permissions/
+# https://github.com/freephile/meza/issues/272
 skip_list:
   - yaml[line-length]  # Allow longer lines for readability
   - name[casing]      # Allow flexible naming conventions
-  - risky-file-permissions  # Some meza tasks require specific permissions
-  - var-naming[no-role-prefix]  # Allow flexible variable naming for role parameters
+#  - risky-file-permissions  # This skip should be removed in the future
+  - var-naming[no-role-prefix]  # Role variables are historically messy. Will improve with role replacement.
+# https://github.com/freephile/meza/issues/42
 
 # Warn for these rules instead of failing
 warn_list:

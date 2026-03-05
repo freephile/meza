@@ -66,12 +66,28 @@ meza deploy monolith --tags mediawiki --skip-tags latest,update.php
 
 ## Configuration File Hierarchy
 
-Meza uses a layered configuration system where values are resolved in this order:
+Meza uses a layered configuration system. Variables are loaded in the order below;
+**later loads win**, so higher-numbered entries override lower-numbered ones.
 
-1. **Environment secrets**: `/opt/conf-meza/secret/<env>/secret.yml` (highest priority)
-2. **Environment public**: `/opt/conf-meza/public/public.yml`
-3. **OS-specific defaults**: `/opt/meza/config/RedHat.yml` or `/opt/meza/config/Debian.yml`
-4. **Global defaults**: `/opt/meza/config/defaults.yml` (lowest priority)
+| Priority | File | Notes |
+|----------|------|-------|
+| 5 (highest) | `/opt/conf-meza/secret/<env>/secret.yml` | Per-environment secrets: passwords, keys, FQDN, private networking zone |
+| 4 | `/opt/conf-meza/public/public.yml` | Per-environment public config: your primary override file for any default |
+| 3 | `/opt/meza/config/defaults.yml` | Global defaults for all Meza installations |
+| 2 | `/opt/meza/config/paths.yml` | Path variable definitions (loaded before defaults since defaults references them) |
+| 1 (lowest) | `/opt/meza/config/RedHat.yml` or `Debian.yml` | OS-family variables (loaded before paths/defaults so they can seed those values) |
+
+> **Implementation reference**: `src/roles/set-vars/tasks/main.yml` is the authoritative
+> source for this load order. Variables are loaded via `ansible.builtin.include_vars`;
+> a variable defined in a later file completely replaces the same variable from an
+> earlier file.
+
+### What to override and where
+- **`secret.yml`** — sensitive values only: passwords, API keys, FQDN, SSL config.
+- **`public.yml`** — the intended place for all local customization: MediaWiki version,
+  auth type, email settings, wiki definitions, extension exclusions, profiling, etc.
+- **`defaults.yml`** — Meza project defaults; edit only when contributing upstream changes.
+- **OS-family YAMLs** — package names and OS-specific paths; rarely edited directly.
 
 ## Common Configuration Examples
 

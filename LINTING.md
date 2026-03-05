@@ -76,6 +76,7 @@ skip_list:
   - name[casing]      # Allow flexible naming conventions
   - risky-file-permissions  # Some meza tasks require specific permissions
 ```
+@see https://docs.ansible.com/projects/lint/rules/risky-file-permissions/
 
 ## Virtual Environment Integration
 

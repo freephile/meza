@@ -1,8 +1,29 @@
 ---
-# public.yml
+# public.yml  --  LOCAL CONFIGURATION OVERRIDE FILE
 #
-# Config file for putting non-secure items needed for configuration during
-# deploy of the application
+# This file is your primary place to customize any Meza setting.
+# Variables defined here override the project-wide defaults in:
+#
+#   /opt/meza/config/defaults.yml       (global defaults)
+#   /opt/meza/config/paths.yml          (path definitions)
+#   /opt/meza/config/RedHat.yml         (OS-family defaults)
+#
+# Only secret/sensitive values (passwords, keys, FQDN) belong in:
+#   /opt/conf-meza/secret/<env>/secret.yml  (highest priority, overrides everything)
+#
+# Variable load order (later overrides earlier):
+#   1. RedHat.yml / Debian.yml
+#   2. paths.yml
+#   3. defaults.yml
+#   4. THIS FILE  <-- you are here
+#   5. secret.yml (highest priority)
+#
+# After editing this file, apply changes with:
+#   sudo meza deploy <env>
+# Or for a faster config-only deploy:
+#   sudo meza deploy <env> --tags mediawiki --skip-tags latest,update.php,verify-wiki
+#
+# Full list of overridable defaults: /opt/meza/config/defaults.yml
 
 # Production mode toggles opcache to ignore timestamps
 # so live edits will NOT be seen without restarting the webserver or php-fpm.
@@ -12,9 +33,8 @@
 m_opcache_production_mode: {{ m_opcache_production_mode | default(true, true) }}
 
 # Set a default authentication method for all wikis that don't specify one
-# FIXME #763: List types, and descriptions
-# meza_auth_type: "viewer-read"
-meza_auth_type: "anon-read"
+# meza_auth_type: viewer-read
+meza_auth_type: anon-read
 
 ## List of extension names to exclude (must match names in MezaCoreExtensions.yml exactly)
 # m_excluded_extension_names:
@@ -44,11 +64,11 @@ meza_auth_type: "anon-read"
 # Refs:
 #   https://www.mediawiki.org/wiki/Manual:$wgPasswordSender
 #   https://www.mediawiki.org/wiki/Manual:$wgEmergencyContact
-wgPasswordSender: "admin@example.com"
+wgPasswordSender: admin@example.com
 # wgEmergencyContact = "another.email@example.com" # defaults to wgPassword Sender
 
 # Big title for the landing page
-blender_landing_page_title: "Meza Wikis"
+blender_landing_page_title: Meza Wikis
 
 # Optional top row of wikis with or without a title
 blender_header_wiki_title: false

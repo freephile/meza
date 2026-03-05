@@ -5,7 +5,7 @@
 # the playbook itself. See the documentation for more info.
 
 # Big title for the landing page
-blender_landing_page_title: "Meza Wikis"
+blender_landing_page_title: Meza Wikis
 
 # Optional top row of wikis with or without a title
 blender_header_wiki_title: false
