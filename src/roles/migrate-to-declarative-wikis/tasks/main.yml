@@ -240,7 +240,7 @@
 
             # Replace wikis section using regex
             # @TODO This is broken logic. We need to make sure that wikis: content is NOT overwritten
-            # since it could be in place and include comments. 
+            # since it could be in place and include comments.
             # The pattern below will replace the entire wikis: section including comments.
             # We need to preserve comments.
             # Pattern matches the wikis: block: the key line plus all subsequent lines.
