@@ -87,14 +87,14 @@
 
     - name: Preserve existing primary wiki settings or set defaults
       block:
-        - name: Get existing primary wikis
+        - name: Get existing primary wiki
           ansible.builtin.set_fact:
-            existing_primary_wikis: "{{ current_config.wikis | default([]) | selectattr('primary', 'equalto', true) | map(attribute='id') | list }}"
+            existing_primary_wiki: "{{ current_config.wikis | default([]) | selectattr('primary', 'equalto', true) | map(attribute='id') | list }}"
 
         - name: Update primary flags based on existing configuration
           ansible.builtin.set_fact:
-            discovered_wikis: "{{ discovered_wikis | map('combine', {'primary': (item.id in existing_primary_wikis)}) | list }}"
-          when: existing_primary_wikis | length > 0
+            discovered_wikis: "{{ discovered_wikis | map('combine', {'primary': (item.id in existing_primary_wiki)}) | list }}"
+          when: existing_primary_wiki | length > 0
 
         - name: Set default primary wiki when no existing configuration
           ansible.builtin.set_fact:
@@ -112,7 +112,20 @@
                 {%- endfor -%}
               {%- endif -%}
               {{ updated_wikis }}
-          when: existing_primary_wikis | length == 0
+          when: existing_primary_wiki | length == 0
+    # Ensure that there is only one primary wiki after processing
+    - name: Count primary wikis in discovered list
+      ansible.builtin.set_fact:
+        discovered_primary_count: "{{ discovered_wikis | default([]) | selectattr('primary', 'equalto', true) | list | length }}"
+
+    - name: Fail if more than one primary wiki discovered
+      ansible.builtin.assert:
+        that: discovered_primary_count | int <= 1
+        fail_msg: >
+          Configuration error: {{ discovered_primary_count }} wikis are marked as primary.
+          Only one wiki may be primary. Check the 'primary: true' flags in
+          {{ m_conf_public_dir }}/public.yml and ensure only one wiki has primary: true.
+        success_msg: "Primary wiki count OK ({{ discovered_primary_count }})"
 
     - name: Add wikis without base.php files (fallback)
       ansible.builtin.set_fact:
@@ -221,13 +234,17 @@
             with open("{{ m_conf_public_dir }}/public.yml", 'r') as f:
                 content = f.read()
 
-            # Read the new wikis section
+            # Read the new wikis section, stripping leading/trailing whitespace
             with open("/tmp/wikis_section.yml", 'r') as f:
                 wikis_content = f.read().strip()
 
             # Replace wikis section using regex
-            # Pattern matches from "wikis:" to either next top-level key or end of file
-            pattern = r'^wikis:[\s\S]*?(?=^[a-zA-Z_][a-zA-Z0-9_]*:|$)'
+            # @TODO This is broken logic. We need to make sure that wikis: content is NOT overwritten
+            # since it could be in place and include comments. 
+            # The pattern below will replace the entire wikis: section including comments.
+            # We need to preserve comments.
+            # Pattern matches the wikis: block: the key line plus all subsequent lines.
+            pattern = r'^wikis:\n([\#\- \t\.\:\,\w\W]*\n)+'
             replacement = wikis_content
 
             # Replace the wikis section

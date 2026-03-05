@@ -30,11 +30,11 @@ meza migrate-wikis development
 
 The migration process automatically:
 
-1. **📂 Scans** `/opt/conf-meza/public/wikis/` for existing wiki directories
-2. **📖 Reads** each wiki's `preLocalSettings.d/base.php` to extract `$wgSitename`
-3. **✏️ Creates/updates** `public.yml` with discovered wikis in declarative format
-4. **🎯 Sets primary wiki** (first found, or 'demo' if it exists)
-5. **💾 Backs up** existing `public.yml` before making changes
+1. **Scans** `/opt/conf-meza/public/wikis/` for existing wiki directories
+2. **Reads** each wiki's `preLocalSettings.d/base.php` to extract `$wgSitename`
+3. **Creates/updates** `public.yml` with discovered wikis in declarative format
+4. **Sets primary wiki** (first found, or 'demo' if it exists)
+5. **Backs up** existing `public.yml` before making changes
 
 ## Before Migration
 
@@ -66,18 +66,18 @@ wikis:
 ## Benefits of Declarative Configuration
 
 After migration, you can:
-- ✅ **Add wikis** by editing `public.yml` or using `meza create wiki`
-- ✅ **Remove wikis** by editing `public.yml` or using `meza delete wiki`
-- ✅ **Control wiki ordering** and primary wiki designation
-- ✅ **Use wiki redirects** and other advanced features
-- ✅ **Version control** wiki configuration changes
+- **Add wikis** by editing `public.yml` or using `meza create wiki`
+- **Remove wikis** by editing `public.yml` or using `meza delete wiki`
+- **Control wiki ordering** and primary wiki designation
+- **Use wiki redirects** and other advanced features
+- **Version control** wiki configuration changes
 
 ## Important Notes
 
-- 🔄 **Configuration only**: This command only updates configuration files
-- 🚀 **Deploy required**: Run `meza deploy` after migration to apply changes
-- 💾 **Backup created**: Existing `public.yml` is automatically backed up
-- 🎯 **Primary wiki**: First wiki found becomes primary (or 'demo' if exists)
+- **Configuration only**: This command only updates configuration files
+- **Deploy required**: Run `meza deploy` after migration to apply changes
+- **Backup created**: Existing `public.yml` is automatically backed up
+- **Primary wiki**: First wiki found becomes primary (or 'demo' if exists)
 
 ## Post-Migration Steps
 
