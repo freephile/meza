@@ -3,6 +3,55 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [03e2d999](https://github.com/freephile/meza/commit/03e2d999) (2026-03-05) Greg Rundlett: remove trailing space 
+  - Modified: `src/roles/migrate-to-declarative-wikis/tasks/main.yml`
+
+* [8613f218](https://github.com/freephile/meza/commit/8613f218) (2026-03-05) Greg Rundlett: add a README for the HAProxy role 
+  - Added: `src/roles/haproxy/README.md`
+
+* [0e0aa034](https://github.com/freephile/meza/commit/0e0aa034) (2026-03-05) Greg Rundlett: update declarative wiki migration deglitter migrate-wikis help
+make references to 'primary_wiki' singular because there should only
+ever be ONE primary wiki
+fail if there is more than one primary wiki
+update the pattern regex to replace declarative wiki stanza but note
+that it is still problematic for handling comments when you manually
+comment your wiki declaration, and then try to use the manual
+"edit public.yml to create a wiki" process.
+  - Modified: `manual/meza-cmd/migrate-wikis.md`
+  - Modified: `src/roles/migrate-to-declarative-wikis/tasks/main.yml`
+
+* [27f06827](https://github.com/freephile/meza/commit/27f06827) (2026-03-05) Greg Rundlett: update yaml and linter configs update ansible-lint config with Issue links and comments
+update yamllint with proper list
+update LINTING.md with link to Ansible docs
+yaml strings do not need quotes;
+unless the value is at risk of being interpreted as an integer;
+so quote "128M" and "127.0.0.1"
+add new variable for memcached listen port to defaults.yml
+add new variable for the 'listen' port for memcached in its config file
+add documentation about meza's config file hierarchy
+- in manual/meza-cmd/config.md
+- in public.yml template
+Addresses Issue [#83](https://github.com/freephile/meza/issues/83) and Issue [#144](https://github.com/freephile/meza/issues/144)
+  - Modified: `.ansible-lint`
+  - Modified: `.yamllint`
+  - Modified: `LINTING.md`
+  - Modified: `config/defaults.yml`
+  - Modified: `manual/meza-cmd/config.md`
+  - Modified: `src/roles/htdocs/defaults/main.yml`
+  - Modified: `src/roles/init-controller-config/templates/public.yml.j2`
+  - Modified: `src/roles/memcached/templates/memcached.j2`
+
+* [7fac5158](https://github.com/freephile/meza/commit/7fac5158) (2026-03-05) Greg Rundlett: update SBOM 
+  - Modified: `src/scripts/meza-sbom.cyclonedx.json`
+  - Modified: `src/scripts/meza-sbom.spdx.json`
+  - Modified: `src/scripts/meza-sbom.txt`
+
+* [b944f271](https://github.com/freephile/meza/commit/b944f271) (2026-02-19) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [21e45c2e](https://github.com/freephile/meza/commit/21e45c2e) (2026-02-19) Greg Rundlett: Doc each role #321 in preparation for #42 Adds a brief explanation for each of the 56 roles
 Categorized as follows:
 - Third-party / vendor roles
