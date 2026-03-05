@@ -1,15 +1,14 @@
 Software Bill of Materials (SBOM) for Meza
 ============================================================
-Generated: 2025-10-09 14:30:22 UTC
+Generated: 2026-02-24 12:31:32 UTC
 Total Components: 221
 
 Source Files:
-  composer.lock: 218 packages
-  composer.local.lock: 3 packages
+  composer.lock: 221 packages
 
 RUNTIME DEPENDENCIES (150)
 ----------------------------------------
-bacon/bacon-qr-code                      v3.0.1         
+bacon/bacon-qr-code                      v3.0.3         
   License: BSD-2-Clause
   Description: BaconQrCode is a QR code generator for PHP.
 
@@ -25,10 +24,6 @@ composer/semver                          3.4.3
   License: MIT
   Description: Semver library that offers utilities, version constraint parsing and validation.
 
-cssjanus/cssjanus                        v2.3.0         
-  License: Apache-2.0
-  Description: Convert CSS stylesheets between left-to-right and right-to-left.
-
 dasprid/enum                             1.0.7          
   License: BSD-2-Clause
   Description: PHP 7.1 enum implementation
@@ -37,7 +32,7 @@ data-values/common                       1.2.0
   License: GPL-2.0-or-later
   Description: Contains common implementations of the interfaces defined by DataValuesInterface
 
-data-values/data-values                  3.1.0          
+data-values/data-values                  3.1.1          
   License: GPL-2.0-or-later
   Description: Defines the DataValue interface and some trivial implementations
 
@@ -117,15 +112,15 @@ ezimuel/guzzlestreams                    4.1.0
   License: MIT
   Description: Fork of guzzle/streams (abandoned) to be used with elasticsearch-php
 
-ezimuel/ringphp                          1.4.0          
+ezimuel/ringphp                          1.4.1          
   License: MIT
   Description: Fork of guzzle/RingPHP (abandoned) to be used with elasticsearch-php
 
-ezyang/htmlpurifier                      v4.18.0        
+ezyang/htmlpurifier                      v4.19.0        
   License: LGPL-2.1-or-later
   Description: Standards compliant HTML filter written in PHP
 
-guzzlehttp/guzzle                        7.9.2          
+guzzlehttp/guzzle                        7.10.0         
   License: MIT
   Description: Guzzle is a PHP HTTP client library
 
@@ -149,7 +144,7 @@ jeroen/file-fetcher                      6.1.1
   License: BSD-3-Clause
   Description: Simple file fetching interface
 
-jeroen/file-fetcher-cache                1.0.1          
+jeroen/file-fetcher-cache                1.1.0          
   License: GPL-2.0-or-later
   Description: Provides a SimpleCache (PSR-16) decorator for file fetchers
 
@@ -169,7 +164,7 @@ jumbojett/openid-connect-php             v1.0.2
   License: Apache-2.0
   Description: Bare-bones OpenID Connect client
 
-justinrainbow/json-schema                5.3.0          
+justinrainbow/json-schema                5.3.1          
   License: MIT
   Description: A library to validate a json schema.
 
@@ -177,7 +172,7 @@ liuggio/statsd-php-client                v1.0.18
   License: MIT
   Description: Statsd (Object Oriented) client library for PHP
 
-mck89/peast                              v1.16.3        
+mck89/peast                              v1.17.4        
   License: BSD-3-Clause
   Description: Peast is PHP library that generates AST for JavaScript code
 
@@ -189,7 +184,7 @@ mediawiki/bootstrap-components           dev-master
   License: GPL-3.0-or-later
   Description: A Mediawiki extension to allow for the usage of special bootstrap components ins
 
-mediawiki/chameleon-skin                 5.0.1          
+mediawiki/chameleon-skin                 5.0.2          
   License: GPL-3.0-or-later
   Description: A highly flexible MediaWiki skin using Bootstrap 4
 
@@ -197,7 +192,7 @@ mediawiki/http-request                   2.0.0
   License: GPL-2.0-or-later
   Description: A minimalistic http/curl request interface library
 
-mediawiki/lingo                          3.2.4          
+mediawiki/lingo                          dev-REL1_43    
   License: GPL-2.0-or-later
   Description: Provides hover-over tool tips on wiki pages from terms defined on a wiki page
 
@@ -209,11 +204,7 @@ mediawiki/mermaid                        dev-master
   License: GPL-2.0-or-later
   Description: Provides a parser function to generate diagrams and charts with the help of the 
 
-mediawiki/mw-extension-registry-helper   1.0             [LOCAL]
-  License: GPL-3.0-or-later
-  Description: Helper functions for the MediaWiki ExtensionRegistry
-
-mediawiki/page-forms                     6.0.3          
+mediawiki/page-forms                     6.0.5          
   License: GPL-2.0-or-later
   Description: Forms for creating and editing wiki pages.
 
@@ -252,10 +243,6 @@ mediawiki/simple-batch-upload            2.0.1
 mediawiki/sub-page-list                  dev-master     
   License: GPL-2.0-or-later
   Description: SubPageList is a lightweight extension to display lists of subpages
-
-mediawiki/validator                      2.2.3           [LOCAL]
-  License: GPL-2.0-or-later
-  Description: MediaWiki wrapper for the ParamProcessor library
 
 michelf/php-markdown                     1.9.1          
   License: BSD-3-Clause
@@ -341,7 +328,7 @@ pear/net_url2                            v2.2.3
   License: BSD-3-Clause
   Description: Class for parsing and handling URL. Provides parsing of URLs into their constitu
 
-pear/pear-core-minimal                   v1.10.16       
+pear/pear-core-minimal                   v1.10.18       
   License: BSD-3-Clause
   Description: Minimal set of PEAR core files to be used as composer dependency
 
@@ -353,7 +340,7 @@ php                                      >=8.1.0
   License: PHP-3.01
   Description: PHP runtime
 
-phpseclib/phpseclib                      3.0.47         
+phpseclib/phpseclib                      3.0.49         
   License: MIT
   Description: PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, 
 
@@ -361,7 +348,7 @@ pimple/pimple                            v3.5.0
   License: MIT
   Description: Pimple, a simple Dependency Injection Container
 
-professional-wiki/external-content       3.0.1          
+professional-wiki/external-content       dev-master     
   License: GPL-2.0-or-later
   Description: MediaWiki extension that allows embedding external content, specified by URL, in
 
@@ -393,7 +380,7 @@ psr/log                                  1.1.4
   License: MIT
   Description: Common interface for logging libraries
 
-psr/simple-cache                         1.0.1          
+psr/simple-cache                         3.0.0          
   License: MIT
   Description: Common interfaces for simple caching
 
@@ -425,6 +412,10 @@ smarty/smarty                            v4.5.6
   License: LGPL-3.0
   Description: Smarty - the compiling PHP template engine
 
+swaggest/json-diff                       v3.12.1        
+  License: MIT
+  Description: JSON diff/rearrange/patch/pointer library for PHP
+
 symfony/css-selector                     v5.4.45        
   License: MIT
   Description: Converts CSS selectors to XPath expressions
@@ -437,10 +428,6 @@ symfony/polyfill-php73                   v1.33.0
   License: MIT
   Description: Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions
 
-symfony/polyfill-php80                   v1.31.0         [LOCAL]
-  License: MIT
-  Description: Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions
-
 symfony/polyfill-php82                   v1.31.0        
   License: MIT
   Description: Symfony polyfill backporting some PHP 8.2+ features to lower PHP versions
@@ -448,6 +435,14 @@ symfony/polyfill-php82                   v1.31.0
 symfony/polyfill-php83                   v1.31.0        
   License: MIT
   Description: Symfony polyfill backporting some PHP 8.3+ features to lower PHP versions
+
+symfony/polyfill-php84                   v1.32.0        
+  License: MIT
+  Description: Symfony polyfill backporting some PHP 8.4+ features to lower PHP versions
+
+symfony/polyfill-php85                   v1.33.0        
+  License: MIT
+  Description: Symfony polyfill backporting some PHP 8.5+ features to lower PHP versions
 
 symfony/yaml                             v5.4.45        
   License: MIT
@@ -477,7 +472,7 @@ wikimedia/cdb                            3.0.0
   License: GPL-2.0-or-later
   Description: Constant Database (CDB) wrapper library for PHP. Provides pure-PHP fallback when
 
-wikimedia/cldr-plural-rule-parser        v2.0.0         
+wikimedia/cldr-plural-rule-parser        v3.0.0         
   License: GPL-2.0-or-later
   Description: Evaluates plural rules specified in the CLDR project notation.
 
@@ -493,6 +488,10 @@ wikimedia/css-sanitizer                  v5.5.0
   License: Apache-2.0
   Description: Classes to parse and sanitize CSS
 
+wikimedia/cssjanus                       v2.3.0         
+  License: Apache-2.0
+  Description: Convert CSS stylesheets between left-to-right and right-to-left.
+
 wikimedia/equivset                       1.7.1          
   License: GPL-2.0-or-later
   Description: Visually Equivalent Set of UTF-8 Characters
@@ -501,7 +500,7 @@ wikimedia/html-formatter                 4.1.0
   License: GPL-2.0-or-later
   Description: Performs transformations of HTML by wrapping around libxml2 and working around i
 
-wikimedia/idle-dom                       v1.0.0         
+wikimedia/idle-dom                       v2.0.1         
   License: MIT
   Description: DOM interfaces automatically generated from WebIDL
 
@@ -513,7 +512,7 @@ wikimedia/json-codec                     v3.0.3
   License: GPL-2.0-or-later
   Description: Interfaces to serialize and deserialize PHP objects to/from JSON
 
-wikimedia/less.php                       v5.1.2         
+wikimedia/less.php                       v5.5.0         
   License: Apache-2.0
   Description: PHP port of the LESS processor
 
@@ -529,7 +528,7 @@ wikimedia/object-factory                 v5.0.1
   License: GPL-2.0-or-later
   Description: Construct objects from configuration instructions
 
-wikimedia/parsoid                        v0.20.3        
+wikimedia/parsoid                        v0.20.6        
   License: GPL-2.0-or-later
   Description: Parsoid, a bidirectional parser between wikitext and HTML5
 
@@ -545,7 +544,7 @@ wikimedia/relpath                        4.0.1
   License: MIT
   Description: Work with file paths to join or find the relative path
 
-wikimedia/remex-html                     4.1.1          
+wikimedia/remex-html                     4.1.2          
   License: MIT
   Description: Fast HTML 5 parser
 
@@ -593,7 +592,7 @@ wikimedia/wrappedstring                  v4.0.1
   License: MIT
   Description: Automatically compact sequentially-outputted strings that share a common prefix 
 
-wikimedia/xmp-reader                     0.9.4          
+wikimedia/xmp-reader                     0.10.2         
   License: GPL-2.0-or-later
   Description: Reader for XMP data containing properties relevant to images
 
@@ -624,7 +623,7 @@ composer/xdebug-handler                  3.0.5
   License: MIT
   Description: Restarts a process without Xdebug.
 
-dealerdirect/phpcodesniffer-composer-installer v1.1.2         
+dealerdirect/phpcodesniffer-composer-installer v1.2.0         
   License: MIT
   Description: PHP_CodeSniffer Standards Composer Installer Plugin
 
@@ -636,11 +635,11 @@ doctrine/dbal                            3.8.4
   License: MIT
   Description: Powerful PHP database abstraction layer (DBAL) with many features for database s
 
-doctrine/deprecations                    1.1.5          
+doctrine/deprecations                    1.1.6          
   License: MIT
   Description: A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with o
 
-doctrine/event-manager                   2.0.1          
+doctrine/event-manager                   2.1.1          
   License: MIT
   Description: The Doctrine Event Manager is a simple PHP event system that was built to be use
 
@@ -696,7 +695,7 @@ netresearch/jsonmapper                   v4.5.0
   License: OSL-3.0
   Description: Map nested JSON structures onto PHP classes
 
-nikic/php-parser                         v5.6.1         
+nikic/php-parser                         v5.7.0         
   License: BSD-3-Clause
   Description: A PHP parser written in PHP
 
@@ -736,15 +735,15 @@ phpdocumentor/reflection-common          2.2.0
   License: MIT
   Description: Common reflection classes used by phpdocumentor to reflect the code structure
 
-phpdocumentor/reflection-docblock        5.6.3          
+phpdocumentor/reflection-docblock        5.6.6          
   License: MIT
   Description: With this component, a library can provide support for annotations via DocBlocks
 
-phpdocumentor/type-resolver              1.10.0         
+phpdocumentor/type-resolver              1.12.0         
   License: MIT
   Description: A PSR-5 based resolver of Class names, Types and Structural Element Names
 
-phpstan/phpdoc-parser                    2.3.0          
+phpstan/phpdoc-parser                    2.3.2          
   License: MIT
   Description: PHPDoc parser with support for nullable, intersection and generic types
 
@@ -768,7 +767,7 @@ phpunit/php-timer                        5.0.3
   License: BSD-3-Clause
   Description: Utility class for timing
 
-phpunit/phpunit                          9.6.19         
+phpunit/phpunit                          9.6.34         
   License: BSD-3-Clause
   Description: The PHP Unit Testing framework.
 
@@ -776,7 +775,7 @@ psr/cache                                3.0.0
   License: MIT
   Description: Common interface for caching libraries
 
-psy/psysh                                v0.12.12       
+psy/psysh                                v0.12.20       
   License: MIT
   Description: An interactive shell for modern PHP.
 
@@ -796,7 +795,7 @@ sebastian/code-unit-reverse-lookup       2.0.3
   License: BSD-3-Clause
   Description: Looks up which function or method a line of code belongs to
 
-sebastian/comparator                     4.0.9          
+sebastian/comparator                     4.0.10         
   License: BSD-3-Clause
   Description: Provides the functionality to compare PHP values for equality
 
@@ -852,23 +851,23 @@ squizlabs/php_codesniffer                3.10.3
   License: BSD-3-Clause
   Description: PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations o
 
-symfony/console                          v6.4.26        
+symfony/console                          v6.4.32        
   License: MIT
   Description: Eases the creation of beautiful and testable command line interfaces
 
-symfony/service-contracts                v3.6.0         
+symfony/service-contracts                v3.6.1         
   License: MIT
   Description: Generic abstractions related to writing services
 
-symfony/string                           v6.4.26        
+symfony/string                           v6.4.30        
   License: MIT
   Description: Provides an object-oriented API to strings and deals with bytes, UTF-8 code poin
 
-symfony/var-dumper                       v6.4.26        
+symfony/var-dumper                       v6.4.32        
   License: MIT
   Description: Provides mechanisms for walking through any arbitrary PHP variable
 
-theseer/tokenizer                        1.2.3          
+theseer/tokenizer                        1.3.1          
   License: BSD-3-Clause
   Description: A small library for converting tokenized PHP source code into XML and potentiall
 
@@ -876,7 +875,7 @@ tysonandre/var_representation_polyfill   0.1.3
   License: MIT
   Description: Polyfill for var_representation: convert a variable to a string in a way that fi
 
-webmozart/assert                         1.11.0         
+webmozart/assert                         1.12.1         
   License: MIT
   Description: Assertions to validate method input/output with nice error messages.
 
@@ -888,7 +887,7 @@ wikimedia/langconv                       0.4.2
   License: GPL-2.0-or-later
   Description: Finite-State Transducer implementation of MediaWiki LanguageConverter
 
-wikimedia/testing-access-wrapper         3.0.0          
+wikimedia/testing-access-wrapper         4.0.0          
   License: GPL-2.0-or-later
   Description: A simple helper class to access non-public elements of a class when testing.
 
@@ -899,13 +898,13 @@ wmde/hamcrest-html-matchers              v1.1.0
 
 LICENSE SUMMARY
 ----------------------------------------
-MIT                            81 packages
-GPL-2.0-or-later               53 packages
+MIT                            83 packages
+GPL-2.0-or-later               52 packages
 BSD-3-Clause                   37 packages
 PHP-3.01                       14 packages
 BSD-2-Clause                   7 packages
-GPL-3.0-or-later               7 packages
 Apache-2.0                     6 packages
+GPL-3.0-or-later               6 packages
 GPL-2.0+                       5 packages
 LGPL-2.1-only                  2 packages
 GPL-3.0-only                   2 packages
