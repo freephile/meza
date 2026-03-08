@@ -62,7 +62,7 @@ defaults
 {% if load_balancer_handle_external %}
 
 frontend www-http
-	# OBSOLETE bind *:80
+	bind *:80
 	reqadd X-Forwarded-Proto:\ http
 	default_backend www-backend
 
