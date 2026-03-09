@@ -102,9 +102,36 @@ use_certbot: false
 # Enable the use of Kibana as an interface to ElasticSearch
 m_install_kibana: false
 
+# HAProxy settings - differences here are only in cases where a
+# more general use case defined in the role defaults is not sufficient or recommended for Meza's use case of MediaWiki hosting. For example, the default HAProxy role settings for rate limiting are very aggressive and would cause false positives on a MediaWiki site, so we set more reasonable defaults here. You can override these in conf-meza/public/public.yml or secret/<env>/secret.yml as needed.
+
+# If enabled, haproxy stats would be visible at port 1936, over HTTPS
+# you can curl -u 'admin:password' https://localhost:1936/haproxy?stats
+# or just forward the port and open it a browser.
+
 enable_haproxy_stats: false
 haproxy_stats_user: admin
 haproxy_stats_password: password
+# how many requests per window to allow before blocking an IP. This is a counter in the HAProxy stick table.
+# A single page in MediaWiki will make 40-100 requests depending on the number of resources
+# 'regular' page (40) to Category page (60), to 'Special:NewFiles' (100)
+haproxy_rate_limit_requests: 900
+# how many IP addresses to track for rate limiting. This is a size of the "stick table" in HAProxy, not a hard limit on
+# the number of IPs that can be blocked.
+haproxy_rate_limit_table_size: "100k"
+# Time window for rate limiting in HAProxy. This is the "expire" time for the stick table entries,
+# and also the time window for the http_req_rate and http_err_rate counters.
+haproxy_rate_limit_window: "10s"
+# how many errors per window to allow before blocking an IP. This is a counter in the HAProxy stick table.
+haproxy_rate_limit_errors: 20
+# how many bytes per window to allow before blocking an IP. This is a counter in the HAProxy stick table.
+# Note that this is a rate (bytes per window), not a total bytes limit.
+# So an IP could request 10 MiB every 10 seconds and never be blocked.
+# We DO NOT DEFINE THIS BY DEFAULT because category pages with many images easily exceed 10 MiB/10s.
+# Which means we would be blocking legitimate traffic. If you have a need to block traffic by volume, you can simply
+# enable it via haproxy_rate_limit_bytes_out if needed (plain integer bytes, e.g. 104857600 = 100 MiB).
+#This is a counter in the HAProxy stick table.
+# haproxy_rate_limit_bytes_out: 10485760
 
 #
 # PHP Profiling Configuration

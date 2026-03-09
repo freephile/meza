@@ -1,0 +1,66 @@
+---
+# HAProxy role defaults
+# Override any of these in conf-meza/public/public.yml or secret/<env>/secret.yml
+
+# --- Stats dashboard ---
+enable_haproxy_stats: false
+haproxy_stats_user: admin
+haproxy_stats_password: password
+# List of additional CIDRs allowed to reach the stats port (localhost + RFC-1918 are always allowed)
+# haproxy_stats_allowed_networks: []
+
+# --- Stick-table rate limiting ---
+# Sliding window duration for all rate counters and record expiry
+haproxy_rate_limit_window: "10s"
+# Maximum stick-table entries (source IPs tracked simultaneously)
+haproxy_rate_limit_table_size: "100k"
+# Max HTTP requests per IP per window before deny
+haproxy_rate_limit_requests: 900
+# Max HTTP error responses (4xx/5xx) per IP per window before deny
+haproxy_rate_limit_errors: 20
+# bytes_out_rate deny is DISABLED by default — MediaWiki category pages with many
+# images easily exceed a conservative threshold and cause false positives.
+# Set to a plain integer (bytes) to enable, e.g. 104857600 = 100 MiB per window.
+# HAProxy 1.8 does NOT accept 'k'/'m' shorthand here.
+# haproxy_rate_limit_bytes_out: 104857600
+
+# --- Bot / scraper User-Agent blocking ---
+# Substrings matched case-insensitively (-i -m sub) against the User-Agent header.
+# Entries containing spaces are automatically wrapped in single quotes by the
+# template to prevent HAProxy from OR-ing each word as a separate pattern.
+#
+# To add bots without replacing this list, define haproxy_extra_blocked_bots
+# in public.yml:
+#   haproxy_extra_blocked_bots:
+#     - MyBadBot
+#     - Sogou web spider   # spaces are safe here; the template quotes them
+haproxy_blocked_bots:
+  - AhrefsBot
+  - Amazonbot
+  - anthropic-ai
+  - Aranet
+  - BaiduSpider
+  - BLEXBot
+  - Bytespider
+  - CCBot
+  - ChatGPT
+  - ClaudeBot
+  - DataForSeoBot
+  - DotBot
+  - DuckAssistBot
+  - GenomeCrawlerd
+  - Google-Extended
+  - GPTBot
+  - meta-externalagent
+  - meta-webindexer
+  - MJ12bot
+  - PerplexityBot
+  - PetalBot
+  - Quantbot
+  - SemrushBot
+  - SERankingBacklinksBot
+  - SeznamBot
+  - Sogou
+  - TikTokSpider
+  - YandexBot
+  - YisouSpider

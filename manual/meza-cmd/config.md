@@ -69,25 +69,47 @@ meza deploy monolith --tags mediawiki --skip-tags latest,update.php
 Meza uses a layered configuration system. Variables are loaded in the order below;
 **later loads win**, so higher-numbered entries override lower-numbered ones.
 
-| Priority | File | Notes |
-|----------|------|-------|
-| 5 (highest) | `/opt/conf-meza/secret/<env>/secret.yml` | Per-environment secrets: passwords, keys, FQDN, private networking zone |
-| 4 | `/opt/conf-meza/public/public.yml` | Per-environment public config: your primary override file for any default |
-| 3 | `/opt/meza/config/defaults.yml` | Global defaults for all Meza installations |
-| 2 | `/opt/meza/config/paths.yml` | Path variable definitions (loaded before defaults since defaults references them) |
-| 1 (lowest) | `/opt/meza/config/RedHat.yml` or `Debian.yml` | OS-family variables (loaded before paths/defaults so they can seed those values) |
+| Priority | Source | Mechanism |
+|----------|--------|-----------|
+| 6 (highest) | `/opt/conf-meza/secret/<env>/secret.yml` | `include_vars` in set-vars role |
+| 5 | `set_fact` tasks (e.g., gluster `m_uploads_dir`) | Ansible `set_fact` in set-vars role |
+| 4 | `/opt/conf-meza/public/public.yml` | `include_vars` in set-vars role |
+| 3 | `/opt/meza/config/defaults.yml` | `include_vars` in set-vars role |
+| 2 | `/opt/meza/config/paths.yml` | `include_vars` in set-vars role |
+| 1 | `/opt/meza/config/RedHat.yml` or `Debian.yml` | `include_vars` in set-vars role |
+| 0 (lowest) | `src/roles/<role>/defaults/main.yml` | Ansible role defaults |
 
 > **Implementation reference**: `src/roles/set-vars/tasks/main.yml` is the authoritative
 > source for this load order. Variables are loaded via `ansible.builtin.include_vars`;
 > a variable defined in a later file completely replaces the same variable from an
 > earlier file.
 
+### Role defaults (`defaults/main.yml`)
+
+Each Ansible role (e.g. `haproxy`, `apache`, `database`) may ship a
+`defaults/main.yml` file containing sensible out-of-the-box values for that
+role's variables. These are Ansible **role defaults** — the lowest-priority
+variable source in the entire system. Every file in the `include_vars`-based
+stack above (priorities 1–6) unconditionally wins over them.
+
+A role default is active only when the variable has not been set anywhere in
+the config file hierarchy. To override any role default, add the variable to
+`/opt/conf-meza/public/public.yml` (non-sensitive) or
+`/opt/conf-meza/secret/<env>/secret.yml` (sensitive). This is also what the
+comment at the top of files like `src/roles/haproxy/defaults/main.yml` means
+when it says:
+
+> *Override any of these in `conf-meza/public/public.yml` or `secret/<env>/secret.yml`*
+
 ### What to override and where
 - **`secret.yml`** — sensitive values only: passwords, API keys, FQDN, SSL config.
 - **`public.yml`** — the intended place for all local customization: MediaWiki version,
-  auth type, email settings, wiki definitions, extension exclusions, profiling, etc.
+  auth type, email settings, wiki definitions, extension exclusions, profiling,
+  and overrides for any role default.
 - **`defaults.yml`** — Meza project defaults; edit only when contributing upstream changes.
 - **OS-family YAMLs** — package names and OS-specific paths; rarely edited directly.
+- **`roles/<role>/defaults/main.yml`** — role-specific defaults; edit only when
+  contributing upstream changes to that role.
 
 ## Common Configuration Examples
 

@@ -7,6 +7,10 @@ global
 	user haproxy
 	group haproxy
 	daemon
+	# one file descriptor (network socket) for frontend 16 KB
+	# one file descriptor for backend 16 KB
+	# = 32 KB per connection
+	# x 2048 = 64 MB memory footprint for maximum concurrent connections.
 	maxconn 2048
 	tune.ssl.default-dh-param 2048
 
@@ -68,6 +72,38 @@ frontend www-http
 
 frontend www-https
 	bind *:443 ssl crt /etc/haproxy/certs/
+
+	# Known AI scrapers and bots — block before any rate-limit overhead.
+	# Default list is defined in defaults/main.yml (haproxy_blocked_bots).
+	# HAProxy 1.8: one acl line per entry. All entries are single-quoted so that
+	# strings containing spaces are treated as a complete substring, not OR-ed
+	# word-by-word (HAProxy splits unquoted spaces into separate -m sub patterns).
+{% for bot in haproxy_blocked_bots %}
+	acl is_known_bot req.hdr(User-Agent) -i -m sub '{{ bot }}'
+{% endfor %}
+{% if haproxy_extra_blocked_bots is defined %}
+	# Extra bots from haproxy_extra_blocked_bots (defined in public.yml or secret.yml)
+{% for bot in haproxy_extra_blocked_bots %}
+	acl is_known_bot req.hdr(User-Agent) -i -m sub '{{ bot }}'
+{% endfor %}
+{% endif %}
+	http-request deny if is_known_bot
+
+	# Rate limiting: track requests per source IP across a sliding window.
+	# Counters: request rate, error rate, bytes sent.
+	# Note: glitch_rate is NOT available in HAProxy 1.8; bytes values must be
+	# plain integers (bytes) — the 'm'/'k' shorthand is not supported here.
+	stick-table type ip size {{ haproxy_rate_limit_table_size }} expire {{ haproxy_rate_limit_window }} store http_req_rate({{ haproxy_rate_limit_window }}),http_err_rate({{ haproxy_rate_limit_window }}),bytes_out_rate({{ haproxy_rate_limit_window }})
+	http-request track-sc0 src
+	http-request deny if { sc_http_req_rate(0) gt {{ haproxy_rate_limit_requests }} }
+	http-request deny if { sc_http_err_rate(0) gt {{ haproxy_rate_limit_errors }} }
+	# bytes_out_rate disabled by default: category pages with many images easily exceed threshold
+	# Enable via haproxy_rate_limit_bytes_out if needed (plain integer bytes, e.g. 104857600 = 100 MiB)
+	{% if haproxy_rate_limit_bytes_out is defined %}
+	http-request deny if { sc_bytes_out_rate(0) gt {{ haproxy_rate_limit_bytes_out }} }
+	{% endif %}
+
+	# reqadd placed after http-request rules to avoid parsing warnings in HAProxy 1.8
 	reqadd X-Forwarded-Proto:\ https
 
 	# Certbot (Let's Encrypt) configuration
@@ -129,6 +165,10 @@ listen mediawiki-internal
 {% if enable_haproxy_stats %}
 listen stats
 	bind *:1936 ssl crt {{ ssl_certificate_file }}
+	# Restrict stats access to localhost and private networks only
+	acl stats_allowed src 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16{% if haproxy_stats_allowed_networks is defined %} {{ haproxy_stats_allowed_networks | join(' ') }}{% endif %}
+
+	tcp-request connection reject if !stats_allowed
 	stats enable
 	stats hide-version
 	stats realm Haproxy\ Statistics
