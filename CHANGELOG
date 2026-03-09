@@ -1,3 +1,31 @@
+commit af64c0fdcedb4dd7a0590b376b6b5d79c9b1ab5d
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Mar 9 04:38:37 2026 +0000
+
+    Block AI bots and scrapers Issue #323
+    
+    Add calculation for memory consumption for HAProxy connections
+    Add calculation for memory consumption for stick tables
+    Fix warnings in haproxy.cfg Issue #327
+    Restrict access to HAProxy stats to local/private networks
+    Fixes original issue #234
+
+commit 0f899f7e831053925ba4c658aa21558812899788
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Mar 8 20:34:40 2026 +0000
+
+    Add back the bind for port 80 Fixes #327
+
+commit 9777616b037227fadfac9920c416baae3857205a
+Author: GitHub Action <action@github.com>
+Date:   Thu Mar 5 02:05:37 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 03e2d99912a8956974ec6622bdb9b3d7f922b490
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Mar 5 02:00:07 2026 +0000
