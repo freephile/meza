@@ -1,3 +1,23 @@
+commit 5d41d3182eacbc0eab5ebba26dfcbc65a5c9d88a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Mar 9 04:43:13 2026 +0000
+
+    Add info about using InstantCommons
+    
+    With new rate limits imposed by WMF for api requests and
+    their policies to thwart AI scrapers, it is important to implement
+    InstantCommons with the proper class, UA identifier, and configuration.
+
+commit 7b5762bd42cf0b35c0ca1e5f0d8e39af571979d1
+Author: GitHub Action <action@github.com>
+Date:   Mon Mar 9 04:39:51 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit af64c0fdcedb4dd7a0590b376b6b5d79c9b1ab5d
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Mon Mar 9 04:38:37 2026 +0000
