@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [5d41d318](https://github.com/freephile/meza/commit/5d41d318) (2026-03-09) Greg Rundlett: Add info about using InstantCommons With new rate limits imposed by WMF for api requests and
+their policies to thwart AI scrapers, it is important to implement
+InstantCommons with the proper class, UA identifier, and configuration.
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [7b5762bd](https://github.com/freephile/meza/commit/7b5762bd) (2026-03-09) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [af64c0fd](https://github.com/freephile/meza/commit/af64c0fd) (2026-03-09) Greg Rundlett: Block AI bots and scrapers Issue [#323](https://github.com/freephile/meza/issues/323) Add calculation for memory consumption for HAProxy connections
 Add calculation for memory consumption for stick tables
 Fix warnings in haproxy.cfg Issue [#327](https://github.com/freephile/meza/issues/327)
