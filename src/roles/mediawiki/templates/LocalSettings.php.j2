@@ -534,7 +534,32 @@ $wgImageMagickConvertCommand = 'convert';
 
 
 // InstantCommons allows wiki to use images from http://commons.wikimedia.org
+// @see https://www.mediawiki.org/wiki/InstantCommons
+// Also consider https://www.mediawiki.org/wiki/Extension:QuickInstantCommons
 $wgUseInstantCommons = false;
+/** 
+Note: that $wgUseInstantCommons is shorthand for this configuration of $wgForeignFileRepos
+In 2026 there are API limits and policies that you must adhere to
+To use InstantCommons, copy this block to your local wiki public/postLocalSettings.d/override.php
+The specific configuration is preferred over shorthand so you know what your doing
+@see https://www.mediawiki.org/wiki/Manual:$wgForeignFileRepos#Usage
+
+// InstantCommons fixed with UA agent
+$wgForeignFileRepos[] = [
+	'class' => ForeignAPIRepoWithFixedUA::class,
+	'name' => 'commonswiki', // must be distinct, do not use 'wikimediacommons' as that is reserved for the default configuration of $wgForeignFileRepos for Wikimedia Commons
+	'apibase' => 'https://commons.wikimedia.org/w/api.php',
+	'url' => 'https://upload.wikimedia.org/wikipedia/commons',
+	'thumbUrl' => 'https://upload.wikimedia.org/wikipedia/commons/thumb',
+	'directory' => $wgUploadDirectory,
+	'hashLevels' => 2,
+	'transformVia404' => true,
+	'fetchDescription' => true,
+	'descriptionCacheExpiry' => 43200, // 12 hours, optional (values are seconds)
+	'apiThumbCacheExpiry' => 0, // local thumb caching is often slower than not doing it
+];
+*/
+
 
 /**
  * If you use ImageMagick, Lua (or any other shell command)
