@@ -3,6 +3,35 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [6b1dccb9](https://github.com/freephile/meza/commit/6b1dccb9) (2026-03-10) Greg Rundlett: Add Vagrant pre-requisites for Linux Issue [#268](https://github.com/freephile/meza/issues/268) 
+  - Modified: `manual/DEVELOPING.md`
+
+* [fa93b3bc](https://github.com/freephile/meza/commit/fa93b3bc) (2026-03-10) Greg Rundlett: Add comments and documentation for ARA ARA Records Ansible was shown to be extremely useful, but also requires
+some thought about how to integrate it.
+Add comments for easy integration in a test lab.
+Address Issue [#85](https://github.com/freephile/meza/issues/85)
+  - Modified: `config/ansible.cfg`
+  - Added: `manual/ARA_NIST_800-53_Compliance.md`
+
+* [3b0dd737](https://github.com/freephile/meza/commit/3b0dd737) (2026-03-10) Greg Rundlett: Improve development environment Make Vagrantfile 'multi-provider' for cross-platform support of
+Windows and Linux
+Using Vagrant's `VAGRANT_DEFAULT_PROVIDER` override and conditional
+provider blocks. Linux users get libvirt, others stay on VirtualBox.
+On Linux, DockerDesktop collides with Virtualbox, so to avoid any
+problems we just use libvirt for Virtualbox on Linux.
+Move post-up message so it displays AFTER you do `vagrant up` - so
+it's not lost in the provisioner window.
+Adopt some good practices from MediaWiki-vagrant project
+Avoid adding meza-ansible to group vboxsf under libvirt bc it doesn't exist.
+Address Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `Vagrantfile`
+
+* [e563c965](https://github.com/freephile/meza/commit/e563c965) (2026-03-09) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [5d41d318](https://github.com/freephile/meza/commit/5d41d318) (2026-03-09) Greg Rundlett: Add info about using InstantCommons With new rate limits imposed by WMF for api requests and
 their policies to thwart AI scrapers, it is important to implement
 InstantCommons with the proper class, UA identifier, and configuration.
