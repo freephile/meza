@@ -3,19 +3,49 @@
 require 'yaml'
 require 'digest/sha1'
 
+# Require a minimum Vagrant version that supports vagrant-libvirt and all
+# features used in this file (preserve_order provisioners, post_up_message, etc.)
+Vagrant.require_version '>= 2.2.0'
+
+# Detect host OS early (before plugin checks) so we can select the right provider.
+# Source: https://stackoverflow.com/questions/26811089/vagrant-how-to-have-host-platform-specific-provisioning-steps
+module OS
+  def OS.windows?
+    (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.mac?
+    (/darwin/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.unix?
+    !OS.windows?
+  end
+
+  # Not ideal. BSD is Unix but is not Mac, but would return true for Linux.
+  def OS.linux?
+    OS.unix? and not OS.mac?
+  end
+end
+
+# Determine which Vagrant provider to use.
+# On Linux, default to libvirt to avoid the KVM/VirtualBox hypervisor conflict:
+# Docker Desktop and other KVM-based tools (which use KVM) cannot run alongside
+# VirtualBox on Linux because both require exclusive access to CPU virtualisation.
+# On Mac and Windows, VirtualBox remains the default.
+# Override with: VAGRANT_DEFAULT_PROVIDER=virtualbox vagrant up
+VAGRANT_PROVIDER = (ENV['VAGRANT_DEFAULT_PROVIDER'] || (OS.linux? ? 'libvirt' : 'virtualbox'))
+ENV['VAGRANT_DEFAULT_PROVIDER'] = VAGRANT_PROVIDER
+USING_LIBVIRT = (VAGRANT_PROVIDER == 'libvirt')
+
 # Vagrant Plugins required
 #
-# FIXME
-#
-# There's probably a better way to check if the vagrant-vbguest plugin is
-# installed.
+# libvirt provider (Linux default): requires vagrant-libvirt plugin
+# VirtualBox provider (Mac/Windows default): requires vagrant-vbguest plugin
 #
 if ARGV[0] != 'plugin' && ARGV[0] != 'destroy'
 
-  # Define the plugins in an array format
-  required_plugins = [
-    'vagrant-vbguest'
-  ]
+  required_plugins = USING_LIBVIRT ? ['vagrant-libvirt'] : ['vagrant-vbguest']
   plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
   if not plugins_to_install.empty?
 
@@ -78,26 +108,7 @@ else
 end
 
 
-# Source:
-# https://stackoverflow.com/questions/26811089/vagrant-how-to-have-host-platform-specific-provisioning-steps
-module OS
-    def OS.windows?
-        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-    end
-
-    def OS.mac?
-        (/darwin/ =~ RUBY_PLATFORM) != nil
-    end
-
-    def OS.unix?
-        !OS.windows?
-    end
-
-    # Not ideal. BSD is Unix but is not Mac, but would return true for Linux.
-    def OS.linux?
-        OS.unix? and not OS.mac?
-    end
-end
+# OS module and VAGRANT_PROVIDER / USING_LIBVIRT are defined at the top of this file.
 
 mezaDirName = File.dirname(__FILE__).rpartition("/").last
 mezaInstallUnique = Digest::SHA1.hexdigest File.dirname(__FILE__)
@@ -132,6 +143,13 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--memory", configuration["app2"]["memory"] ]
         v.customize ["modifyvm", :id, "--cpus", configuration["app2"]["cpus"] ]
         v.customize ["modifyvm", :id, "--name", mezaDirName + '-' + hostname + '-' + mezaInstallUnique]
+      end
+
+      # libvirt provider (Linux default - avoids KVM/VirtualBox conflict with Docker)
+      app2.vm.provider :libvirt do |v|
+        v.memory = configuration["app2"]["memory"]
+        v.cpus = configuration["app2"]["cpus"]
+        v.qemu_use_session = false
       end
 
       # Non-controlling server should not have meza
@@ -188,6 +206,13 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--name", mezaDirName + '-' + hostname + '-' + mezaInstallUnique]
       end
 
+      # libvirt provider (Linux default - avoids KVM/VirtualBox conflict with Docker)
+      db2.vm.provider :libvirt do |v|
+        v.memory = configuration["db2"]["memory"]
+        v.cpus = configuration["db2"]["cpus"]
+        v.qemu_use_session = false
+      end
+
       # Non-controlling server should not have meza
       db2.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -224,15 +249,37 @@ Vagrant.configure("2") do |config|
     # Increase boot timeout for slower systems or first-time box downloads
     app1.vm.boot_timeout = 600
 
-    # Disable auto-update for vbguest - it hangs after successful installation
-    # Guest Additions install correctly on first boot and don't need reinstalling
+    # Disable VirtualBox Guest Additions auto-update (VirtualBox provider only).
+    # Guest Additions install correctly on first boot and don't need reinstalling.
     # If you need to update Guest Additions, run: vagrant vbguest --do install --no-cleanup
-    app1.vbguest.auto_update = false
+    # Guard with Vagrant.has_plugin? so this is safe even if vagrant-vbguest is absent
+    # at parse time (pattern from mediawiki-vagrant)
+    app1.vbguest.auto_update = false if !USING_LIBVIRT && Vagrant.has_plugin?('vagrant-vbguest')
 
     hostname = 'meza-app1-' + box_os
     app1.vm.box = baseBox
     app1.vm.hostname = hostname
     app1_ip_address = configuration["app1"]["ip_address"]
+
+    # post_up_message is displayed after `vagrant up` completes - much more visible
+    # than a shell provisioner whose output scrolls by during provisioning.
+    # (pattern from mediawiki-vagrant)
+    config.vm.post_up_message = <<~MSG
+
+      Meza VM is ready. Next steps (copy/paste):
+
+        vagrant ssh app1               # SSH into the VM
+        sudo su - meza-ansible         # switch to the service account
+        sudo meza deploy vagrant -vvv  # deploy (first run creates the demo wiki)
+
+      Then browse:
+        https://#{app1_ip_address}/demo
+
+      When done:
+        vagrant halt     # stop the VM (data preserved)
+        vagrant destroy  # remove the VM and all its data
+
+    MSG
 
     app1.vm.network :private_network, ip: app1_ip_address
 
@@ -254,19 +301,40 @@ Vagrant.configure("2") do |config|
       v.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
     end
 
+    # libvirt provider (Linux default - avoids KVM/VirtualBox conflict with Docker Desktop).
+    # Host prerequisites (Debian/Ubuntu):  apt install libvirt-dev libvirt-daemon-system qemu-kvm
+    # Host prerequisites (RHEL/Rocky/Alma): dnf install libvirt-devel qemu-kvm
+    # Then:                                 vagrant plugin install vagrant-libvirt
+    # To override and use VirtualBox on Linux: VAGRANT_DEFAULT_PROVIDER=virtualbox vagrant up
+    app1.vm.provider :libvirt do |v|
+      v.memory = configuration["app1"]["memory"]
+      v.cpus = configuration["app1"]["cpus"]
+      v.machine_virtual_size = 40
+      # Required on Fedora 30+ hosts to fix private networking (rhbz#1697773)
+      # Pattern from mediawiki-vagrant
+      v.qemu_use_session = false
+    end
+
     # Disable default synced folder at /vagrant, instead put at /opt/meza
     app1.vm.synced_folder ".", "/vagrant", disabled: true
 
-    if OS.windows?
-      # Vagrant provisioning happens after mounts, so since meza-ansible doesn't
-      # exist yet at the time of mounting cannot specify owner appropriately.
-      # Also, at least on Windows it's not possible to change the owner/group
-      # after it is mounted, so instead we pick a UID and GID and meza-ansible
-      # and wheel are changed to these IDs after they are created.
+    if USING_LIBVIRT
+      # libvirt uses rsync for synced folders (VirtualBox mount options are not available).
+      # The getmeza shell provisioner below sets correct ownership, so rsync__chown is disabled.
+      # Run `vagrant rsync-auto` in a separate terminal while developing to keep files in sync.
+      app1.vm.synced_folder ".", install_directory + "/meza",
+        type: "rsync",
+        rsync__exclude: [".git/", ".vagrant/"],
+        rsync__chown: false,
+        rsync__args: ["--verbose", "--archive", "--delete", "-z"]
+    elsif OS.windows?
+      # On Windows, VirtualBox shared folders require explicit owner/group UID/GID.
+      # meza-ansible and wheel are changed to UID/GID 10000 after they are created.
       # Use dmode=775 for directories, fmode=755 for files (allows execute bit)
       app1.vm.synced_folder ".", install_directory + "/meza", type: "virtualbox", owner: 10000, group: 10000, mount_options: ["dmode=775,fmode=755"]
     else
-      # On Linux/Mac, same, use dmode=775 for directories, fmode=755 for files (allows execute bit)
+      # On Mac with VirtualBox, same approach.
+      # Use dmode=775 for directories, fmode=755 for files (allows execute bit)
       app1.vm.synced_folder ".", install_directory + "/meza", type: "virtualbox", owner: 10000, group: 10000, mount_options: ["dmode=775,fmode=755"]
     end
 
@@ -320,10 +388,11 @@ Vagrant.configure("2") do |config|
       usermod -u 10000 meza-ansible
       groupmod -g 10000 wheel
 
-      # Add meza-ansible to vboxsf group for shared folder access
-      # Note: Apache group membership and shell init files are now handled by
-      # the meza-user Ansible role during getmeza.sh or first deploy
-      usermod -aG vboxsf meza-ansible
+      # Add meza-ansible to vboxsf group for shared folder access (VirtualBox only).
+      # The vboxsf group does not exist under libvirt, so guard with getent.
+      # Apache group membership and shell init files are handled by the meza-user
+      # Ansible role during getmeza.sh or first deploy.
+      getent group vboxsf > /dev/null 2>&1 && usermod -aG vboxsf meza-ansible || true
 
       # Fix permissions on shared folder to be accessible
       # This only affects the guest VM 'view'; host permissions are unaffected
@@ -384,39 +453,6 @@ EOL
       echo 'm_opcache_production_mode: False' >> #{install_directory}/conf-meza/public/public.yml
 
       cat #{install_directory}/conf-meza/public/public.yml
-    SHELL
-
-    #
-    # Reminder: manual deploy steps
-    #
-    app1.vm.provision "reminder", type: "shell", preserve_order: true, inline: <<-SHELL
-      cat <<'EOL'
-
-Next steps (copy/paste):
-
-  # ssh into the local VM
-  vagrant ssh app1
-
-  # switch user to the service account
-  sudo su - meza-ansible
-
-  # change to the project's ansible config dir
-  cd /opt/meza/config
-
-  # create a demo wiki on the VM
-  sudo meza deploy vagrant -vvv
-
-Then browse:
-  https://192.168.56.56/demo
-
-  # when done, `sudo shutdown now` to exit the VM; or from outside the VM run:
-  vagrant halt
-  # to stop the VM, or:
-  vagrant destroy
-  # to remove the VM and all associated data
-
-  # You can also run `vagrant up` again to restart the VM with the same configuration and data (unless you ran `destroy`)
-EOL
     SHELL
 
     #
