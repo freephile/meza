@@ -15,8 +15,17 @@ You can also forward ports between the host and VM for easily using graphical to
 
 ## First-time Vagrant Setup
 
-These steps assume you have Vagrant installed on your workstation:
+These steps assume you have Vagrant installed on your workstation.
 
+### Linux pre-requisites
+If your host is Linux, you will want to ensure you have libvirt
+
+```
+sudo apt install libvirt-dev libvirt-daemon-system qemu-kvm  # Debian/Ubuntu
+vagrant plugin install vagrant-libvirt
+```
+
+### All OSes
 ```
 # get the code
 git clone https://github.com/freephile/meza.git
