@@ -1,3 +1,56 @@
+commit b0f54fed0a7168575fd4f32adc115cfc223ab055
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Mar 11 04:53:53 2026 +0000
+
+    Improve performance via File Caching
+    
+    Add Cache-Control directive with mod_headers
+    Add mod_expires rules
+    Synchronize the 'php-fpm' version of httpd.conf with the canonical httpd.conf
+    Fixes Issue #105
+
+commit fa56c9e2881b86b4216be77a0938d38bd00a99bf
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Mar 11 04:30:31 2026 +0000
+
+    Add caching to MediaWiki
+    
+    Enable the sidebar cache w 24h expiry
+    Set Parser Cache to 30 days
+    Enable ResourceLoader caching
+    
+    Address Issue #105
+
+commit f6645fb30b2cada97da19f5fd627c24865fff0dd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Mar 11 04:08:45 2026 +0000
+
+    Fix the indentation of the HAProxy templating
+    
+    Add ALPN and HTTP/2 binds
+    alpn h2,http/1.1 advertises HTTP/2 support during the TLS handshake
+    (via ALPN extension). Clients that support it (every modern browser)
+    will negotiate h2. HTTP/2
+    
+    We still send traffic (internally) unencrypted to the MediaWiki backend,
+    so we don't have HTTP/2 for MediaWiki. The current flow looks like:
+    
+    Client ──h2/TLS──▶ HAProxy :443 ──HTTP/1.1──▶ Apache :8080
+    
+    Drop copy/paste commented content from Apache - this is HAProxy!
+    
+    Addresses Issue #323
+
+commit c123bcc54fc9e599b39a3697d6ee2518b7c55b6b
+Author: GitHub Action <action@github.com>
+Date:   Tue Mar 10 18:17:28 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 6b1dccb95faac07a7042fa05bfe122ec37cb117b
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Tue Mar 10 14:15:36 2026 -0400
