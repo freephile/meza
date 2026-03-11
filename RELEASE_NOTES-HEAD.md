@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [362ea45b](https://github.com/freephile/meza/commit/362ea45b) (2026-03-11) Greg Rundlett: Update Vagrantfile to use NFS for mount vagrant-libvirt handles adding the NFS export +  mounting on `vagrant up`
+Addresses Issue [#268](https://github.com/freephile/meza/issues/268)
+  - Modified: `Vagrantfile`
+  - Modified: `manual/DEVELOPING.md`
+
+* [8601f3a6](https://github.com/freephile/meza/commit/8601f3a6) (2026-03-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [b0f54fed](https://github.com/freephile/meza/commit/b0f54fed) (2026-03-11) Greg Rundlett: Improve performance via File Caching Add Cache-Control directive with mod_headers
 Add mod_expires rules
 Synchronize the 'php-fpm' version of httpd.conf with the canonical httpd.conf
