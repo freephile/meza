@@ -458,35 +458,50 @@ $wgSharedDB = '';
 $wgUseCdn = true;
 $wgUsePrivateIPs = true;
 $wgCdnServersNoPurge = [
-	{% for server in groups['load_balancers'] -%}
-	{%- if server == inventory_hostname or server == 'localhost' -%}
+{% for server in groups['load_balancers'] -%}
+{%- if server == inventory_hostname or server == 'localhost' -%}
 	'127.0.0.1',
-	{%- else -%}
+{%- else -%}
 	'{{ server }}',
-	{%- endif -%}
-	{%- endfor %}
+{%- endif -%}
+{%- endfor %}
 
-	{% if 'load_balancers_nonmeza' in groups and groups['load_balancers_nonmeza']|length|int > 0 %}
-	// Unmanaged load_balancers, e.g. load balancers not maintained by meza,
-	// such as AWS or Digital Ocean
-	{% for server in groups['load_balancers_nonmeza'] -%}
+{% if 'load_balancers_nonmeza' in groups and groups['load_balancers_nonmeza']|length|int > 0 %}
+// Unmanaged load_balancers, e.g. load balancers not maintained by meza,
+// such as AWS or Digital Ocean
+{% for server in groups['load_balancers_nonmeza'] -%}
 	'{{ server }}',
-	{%- endfor %}
-	{% endif %}
+{%- endfor %}
+{% endif %}
 
-	{% if 'load_balancers_nonmeza_external' in groups and groups['load_balancers_nonmeza_external']|length|int > 0 %}
-	// Unmanaged load_balancers, e.g. load balancers not maintained by meza,
-	// such as AWS or Digital Ocean
-	{% for server in groups['load_balancers_nonmeza_external'] -%}
+{% if 'load_balancers_nonmeza_external' in groups and groups['load_balancers_nonmeza_external']|length|int > 0 %}
+// Unmanaged load_balancers, e.g. load balancers not maintained by meza,
+// such as AWS or Digital Ocean
+{% for server in groups['load_balancers_nonmeza_external'] -%}
 	'{{ server }}',
-	{%- endfor %}
-	{% endif %}
+{%- endfor %}
+{% endif %}
 
 ];
 
 // Caching configuration
+
+// from https://www.mediawiki.org/wiki/Manual:Performance_tuning
+// Short version: We recommend bytecode cache for PHP, APCu as local object cache, Memcached for main cache;
+// this is what the Wikimedia Foundation uses for Wikipedia et al.
+// For bytecode cache, Opcache is included in PHP 5.5.0 and later and 'just works' with MediaWiki, so we don't need to configure it here in LocalSettings.php
+
+// Cache the sidebar, which is used on every page and thus benefits greatly from caching.
+// This is disabled by default in MediaWiki because it can cause issues with dynamic
+// sidebars, but we don't have any dynamic sidebar content and we want the performance boost.
+// https://www.mediawiki.org/wiki/Manual:$wgEnableSidebarCache
+$day = 24 * 60 * 60;
+$wgEnableSidebarCache = true;
+$wgSidebarCacheExpiry = $day; // 86400 = 24 hours (default)
+
 $wgMainCacheType = CACHE_MEMCACHED;
 $wgParserCacheType = {{ m_parser_cache_type }};
+$wgParserCacheExpireTime = 30 * $day; // 30 days
 $wgMessageCacheType = CACHE_MEMCACHED;
 $wgSessionCacheType = CACHE_MEMCACHED;
 // SemanticMediaWiki cache is set in MezaCoreExtensions.yml
@@ -502,6 +517,13 @@ $wgMemCachedServers = [
 	{%- endfor %}
 ];
 
+// Not exactly sure yet how well this works, and what the settings should be.
+// https://www.mediawiki.org/wiki/Manual:$wgResourceLoaderMaxage
+// ResourceLoader caching: set long cache times for both versioned and unversioned resources. Versioned resources get a longer cache time because they are immutable (their URL changes if they change), while unversioned resources may change but we still want to cache them for a reasonable amount of time to improve performance.
+$wgResourceLoaderMaxage = [
+	'unversioned' => $day,
+	'versioned'   => 30 * $day,
+];
 
 // Of course we allow uploads, we even allow large uploads.
 $wgEnableUploads = true;
