@@ -19,10 +19,19 @@ These steps assume you have Vagrant installed on your workstation.
 
 ### Linux pre-requisites
 If your host is Linux, you will want to ensure you have libvirt
+(unless you want to use VirtualBox provisioner - but that can conflict with DockerDesktop)
 
 ```
 sudo apt install libvirt-dev libvirt-daemon-system qemu-kvm  # Debian/Ubuntu
 vagrant plugin install vagrant-libvirt
+```
+And also nfs-kernel-server for the persistent bi-directional automatic mount avoiding `vagrant rsync`
+```
+# Debian/Ubuntu
+sudo apt install nfs-kernel-server
+
+# RHEL/Rocky/Alma
+sudo dnf install nfs-utils
 ```
 
 ### All OSes

@@ -319,14 +319,13 @@ Vagrant.configure("2") do |config|
     app1.vm.synced_folder ".", "/vagrant", disabled: true
 
     if USING_LIBVIRT
-      # libvirt uses rsync for synced folders (VirtualBox mount options are not available).
-      # The getmeza shell provisioner below sets correct ownership, so rsync__chown is disabled.
-      # Run `vagrant rsync-auto` in a separate terminal while developing to keep files in sync.
+      # NFS provides a persistent, bidirectional mount under libvirt — no need to run
+      # `vagrant rsync-auto` in a separate terminal while developing.
+      # Host prerequisites: nfs-kernel-server (Debian/Ubuntu) or nfs-utils (RHEL/Rocky/Alma)
+      # vagrant-libvirt handles adding the NFS export and mounting on `vagrant up`.
       app1.vm.synced_folder ".", install_directory + "/meza",
-        type: "rsync",
-        rsync__exclude: [".git/", ".vagrant/"],
-        rsync__chown: false,
-        rsync__args: ["--verbose", "--archive", "--delete", "-z"]
+        type: "nfs",
+        nfs_udp: false
     elsif OS.windows?
       # On Windows, VirtualBox shared folders require explicit owner/group UID/GID.
       # meza-ansible and wheel are changed to UID/GID 10000 after they are created.
