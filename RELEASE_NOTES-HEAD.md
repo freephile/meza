@@ -3,6 +3,36 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [b0f54fed](https://github.com/freephile/meza/commit/b0f54fed) (2026-03-11) Greg Rundlett: Improve performance via File Caching Add Cache-Control directive with mod_headers
+Add mod_expires rules
+Synchronize the 'php-fpm' version of httpd.conf with the canonical httpd.conf
+Fixes Issue [#105](https://github.com/freephile/meza/issues/105)
+  - Modified: `src/roles/apache/templates/httpd.conf.j2`
+  - Modified: `src/roles/apache/templates/php-fpm-httpd.conf.j2`
+
+* [fa56c9e2](https://github.com/freephile/meza/commit/fa56c9e2) (2026-03-11) Greg Rundlett: Add caching to MediaWiki Enable the sidebar cache w 24h expiry
+Set Parser Cache to 30 days
+Enable ResourceLoader caching
+Address Issue [#105](https://github.com/freephile/meza/issues/105)
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [f6645fb3](https://github.com/freephile/meza/commit/f6645fb3) (2026-03-11) Greg Rundlett: Fix the indentation of the HAProxy templating Add ALPN and HTTP/2 binds
+alpn h2,http/1.1 advertises HTTP/2 support during the TLS handshake
+(via ALPN extension). Clients that support it (every modern browser)
+will negotiate h2. HTTP/2
+We still send traffic (internally) unencrypted to the MediaWiki backend,
+so we don't have HTTP/2 for MediaWiki. The current flow looks like:
+Client ──h2/TLS──▶ HAProxy :443 ──HTTP/1.1──▶ Apache :8080
+Drop copy/paste commented content from Apache - this is HAProxy!
+Addresses Issue [#323](https://github.com/freephile/meza/issues/323)
+  - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
+
+* [c123bcc5](https://github.com/freephile/meza/commit/c123bcc5) (2026-03-10) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [6b1dccb9](https://github.com/freephile/meza/commit/6b1dccb9) (2026-03-10) Greg Rundlett: Add Vagrant pre-requisites for Linux Issue [#268](https://github.com/freephile/meza/issues/268) 
   - Modified: `manual/DEVELOPING.md`
 
