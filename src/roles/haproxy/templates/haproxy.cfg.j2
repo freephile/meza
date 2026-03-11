@@ -24,23 +24,8 @@ global
 
 	ssl-default-bind-ciphers EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:EDH+aRSA:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS:!RC4:!DHE-RSA-CAMELLIA256-SHA:!DHE-RSA-AES256-SHA256:!DHE-RSA-AES256-SHA:!DHE-RSA-AES128-SHA256:!DHE-RSA-AES128-SHA:!DHE-RSA-SEED-SHA:!DHE-RSA-CAMELLIA128-SHA
 	
-        # Per NASA-SPEC-2650 v4.0.3, section 5.1.1 - TLSv1.2 is acceptable due to interoperability with mwclient
-        ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11
-
-	# Apache httpd.conf settings regarding SSL which we should verify if they
-	# need to be included somehow here.
-	#
-	# SSLProtocol             all -SSLv3 -TLSv1
-	# SSLCipherSuite          ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
-	# SSLHonorCipherOrder     on
-	# SSLCompression          off
-	# #SSLSessionTickets       off # not available until httpd 2.4.11
-
-	# # OCSP Stapling
-	# SSLUseStapling          on
-	# SSLStaplingResponderTimeout 5
-	# SSLStaplingReturnResponderErrors off
-	# SSLStaplingCache        shmcb:/var/run/ocsp(128000)
+	# Per NASA-SPEC-2650 v4.0.3, section 5.1.1 - TLSv1.2 is acceptable due to interoperability with mwclient
+	ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11
 
 defaults
 	log	global
@@ -59,8 +44,6 @@ defaults
 	# errorfile 504 /etc/haproxy/errors/504.http
 	option forwardfor
 	option http-server-close
-
-
 
 
 {% if load_balancer_handle_external %}
@@ -99,9 +82,9 @@ frontend www-https
 	http-request deny if { sc_http_err_rate(0) gt {{ haproxy_rate_limit_errors }} }
 	# bytes_out_rate disabled by default: category pages with many images easily exceed threshold
 	# Enable via haproxy_rate_limit_bytes_out if needed (plain integer bytes, e.g. 104857600 = 100 MiB)
-	{% if haproxy_rate_limit_bytes_out is defined %}
+{% if haproxy_rate_limit_bytes_out is defined %}
 	http-request deny if { sc_bytes_out_rate(0) gt {{ haproxy_rate_limit_bytes_out }} }
-	{% endif %}
+{% endif %}
 
 	# reqadd placed after http-request rules to avoid parsing warnings in HAProxy 1.8
 	reqadd X-Forwarded-Proto:\ https
@@ -117,31 +100,29 @@ frontend www-https
 
 backend www-backend
 	redirect scheme https code 301 if !{ ssl_fc }
-	{% for host in groups['app_servers'] -%}
-		{%- if host == inventory_hostname -%}
-			server apache{{ loop.index }} 127.0.0.1:8080 check
-		{%- else -%}
-			server apache{{ loop.index }} {{ host }}:8080 check
-		{%- endif %}
-
-	{% endfor %}
-
+{% for host in groups['app_servers'] %}
+{% if host == inventory_hostname %}
+	server apache{{ loop.index }} 127.0.0.1:8080 check
+{% else %}
+	server apache{{ loop.index }} {{ host }}:8080 check
+{% endif %}
+{% endfor %}
 	# HSTS
 	# Ref: https://www.haproxy.com/blog/haproxy-and-http-strict-transport-security-hsts-header-in-http-redirects/
 	# Note: slight modification for HAProxy 1.6+
 	http-response set-header Strict-Transport-Security max-age=31536000;\ includeSubDomains;\ preload;
 
-    # @FIXME loop w/ index and tie all
-	# app servers together with controller as registry
-	{% if m_install_netdata %}
-	frontend netdata
-		bind *:20000 ssl crt {{ ssl_certificate_file }}
-		mode http
-		default_backend netdata-back
-	backend netdata-back
-		server nd1 127.0.0.1:19999
-	{% endif %}
+# @FIXME loop w/ index and tie all app servers together with controller as registry
+{% if m_install_netdata %}
+frontend netdata
+	bind *:20000 ssl crt {{ ssl_certificate_file }} alpn h2,http/1.1
+	mode http
+	default_backend netdata-back
 
+backend netdata-back
+	server nd1 127.0.0.1:19999
+
+{% endif %}
 backend nonwiki-backend
 	redirect scheme https if !{ ssl_fc }
 	server nonwiki 127.0.0.1:8082 check
@@ -151,14 +132,13 @@ backend nonwiki-backend
 {% if load_balancer_handle_internal %}
 listen mediawiki-internal
 	bind *:8081
-	{% for host in groups['app_servers'] -%}
-		{%- if host == inventory_hostname -%}
-			server mediawiki{{ loop.index }} 127.0.0.1:8080 check
-		{%- else -%}
-			server mediawiki{{ loop.index }} {{ host }}:8080 check
-		{%- endif %}
-
-	{% endfor %}
+{% for host in groups['app_servers'] %}
+{% if host == inventory_hostname %}
+	server mediawiki{{ loop.index }} 127.0.0.1:8080 check
+{% else %}
+	server mediawiki{{ loop.index }} {{ host }}:8080 check
+{% endif %}
+{% endfor %}
 {% endif %}
 
 
