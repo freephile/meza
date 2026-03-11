@@ -421,7 +421,36 @@ SSLRandomSeed connect builtin
 #RequestHeader unset DNT env=bad_DNT
 #</IfModule>
 
+<IfModule mod_headers.c>
+	<LocationMatch "/">
+		Header set Cache-Control "max-age=3600, public, must-revalidate"
+	</LocationMatch>
+</IfModule>
 
+# Expires and CORS for static content
+# sends max-age and Expires header, time in seconds
+<IfModule mod_expires.c>
+   ExpiresActive On
+   <Directory ~ "^/opt/htdocs/">
+        <FilesMatch "\.(gif|jpe?g|png|css|js|json|woff|woff2|svg|eot|ttf|ico)$">
+            ExpiresByType image/gif A31536000
+            ExpiresByType image/png A31536000
+            ExpiresByType image/jpeg A31536000
+            ExpiresByType text/css A31536000
+            ExpiresByType text/javascript A31536000
+            ExpiresByType application/x-javascript A31536000
+            ExpiresByType application/json A31536000
+            ExpiresByType application/font-woff A31536000
+            ExpiresByType application/font-woff2 A31536000
+            ExpiresByType image/svg+xml A31536000
+            ExpiresByType image/x-icon A31536000
+            ExpiresByType image/vnd.microsoft.icon A31536000
+            ExpiresByType application/vnd.ms-fontobject A31536000
+            ExpiresByType application/x-font-ttf A31536000
+            Header add Access-Control-Allow-Origin "*"
+        </FilesMatch>
+    </Directory>
+</IfModule>
 # main handling via http
 Listen 8080
 <VirtualHost *:8080>

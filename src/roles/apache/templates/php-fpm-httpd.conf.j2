@@ -30,6 +30,9 @@
 #
 ServerRoot "{{ path_apache_server_root }}"
 
+# Ensure that apache headers only contain the minimum required information
+ServerTokens ProductOnly
+
 #
 # Mutex: Allows you to set the mutex mechanism and mutex file directory
 # for individual mutexes, or change the global defaults
@@ -419,6 +422,36 @@ SSLRandomSeed connect builtin
 #</IfModule>
 
 
+<IfModule mod_headers.c>
+	<LocationMatch "/">
+		Header set Cache-Control "max-age=3600, public, must-revalidate"
+	</LocationMatch>
+</IfModule>
+
+# Expires and CORS for static content
+# sends max-age and Expires header, time in seconds
+<IfModule mod_expires.c>
+   ExpiresActive On
+   <Directory ~ "^/opt/htdocs/">
+        <FilesMatch "\.(gif|jpe?g|png|css|js|json|woff|woff2|svg|eot|ttf|ico)$">
+            ExpiresByType image/gif A31536000
+            ExpiresByType image/png A31536000
+            ExpiresByType image/jpeg A31536000
+            ExpiresByType text/css A31536000
+            ExpiresByType text/javascript A31536000
+            ExpiresByType application/x-javascript A31536000
+            ExpiresByType application/json A31536000
+            ExpiresByType application/font-woff A31536000
+            ExpiresByType application/font-woff2 A31536000
+            ExpiresByType image/svg+xml A31536000
+            ExpiresByType image/x-icon A31536000
+            ExpiresByType image/vnd.microsoft.icon A31536000
+            ExpiresByType application/vnd.ms-fontobject A31536000
+            ExpiresByType application/x-font-ttf A31536000
+            Header add Access-Control-Allow-Origin "*"
+        </FilesMatch>
+    </Directory>
+</IfModule>
 # main handling via http
 Listen 8080
 <VirtualHost *:8080>
@@ -448,6 +481,9 @@ Listen 8080
 
 	{% if saml_secret is defined -%}
 	# Use SimpleSamlPhp to handle authentication
+	# The environment variable is optional since we use the default config dir
+	# SetEnv SIMPLESAMLPHP_CONFIG_DIR /opt/simplesamlphp/config
+
 	Alias /simplesaml {{ m_simplesamlphp_path }}/public
 	<Directory {{ m_simplesamlphp_path }}/public>
 		Require all granted
@@ -460,6 +496,20 @@ Listen 8080
 	# php_admin_value auto_prepend_file "{{ m_profiling_xhgui_directory }}/external/header.php"
 	{% endif %}
 
+</VirtualHost>
+
+Listen 8082
+<VirtualHost *:8082>
+        DocumentRoot /opt/nonwiki
+        ServerName NonWikiMainEntrypoint
+        <Directory /opt/nonwiki>
+                AllowOverride All
+                Options Indexes
+                Require all granted
+                Allow from all
+        </Directory>
+        CustomLog /var/log/httpd/nonwiki-access.log combined
+        ErrorLog  /var/log/httpd/nonwiki-error.log
 </VirtualHost>
 
 # Use port 8090 to access mod_status. Not accessible outside firewall.
