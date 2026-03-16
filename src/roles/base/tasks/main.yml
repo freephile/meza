@@ -260,6 +260,7 @@
       - openssh-clients
       - openssh-server
       - python3-pip
+      - python3-pygments # Needed for SyntaxHighlight_GeSHi extension; see MezaCoreExtensions.yml
       - rsync
       - rsyslog
       - selinux-policy
