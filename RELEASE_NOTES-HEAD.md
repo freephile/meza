@@ -3,6 +3,22 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [1f3a8d1a](https://github.com/freephile/meza/commit/1f3a8d1a) (2026-03-16) Greg Rundlett: Fix Syntax Highlight issue Install pygmentize and add path configuration to work around bug with
+using very old Python 3.6.8
+Fixes Issue [#337](https://github.com/freephile/meza/issues/337)
+  - Modified: `config/MezaCoreExtensions.yml`
+  - Modified: `src/roles/base/tasks/main.yml`
+
+* [45737f11](https://github.com/freephile/meza/commit/45737f11) (2026-03-13) Greg Rundlett: Add agentic instructions according to agents.md @See https://agents.md/
+This new content is based on .github/copilot-instructions.md
+  - Added: `AGENTS.md`
+
+* [5c147fd5](https://github.com/freephile/meza/commit/5c147fd5) (2026-03-11) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [362ea45b](https://github.com/freephile/meza/commit/362ea45b) (2026-03-11) Greg Rundlett: Update Vagrantfile to use NFS for mount vagrant-libvirt handles adding the NFS export +  mounting on `vagrant up`
 Addresses Issue [#268](https://github.com/freephile/meza/issues/268)
   - Modified: `Vagrantfile`
