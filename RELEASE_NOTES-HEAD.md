@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [ad81fdca](https://github.com/freephile/meza/commit/ad81fdca) (2026-03-17) Greg Rundlett: Fix refresh-links.sh script Back in Oct 2025 we introduced a function, which failed to follow BASH order of execution and scoping rules: The function was declared AFTER it was invoked - which you can't do in BASH. @see 7dd492a389982c6318bd2b338509f091b78f3cd2
+Fixes Issue [#339](https://github.com/freephile/meza/issues/339)
+  - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
+
+* [0e2f89a3](https://github.com/freephile/meza/commit/0e2f89a3) (2026-03-16) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [1f3a8d1a](https://github.com/freephile/meza/commit/1f3a8d1a) (2026-03-16) Greg Rundlett: Fix Syntax Highlight issue Install pygmentize and add path configuration to work around bug with
 using very old Python 3.6.8
 Fixes Issue [#337](https://github.com/freephile/meza/issues/337)
