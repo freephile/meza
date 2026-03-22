@@ -1,9 +1,23 @@
 [client]
+# "all" client connections, not just for mysql command-line tool
+default-character-set=utf8mb4
+# 'binary' would be the default for MediaWiki, but for wider compatibility we're better off with the MariaDB default client setting of utf8mb4.
 #password = your_password
 port = {{ mysql_port }}
 socket = {{ mysql_socket }}
 
 [mysqld]
+# https://mariadb.com/docs/server/reference/data-types/string-data-types/character-sets/setting-character-sets-and-collations#less-than-11.6
+# CHARSET and COLLATION settings
+# MediaWiki sets the character set to 'binary' through wgDBTableOptions so this is
+# just for other databases that you might install on the same host.
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+# default collation for MariaDB 11.6+ is utf8mb4_uca1400_ai_ci but that is not even available for Rocky Linux 8
+# Don't do 'SET NAMES' because it could lead to inconsistencies due to CONNECTION_ADMIN privileges and we know that MediaWiki sets the character set to 'binary' through wgDBTableOptions.
+# init-connect='SET NAMES utf8mb4'
+
+
 port = {{ mysql_port }}
 bind-address = {{ mysql_bind_address }}
 datadir = {{ mysql_datadir }}
