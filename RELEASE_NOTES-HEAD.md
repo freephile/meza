@@ -3,6 +3,21 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [aa7c2cf0](https://github.com/freephile/meza/commit/aa7c2cf0) (2026-03-22) Greg Rundlett: update sql used for create wiki This needs to be refactored - see https://wiki.freephile.org/wiki/Charset#Updating_src/roles/verify-wiki/templates/mediawiki-tables.sql
+  - Modified: `src/roles/verify-wiki/templates/mediawiki-tables.sql`
+
+* [1f63e436](https://github.com/freephile/meza/commit/1f63e436) (2026-03-22) Greg Rundlett: remove wgDBmysql5 setting removed in REL1_33 Issue [#341](https://github.com/freephile/meza/issues/341)
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [a8300a98](https://github.com/freephile/meza/commit/a8300a98) (2026-03-22) Greg Rundlett: configure MySQL server's charset and collation Issue [#102](https://github.com/freephile/meza/issues/102) This was raised in Issue [#102](https://github.com/freephile/meza/issues/102) and is finally resolved after working through #341
+  - Modified: `src/roles/database/templates/my.cnf.j2`
+
+* [c37fff83](https://github.com/freephile/meza/commit/c37fff83) (2026-03-17) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [ad81fdca](https://github.com/freephile/meza/commit/ad81fdca) (2026-03-17) Greg Rundlett: Fix refresh-links.sh script Back in Oct 2025 we introduced a function, which failed to follow BASH order of execution and scoping rules: The function was declared AFTER it was invoked - which you can't do in BASH. @see 7dd492a389982c6318bd2b338509f091b78f3cd2
 Fixes Issue [#339](https://github.com/freephile/meza/issues/339)
   - Modified: `src/roles/mediawiki/templates/refresh-links.sh.j2`
