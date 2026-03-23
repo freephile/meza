@@ -245,6 +245,12 @@ mediawiki_default_branch: "REL1_43"
 # CAUTION: if set to true, a deploy will overwrite manual changes made on disk
 # to MediaWiki core, Meza core extensions and skins + Local extensions and skins
 # including any that are installed via composer.
+# The default is true because you want things to be deterministic for production.
+# You may want to override this in your public/public.yml for development flexibility.
+# To determine ahead of time whether you have changes in composer-managed extensions
+# You can run `composer status --verbose --working-dir=/opt/htdocs/mediawiki`.
+# For git-managed core, extensions and skins you can run
+# scripts/findDirtyDirs.sh
 overwrite_local_changes: true
 
 # PHP version
