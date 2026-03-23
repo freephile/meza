@@ -695,7 +695,7 @@ list:
       $wgGroupPermissions['sysop']['smw-patternedit'] = true;
       $wgGroupPermissions['sysop']['smw-schemaedit'] = true;
 
-  # SRF - Extends SMW to display quesry results in many different formats
+  # SRF - Extends SMW to display query results in many different formats
   - name: Semantic Result Formats
     composer: "mediawiki/semantic-result-formats"
     version: "^5.0"
