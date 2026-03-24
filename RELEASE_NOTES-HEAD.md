@@ -3,6 +3,19 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [3e71597e](https://github.com/freephile/meza/commit/3e71597e) (2026-03-23) Greg Rundlett: add script to find "Dirty" directories that have changes 
+  - Modified: `config/defaults.yml`
+  - Added: `scripts/findDirtyDirs.sh`
+
+* [d326125e](https://github.com/freephile/meza/commit/d326125e) (2026-03-23) Greg Rundlett: typo 
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [304eb7bb](https://github.com/freephile/meza/commit/304eb7bb) (2026-03-22) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [aa7c2cf0](https://github.com/freephile/meza/commit/aa7c2cf0) (2026-03-22) Greg Rundlett: update sql used for create wiki This needs to be refactored - see https://wiki.freephile.org/wiki/Charset#Updating_src/roles/verify-wiki/templates/mediawiki-tables.sql
   - Modified: `src/roles/verify-wiki/templates/mediawiki-tables.sql`
 
