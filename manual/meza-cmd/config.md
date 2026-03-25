@@ -66,6 +66,8 @@ meza deploy monolith --tags mediawiki --skip-tags latest,update.php
 
 ## Configuration File Hierarchy
 
+![Meza configuration file hierarchy](../../assets/Meza-config-file-hierarchy.png)
+
 Meza uses a layered configuration system. Variables are loaded in the order below;
 **later loads win**, so higher-numbered entries override lower-numbered ones.
 
