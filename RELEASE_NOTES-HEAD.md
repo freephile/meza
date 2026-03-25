@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [5b65fed9](https://github.com/freephile/meza/commit/5b65fed9) (2026-03-25) Greg Rundlett: Add illustration to the config documentation 
+  - Added: `assets/Meza-config-file-hierarchy.png`
+  - Modified: `manual/meza-cmd/config.md`
+
+* [294929bd](https://github.com/freephile/meza/commit/294929bd) (2026-03-24) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [3e71597e](https://github.com/freephile/meza/commit/3e71597e) (2026-03-23) Greg Rundlett: add script to find "Dirty" directories that have changes 
   - Modified: `config/defaults.yml`
   - Added: `scripts/findDirtyDirs.sh`
