@@ -15,9 +15,9 @@ haproxy_rate_limit_window: "10s"
 # Maximum stick-table entries (source IPs tracked simultaneously)
 haproxy_rate_limit_table_size: "100k"
 # Max HTTP requests per IP per window before deny
-haproxy_rate_limit_requests: 900
+haproxy_rate_limit_requests: 100
 # Max HTTP error responses (4xx/5xx) per IP per window before deny
-haproxy_rate_limit_errors: 20
+haproxy_rate_limit_errors: 10
 # bytes_out_rate deny is DISABLED by default — MediaWiki category pages with many
 # images easily exceed a conservative threshold and cause false positives.
 # Set to a plain integer (bytes) to enable, e.g. 104857600 = 100 MiB per window.
@@ -40,6 +40,8 @@ haproxy_blocked_bots:
   - anthropic-ai
   - Aranet
   - BaiduSpider
+  - babbar.tech
+  - Barkrowler
   - BLEXBot
   - Bytespider
   - CCBot
