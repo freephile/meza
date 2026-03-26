@@ -1,7 +1,8 @@
 # Meza Configuration Management
 
-## No `meza config` Command Available
+## What this is not
 
+### No Meza Config command
 There is no `meza config` command in the current implementation. Such a command would require:
 
 - A complex configuration management system
@@ -10,6 +11,10 @@ There is no `meza config` command in the current implementation. Such a command 
 - Integration with Meza's multi-layered configuration hierarchy
 
 This level of complexity doesn't align with Meza's current architecture, which is designed around direct file editing and Ansible-based configuration management.
+
+### YAML Configuration => Settings in PHP
+Here we talk about **YAML** file configuration intrinsic to Ansible. The YAML configs are used at build time, during the deploy process (or other Ansible playbooks). The *effect* of all this configuration, through **meza deploy**, results in another configuration hierarchy in the **PHP** application layer of MediaWiki. That filesystem layer at runtime is what allows for tenant customizations.
+![PHP Settings file hierarchy](../../assets/meza-overrides-tree-structure.png)
 
 ## Managing config in Meza
 
