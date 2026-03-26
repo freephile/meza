@@ -766,10 +766,10 @@ list:
       // @see https://phabricator.wikimedia.org/T133371#11715031
       // We shouldn't need this, but our old version of Python 3.6.8 on RockyLinux8 means
       // that the bundled pygments is too new to run properly, so we need to install a
-      // pygments compatible with Python 3.6 and point to it here. If we upgrade to a newer OS 
+      // pygments compatible with Python 3.6 and point to it here. If we upgrade to a newer OS
       // with a new enough Python, we can remove this and the pygments package.
       // We separately install pygments with dnf install python3-pygments.
-      // pygmentize -V 
+      // pygmentize -V
       // Pygments version 2.2.0, (c) 2006-2017 by Georg Brandl.
       // vs. the bundled version in MediaWiki 1.43 which is 2.11.2 vs. current 2.20 in 2026
       // https://pygments.org/docs/changelog/

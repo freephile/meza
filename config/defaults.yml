@@ -103,7 +103,10 @@ use_certbot: false
 m_install_kibana: false
 
 # HAProxy settings - differences here are only in cases where a
-# more general use case defined in the role defaults is not sufficient or recommended for Meza's use case of MediaWiki hosting. For example, the default HAProxy role settings for rate limiting are very aggressive and would cause false positives on a MediaWiki site, so we set more reasonable defaults here. You can override these in conf-meza/public/public.yml or secret/<env>/secret.yml as needed.
+# more general use case defined in the role defaults is not sufficient or recommended for Meza's use case of MediaWiki
+# hosting. For example, the default HAProxy role settings for rate limiting are very aggressive and would cause false
+# positives on a MediaWiki site, so we set more reasonable defaults here. You can override these in
+# conf-meza/public/public.yml or secret/<env>/secret.yml as needed.
 
 # If enabled, haproxy stats would be visible at port 1936, over HTTPS
 # you can curl -u 'admin:password' https://localhost:1936/haproxy?stats
@@ -130,7 +133,6 @@ haproxy_rate_limit_errors: 20
 # We DO NOT DEFINE THIS BY DEFAULT because category pages with many images easily exceed 10 MiB/10s.
 # Which means we would be blocking legitimate traffic. If you have a need to block traffic by volume, you can simply
 # enable it via haproxy_rate_limit_bytes_out if needed (plain integer bytes, e.g. 104857600 = 100 MiB).
-#This is a counter in the HAProxy stick table.
 # haproxy_rate_limit_bytes_out: 10485760
 
 #
