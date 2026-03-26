@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [aacf6931](https://github.com/freephile/meza/commit/aacf6931) (2026-03-26) Greg Rundlett: Fix linting (trailing spaces and line length) 
+  - Modified: `config/MezaCoreExtensions.yml`
+  - Modified: `config/defaults.yml`
+
+* [44a400e3](https://github.com/freephile/meza/commit/44a400e3) (2026-03-26) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [d42b95b9](https://github.com/freephile/meza/commit/d42b95b9) (2026-03-26) Greg Rundlett: Add PHP settings hierarchy to config doc 
   - Added: `assets/meza-overrides-tree-structure.png`
   - Modified: `manual/meza-cmd/config.md`
