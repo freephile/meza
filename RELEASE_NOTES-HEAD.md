@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [d42b95b9](https://github.com/freephile/meza/commit/d42b95b9) (2026-03-26) Greg Rundlett: Add PHP settings hierarchy to config doc 
+  - Added: `assets/meza-overrides-tree-structure.png`
+  - Modified: `manual/meza-cmd/config.md`
+
+* [818f152a](https://github.com/freephile/meza/commit/818f152a) (2026-03-26) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [632e14d6](https://github.com/freephile/meza/commit/632e14d6) (2026-03-26) Greg Rundlett: Clarify language in the config manual 
   - Modified: `manual/meza-cmd/config.md`
 
