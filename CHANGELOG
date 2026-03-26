@@ -1,3 +1,53 @@
+commit 632e14d6edf74baf71aea7bffbc0cbe43477d4f7
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Mar 26 04:04:27 2026 +0000
+
+    Clarify language in the config manual
+
+commit 288e9a7385f21716d6da45ef71bf29a58af986bc
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Mar 26 03:58:19 2026 +0000
+
+    Fight the bots
+    
+    Make the HAProxy limits more agressive in the Ansible role defaults
+    
+    2 errors/second limit
+    10 requests/second limit
+    Deny list Babbar.tech and Barkrowler User Agents from France
+    
+    Improve the HAProxy configuration file template
+    
+    Make the timeouts clear with 5s notation instead of 5000 for 5 seconds
+    Add 5s timeout for http-request
+    Add 30s timeout tarpit
+    Add the http-buffer-request option which will track how slowly clients
+    make requests. Client will get 408 Request Timeout when they request
+    only a few bytes per second.  IOW, they are ordering their lunch
+    verrrrrrrryyyyy sloooooowly. = slowloris attack.
+    https://www.haproxy.com/blog/application-layer-ddos-attack-protection-with-haprox
+    deny requests for old/broken HTTP 1.0 clients
+    deny requests for curl, phantomjs, slimerjs
+    deny requests for clients without a UA string
+    add tarpit and use 'HTTP 429 Too Many Requests' response
+    429 is the standard response for rate-limited requests.
+    Two-tier rate response:
+    - tarpit moderate abusers
+    (holds their sockets for timeout tarpit, exhausting their connection pool)
+    - hard-deny aggressive floods.
+    
+    Issue #323 and Issue #234
+
+commit f94c476cf110414dcccaad640bf7deff9ea3dc98
+Author: GitHub Action <action@github.com>
+Date:   Wed Mar 25 03:23:26 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 5b65fed96a9ec5e5d11212d67b488d7662a58ff8
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Mar 25 03:22:11 2026 +0000
