@@ -3,6 +3,41 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [632e14d6](https://github.com/freephile/meza/commit/632e14d6) (2026-03-26) Greg Rundlett: Clarify language in the config manual 
+  - Modified: `manual/meza-cmd/config.md`
+
+* [288e9a73](https://github.com/freephile/meza/commit/288e9a73) (2026-03-26) Greg Rundlett: Fight the bots Make the HAProxy limits more agressive in the Ansible role defaults
+2 errors/second limit
+10 requests/second limit
+Deny list Babbar.tech and Barkrowler User Agents from France
+Improve the HAProxy configuration file template
+Make the timeouts clear with 5s notation instead of 5000 for 5 seconds
+Add 5s timeout for http-request
+Add 30s timeout tarpit
+Add the http-buffer-request option which will track how slowly clients
+make requests. Client will get 408 Request Timeout when they request
+only a few bytes per second.  IOW, they are ordering their lunch
+verrrrrrrryyyyy sloooooowly. = slowloris attack.
+https://www.haproxy.com/blog/application-layer-ddos-attack-protection-with-haprox
+deny requests for old/broken HTTP 1.0 clients
+deny requests for curl, phantomjs, slimerjs
+deny requests for clients without a UA string
+add tarpit and use 'HTTP 429 Too Many Requests' response
+429 is the standard response for rate-limited requests.
+Two-tier rate response:
+- tarpit moderate abusers
+(holds their sockets for timeout tarpit, exhausting their connection pool)
+- hard-deny aggressive floods.
+Issue [#323](https://github.com/freephile/meza/issues/323) and Issue [#234](https://github.com/freephile/meza/issues/234)
+  - Modified: `src/roles/haproxy/defaults/main.yml`
+  - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
+
+* [f94c476c](https://github.com/freephile/meza/commit/f94c476c) (2026-03-25) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [5b65fed9](https://github.com/freephile/meza/commit/5b65fed9) (2026-03-25) Greg Rundlett: Add illustration to the config documentation 
   - Added: `assets/Meza-config-file-hierarchy.png`
   - Modified: `manual/meza-cmd/config.md`
