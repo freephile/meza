@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [4ee2b946](https://github.com/freephile/meza/commit/4ee2b946) (2026-03-27) Greg Rundlett: expand list of CrawlerProtection blocked pages Fixes Issue [#156](https://github.com/freephile/meza/issues/156)
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [8c99dbdc](https://github.com/freephile/meza/commit/8c99dbdc) (2026-03-27) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [81c5d521](https://github.com/freephile/meza/commit/81c5d521) (2026-03-27) Greg Rundlett: remove invalid parameter from template task 
   - Modified: `src/roles/haproxy/tasks/main.yml`
 
