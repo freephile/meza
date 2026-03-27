@@ -103,8 +103,8 @@ frontend www-https
 	# Ref: https://www.haproxy.com/blog/application-layer-ddos-attack-protection-with-haproxy
 
 
-	http-request tarpit deny_status 429 if { sc_http_req_rate(0) gt 10 } !{ sc_http_req_rate(0) gt {{ haproxy_rate_limit_requests }} }
-	http-request deny if { sc_http_req_rate(0) gt {{ haproxy_rate_limit_requests }} }
+	http-request tarpit deny_status 429 if { sc_http_req_rate(0) gt {{ haproxy_rate_limit_tarpit }} } !{ sc_http_req_rate(0) gt {{ haproxy_rate_limit_requests }} }
+	http-request deny deny_status 429 if { sc_http_req_rate(0) gt {{ haproxy_rate_limit_requests }} }
 	http-request deny if { sc_http_err_rate(0) gt {{ haproxy_rate_limit_errors }} }
 	# bytes_out_rate disabled by default: category pages with many images easily exceed threshold
 	# Enable via haproxy_rate_limit_bytes_out if needed (plain integer bytes, e.g. 104857600 = 100 MiB)

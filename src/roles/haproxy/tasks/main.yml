@@ -164,7 +164,9 @@
     - restart haproxy
 
 - name: write the haproxy config file
-  template:
+  ansible.builtin.template:
+    ansible_managed: true
+    validate: haproxy -c -f %s
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
   notify:
@@ -180,14 +182,14 @@
 
 
 - name: Ensure error files directory in place
-  file:
+  ansible.builtin.file:
     path: /etc/haproxy/errors
     state: directory
     # FIXME #530: permissions?
 
 
 - name: Ensure error pages in place
-  template:
+  ansible.builtin.template:
     src: "errors/{{ item }}.http.j2"
     dest: "/etc/haproxy/errors/{{ item }}.http"
   with_items:
@@ -203,7 +205,7 @@
 # FIXME #746: Why does HAProxy specify this different method for firewall? Is
 # it an SELinux thing (which at present we don't have in enforcing)?
 - name: Ensure firewalld haproxy service files in place
-  template:
+  ansible.builtin.template:
     src: "haproxy-{{ item }}.firewalld.xml.j2"
     dest: "/etc/firewalld/services/haproxy-{{ item }}.xml"
     owner: root
@@ -324,7 +326,7 @@
     - restart rsyslog
 
 - name: Ensure /etc/rsyslog.d/haproxy.conf configured
-  template:
+  ansible.builtin.template:
     src: haproxy.rsyslog.conf.j2
     dest: /etc/rsyslog.d/haproxy.conf
   notify:
