@@ -165,7 +165,6 @@
 
 - name: write the haproxy config file
   ansible.builtin.template:
-    ansible_managed: true
     validate: haproxy -c -f %s
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
