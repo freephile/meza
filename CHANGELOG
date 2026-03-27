@@ -1,3 +1,27 @@
+commit 83b5f867a08506b9bf1c363cbbc549693f1ea4d8
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Fri Mar 27 05:42:33 2026 +0000
+
+    Make HAProxy rules more robust for blocking bots
+    - add variable for tarpit request limit
+    - increase hard request limit to 2500,
+    which is really only equivalent to about 5 pages/sec
+    So don't have more than 5 tabs open in a session you restore :-(
+    - add deny status of HTTP 429 "too many requests"
+    - add validation to templating of HAProxy config
+    
+    Continuing fixes to Issue #323
+
+commit 091fabe5d9ffa1b937cbe11c18363d4ef6afe6e4
+Author: GitHub Action <action@github.com>
+Date:   Thu Mar 26 21:57:31 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit aacf6931f5f014badae984a82ede9593ed40988a
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Mar 26 17:56:39 2026 -0400
