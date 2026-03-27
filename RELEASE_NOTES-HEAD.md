@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [83b5f867](https://github.com/freephile/meza/commit/83b5f867) (2026-03-27) Greg Rundlett: Make HAProxy rules more robust for blocking bots - add variable for tarpit request limit - increase hard request limit to 2500, which is really only equivalent to about 5 pages/sec So don't have more than 5 tabs open in a session you restore :-( - add deny status of HTTP 429 "too many requests" - add validation to templating of HAProxy config Continuing fixes to Issue [#323](https://github.com/freephile/meza/issues/323)
+  - Modified: `src/roles/haproxy/defaults/main.yml`
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+  - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
+
+* [091fabe5](https://github.com/freephile/meza/commit/091fabe5) (2026-03-26) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [aacf6931](https://github.com/freephile/meza/commit/aacf6931) (2026-03-26) Greg Rundlett: Fix linting (trailing spaces and line length) 
   - Modified: `config/MezaCoreExtensions.yml`
   - Modified: `config/defaults.yml`
