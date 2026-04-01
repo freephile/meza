@@ -855,6 +855,12 @@ if ( $mezaAuthType === 'anon-edit' ) {
  * below.
  */
 
+// Before we do 100+ wfLoadExtension(), we can avoid multiple calls to filemtime() for each extension.json
+// If we want to reload all extensions, we can just touch this file.
+// Really a cache setting, https://www.mediawiki.org/wiki/Manual:Configuration_settings#Cache
+// but we want it to be proximal to the wfLoadExtension() calls below, which is what benefits from caching.
+// @see: https://www.mediawiki.org/wiki/Manual:$wgExtensionInfoMTime
+$wgExtensionInfoMTime = filemtime( __FILE__ );
 require_once "{{ m_config_deploy_dir }}/Extensions.php";
 
 
