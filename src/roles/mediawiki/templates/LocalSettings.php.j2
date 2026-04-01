@@ -207,6 +207,10 @@ if ( $debug ) {
 	// Shows the actual query when errors occur (in HTML, I think. Not logs)
 	$wgShowSQLErrors = true;
 
+	// Allows to view Special:JavaScriptTest for QUnit testing.
+	// https://www.mediawiki.org/wiki/Manual:JavaScript_unit_testing
+	$wgEnableJavaScriptTest = true;
+
 } else {
 
 	// Production: no error reporting
