@@ -1,3 +1,30 @@
+commit 45cca76224ce74470d2497b55d4645a089e0ede2
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 1 18:38:26 2026 +0000
+
+    Add cache setting for Extension registration
+    
+    Solves Issue #353
+
+commit 7bb0704d001b585c6c9b76314a2be45bc39c58d0
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 1 18:19:23 2026 +0000
+
+    Enable JavaScript Unit Test interface
+    
+    Allows viewing Special:JavaScriptTest
+    Fixes Issue #352
+
+commit f3b0e55370cca38e78b7812af0a289e0378b454d
+Author: GitHub Action <action@github.com>
+Date:   Fri Mar 27 19:56:10 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 4ee2b9469fe9765a24fba5690c7108eef43b9984
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Fri Mar 27 18:56:52 2026 +0000
