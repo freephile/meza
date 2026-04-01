@@ -3,6 +3,19 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [45cca762](https://github.com/freephile/meza/commit/45cca762) (2026-04-01) Greg Rundlett: Add cache setting for Extension registration Solves Issue [#353](https://github.com/freephile/meza/issues/353)
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [7bb0704d](https://github.com/freephile/meza/commit/7bb0704d) (2026-04-01) Greg Rundlett: Enable JavaScript Unit Test interface Allows viewing Special:JavaScriptTest
+Fixes Issue [#352](https://github.com/freephile/meza/issues/352)
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [f3b0e553](https://github.com/freephile/meza/commit/f3b0e553) (2026-03-27) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [4ee2b946](https://github.com/freephile/meza/commit/4ee2b946) (2026-03-27) Greg Rundlett: expand list of CrawlerProtection blocked pages Fixes Issue [#156](https://github.com/freephile/meza/issues/156)
   - Modified: `config/MezaCoreExtensions.yml`
 
