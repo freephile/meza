@@ -115,10 +115,12 @@ m_install_kibana: false
 enable_haproxy_stats: false
 haproxy_stats_user: admin
 haproxy_stats_password: password
+# how many requests per window before we slow them down with tarpit.
+haproxy_rate_limit_tarpit: 900
 # how many requests per window to allow before blocking an IP. This is a counter in the HAProxy stick table.
 # A single page in MediaWiki will make 40-100 requests depending on the number of resources
 # 'regular' page (40) to Category page (60), to 'Special:NewFiles' (100)
-haproxy_rate_limit_requests: 900
+haproxy_rate_limit_requests: 2500
 # how many IP addresses to track for rate limiting. This is a size of the "stick table" in HAProxy, not a hard limit on
 # the number of IPs that can be blocked.
 haproxy_rate_limit_table_size: "100k"

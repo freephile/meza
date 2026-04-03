@@ -103,7 +103,8 @@ allow connections from the load balancer group on that port (configured in
 | `wiki_app_fqdn` | — | FQDN used in the self-signed cert CN and `$wgServer` |
 | `haproxy_rate_limit_table_size` | `100k` | Stick table capacity — number of source IPs to track simultaneously |
 | `haproxy_rate_limit_window` | `10s` | Sliding window duration for all rate counters and record expiry |
-| `haproxy_rate_limit_requests` | `900` | Max HTTP requests per IP per window before deny |
+| `haproxy_rate_limit_tarpit` | `900` | Requests per window before we slow them down with a tarpit |
+| `haproxy_rate_limit_requests` | `2500` | Max HTTP requests per IP per window before deny |
 | `haproxy_rate_limit_errors` | `20` | Max HTTP error responses (4xx/5xx) per IP per window before deny |
 | `haproxy_rate_limit_bytes_out` | (unset) | Max bytes sent to a single IP per window before deny. **Disabled by default** — MediaWiki category pages easily exceed conservative thresholds. Set as a plain integer (bytes) to enable, e.g. `104857600` = 100 MiB. HAProxy 1.8 does not accept `k`/`m` shorthand. |
 | `haproxy_blocked_bots` | (see `defaults/main.yml`) | List of User-Agent substrings to block. Defined in `defaults/main.yml`; override the entire list in `public.yml` if needed. To **add** bots without replacing the defaults, use `haproxy_extra_blocked_bots` instead. |
