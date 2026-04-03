@@ -3,6 +3,19 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [a237ab31](https://github.com/freephile/meza/commit/a237ab31) (2026-04-03) Greg Rundlett: Finish the fighting bots update to HAProxy #323 Add tarpit and request limits for HAProxy
+Add {{ansible_managed}} to config file template
+Finishes Issue [#323](https://github.com/freephile/meza/issues/323)
+  - Modified: `config/defaults.yml`
+  - Modified: `src/roles/haproxy/README.md`
+  - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
+
+* [b57f218e](https://github.com/freephile/meza/commit/b57f218e) (2026-04-03) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [23807df9](https://github.com/freephile/meza/commit/23807df9) (2026-04-03) Greg Rundlett: Start refactor of Maintenance operations #356 Add prompt for agent to implement changes
 Add doMaintenance.sh simple prototype
 Add some (current) working examples in maint.md for documentation
