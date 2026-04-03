@@ -170,6 +170,14 @@ ansible-playbook /opt/meza/src/playbooks/run-maintenance.yml \
   -i /opt/conf-meza/secret/<env>/hosts
 ```
 
+### Examples
+These commands are very long compared to direct invocation of a PHP script, but
+they do work. Most importantly they work in the Ansible context where you can
+change out the inventory etc for remote command and control across your infrastructure.
+
+- `ansible-playbook /opt/meza/src/playbooks/run-maintenance.yml -e "maintenance_script=runJobs" -e "maintenance_args=--maxjobs=10" -i /opt/conf-meza/secret/monolith/hosts`
+- `/opt/meza/src/playbooks/run-maintenance.yml -e "maintenance_script=runJobs" -e "maintenance_args=--maxjobs=10" -i /opt/conf-meza/secret/monolith/hosts -e "target_wiki=demo"`
+
 ### Common Maintenance Scripts
 
 | Script | Purpose | Example Arguments |
