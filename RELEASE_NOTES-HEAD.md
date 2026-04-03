@@ -3,6 +3,21 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [23807df9](https://github.com/freephile/meza/commit/23807df9) (2026-04-03) Greg Rundlett: Start refactor of Maintenance operations #356 Add prompt for agent to implement changes
+Add doMaintenance.sh simple prototype
+Add some (current) working examples in maint.md for documentation
+https://github.com/freephile/meza/blob/dev/manual/meza-cmd/maint.md
+for Issue [#356](https://github.com/freephile/meza/issues/356)
+  - Added: `.github/prompts/plan-mezaMaintenanceRefactor.prompt.md`
+  - Modified: `manual/meza-cmd/maint.md`
+  - Added: `src/scripts/doMaintenance.sh`
+
+* [03f13a09](https://github.com/freephile/meza/commit/03f13a09) (2026-04-01) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [45cca762](https://github.com/freephile/meza/commit/45cca762) (2026-04-01) Greg Rundlett: Add cache setting for Extension registration Solves Issue [#353](https://github.com/freephile/meza/issues/353)
   - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
 
