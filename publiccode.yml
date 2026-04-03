@@ -1,0 +1,62 @@
+publiccodeYmlVersion: "0.3"
+
+name: Meza
+url: https://github.com/freephile/meza
+landingURL: https://www.mediawiki.org/wiki/Meza
+softwareVersion: "43.60.6"
+releaseDate: "2025-10-31"
+platforms:
+  - linux
+
+categories:
+  - it-development
+  - collaboration
+  - knowledge-management
+
+developmentStatus: stable
+
+softwareType: standalone/other
+
+description:
+  en:
+    localisedName: Meza
+    shortDescription: >-
+      Ansible-based automation platform to deploy and manage enterprise
+      MediaWiki installations with simple commands.
+    longDescription: >-
+      Meza is a MediaWiki deployment automation platform built with Ansible and
+      a Python CLI. It enables system administrators to set up, configure, and
+      maintain enterprise-grade MediaWiki installations across single or
+      multi-server environments using the single `meza` command. Meza handles
+      the full lifecycle: initial installation, configuration of extensions such
+      as VisualEditor and CirrusSearch, database management, backups, and
+      ongoing maintenance. It supports Rocky Linux 8 and RHEL 8 (with Debian
+      support in progress), and is suitable for public administrations and
+      organisations looking for an open-source, self-hosted knowledge management
+      solution based on MediaWiki.
+    documentation: https://www.mediawiki.org/wiki/Meza
+    features:
+      - Single-command MediaWiki deployment
+      - Multi-server and monolithic architectures
+      - VisualEditor integration
+      - CirrusSearch (Elasticsearch) integration
+      - Automated backups
+      - Multi-environment support
+      - Database replica management
+      - SSL certificate automation via Let's Encrypt
+      - Role-based Ansible configuration
+
+legal:
+  license: MIT
+
+maintenance:
+  type: community
+  contacts:
+    - name: Greg Rundlett
+      email: greg.rundlett@gmail.com
+      affiliation: freephile
+
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - en
