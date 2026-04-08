@@ -393,10 +393,10 @@ Vagrant.configure("2") do |config|
       # Ansible role during getmeza.sh or first deploy.
       getent group vboxsf > /dev/null 2>&1 && usermod -aG vboxsf meza-ansible || true
 
-      # Fix permissions on shared folder to be accessible
-      # This only affects the guest VM 'view'; host permissions are unaffected
-      chown -R meza-ansible:wheel #{install_directory}/meza
-      chmod -R u+rwX,g+rwX,o+rX #{install_directory}/meza
+      # Ownership and permissions of #{install_directory}/meza are controlled by the
+      # NFS server (libvirt) or by VirtualBox shared folder mount options above.
+      # meza-ansible reads project sources via world-readable permissions set by
+      # getmeza.sh (chmod a+r -R); no chown or chmod of the mount is needed here.
 
       # Verify user configuration
       echo "meza-ansible user configured"
