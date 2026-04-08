@@ -3,6 +3,56 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [4ea7b035](https://github.com/freephile/meza/commit/4ea7b035) (2026-04-08) Greg Rundlett: Move haproxy config generation after tree building On a new instance, the certs and other subdirectories for /etc/haproxy
+will not exist and thus the config syntax validation would fail
+if done first.
+Additionally, cleanup the file for Ansible linting
+Category			Fixes
+FQCN (22)			Added ansible.builtin. prefix to all bare module names:
+				set_fact, package, file, stat, command, shell, copy, include_role, replace, service
+package-latest (1)		state: latest → state: present
+risky-file-permissions (6)	Added owner: root, group: root, mode to certs dir, PEM file, error dir, error pages, haproxy config, rsyslog config
+jinja[spacing] (4)		Fixed {{ wiki_app_fqdn}} and {{m_private_networking_zone|default('public')}} spacing
+literal-compare (1)		stat.exists == False → not stat.exists
+no-changed-when (5)		Added changed_when to openssl, ansible-vault encrypt, two ansible-vault view tasks, and restorecon
+command-instead-of-shell (1)	shell: restorecon ... → ansible.builtin.command:
+name[template] (1)		Moved Jinja template out of mid-name position: renamed to Ensure haproxy world-accessible firewall ports are open
+Change the self-signed certificate org to eQuality Technology
+Issue [#272](https://github.com/freephile/meza/issues/272)
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+
+* [95da3005](https://github.com/freephile/meza/commit/95da3005) (2026-04-08) Greg Rundlett: Fix some permission-related problems #72 - disable recursive ownership task on /opt/meza
+in init-controller-config
+- Ensure that the mw-debug log file can be written by Apache
+- move templating of cleanup-backups.sh outside the source tree
+- modify affected cron
+- modify documentation of cleanup-backups.sh
+- delete the templated file from source. We only need to version-control
+the template
+Improves Issue [#72](https://github.com/freephile/meza/issues/72) and permission-related tasks
+  - Modified: `src/roles/init-controller-config/tasks/main.yml`
+  - Modified: `src/roles/logrotate/tasks/main.yml`
+  - Modified: `src/scripts/cleanup-backups.md`
+  - Deleted: `src/scripts/cleanup-backups.sh`
+
+* [c05d694d](https://github.com/freephile/meza/commit/c05d694d) (2026-04-08) Greg Rundlett: Note need to fix permissions once and for all Issue [#72](https://github.com/freephile/meza/issues/72) 
+  - Modified: `src/scripts/getmeza.sh`
+
+* [59a21736](https://github.com/freephile/meza/commit/59a21736) (2026-04-08) Greg Rundlett: update post_up_message with `cd` to config dir 
+  - Modified: `Vagrantfile`
+
+* [5a3bfa22](https://github.com/freephile/meza/commit/5a3bfa22) (2026-04-08) Greg Rundlett: Remove unneccessary recursive chown and chmod 
+  - Modified: `Vagrantfile`
+
+* [d77556cb](https://github.com/freephile/meza/commit/d77556cb) (2026-04-08) Greg Rundlett: Add libvirt requirement for vagrant on linux to DEVELOPING.md 
+  - Modified: `manual/DEVELOPING.md`
+
+* [b60e3733](https://github.com/freephile/meza/commit/b60e3733) (2026-04-08) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [ed8ef7de](https://github.com/freephile/meza/commit/ed8ef7de) (2026-04-08) Greg Rundlett: make wiki-check.sh executable 
   - Modified: `tests/integration/wiki-check.sh`
 
