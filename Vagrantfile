@@ -270,6 +270,7 @@ Vagrant.configure("2") do |config|
 
         vagrant ssh app1               # SSH into the VM
         sudo su - meza-ansible         # switch to the service account
+        cd /opt/meza/config            # change to the config directory (shared with host)
         sudo meza deploy vagrant -vvv  # deploy (first run creates the demo wiki)
 
       Then browse:
