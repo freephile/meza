@@ -42,11 +42,11 @@ $mezaEnableWikiEmail = {{ enable_wiki_emails }};
  * By default, wikis use project-wide logo assets from web root (/). You can
  * customize logos for this wiki in three ways:
  *
- * 1. USER-FRIENDLY: Upload files via Special:Upload with exact filenames:
- *    - Meza-logo-135.png (135x135)
+ * 1. USER-FRIENDLY: Upload files via Special:Upload using the exact filenames expected below:
+ *    - Meza-logo-135.png (135x135) for Chameleon skin
  *    - Meza-logo-1.5x.png (203x203)
  *    - Meza-logo-2x.png (270x270)
- *    - Meza-icon-50.svg (50x50)
+ *    - Meza-icon-50.svg (50x50) for Vector skin
  *    - Favicon.ico
  *    - Apple-touch-icon.png (180x180)
  *
@@ -57,7 +57,7 @@ $mezaEnableWikiEmail = {{ enable_wiki_emails }};
  *    MediaWiki's hashed upload directory automatically handles these files.
  *    The system checks for uploaded files first before falling back to defaults.
  *
- * 2. DEPLOY-BASED: Place custom logo files in:
+ * 2. DEPLOY-BASED: Place logo files in conf-meza, again using the exact filenames expected above, in the wiki-specific conf directory:
  *    {{ m_conf_public_dir }}/wikis/{{ wiki_id }}/
  *
  *    During deployment, these files sync to app servers at /opt/.deploy-meza/public/wikis/{{ wiki_id }}/
@@ -72,19 +72,25 @@ $mezaEnableWikiEmail = {{ enable_wiki_emails }};
  **/
 
 /*
-// Example: Override logos with wiki-specific files (deployed from controller)
+// Specify $wgLogos, $wgFavicon, and $wgAppleTouchIcon using whatever files you placed in conf-meza (deployed from controller)
 $wgLogos = [
-	'1x' => "/wikis/$wikiId/config/my-custom-logo-135.png",
-	'1.5x' => "/wikis/$wikiId/config/my-custom-logo-203.png",
-	'2x' => "/wikis/$wikiId/config/my-custom-logo-270.png",
-	'icon' => "/wikis/$wikiId/config/my-custom-icon-50.svg",
+	'1x' => "/wikis/$wikiId/config/ACME_custom-logo-135.png",
+	'1.5x' => "/wikis/$wikiId/config/ACME_custom-logo-203.png",
+	'2x' => "/wikis/$wikiId/config/ACME_custom-logo-270.png",
+	'icon' => "/wikis/$wikiId/config/ACME_custom-icon-50.svg",
 ];
-$wgFavicon = "/wikis/$wikiId/config/my-custom-favicon.ico";
-$wgAppleTouchIcon = "/wikis/$wikiId/config/my-custom-apple-touch-icon.png";
+$wgFavicon = "/wikis/$wikiId/config/ACME_custom-favicon.ico";
+$wgAppleTouchIcon = "/wikis/$wikiId/config/ACME_custom-apple-touch-icon.png";
 */
 
 /*
-// Example: Check for uploaded file override, fall back to wiki-specific or project-wide
+// This 4th method is the most flexible, useful for an organization where
+// a different team manages the marketing collateral (logos, icons, favicons) 
+// and they simply agree to use a naming convention for ACME Corp.
+// Example: Use ACME Corp's logos if they exist but fall back to project-wide default.
+
+// The function checks for files in this order: 1. Uploaded override via Special:Upload, 2. Wiki-specific custom file deployed from controller, 3. Project-wide default in web root. It is exactly the same as mezaGetLogoPath(), but adds the optional $customFilename parameter to allow for a different naming convention.
+
 function mezaGetCustomLogoPath( $filename, $wikiId, $customFilename = null ) {
 	$customFilename = $customFilename ?? $filename;
 
@@ -110,11 +116,11 @@ function mezaGetCustomLogoPath( $filename, $wikiId, $customFilename = null ) {
 }
 
 $wgLogos = [
-	'1x' => mezaGetCustomLogoPath( 'meza-logo-135.png', $wikiId, 'my-logo-135.png' ),
-	'1.5x' => mezaGetCustomLogoPath( 'meza-logo-1.5x.png', $wikiId, 'my-logo-203.png' ),
-	'2x' => mezaGetCustomLogoPath( 'meza-logo-2x.png', $wikiId, 'my-logo-270.png' ),
-	'icon' => mezaGetCustomLogoPath( 'meza-icon-50.svg', $wikiId, 'my-icon-50.svg' ),
+	'1x' => mezaGetCustomLogoPath( 'meza-logo-135.png', $wikiId, 'ACME_logo-135.png' ),
+	'1.5x' => mezaGetCustomLogoPath( 'meza-logo-1.5x.png', $wikiId, 'ACME_logo-203.png' ),
+	'2x' => mezaGetCustomLogoPath( 'meza-logo-2x.png', $wikiId, 'ACME_logo-270.png' ),
+	'icon' => mezaGetCustomLogoPath( 'meza-icon-50.svg', $wikiId, 'ACME_icon-50.svg' ),
 ];
-$wgFavicon = mezaGetCustomLogoPath( 'favicon.ico', $wikiId, 'my-favicon.ico' );
-$wgAppleTouchIcon = mezaGetCustomLogoPath( 'apple-touch-icon.png', $wikiId, 'my-apple-icon.png' );
+$wgFavicon = mezaGetCustomLogoPath( 'favicon.ico', $wikiId, 'ACME_favicon.ico' );
+$wgAppleTouchIcon = mezaGetCustomLogoPath( 'apple-touch-icon.png', $wikiId, 'ACME_apple-icon.png' );
 */
