@@ -3,6 +3,26 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [ed8ef7de](https://github.com/freephile/meza/commit/ed8ef7de) (2026-04-08) Greg Rundlett: make wiki-check.sh executable 
+  - Modified: `tests/integration/wiki-check.sh`
+
+* [f0c51f78](https://github.com/freephile/meza/commit/f0c51f78) (2026-04-08) Greg Rundlett: Improve comments and examples for the base.php.dist file Logo overrides needed better explanation and examples.
+Adds to Issue [#270](https://github.com/freephile/meza/issues/270)
+  - Modified: `src/roles/configure-wiki/templates/preLocalSettings.d/base.php.dist.j2`
+
+* [972ed71d](https://github.com/freephile/meza/commit/972ed71d) (2026-04-08) Greg Rundlett: Ensure that base.php is templated during wiki creation Without a base.php in place during configure-wiki, wgSitename is not populated for newly created wikis.
+This fixes a problem introduced by Issue [#270](https://github.com/freephile/meza/issues/270)
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+
+* [8c334526](https://github.com/freephile/meza/commit/8c334526) (2026-04-08) Greg Rundlett: Disable DynamicPageList3 for abandonment #362 Fix Issue [#362](https://github.com/freephile/meza/issues/362)
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [43247e4f](https://github.com/freephile/meza/commit/43247e4f) (2026-04-03) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [a237ab31](https://github.com/freephile/meza/commit/a237ab31) (2026-04-03) Greg Rundlett: Finish the fighting bots update to HAProxy #323 Add tarpit and request limits for HAProxy
 Add {{ansible_managed}} to config file template
 Finishes Issue [#323](https://github.com/freephile/meza/issues/323)
