@@ -24,6 +24,12 @@ If your host is Linux, you will want to ensure you have libvirt
 ```
 sudo apt install libvirt-dev libvirt-daemon-system qemu-kvm  # Debian/Ubuntu
 vagrant plugin install vagrant-libvirt
+# Make your user a member of the libvirt group
+sudo usermod -aG libvirt $(whoami)
+# Either log out and back in again, or use newgrp
+newgrp libvirt
+# Verify that you are a member
+groups # should show 'libvirt' in the output
 ```
 And also nfs-kernel-server for the persistent bi-directional automatic mount avoiding `vagrant rsync`
 ```
