@@ -274,10 +274,19 @@ else
     fi
 fi
 
-# Set ownership on meza directories
+# Set ownership on conf-meza directories (these are not shared/mounted)
 chown meza-ansible:wheel ${INSTALL_DIR}/conf-meza
 chown meza-ansible:wheel ${INSTALL_DIR}/conf-meza/secret
-chown meza-ansible:wheel ${INSTALL_DIR}/meza
+# ${INSTALL_DIR}/meza may be a git clone (owned by root) or a Vagrant NFS/shared-folder mount.
+# This really needs to be fixed. We should not assume root ownership and should actively prevent it.
+# Meza source should be owned by the developer user on a local system.
+# Meza source should be owned by the system account (meza-ansible) on a production system.
+# We do not want to constantly chown and chmod sources. The repo should be set up correctly from the start and left alone.
+# All scripts for example that need execute bits, should be stored that way in the repo.
+# All privilege escalation should be handled by Ansible (and also sudoers configuration)
+# For Vagrant, the NFS/shared-folder mount is owned by root but should have permissions set by the host (e.g. 0775 with group ownership of vboxsf or the host user). This allows the meza-ansible user to read and execute files without needing chown or chmod in the guest.
+# Either way, meza-ansible only needs read access, which chmod a+r above provides.
+# Attempting chown on an NFS mount fails when root is squashed, so we skip it here.
 
 # Configure sudoers for passwordless ansible operations
 # @TODO: setup-minion-user.sh needs to be refactored/updated
