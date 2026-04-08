@@ -1,3 +1,81 @@
+commit 4ea7b0350b176c927904e8b8691bd07404e5e997
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 8 14:53:03 2026 -0400
+
+    Move haproxy config generation after tree building
+    
+    On a new instance, the certs and other subdirectories for /etc/haproxy
+    will not exist and thus the config syntax validation would fail
+    if done first.
+    
+    Additionally, cleanup the file for Ansible linting
+    
+    Category                        Fixes
+    FQCN (22)                       Added ansible.builtin. prefix to all bare module names:
+                                    set_fact, package, file, stat, command, shell, copy, include_role, replace, service
+    package-latest (1)              state: latest → state: present
+    risky-file-permissions (6)      Added owner: root, group: root, mode to certs dir, PEM file, error dir, error pages, haproxy config, rsyslog config
+    jinja[spacing] (4)              Fixed {{ wiki_app_fqdn}} and {{m_private_networking_zone|default('public')}} spacing
+    literal-compare (1)             stat.exists == False → not stat.exists
+    no-changed-when (5)             Added changed_when to openssl, ansible-vault encrypt, two ansible-vault view tasks, and restorecon
+    command-instead-of-shell (1)    shell: restorecon ... → ansible.builtin.command:
+    name[template] (1)              Moved Jinja template out of mid-name position: renamed to Ensure haproxy world-accessible firewall ports are open
+    
+    Change the self-signed certificate org to eQuality Technology
+    
+    Issue #272
+
+commit 95da3005cf03a775dd0f3badfc782fa41d8e6608
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 8 12:32:32 2026 -0400
+
+    Fix some permission-related problems #72
+    
+    - disable recursive ownership task on /opt/meza
+    in init-controller-config
+    - Ensure that the mw-debug log file can be written by Apache
+    - move templating of cleanup-backups.sh outside the source tree
+    - modify affected cron
+    - modify documentation of cleanup-backups.sh
+    - delete the templated file from source. We only need to version-control
+    the template
+    
+    Improves Issue #72 and permission-related tasks
+
+commit c05d694da0587fb1ac231ae1efe345df2c22d42f
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 8 12:15:17 2026 -0400
+
+    Note need to fix permissions once and for all Issue #72
+
+commit 59a21736e567cadb7fd91c49754d1935dd43a547
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 8 10:34:15 2026 -0400
+
+    update post_up_message with `cd` to config dir
+
+commit 5a3bfa229ae3b92b63a6e76d4a6db1e1dad6687b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 8 10:33:20 2026 -0400
+
+    Remove unneccessary recursive chown and chmod
+
+commit d77556cb49e9d20b44df55853773a53df51557f5
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Wed Apr 8 10:31:57 2026 -0400
+
+    Add libvirt requirement for vagrant on linux to DEVELOPING.md
+
+commit b60e37337732166c888f6ea2204a5c390ee1e35c
+Author: GitHub Action <action@github.com>
+Date:   Wed Apr 8 05:04:24 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit ed8ef7de42ab6dc0e70f6e16156f63a483c83673
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Apr 8 05:01:51 2026 +0000
