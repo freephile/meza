@@ -86,6 +86,20 @@
     - postLocalSettings.d
     - samlAuthorizations.d
 
+# base.php has $wgSitename and must be available for sync-configs
+# In the next step, we'll force update the base.php.dist file, which is the "distribution" version that instructs users how to customize their own base.php.
+# which might have been laid down 'years ago'.
+- name: Ensure base.php exists in preLocalSettings.d (but do not overwrite)
+  ansible.builtin.template:
+    src: "templates/preLocalSettings.d/base.php.dist.j2"
+    dest: "{{ m_conf_public_dir }}/wikis/{{ wiki_id }}/preLocalSettings.d/base.php"
+    force: false
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: '0775'
+  delegate_to: localhost
+  run_once: true
+
 - name: Ensure base templates are present (overwrite)
   ansible.builtin.template:
     src: "templates/{{ item }}.j2"
