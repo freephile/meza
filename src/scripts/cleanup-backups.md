@@ -20,7 +20,7 @@ The script runs automatically via cron:
 
 ```bash
 # Default schedule: Daily at 2:30 AM
-30 2 * * * /opt/meza/src/scripts/cleanup-backups.sh > /dev/null 2>&1
+30 2 * * * /opt/.deploy-meza/cleanup-backups.sh > /dev/null 2>&1
 ```
 
 ## Configuration
@@ -101,7 +101,7 @@ logrotate_backup_files:
 
 ```bash
 # Run cleanup manually (useful for testing)
-sudo /opt/meza/src/scripts/cleanup-backups.sh
+sudo /opt/.deploy-meza/cleanup-backups.sh
 
 # View recent cleanup activity
 tail -f /opt/data-meza/logs/cleanup/backup-cleanup.log
@@ -131,6 +131,7 @@ du -sh /opt/data-meza/backups/
 This script is automatically deployed and configured by the **logrotate** Ansible role:
 
 - **Template**: `/opt/meza/src/roles/logrotate/templates/cleanup-backups.sh.j2`
+- **Deployed to**: `/opt/.deploy-meza/cleanup-backups.sh`
 - **Deployment**: Installed during `meza deploy` operations
 - **Scheduling**: Cron job created automatically
 - **Configuration**: Variables sourced from logrotate role defaults
@@ -151,7 +152,7 @@ crontab -l | grep cleanup-backups
 **Permission errors**:
 ```bash
 # Check script permissions
-ls -la /opt/meza/src/scripts/cleanup-backups.sh
+ls -la /opt/.deploy-meza/cleanup-backups.sh
 
 # Verify backup directory ownership
 ls -la /opt/data-meza/backups/

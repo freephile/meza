@@ -57,6 +57,19 @@
       group: "{{ group_apache }}"
       mode: '0755'
 
+- name: Ensure mediawiki log files exist with apache ownership
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: touch
+    owner: "{{ user_apache }}"
+    group: "{{ group_apache }}"
+    mode: '0664'
+    modification_time: preserve
+    access_time: preserve
+  loop:
+    - "{{ m_data_logs_dir }}/mediawiki/mw-debug.log"
+    - "{{ m_data_logs_dir }}/php/php_errors.log"
+
 - name: Ensure backup directory exists with proper permissions
   ansible.builtin.file:
     path: "{{ m_data_backups_dir }}"
@@ -78,7 +91,7 @@
 - name: Create backup cleanup script for SQL files
   ansible.builtin.template:
     src: cleanup-backups.sh.j2
-    dest: "{{ m_app_scripts_dir }}/cleanup-backups.sh"
+    dest: "{{ m_config_deploy_dir }}/cleanup-backups.sh"
     owner: root
     group: root
     mode: '0755'
@@ -88,7 +101,7 @@
   ansible.builtin.cron:
     name: "Meza backup cleanup"
     user: root
-    job: "{{ m_app_scripts_dir }}/cleanup-backups.sh > /dev/null 2>&1"
+    job: "{{ m_config_deploy_dir }}/cleanup-backups.sh > /dev/null 2>&1"
     minute: "30"
     hour: "2"
     state: present

@@ -78,7 +78,7 @@
 # Ensure that the 'wikis' directory exists within m_conf_public_dir
 # Note: ownership will be set later after apache user is created
 - name: "Ensure m_conf_public_dir/wikis exists"
-  file:
+  ansible.builtin.file:
     path: "{{ m_conf_public_dir }}/wikis"
     state: directory
     mode: "{{ m_config_public_mode }}"
@@ -108,15 +108,16 @@
     - MezaLocalSkins.yml
     - public.yml
 
-- name: "Ensure meza directory properly owned: {{ m_app_dir }}"
-  ansible.builtin.file:
-    path: "{{ m_app_dir }}"
-    owner: "meza-ansible"
-    group: "{{ m_group }}"
-    state: directory
-    recurse: true
-  tags:
-    - file-perms
+# This fails on Vagrant, and should not be needed at all outside getmeza.sh See Issue #72
+    # - name: "Ensure meza directory properly owned: {{ m_app_dir }}"
+#   ansible.builtin.file:
+#     path: "{{ m_app_dir }}"
+#     owner: "meza-ansible"
+#     group: "{{ m_group }}"
+#     state: directory
+#     recurse: true
+#   tags:
+#     - file-perms
 
 - name: "Ensure secret directories properly owned/moded: {{ m_conf_secret_dir }}"
   ansible.builtin.file:
