@@ -104,4 +104,19 @@ git config --global color.ui true
 
 When you deploy meza, it will automatically ensure that the service account 'meza-ansible' is setup appropriately.
 Always use the meza-ansible user account when operating on the Vagrant Virtual Machine or other controller host. meza-ansible is
-a password-less sudoer so the account is fully privileged. The main 'deploy' command should be invoked with sudo. That said, most commands do not require sudo, and we are working to remove 'sudo' from all meza commands.
+a password-less sudoer so the account is fully privileged. The main 'deploy' command should be invoked with sudo. That said, most commands do not require sudo, and we are working to [remove 'sudo' from all meza commands](https://github.com/freephile/meza/issues/72).
+
+## Finding your way around
+
+Here's the basic structure of the source files:
+```
+meza/
+├── src/
+│   ├── playbooks/          # Ansible playbooks (30+ yml files)
+│   ├── roles/              # Ansible roles (58+ directories)
+│   └── scripts/            # Python and shell scripts
+├── config/                 # Configuration files
+├── manual/                 # Documentation including meza-cmd help files
+├── tests/                  # Test suite
+└── [root files]            # README, CHANGELOG, LICENSE, etc.
+```
