@@ -1,3 +1,48 @@
+commit ecee7d8e7152fac46983e665788152c889dea8b3
+Merge: ab69f2b6 043b4963
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Thu Apr 9 07:57:21 2026 -0400
+
+    Merge pull request #361 from freephile/copilot/add-publiccode-yml-file
+    
+    Add publiccode.yml for EU Open Source Solutions Catalogue discoverability
+
+commit 043b49638b58762e4261cef385f6c4fb108d3872
+Author: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+Date:   Thu Apr 9 11:37:53 2026 +0000
+
+    Add GitHub Actions workflow to auto-update publiccode.yml on release
+    
+    Agent-Logs-Url: https://github.com/freephile/meza/sessions/286f8337-4e77-406c-aef1-6002969fe4e2
+    
+    Co-authored-by: freephile <38368+freephile@users.noreply.github.com>
+
+commit ab69f2b600059050b2e37421bf5d33cd0d251bac
+Author: GitHub Action <action@github.com>
+Date:   Wed Apr 8 18:57:19 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
+commit 37520b04dca9a1aef9eb3e0171bc3b043efb82bd
+Author: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+Date:   Fri Apr 3 18:36:54 2026 +0000
+
+    Add publiccode.yml for EU Open Source Solutions Catalogue listing
+    
+    Agent-Logs-Url: https://github.com/freephile/meza/sessions/5020d768-db4d-45b0-99f7-469b87e39717
+    
+    Co-authored-by: freephile <38368+freephile@users.noreply.github.com>
+
+commit 308bc05ac9d67f9217ca8a37971d633ca7aa9c1f
+Author: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+Date:   Fri Apr 3 18:35:04 2026 +0000
+
+    Initial plan
+
 commit 4ea7b0350b176c927904e8b8691bd07404e5e997
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed Apr 8 14:53:03 2026 -0400
