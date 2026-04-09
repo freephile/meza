@@ -1,0 +1,52 @@
+name: Update publiccode.yml on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-publiccode:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.target_commitish }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+
+      - name: Update publiccode.yml version and release date
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          RELEASE_DATE=$(date -u -d "${{ github.event.release.published_at }}" '+%Y-%m-%d')
+
+          sed -i "s/^softwareVersion:.*/softwareVersion: \"${TAG}\"/" publiccode.yml
+          sed -i "s/^releaseDate:.*/releaseDate: \"${RELEASE_DATE}\"/" publiccode.yml
+
+          echo "Updated publiccode.yml: softwareVersion=${TAG}, releaseDate=${RELEASE_DATE}"
+
+      - name: Validate updated publiccode.yml
+        run: |
+          pip install yamllint -q
+          yamllint publiccode.yml
+          echo "publiccode.yml passes yamllint"
+
+      - name: Commit and push updated publiccode.yml
+        run: |
+          if git diff --quiet publiccode.yml; then
+            echo "No changes to publiccode.yml, skipping commit"
+          else
+            git add publiccode.yml
+            git commit -m \
+              "chore: update publiccode.yml for release ${{ github.event.release.tag_name }} [skip ci]"
+            git push origin ${{ github.event.release.target_commitish }}
+            echo "publiccode.yml updated and pushed"
+          fi
