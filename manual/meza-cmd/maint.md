@@ -42,6 +42,47 @@ meza maint rebuild <environment>
 - Recreates search indexes for all wikis
 - Updates CirrusSearch/Elasticsearch indexes
 
+### `run <env> <script>` - Run Any Maintenance Script
+
+Run any MediaWiki maintenance script on an environment's wikis. This is the
+general-purpose command for ad-hoc maintenance operations.
+
+```bash
+meza maint run <environment> <script>
+meza maint run <environment> <script> --wiki <wiki_id>
+meza maint run <environment> <script> --args '<script_args>'
+meza maint run <environment> <script> --wiki <wiki_id> --args '<script_args>'
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--wiki <wiki_id>` | Run script on a specific wiki only (defaults to all wikis) |
+| `--args '<script_args>'` | Arguments to pass to the maintenance script |
+
+**Examples:**
+
+```bash
+# Run update.php on all wikis
+meza maint run monolith update
+
+# Run refreshLinks.php on a specific wiki
+meza maint run monolith refreshLinks --wiki demo
+
+# Run runJobs.php with a maximum job count
+meza maint run monolith runJobs --args '--maxjobs=50'
+
+# Run refreshLinks.php with verbose output on a specific wiki
+meza maint run monolith refreshLinks --wiki demo --args '--verbose'
+```
+
+**What it does:**
+- Runs any MediaWiki maintenance script via the `run-maintenance.yml` playbook
+- Targets all wikis by default, or a specific wiki with `--wiki`
+- Passes optional arguments to the script with `--args`
+- Reports per-wiki output, exit code, and any errors
+
 ### `cleanuploadstash <env>` - Clean Upload Stash
 
 Clean up temporary upload files from the upload stash directory.
@@ -88,6 +129,9 @@ meza maint decrypt-string <environment> '$ANSIBLE_VAULT;1.1;AES256...'
 |----------|-------------|----------|
 | `[directive]` | Maintenance operation to perform | No |
 | `<environment>` | Environment name (for env-specific commands) | Yes (for some directives) |
+| `<script>` | Maintenance script name (with or without .php) | Yes (for `run`) |
+| `--wiki <wiki_id>` | Target a specific wiki (for `run`) | No |
+| `--args '<script_args>'` | Arguments to pass to script (for `run`) | No |
 | `<value>` | Value to encrypt/decrypt | Yes (for encrypt/decrypt) |
 | `[var_name]` | Variable name for encrypted string | No |
 
@@ -126,6 +170,11 @@ Run various maintenance operations when:
 - ✅ As part of regular cleanup maintenance
 - ✅ After failed bulk upload operations
 
+**Ad-hoc Script Execution (`run`):**
+- ✅ For any one-off maintenance task
+- ✅ After debugging specific MediaWiki issues
+- ✅ When a specific script needs to be run on one or all wikis
+
 **String Encryption/Decryption:**
 - ✅ When storing sensitive configuration values
 - ✅ For secure password management
@@ -147,7 +196,22 @@ Run various maintenance operations when:
 
 ## Advanced: Custom Maintenance Scripts
 
-For advanced users, you can run any MediaWiki maintenance script using the general-purpose playbook:
+The `meza maint run` command provides the simplest way to run any MediaWiki
+maintenance script. For cases where you need more control over the Ansible
+invocation, you can also call the underlying playbook directly.
+
+### Using `meza maint run` (Recommended)
+
+```bash
+# Run any MediaWiki maintenance script on all wikis
+meza maint run <env> <script>
+
+# Run with arguments
+meza maint run <env> runJobs --args '--maxjobs=10'
+
+# Run on a specific wiki
+meza maint run <env> update --wiki demo
+```
 
 ### Direct Ansible Playbook Usage
 
@@ -169,14 +233,6 @@ ansible-playbook /opt/meza/src/playbooks/run-maintenance.yml \
   -e "target_wiki=demo" \
   -i /opt/conf-meza/secret/<env>/hosts
 ```
-
-### Examples
-These commands are very long compared to direct invocation of a PHP script, but
-they do work. Most importantly they work in the Ansible context where you can
-change out the inventory etc for remote command and control across your infrastructure.
-
-- `ansible-playbook /opt/meza/src/playbooks/run-maintenance.yml -e "maintenance_script=runJobs" -e "maintenance_args=--maxjobs=10" -i /opt/conf-meza/secret/monolith/hosts`
-- `/opt/meza/src/playbooks/run-maintenance.yml -e "maintenance_script=runJobs" -e "maintenance_args=--maxjobs=10" -i /opt/conf-meza/secret/monolith/hosts -e "target_wiki=demo"`
 
 ### Common Maintenance Scripts
 

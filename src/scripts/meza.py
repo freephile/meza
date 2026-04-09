@@ -1805,6 +1805,91 @@ def meza_command_maint_cleanuploadstash(argv):
     meza_shell_exec_exit(rc)
 
 
+def meza_command_maint_run(argv):
+    """
+    Run any MediaWiki maintenance script on an environment's wikis.
+
+    This is a general-purpose command for ad-hoc maintenance operations.
+    It wraps the run-maintenance.yml playbook to allow running any MediaWiki
+    maintenance script from the command line without needing to invoke
+    ansible-playbook directly.
+
+    Usage:
+        sudo meza maint run <env> <script> [--wiki <wiki_id>] [--args <script_args>]
+
+    Args:
+        argv (list): List of command-line arguments. First argument is the
+            environment, second is the maintenance script name.
+
+    Examples:
+        # Run update.php on all wikis in 'monolith' environment
+        sudo meza maint run monolith update
+
+        # Run refreshLinks.php on a specific wiki
+        sudo meza maint run monolith refreshLinks --wiki demo
+
+        # Run runJobs.php with extra arguments on all wikis
+        sudo meza maint run monolith runJobs --args '--maxjobs=50'
+
+        # Run a script with both wiki targeting and arguments
+        sudo meza maint run monolith refreshLinks --wiki demo --args '--verbose'
+
+    Returns:
+        None
+    """
+    if len(argv) < 2:
+        print("run requires environment and script name. Ex:")
+        print("  sudo meza maint run <env> <script>")
+        print("  sudo meza maint run <env> <script> --wiki <wiki_id>")
+        print("  sudo meza maint run <env> <script> --args <script_args>")
+        sys.exit(1)
+
+    env = argv[0]
+
+    rc = check_environment(env)
+
+    # return code != 0 means failure
+    if rc != 0:
+        meza_shell_exec_exit(rc)
+
+    script = argv[1]
+
+    # Parse optional --wiki and --args flags from remaining arguments
+    remaining_argv = argv[2:]
+    target_wiki = None
+    script_args = None
+    extra_ansible_argv = []
+
+    try:
+        opts, extra_ansible_argv = getopt.getopt(
+            remaining_argv, "", ["wiki=", "args="])
+    except getopt.GetoptError as e:
+        print(str(e))
+        print("Usage: sudo meza maint run <env> <script> [--wiki <wiki_id>] [--args <script_args>]")
+        sys.exit(1)
+
+    for opt, arg in opts:
+        if opt == "--wiki":
+            target_wiki = arg
+        elif opt == "--args":
+            script_args = arg
+
+    more_extra_vars = {'maintenance_script': script}
+    if target_wiki:
+        more_extra_vars['target_wiki'] = target_wiki
+    if script_args:
+        more_extra_vars['maintenance_args'] = script_args
+
+    shell_cmd = playbook_cmd('run-maintenance', env, more_extra_vars)
+    if extra_ansible_argv:
+        shell_cmd = shell_cmd + extra_ansible_argv
+
+    rc = meza_shell_exec(shell_cmd)
+
+    # exit with same return code as ansible command
+    meza_shell_exec_exit(rc)
+
+
 def meza_command_maint_encrypt_string(argv):
     """
     Encrypts a string using Ansible Vault.
