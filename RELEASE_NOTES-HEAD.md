@@ -2,7 +2,16 @@
 
 ### Commits
 
-origin/copilot/add-publiccode-yml-file
+HEAD -> dev origin/dev
+* [e42c5f3c](https://github.com/freephile/meza/commit/e42c5f3c) (2026-04-09) Greg Rundlett: Add basic ascii art project structure to DEVELOPING.md 
+  - Modified: `manual/DEVELOPING.md`
+
+* [e9207a76](https://github.com/freephile/meza/commit/e9207a76) (2026-04-09) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [043b4963](https://github.com/freephile/meza/commit/043b4963) (2026-04-09) copilot-swe-agent[bot]: Add GitHub Actions workflow to auto-update publiccode.yml on release Agent-Logs-Url: https://github.com/freephile/meza/sessions/286f8337-4e77-406c-aef1-6002969fe4e2
 Co-authored-by: freephile <38368+freephile@users.noreply.github.com>
   - Added: `.github/workflows/update-publiccode.yml`
