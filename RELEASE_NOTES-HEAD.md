@@ -2,7 +2,17 @@
 
 ### Commits
 
-HEAD -> dev origin/dev
+origin/copilot/add-publiccode-yml-file
+* [043b4963](https://github.com/freephile/meza/commit/043b4963) (2026-04-09) copilot-swe-agent[bot]: Add GitHub Actions workflow to auto-update publiccode.yml on release Agent-Logs-Url: https://github.com/freephile/meza/sessions/286f8337-4e77-406c-aef1-6002969fe4e2
+Co-authored-by: freephile <38368+freephile@users.noreply.github.com>
+  - Added: `.github/workflows/update-publiccode.yml`
+
+* [ab69f2b6](https://github.com/freephile/meza/commit/ab69f2b6) (2026-04-08) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [4ea7b035](https://github.com/freephile/meza/commit/4ea7b035) (2026-04-08) Greg Rundlett: Move haproxy config generation after tree building On a new instance, the certs and other subdirectories for /etc/haproxy
 will not exist and thus the config syntax validation would fail
 if done first.
@@ -66,6 +76,12 @@ This fixes a problem introduced by Issue [#270](https://github.com/freephile/mez
 
 * [8c334526](https://github.com/freephile/meza/commit/8c334526) (2026-04-08) Greg Rundlett: Disable DynamicPageList3 for abandonment #362 Fix Issue [#362](https://github.com/freephile/meza/issues/362)
   - Modified: `config/MezaCoreExtensions.yml`
+
+* [37520b04](https://github.com/freephile/meza/commit/37520b04) (2026-04-03) copilot-swe-agent[bot]: Add publiccode.yml for EU Open Source Solutions Catalogue listing Agent-Logs-Url: https://github.com/freephile/meza/sessions/5020d768-db4d-45b0-99f7-469b87e39717
+Co-authored-by: freephile <38368+freephile@users.noreply.github.com>
+  - Added: `publiccode.yml`
+
+* [308bc05a](https://github.com/freephile/meza/commit/308bc05a) (2026-04-03) copilot-swe-agent[bot]: Initial plan 
 
 * [43247e4f](https://github.com/freephile/meza/commit/43247e4f) (2026-04-03) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
 - Generated RELEASE_NOTES-HEAD.md
