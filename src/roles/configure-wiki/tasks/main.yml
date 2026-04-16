@@ -114,6 +114,7 @@
     - preLocalSettings.d/base.php.dist
     - preLocalSettings.d/README.md
     - postLocalSettings.d/README.md
+    - postLocalSettings.d/override.php.dist
     - samlAuthorizations.d/base.php.dist
   delegate_to: localhost
   run_once: true

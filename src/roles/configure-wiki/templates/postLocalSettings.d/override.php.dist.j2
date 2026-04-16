@@ -1,27 +1,24 @@
 <?php
 
 /**
- * This file is this wiki's basic setup location. It determines wiki-specific
- * settings. This file is used by the main LocalSettings.php file which is
- * common to all wikis. It is located at:
+ * To use this file, first rename it to override.php placing it in the same directory (postLocalSettings.d).
+ * Then customize as needed.
  *
+ * This file is this wiki's configuration file. It determines wiki-specific
+ * settings that override the default farm-wide settings. This file is included
+ * by the main LocalSettings.php file which sets up the default settings for all wikis.
+ * You can verify the default settings in LocalSettings.php here:
  *     {{ m_mediawiki_install_path }}/LocalSettings.php
  *
- * This file is included near the beginning of that file, and thus can only be
- * used for initial setup and cannot override any settings therein.
+ * This file is included at the end of that file, and thus has final say over settings therein.
+ * Be careful NOT to override settings (e.g. wgSitename) that are then used as the basis for other settings in LocalSettings.php,
+ * or where there is logic in LocalSettings.php (e.g. mezaAuthType) or you may cause unintended consequences.
  **/
 
 /**
- * Name of your wiki. This will also be used to generate $wgMetaNamespace. See
- *  - https://www.mediawiki.org/wiki/Manual:$wgSitename
- *  - https://www.mediawiki.org/wiki/Manual:$wgMetaNamespace
+ * Enables several debugging options.
  **/
-$wgSitename = '{{ wiki_name }}';
-
-/**
- * meza uses an authentication system with a few default types. See LocalSettings.php
- **/
-// $mezaAuthType = 'viewer-read';
+$mezaDebug = false;
 
 /**
  * Determines if this wiki has email enabled. In order for email to work the global
