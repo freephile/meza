@@ -504,7 +504,9 @@ $wgParserCacheType = {{ m_parser_cache_type }};
 $wgParserCacheExpireTime = 30 * $day; // 30 days
 $wgMessageCacheType = CACHE_MEMCACHED;
 $wgSessionCacheType = CACHE_MEMCACHED;
-// SemanticMediaWiki cache is set in MezaCoreExtensions.yml
+// https://www.mediawiki.org/wiki/Manual:$wgObjectCacheSessionExpiry
+// session storage time in seconds, default is 1 hour in MW
+$wgObjectCacheSessionExpiry = 60 * 60 * 24; // 24 hours
 
 // Memcached configuration
 $wgMemCachedServers = [
