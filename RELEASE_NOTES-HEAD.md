@@ -3,6 +3,30 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [57bfaf07](https://github.com/freephile/meza/commit/57bfaf07) (2026-04-16) Greg Rundlett: make debug more granular and idomatic (override) Similar to base.php, template a default 'override.php.dist' file
+Move the $mezaDebug debug setting to the override file since base can
+NOT override what is in LocalSettings.php or override.php (last one wins)
+even though $mezaDebug is read from $GLOBALS in LocalSettings.
+Partly addresses bug [BUG] Sessions are broken on multisite freephile/meza#367
+  - Modified: `src/roles/configure-wiki/tasks/main.yml`
+  - Added: `src/roles/configure-wiki/templates/postLocalSettings.d/override.php.dist.j2`
+  - Modified: `src/roles/configure-wiki/templates/preLocalSettings.d/base.php.dist.j2`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [94fe07fc](https://github.com/freephile/meza/commit/94fe07fc) (2026-04-16) Greg Rundlett: move ObjectCacheSessionExpiry out of SMW into LocalSettings.php $wgObjectCacheSessionExpiry is not about SMW
+It's about session cookie storage
+The default is one hour, and we want a longer session so be explicit with the math for clarity
+Related to bug [BUG] Sessions are broken on multisite
+freephile/meza#367
+  - Modified: `config/MezaCoreExtensions.yml`
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [80a15691](https://github.com/freephile/meza/commit/80a15691) (2026-04-09) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [e42c5f3c](https://github.com/freephile/meza/commit/e42c5f3c) (2026-04-09) Greg Rundlett: Add basic ascii art project structure to DEVELOPING.md 
   - Modified: `manual/DEVELOPING.md`
 
