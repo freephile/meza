@@ -561,7 +561,7 @@ $wgImageMagickConvertCommand = 'convert';
 // @see https://www.mediawiki.org/wiki/InstantCommons
 // Also consider https://www.mediawiki.org/wiki/Extension:QuickInstantCommons
 $wgUseInstantCommons = false;
-/** 
+/**
 Note: that $wgUseInstantCommons is shorthand for this configuration of $wgForeignFileRepos
 In 2026 there are API limits and policies that you must adhere to
 To use InstantCommons, copy this block to your local wiki public/postLocalSettings.d/override.php
@@ -890,13 +890,25 @@ $wgCirrusSearchClusters['default'][] = '{{ host }}';
 
 $wgCirrusSearchWikimediaExtraPlugin['id_hash_mod_filter'] = true;
 
+// Fix Issue #369: Add Section 508 Compliance link to footer
+// We need these `use` statements to use the Html and Title classes in the hook below
+use MediaWiki\Html\Html;
+use MediaWiki\Title\Title;
 $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$footerlinks ) {
 	if ( $key === 'places' ) {
-		$footerlinks['test'] = Html::rawElement( 'a', [
-			'href' => Title::newFromText(
-				$skin->msg( 'Section 508 Compliance and Digital Accessibility' )->inContentLanguage()->text()
-			)
-		], $skin->msg( 'section508compliance' ) );
+		// Wikis can override via MediaWiki:section508compliance-url
+		$urlMsg = $skin->msg( 'section508compliance-url' );
+		$url = $urlMsg->isDisabled()
+			? Title::newFromText( 'Section 508 Compliance and Digital Accessibility' )->getLocalURL()
+			: $urlMsg->inContentLanguage()->text();
+
+		// Wikis can override via MediaWiki:section508compliance
+		$textMsg = $skin->msg( 'section508compliance' );
+		$linkText = $textMsg->isDisabled()
+			? 'Section 508 Compliance and Digital Accessibility'
+			: $textMsg->escaped();
+
+		$footerlinks['section508'] = Html::rawElement( 'a', [ 'href' => $url ], $linkText );
 	}
 };
 
