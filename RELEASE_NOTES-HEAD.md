@@ -3,6 +3,34 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [91a449b3](https://github.com/freephile/meza/commit/91a449b3) (2026-05-06) Greg Rundlett: Improve Footer Link for Section 508 Accessibility You don't have to, but you can create/edit MediaWiki:
+section508compliance for the link text
+and
+section508compliance-url for the link target (internal or external)
+Key points vs. the current code:
+1. **`isDisabled()`** — returns `true` when no `MediaWiki:` page exists
+for that key, giving you a clean place to inject defaults without
+requiring any per-wiki setup.
+2. **`->escaped()`** — use instead of raw `Message` object as element
+content; the current code passes the `Message` object directly to
+`Html::rawElement()`, which relies on implicit `__toString()` and skips
+escaping.
+3. **`->getLocalURL()`** — `Title::newFromText()` returns a `Title`
+object, not a string; the current code passes the object as the `href`
+value.
+4. **Separate message for URL** — separating the display text
+(`section508compliance`) from the target page name
+(`section508compliance-url`) lets wikis point to an external URL or a
+differently-named page without editing link text, and vice versa.
+Fixes Issue#369
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [7f595637](https://github.com/freephile/meza/commit/7f595637) (2026-04-17) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [57bfaf07](https://github.com/freephile/meza/commit/57bfaf07) (2026-04-16) Greg Rundlett: make debug more granular and idomatic (override) Similar to base.php, template a default 'override.php.dist' file
 Move the $mezaDebug debug setting to the override file since base can
 NOT override what is in LocalSettings.php or override.php (last one wins)
