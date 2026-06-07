@@ -734,7 +734,7 @@ list:
   # Maps - Extension to visualize and work with geographical information
   - name: Maps
     composer: "mediawiki/maps"
-    version: "11.0.1"
+    version: "12.1.*"
     config: |
       wfLoadExtension( 'Maps' );
 
