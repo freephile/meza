@@ -1,3 +1,27 @@
+commit 7435e6e48c0d6c79f3969b57b23fc845e3e16b8b
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sun Jun 7 19:14:32 2026 +0000
+
+    Fix deploys that hang on cloning the YouTub repo
+    
+    ansible debugger should not be enabled for regular deploys.
+    
+    To enable the debugger in a single run, use the environment var:
+    
+    ANSIBLE_ENABLE_TASK_DEBUGGER=True sudo meza deploy monolith -vvv
+    
+    Fixes Bug #372
+
+commit 154d74e5b61b19b0e7b2cf332b4eeecdc1e3bbf7
+Author: GitHub Action <action@github.com>
+Date:   Wed May 6 17:04:42 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit 91a449b33e5738415d46293834141c12bc1292e5
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Wed May 6 12:58:50 2026 -0400
