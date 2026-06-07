@@ -3,6 +3,18 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [7435e6e4](https://github.com/freephile/meza/commit/7435e6e4) (2026-06-07) Greg Rundlett: Fix deploys that hang on cloning the YouTub repo ansible debugger should not be enabled for regular deploys.
+To enable the debugger in a single run, use the environment var:
+ANSIBLE_ENABLE_TASK_DEBUGGER=True sudo meza deploy monolith -vvv
+Fixes Bug #372
+  - Modified: `config/ansible.cfg`
+
+* [154d74e5](https://github.com/freephile/meza/commit/154d74e5) (2026-05-06) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [91a449b3](https://github.com/freephile/meza/commit/91a449b3) (2026-05-06) Greg Rundlett: Improve Footer Link for Section 508 Accessibility You don't have to, but you can create/edit MediaWiki:
 section508compliance for the link text
 and
