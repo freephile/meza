@@ -907,7 +907,7 @@ list:
   # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
   - name: SemanticCompoundQueries
     composer: "mediawiki/semantic-compound-queries"
-    version: "3.x-dev"
+    version: "dev-master"
     config: |
       wfLoadExtension( 'SemanticCompoundQueries' );
 
@@ -953,12 +953,14 @@ list:
   # SMW - Allows in-page storage and querying of data with semantics turning Mediawiki into a Knowledge Graph Interface
   - name: Semantic MediaWiki
     composer: "mediawiki/semantic-media-wiki"
-    version: "^6.0.0"
+    version: "^7.0.0@dev"
 #    version: "dev-master" # (failed in prod... try in dev first)
     config: |
       wfLoadExtension( 'SemanticMediaWiki' );
       // add true bc we have a full URL https://www.semantic-mediawiki.org/wiki/Help:EnableSemantics
-      enableSemantics( $wgServer . '/' . $wikiId . '/', true );
+      // enableSemantics( $wgServer . '/' . $wikiId . '/', true );
+      // SMW 7.x enableSemantics is a no-op, but we can set the namespace for RDF/OWL export.
+      $smwgNamespace = $wgServer . '/' . $wikiId . '/';
       $smwgQMaxSize = 5000;
       // CACHE_MEMCACHED is configured already in LocalSettings.php.j2
       // We're leaving this unset because initial testing showed a negative performance impact
@@ -969,7 +971,10 @@ list:
       $smwgNamespacesWithSemanticLinks[NS_TEMPLATE] = true;
       $smwgLocalConnectionConf['mw.db.queryengine'] = [ 'read' => DB_REPLICA, 'write' => DB_REPLICA ];
       // allow Links in Values https://www.semantic-mediawiki.org/wiki/Help:$smwgLinksInValues
-      $smwgParserFeatures = ( $smwgParserFeatures | SMW_PARSER_LINV );
+      // $smwgParserFeatures = ( $smwgParserFeatures | SMW_PARSER_LINV );
+      // for 7.x
+      $smwgParserFeatures = [ 'strict', 'inline-errors', 'hidden-categories', 'links-in-values' ];
+
       $smwgPageSpecialProperties[] = '_LEDT';
       $smwgPageSpecialProperties[] = '_MDAT';
       $smwgPageSpecialProperties[] = '_CDAT';
