@@ -1109,19 +1109,20 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/TitleBlacklist
     version: "{{ mediawiki_default_branch }}"
 
-  #  # ULS - Allows users to select a language and configure its support in an easy way.
-  - name: UniversalLanguageSelector
-    repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
-    version: "{{ mediawiki_default_branch }}"
-    config: |
-      // Disable international phoenetic alphabet selector that breaks searching for
-      // English users. From docs:
-      // $wgULSIMEEnabled - Disable the input methods feature for all users by
-      // default. Can still be enabled manually by the user.
-      // Refs:
-      // https://www.mediawiki.org/wiki/Help:Extension:UniversalLanguageSelector/Input_methods
-      // https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
-      $wgULSIMEEnabled = false;
+  # #  # ULS - Allows users to select a language and configure its support in an easy way.
+  # MOVED to LocalExtensions as part of MLEB
+  # - name: UniversalLanguageSelector
+  #   repo: https://github.com/wikimedia/mediawiki-extensions-UniversalLanguageSelector
+  #   version: "{{ mediawiki_default_branch }}"
+  #   config: |
+  #     // Disable international phoenetic alphabet selector that breaks searching for
+  #     // English users. From docs:
+  #     // $wgULSIMEEnabled - Disable the input methods feature for all users by
+  #     // default. Can still be enabled manually by the user.
+  #     // Refs:
+  #     // https://www.mediawiki.org/wiki/Help:Extension:UniversalLanguageSelector/Input_methods
+  #     // https://www.mediawiki.org/wiki/Extension:UniversalLanguageSelector
+  #     $wgULSIMEEnabled = false;
 
   # UrlGetParameters - enables you to use and/or display URL GET parameters in wiki pages
   - name: UrlGetParameters
