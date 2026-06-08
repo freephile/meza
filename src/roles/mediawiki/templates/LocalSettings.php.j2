@@ -543,20 +543,6 @@ $wgFileExtensions[] = 'ics';
 $wgFileExtensions[] = 'msg';
 $wgFileExtensions[] = 'mp4';
 
-// We do not generate thumbnails on parse, but rather on demand - which speeds
-// up page load times.
-$wgGenerateThumbnailOnParse = false;
-// With short-urls, we need to let MediaWiki know where to find thumb.php
-$wgThumbnailScriptPath = "$wgScriptPath/thumb.php";
-
-$wgUseImageMagick = true;
-{% if ansible_distribution_file_variety == "RedHat" %}
-$wgImageMagickConvertCommand = '/usr/bin/convert';
-{% else %}
-$wgImageMagickConvertCommand = 'convert';
-{% endif %}
-
-
 // InstantCommons allows wiki to use images from http://commons.wikimedia.org
 // @see https://www.mediawiki.org/wiki/InstantCommons
 // Also consider https://www.mediawiki.org/wiki/Extension:QuickInstantCommons
@@ -750,10 +736,29 @@ $wgFileExtensions = array_merge( $wgFileExtensions, [
 	'zip'
 ] );
 
+// https://www.mediawiki.org/wiki/Manual:Image_administration#SVG
+
+// We do not generate thumbnails on parse, but rather on demand - which speeds
+// up page load times.
+$wgGenerateThumbnailOnParse = false;
+// With short-urls, we need to let MediaWiki know where to find thumb.php
+$wgThumbnailScriptPath = "$wgScriptPath/thumb.php";
+
+$wgUseImageMagick = true;
+// for scaling non-SVG images
+{% if ansible_distribution_file_variety == "RedHat" %}
+$wgImageMagickConvertCommand = '/usr/bin/convert';
+{% else %}
+$wgImageMagickConvertCommand = 'convert';
+{% endif %}
+
 // Native (browser) rendering has been available since 1.41
 // Use partial so that huge SVGs are still rasterized server-side.
-$wgSVGNativeRendering = 'partial';
-$wgSVGNativeRenderingSizeLimit = 50 * 1024; // 50 KB is the default
+$wgSVGNativeRendering = 'true';
+$wgSVGNativeRenderingSizeLimit = 300 * 1024; // 50 KB is the default
+// $wgSVGConverters (array) are defined inmediawiki/includes/config-schema.php
+// we'll use ImageMagick
+$wgSVGConverter = "ImageMagick";
 
 // Tell Universal Language Selector not to try to guess language based upon IP
 // address. This (a) isn't likely needed in enterprise use cases and (b) fails
