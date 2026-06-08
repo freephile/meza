@@ -3,6 +3,74 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [d2ec3ced](https://github.com/freephile/meza/commit/d2ec3ced) (2026-06-08) Greg Rundlett: There is no more .smw.json file in SMW 7 fixes Bug #374
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [85c9649b](https://github.com/freephile/meza/commit/85c9649b) (2026-06-08) Greg Rundlett: modify thumbnailing for SVG handling 
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [08a55334](https://github.com/freephile/meza/commit/08a55334) (2026-06-08) Greg Rundlett: Modify mediawiki role and meza.py to avoid hangs With the Ansible debug mode enabled, and with the way meza was executing
+shell commands, a deploy could hang waiting for interactive input such
+as a git password for a protected repository during git clone  - but
+we'd never know about it.
+Added
+    GIT_TERMINAL_PROMPT: "0"
+    GCM_INTERACTIVE: "Never"
+to the MediaWiki role's git tasks
+  - Modified: `src/roles/mediawiki/tasks/main.yml`
+  - Modified: `src/scripts/meza.py`
+
+* [f37d5f55](https://github.com/freephile/meza/commit/f37d5f55) (2026-06-08) Greg Rundlett: Remove Universal Language Selector from Core ULS is now in Meza Local Extensions along with the rest of the MLEB
+MediaWiki Language Extension Bundle
+This includes
+- Translate: Manages translation workflows for pages and messages,
+enabling community translation and versioning.
+- Universal Language Selector (ULS): Provides language selection, custom
+fonts, and input methods for non-Latin alphabets.
+- Babel: Allows users to add their language proficiency to user pages
+and find other speakers.
+- CLDR: Offers a massive database of language and country name translations
+We needed the Translate extension to be able to use some of the
+templates from MediaWiki.org such as the TNT template which is a
+dependency of the ColoredBox and ContentGrid templates and modules
+used on the discgolf wiki
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [9e1f793f](https://github.com/freephile/meza/commit/9e1f793f) (2026-06-08) Greg Rundlett: Improve Elasticsearch handling and docs The meza maint rebuild command now uses Ansible's Apply
+directive to properly cascade the 'tags: always' to the set-vars
+included role. Without it, some tasks weren't executing and the
+list_of_wikis was not populated.
+The elastic-build-index.sh template is fortified by detecting
+different error conditions and responding appropriately
+We also drain the job queue after rebuilding the index so that it
+at least reports some content is indexed (there can be more still in
+the job queue.)
+Update maintenance, deploy and create docs
+Fixes Bug #376
+  - Modified: `manual/meza-cmd/create.md`
+  - Modified: `manual/meza-cmd/deploy.md`
+  - Modified: `manual/meza-cmd/maint.md`
+  - Modified: `src/playbooks/rebuild-smw-and-index.yml`
+  - Modified: `src/roles/mediawiki/templates/elastic-build-index.sh.j2`
+  - Modified: `src/roles/set-vars/tasks/main.yml`
+
+* [b02a0a7a](https://github.com/freephile/meza/commit/b02a0a7a) (2026-06-07) Greg Rundlett: Update SMW to 7.x and Semantic Compound Queries Update Semantic Compound Queries from 3.x-dev to dev-master for SMW 7
+Update Semantic MediaWiki to 7.x for the new features
+Fixes Bug #374
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [65beb5b8](https://github.com/freephile/meza/commit/65beb5b8) (2026-06-07) Greg Rundlett: Upgrade Maps extension to v12.1.x We upgraded SMW to 7.x and it would appear that Maps 11 is not compatible
+There isn't explicit compatibility info in the Maps matrix chart.
+In any case, upgrade to the latest stable which is 12.x
+fixes Bug #377
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [d92e9b4a](https://github.com/freephile/meza/commit/d92e9b4a) (2026-06-07) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [7435e6e4](https://github.com/freephile/meza/commit/7435e6e4) (2026-06-07) Greg Rundlett: Fix deploys that hang on cloning the YouTub repo ansible debugger should not be enabled for regular deploys.
 To enable the debugger in a single run, use the environment var:
 ANSIBLE_ENABLE_TASK_DEBUGGER=True sudo meza deploy monolith -vvv
