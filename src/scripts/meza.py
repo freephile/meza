@@ -13,10 +13,12 @@ import getopt
 import getpass
 import grp
 import hashlib
+import io
 import json
 import os
 import pwd
 import random
+import select
 import shutil
 import signal
 import string
@@ -2082,20 +2084,61 @@ def meza_shell_exec(shell_cmd, print_command=True, log_file=False):
     if print_command:
         print(cmd)
 
+    log = None
     if log_file:
-        log = open(log_file, 'ab')
-    proc = subprocess.Popen(
-        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    for line in iter(proc.stdout.readline, b''):
-        print(line.rstrip().decode())
-        if log_file:
-            log.write(line)
-    proc.wait()
+        log = io.open(log_file, 'a', encoding='utf-8')
 
-    rc = proc.returncode
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            shell=True,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,
+            bufsize=1,
+        )
 
-    # Move back to original working directory
-    os.chdir(starting_wd)
+        if proc.stdout is not None:
+            # Read incrementally while process is alive. Do not block on EOF,
+            # because child helpers can keep stdout open and cause a false hang.
+            while True:
+                if proc.poll() is not None:
+                    # Drain any immediately available trailing lines.
+                    while True:
+                        ready, _, _ = select.select([proc.stdout], [], [], 0)
+                        if not ready:
+                            break
+                        line = proc.stdout.readline()
+                        if not line:
+                            break
+                        output = line.rstrip('\n')
+                        print(output)
+                        if log is not None:
+                            log.write(line)
+                    break
+
+                ready, _, _ = select.select([proc.stdout], [], [], 0.2)
+                if not ready:
+                    continue
+
+                line = proc.stdout.readline()
+                if not line:
+                    continue
+
+                output = line.rstrip('\n')
+                print(output)
+                if log is not None:
+                    log.write(line)
+
+        proc.wait()
+        rc = proc.returncode
+    finally:
+        if log is not None:
+            log.close()
+
+        # Move back to original working directory
+        os.chdir(starting_wd)
 
     return rc
 

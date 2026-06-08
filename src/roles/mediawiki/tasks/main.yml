@@ -144,6 +144,8 @@
   # Ref #1149 for TMPDIR environment var
   environment:
     TMPDIR: "{{ m_data_tmp_dir }}"
+    GIT_TERMINAL_PROMPT: "0"
+    GCM_INTERACTIVE: "Never"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki_install_path }}/extensions/{{ item.name }}"
@@ -171,6 +173,8 @@
   # Ref #1149 for TMPDIR environment var
   environment:
     TMPDIR: "{{ m_data_tmp_dir }}"
+    GIT_TERMINAL_PROMPT: "0"
+    GCM_INTERACTIVE: "Never"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki_install_path }}/skins/{{ item.name }}"
@@ -190,6 +194,8 @@
   # Ref #1149 for TMPDIR environment var
   environment:
     TMPDIR: "{{ m_data_tmp_dir }}"
+    GIT_TERMINAL_PROMPT: "0"
+    GCM_INTERACTIVE: "Never"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki_install_path }}/extensions/{{ item.name }}"
@@ -210,6 +216,8 @@
   # Ref #1149 for TMPDIR environment var
   environment:
     TMPDIR: "{{ m_data_tmp_dir }}"
+    GIT_TERMINAL_PROMPT: "0"
+    GCM_INTERACTIVE: "Never"
   git:
     repo: "{{ item.repo }}"
     dest: "{{ m_mediawiki_install_path }}/skins/{{ item.name }}"
