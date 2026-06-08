@@ -7,6 +7,9 @@
     - name: Set vars
       ansible.builtin.include_role:
         name: set-vars
+        apply:
+          tags:
+            - always
       tags:
         - always
 
@@ -14,6 +17,19 @@
       ansible.builtin.command: "bash {{ m_config_deploy_dir }}/elastic-rebuild-all.sh"
       run_once: true
       changed_when: true
+      tags:
+        - search-index
+
+    # ForceSearchIndex rebuilds the index in-process by default. Drain any queued
+    # CirrusSearch write jobs as a follow-up so recent background updates do not lag.
+    - name: Drain CirrusSearch write job queue for each wiki
+      ansible.builtin.command: >
+        {{ m_mediawiki_install_path | quote }}/maintenance/run
+        runJobs --type cirrusSearchElasticaWrite --maxjobs 10000
+      environment:
+        WIKI: "{{ item }}"
+      loop: "{{ list_of_wikis | flatten(levels=1) }}"
+      changed_when: false
       tags:
         - search-index
 

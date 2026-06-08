@@ -42,6 +42,52 @@ meza maint rebuild <environment>
 - Recreates search indexes for all wikis
 - Updates CirrusSearch/Elasticsearch indexes
 
+**When it runs:**
+- `meza maint rebuild <environment>` runs the dedicated rebuild playbook for the environment.
+- With no extra Ansible tag filters, it runs both the search rebuild and the SMW rebuild.
+- You can pass Ansible tags through to limit the run, for example:
+
+```bash
+meza maint rebuild <environment> --tags search-index
+meza maint rebuild <environment> --tags smw-data
+```
+
+**Search rebuild behavior:**
+- The search rebuild recreates the active CirrusSearch/Elasticsearch indices for each wiki.
+- It runs `CirrusSearch:UpdateSearchIndexConfig --startOver` and then two `CirrusSearch:ForceSearchIndex` passes.
+- In this rebuild path, `ForceSearchIndex` writes to Elasticsearch in-process by default. The rebuild is expected to populate the index before the command returns.
+- After the search rebuild, Meza also runs `runJobs --type cirrusSearchElasticaWrite` for each wiki as a follow-up drain step so queued CirrusSearch writes do not lag behind the rebuild.
+
+**What to expect from the job queue afterward:**
+- It is normal for a later manual `runJobs` to still find other MediaWiki job types such as `refreshLinks`, `htmlCacheUpdate`, mail, or thumbnail jobs.
+- It is not necessary for the general MediaWiki job queue to be completely empty for the search rebuild to be considered successful.
+- The key post-rebuild check is that the Elasticsearch indices for the wiki have non-zero document counts when the wiki has indexable content.
+- CirrusSearch may enqueue additional `cirrusSearchElasticaWrite` jobs while indexing is in progress, and those jobs can legitimately remain in the queue at command completion depending on queue backend and worker timing.
+- Meza runs a targeted `runJobs --type cirrusSearchElasticaWrite` follow-up drain as a best-effort step, but an immediately empty queue is not guaranteed.
+
+**Quick post-rebuild checks:**
+
+```bash
+curl -s 'localhost:9200/_cat/aliases/wiki_<wiki>_*?v'
+curl -s 'localhost:9200/_cat/indices/wiki_<wiki>_*?v&h=index,docs.count,store.size'
+WIKI=<wiki> /opt/htdocs/mediawiki/maintenance/run showJobs
+```
+
+**If it fails with** `Primary index was expected to be an alias`:
+- The wiki's primary search index alias is missing or points at the wrong object.
+- Repair the alias first, then rerun the rebuild.
+- Quick check:
+
+```bash
+curl -s localhost:9200/_alias/wiki_<wiki>_general
+curl -s localhost:9200/_cat/indices/wiki_<wiki>_general*?h=index
+```
+- If there is exactly one backing index, add the alias back with:
+
+```bash
+curl -s -XPOST 'localhost:9200/_aliases' -H 'Content-Type: application/json' -d '{"actions":[{"add":{"index":"<backing-index>","alias":"wiki_<wiki>_general"}}]}'
+```
+
 ### `cleanuploadstash <env>` - Clean Upload Stash
 
 Clean up temporary upload files from the upload stash directory.
@@ -120,6 +166,7 @@ Run various maintenance operations when:
 - ✅ When search functionality is broken
 - ✅ After major content restructuring
 - ✅ When CirrusSearch indexes are corrupted
+- ✅ When you want a full operator-driven search rebuild rather than waiting for incremental queue updates
 
 **Upload Stash Cleanup (`cleanuploadstash`):**
 - ✅ When disk space is running low
@@ -138,6 +185,7 @@ Run various maintenance operations when:
 - Manual job runs are useful after bulk operations
 - Jobs process in background without affecting wiki availability
 - Consider running during low-traffic periods for large job queues
+- `meza maint rebuild` is the operator-facing command for full search/SMW rebuilds; routine `meza deploy` runs do not rebuild search unless you explicitly tag them
 
 ## Performance Considerations
 

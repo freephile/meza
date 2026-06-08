@@ -43,6 +43,9 @@ meza create wiki-promptless production blogwiki "Company Blog"
 - Interactive mode will prompt for wiki ID, name, and other settings
 - Non-interactive mode is useful for scripting and automation
 - New wikis are automatically added to the environment configuration
+- The create-wiki path runs the search rebuild wrapper for the new wiki as part of the normal create flow
+- That search rebuild is not suppressed by Ansible's `never` tag in the create-wiki wrapper role, so operators should expect Elasticsearch indices for the new wiki to be created during wiki creation
+- This create-time rebuild does not imply the entire MediaWiki job queue will be empty afterward; later `runJobs` may still process unrelated background jobs
 
 ## See Also
 

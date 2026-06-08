@@ -38,6 +38,54 @@ run_with_retries() {
 	return 1
 }
 
+check_primary_alias() {
+	local alias_name="wiki_${wiki_id}_general"
+	local alias_status
+	local backing_indices
+	local backing_index_count
+	local backing_index
+
+	alias_status=$(curl -s -o /dev/null -w '%{http_code}' "localhost:9200/_alias/$alias_name" 2>/dev/null || true)
+	if [ "$alias_status" = "200" ]; then
+		return 0
+	fi
+
+	# Check if a concrete index (not an alias) exists with the alias name.
+	# CirrusSearch:UpdateSearchIndexConfig --startOver will fail with
+	# "Primary index was expected to be an alias" when this is the case.
+	# Since --startOver rebuilds from scratch, it is safe to delete it.
+	concrete_index=$(curl --silent "localhost:9200/_cat/indices/$alias_name?h=index" 2>/dev/null | tr -d '[:space:]' || true)
+	if [ "$concrete_index" = "$alias_name" ]; then
+		log "Concrete index $alias_name exists where CirrusSearch expects an alias."
+		log "Deleting it so --startOver can recreate it correctly as an alias."
+		log "curl -s -XDELETE 'localhost:9200/$alias_name'"
+		curl -s -XDELETE "localhost:9200/$alias_name" >/dev/null
+		return 0
+	fi
+
+	backing_indices=$(curl --silent "localhost:9200/_cat/indices/${alias_name}*?h=index" 2>/dev/null | grep -vx "$alias_name" || true)
+	backing_index_count=$(printf '%s\n' "$backing_indices" | sed '/^$/d' | wc -l | tr -d '[:space:]')
+
+	if [ "$backing_index_count" -eq 1 ]; then
+		backing_index=$(printf '%s\n' "$backing_indices" | sed '/^$/d')
+		log "Primary alias $alias_name is missing; creating it for backing index $backing_index"
+		log "curl -s -XPOST 'localhost:9200/_aliases' -H 'Content-Type: application/json' -d '{\"actions\":[{\"add\":{\"index\":\"$backing_index\",\"alias\":\"$alias_name\"}}]}'"
+		curl -s -XPOST "localhost:9200/_aliases" -H 'Content-Type: application/json' -d "{\"actions\":[{\"add\":{\"index\":\"$backing_index\",\"alias\":\"$alias_name\"}}]}" >/dev/null
+		return 0
+	fi
+
+	if [ "$backing_index_count" -eq 0 ]; then
+		log "Primary alias $alias_name is missing, but no backing indices exist yet; continuing so CirrusSearch can create them."
+		return 0
+	fi
+
+	log "Primary alias $alias_name is missing and could not be repaired automatically."
+	log "Backing indices seen for $alias_name: ${backing_indices:-<none>}"
+	log "If this is a failed rebuild, fix the alias manually and rerun the script."
+	log "curl -s -XPOST 'localhost:9200/_aliases' -H 'Content-Type: application/json' -d '{\"actions\":[{\"add\":{\"index\":\"<backing-index>\",\"alias\":\"$alias_name\"}}]}'"
+	return 1
+}
+
 echo "******* Generating Elasticsearch index for $wiki_id *******"
 
 # Lock to prevent concurrent rebuilds for the same wiki
@@ -49,14 +97,20 @@ exec 200>"$LOCKFILE"
 flock -n 200 || { echo "Another index build is running for $wiki_id; exiting."; exit 1; }
 trap 'echo "Caught signal, releasing lock"; flock -u 200; rm -f "$LOCKFILE"; exit 1' INT TERM EXIT
 
+check_primary_alias
+
 disable_search_file="{{ m_config_deploy_dir }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
 
-# disable search update in wiki-specific settings
+# Match CirrusSearch bootstrap guidance: disable live search updates while
+# index config is recreated, then re-enable before ForceSearchIndex.
 echo -e "<?php\n\$wgDisableSearchUpdate = true;\n" > "$disable_search_file"
 
 # Run script to generate elasticsearch index mappings/config
 cd "{{ m_mediawiki_install_path }}"
 WIKI=$wiki_id {{ m_mediawiki_install_path | quote }}/maintenance/run CirrusSearch:UpdateSearchIndexConfig --startOver
+
+# Re-enable search updates before bootstrapping content into Elasticsearch.
+rm -f "$disable_search_file"
 
 # Determine indices for this wiki (typical CirrusSearch index pattern)
 index_pattern="wiki_${wiki_id}_*"
@@ -87,6 +141,12 @@ indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/
 log "Starting ForceSearchIndex (skipParse) with retries"
 run_with_retries "WIKI=$wiki_id {{ m_mediawiki_install_path | quote }}/maintenance/run CirrusSearch:ForceSearchIndex --skipParse"
 
+# Some environments still enqueue cirrusSearchElasticaWrite jobs during rebuild.
+# Drain them here so wrapper-driven rebuilds (for example create-wiki) finish
+# with Elasticsearch populated before returning.
+log "Draining queued cirrusSearchElasticaWrite jobs"
+run_with_retries "WIKI=$wiki_id {{ m_mediawiki_install_path | quote }}/maintenance/run runJobs --type cirrusSearchElasticaWrite --maxjobs 10000"
+
 # Recompute indices again to capture any additional indices created during indexing
 indices=$(curl --silent "localhost:9200/_cat/indices/$index_pattern?h=index" 2>/dev/null || true)
 
@@ -100,10 +160,12 @@ if [ -n "$indices" ]; then
 			echo "  Warning: failed to restore settings for $idx (HTTP $status)"
 		fi
 	done
+	echo "Refreshing indices matching $index_pattern so document counts are visible before exit"
+	refresh_status=$(curl -s -o /dev/null -w '%{http_code}' -XPOST "localhost:9200/$index_pattern/_refresh" || true)
+	if [ "$refresh_status" != "200" ]; then
+		echo "  Warning: failed to refresh indices for $index_pattern (HTTP $refresh_status)"
+	fi
 fi
-
-# Remove search-update disable in wiki-specific settings
-rm -f "$disable_search_file"
 
 echo "******* Elasticsearch build index complete! *******"
 

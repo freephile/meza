@@ -60,6 +60,8 @@
     m_conf_public_dir: "{{ m_conf_public_dir | default(m_install_dir + '/conf-meza/public') }}"
     m_conf_secret_dir: "{{ m_conf_secret_dir | default(m_install_dir + '/conf-meza/secret') }}"
     m_app_dir: "{{ m_app_dir | default(m_install_dir + '/meza') }}"
+  tags:
+    - always
 
 #
 # Gluster mods
@@ -68,6 +70,8 @@
   ansible.builtin.set_fact:
     m_uploads_dir: "{{ gluster_mount_dir }}"
   when: "'app_servers' in groups and groups['app_servers']|length|int > 1"
+  tags:
+    - always
 
 #
 # Public config
@@ -77,6 +81,8 @@
     file: "{{ m_conf_public_dir }}/public.yml"
   # In the first bootstrap, this file may not exist yet
   failed_when: false
+  tags:
+    - always
 
 # Process declarative wiki configuration
 - name: Set wiki variables from declarative config (if wikis defined)
@@ -84,17 +90,23 @@
     list_of_wikis_unordered: "{{ wikis | map(attribute='id') | list }}"
     primary_wiki_id: "{{ (wikis | selectattr('primary', 'defined') | selectattr('primary', 'equalto', true) | map(attribute='id') | list)[0] | default('') }}"
   when: wikis is defined and wikis | length > 0
+  tags:
+    - always
 
 # Sort list of wikis so primary wiki is first (needed for shared user tables)
 - name: Order wiki list with primary wiki first (if primary_wiki_id set)
   ansible.builtin.set_fact:
     list_of_wikis: "{{ [primary_wiki_id] + (list_of_wikis_unordered | difference([primary_wiki_id])) }}"
   when: wikis is defined and wikis | length > 0 and primary_wiki_id != ''
+  tags:
+    - always
 
 - name: Use unordered wiki list (no primary wiki defined)
   ansible.builtin.set_fact:
     list_of_wikis: "{{ list_of_wikis_unordered }}"
   when: wikis is defined and wikis | length > 0 and primary_wiki_id == ''
+  tags:
+    - always
 
 # Process wiki redirects from declarative config
 - name: Build wiki redirects from declarative config
@@ -104,6 +116,8 @@
   vars:
     wiki: "{{ wikis | selectattr('id', 'equalto', item.key) | first }}"
   when: wikis is defined and wikis | length > 0
+  tags:
+    - always
 
 # Fallback to directory-based wiki discovery (legacy)
 - name: Get individual wikis dirs from localhost (legacy fallback)
@@ -115,16 +129,22 @@
   run_once: true
   when: wikis is not defined or wikis | length == 0
   failed_when: false
+  tags:
+    - always
 
 - name: Set wiki list from directory discovery (legacy fallback)
   ansible.builtin.set_fact:
     list_of_wikis: "{{ wiki_dirs.files | map(attribute='path') | map('basename') | sort }}"
   when: wikis is not defined or wikis | length == 0 and wiki_dirs is defined and wiki_dirs.files is defined
+  tags:
+    - always
 
 # Merge wiki redirects from declarative config with legacy config
 - name: Merge wiki redirects
   ansible.builtin.set_fact:
     wiki_id_redirects: "{{ wiki_id_redirects | default({}) | combine(wiki_redirects_from_declarative | default({})) }}"
+  tags:
+    - always
 
 - name: Normalize env from Ansible or shell environment
   ansible.builtin.set_fact:
@@ -138,3 +158,5 @@
     file: "{{ m_conf_secret_dir }}/{{ env }}/secret.yml"
   failed_when: false
   when: env | length > 0
+  tags:
+    - always
