@@ -3,6 +3,25 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [a56bdc8f](https://github.com/freephile/meza/commit/a56bdc8f) (2026-06-18) Greg Rundlett: Upgrade Bootstrap and Chameleon Upgrade Bootstrap ext from 5.x to 6.x for the Bootstrap framework
+We get the Chameleon 6.x skin by specifying dev-master
+https://www.mediawiki.org/wiki/Skin:Chameleon
+These now support MediaWiki 1.43 and later on PHP 8.1 and later
+The actual components provided to MediaWiki by the  Bootstrap Components
+extension are documented at
+https://github.com/oetterer/BootstrapComponents/blob/master/docs/components.md
+and include Accordion, Alert, Badge, Button, Card, Carousel, Collapse
+Jumbotron, Modal, Popover, and Tooltip
+Freephile wiki notes at https://wiki.freephile.org/wiki/Bootstrap
+  - Modified: `config/MezaCoreExtensions.yml`
+  - Modified: `config/MezaCoreSkins.yml`
+
+* [2c234607](https://github.com/freephile/meza/commit/2c234607) (2026-06-08) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [d2ec3ced](https://github.com/freephile/meza/commit/d2ec3ced) (2026-06-08) Greg Rundlett: There is no more .smw.json file in SMW 7 fixes Bug #374
   - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
 
