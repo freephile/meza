@@ -3,6 +3,18 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [d7eb218d](https://github.com/freephile/meza/commit/d7eb218d) (2026-06-20) Greg Rundlett: Document core skins We allow site CSS on restricted pages (e.g. Special:UserLogin) to allow
+MediaWiki:Common.css 'site styles' to be applied on the login page as well.
+By setting $wgAllowSiteCSSOnRestrictedPages = true; any custom style
+is not lost on those special pages.
+  - Modified: `config/MezaCoreSkins.yml`
+
+* [75bdb500](https://github.com/freephile/meza/commit/75bdb500) (2026-06-20) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [4b9eaeed](https://github.com/freephile/meza/commit/4b9eaeed) (2026-06-20) Greg Rundlett: Check ES aliases for both general and content Elasticsearch needs aliases for both the wiki_general and
 wiki_content physical indexes
 What this looks like when it's good:
