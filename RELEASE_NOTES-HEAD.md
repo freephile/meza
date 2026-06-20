@@ -3,6 +3,25 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [4b9eaeed](https://github.com/freephile/meza/commit/4b9eaeed) (2026-06-20) Greg Rundlett: Check ES aliases for both general and content Elasticsearch needs aliases for both the wiki_general and
+wiki_content physical indexes
+What this looks like when it's good:
+curl -s localhost:9200/_cat/indices/wiki_wiki*?h=index
+wiki_wiki_content_first
+wiki_wiki_general_first
+'wiki_' is the database prefix
+'wiki' is the wiki ID
+'content' and 'general' are indexes that exist
+'first' is the suffix given to each alias for the respective index.
+Continuing fix for Bug #376
+  - Modified: `src/roles/mediawiki/templates/elastic-build-index.sh.j2`
+
+* [61d2a16f](https://github.com/freephile/meza/commit/61d2a16f) (2026-06-19) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [a56bdc8f](https://github.com/freephile/meza/commit/a56bdc8f) (2026-06-18) Greg Rundlett: Upgrade Bootstrap and Chameleon Upgrade Bootstrap ext from 5.x to 6.x for the Bootstrap framework
 We get the Chameleon 6.x skin by specifying dev-master
 https://www.mediawiki.org/wiki/Skin:Chameleon

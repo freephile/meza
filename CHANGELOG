@@ -1,3 +1,34 @@
+commit 4b9eaeed8823f7f789bd5ef82bf439e0ee5b34dd
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Sat Jun 20 12:47:41 2026 +0000
+
+    Check ES aliases for both general and content
+    
+    Elasticsearch needs aliases for both the wiki_general and
+    wiki_content physical indexes
+    
+    What this looks like when it's good:
+    curl -s localhost:9200/_cat/indices/wiki_wiki*?h=index
+    wiki_wiki_content_first
+    wiki_wiki_general_first
+    
+    'wiki_' is the database prefix
+    'wiki' is the wiki ID
+    'content' and 'general' are indexes that exist
+    'first' is the suffix given to each alias for the respective index.
+    
+    Continuing fix for Bug #376
+
+commit 61d2a16fa529f0d648d59a08540b2a80b41c6664
+Author: GitHub Action <action@github.com>
+Date:   Fri Jun 19 12:49:20 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit a56bdc8f7573b23124e29baf8b4d697ee7d250d2
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Thu Jun 18 17:12:38 2026 +0000
