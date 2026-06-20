@@ -38,8 +38,9 @@ run_with_retries() {
 	return 1
 }
 
-check_primary_alias() {
-	local alias_name="wiki_${wiki_id}_general"
+check_required_alias() {
+	local alias_suffix="$1"
+	local alias_name="wiki_${wiki_id}_${alias_suffix}"
 	local alias_status
 	local backing_indices
 	local backing_index_count
@@ -97,7 +98,9 @@ exec 200>"$LOCKFILE"
 flock -n 200 || { echo "Another index build is running for $wiki_id; exiting."; exit 1; }
 trap 'echo "Caught signal, releasing lock"; flock -u 200; rm -f "$LOCKFILE"; exit 1' INT TERM EXIT
 
-check_primary_alias
+# CirrusSearch expects both primary aliases to exist.
+check_required_alias "general"
+check_required_alias "content"
 
 disable_search_file="{{ m_config_deploy_dir }}/public/wikis/$wiki_id/postLocalSettings.d/disable-search-update.php"
 
