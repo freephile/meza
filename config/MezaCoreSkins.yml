@@ -13,6 +13,8 @@ list:
     # There are no Vector specific configurations per-say, however, let's take advantage of the universality
     # of the Vector Skin load and use it to load core Mediawiki Site configuratons here as well:
     config: |
+      // Allow site CSS on restricted pages (e.g. Special:UserLogin) to allow
+      // MediaWiki:Common.css 'site styles' to be applied on the login page as well.
       $wgAllowSiteCSSOnRestrictedPages = true;
 
   # Skin:Chameleon - A highly customizable responsive MediaWiki skin that requires Extension:Bootstrap
