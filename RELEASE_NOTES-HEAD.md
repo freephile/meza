@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [cc6d0269](https://github.com/freephile/meza/commit/cc6d0269) (2026-06-22) Greg Rundlett: Remove SubpageFun extension SubpageFun is unmaintained and is breaks usage of the SubPageList ext.
+Fixes Bug #383
+  - Modified: `config/MezaCoreExtensions.yml`
+
+* [e4b28716](https://github.com/freephile/meza/commit/e4b28716) (2026-06-20) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [d7eb218d](https://github.com/freephile/meza/commit/d7eb218d) (2026-06-20) Greg Rundlett: Document core skins We allow site CSS on restricted pages (e.g. Special:UserLogin) to allow
 MediaWiki:Common.css 'site styles' to be applied on the login page as well.
 By setting $wgAllowSiteCSSOnRestrictedPages = true; any custom style
