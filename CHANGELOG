@@ -1,3 +1,23 @@
+commit cc6d026984933182793e6296fa7cd19222dfc57e
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Mon Jun 22 15:44:43 2026 +0000
+
+    Remove SubpageFun extension
+    
+    SubpageFun is unmaintained and is breaks usage of the SubPageList ext.
+    
+    Fixes Bug #383
+
+commit e4b28716b09ea13220bf62d0b1e1d55ae6716de0
+Author: GitHub Action <action@github.com>
+Date:   Sat Jun 20 19:54:21 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit d7eb218d42d86b6dd927429e1f1542279762a3e2
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Sat Jun 20 19:52:03 2026 +0000
