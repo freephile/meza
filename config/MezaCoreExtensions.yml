@@ -1028,12 +1028,6 @@ list:
     repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SpamBlacklist
     version: "{{ mediawiki_default_branch }}"
 
-  # SubpageFun - Provides your wiki with seven new parser functions/variables to get information about subpages which
-  # you can't get with MediaWikis existing magic Words
-  - name: SubpageFun
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SubpageFun
-    version: "{{ mediawiki_default_branch }}"
-
   # SubPageList - Allows the display and count of subpages
   - name: SubPageList
     composer: "mediawiki/sub-page-list"
