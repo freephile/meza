@@ -3,6 +3,27 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [e4dcbc57](https://github.com/freephile/meza/commit/e4dcbc57) (2026-08-05) Greg Rundlett: update the Netdata MD5 checksum 
+  - Modified: `src/roles/netdata/tasks/main.yml`
+
+* [837c974e](https://github.com/freephile/meza/commit/837c974e) (2026-08-05) Greg Rundlett: Fix TLS cert creation to include SAN Including a Subject Alternative Name has been standard since 2000 when CN (Common Name) was deprecated.
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+
+* [818243a8](https://github.com/freephile/meza/commit/818243a8) (2026-08-05) Greg Rundlett: Add VSCode with Vagrant instructions 
+  - Modified: `manual/DEVELOPING.md`
+
+* [496f46e0](https://github.com/freephile/meza/commit/496f46e0) (2026-08-05) Greg Rundlett: Add synced folders for config and uploads to Vagrantfile 
+  - Modified: `Vagrantfile`
+
+* [e56845fd](https://github.com/freephile/meza/commit/e56845fd) (2026-08-05) Greg Rundlett: Ignore TLS certificates (.crt .key .pem) 
+  - Modified: `.gitignore`
+
+* [2e13305a](https://github.com/freephile/meza/commit/2e13305a) (2026-06-22) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [cc6d0269](https://github.com/freephile/meza/commit/cc6d0269) (2026-06-22) Greg Rundlett: Remove SubpageFun extension SubpageFun is unmaintained and is breaks usage of the SubPageList ext.
 Fixes Bug #383
   - Modified: `config/MezaCoreExtensions.yml`
