@@ -97,10 +97,26 @@
 # and only run if not 'use_certbot'
 # Self-signed certificate is useful only in limited circumstances
 # Perhaps better control whether it is possible to run in http mode.
+#
+# A subjectAltName (SAN) entry is required here: modern TLS clients
+# (Node.js, curl, browsers) ignore the legacy CN field for hostname/IP
+# verification and will reject the cert without a matching SAN, even
+# when the CA itself is trusted. Use an IP-type SAN when wiki_app_fqdn
+# is a literal IP address (e.g. a Vagrant host-only IP), otherwise use
+# a DNS-type SAN.
+- name: Set fact for self-signed cert subjectAltName type
+  ansible.builtin.set_fact:
+    m_ssl_san: >-
+      {{ ('IP:' ~ wiki_app_fqdn) if (wiki_app_fqdn is match('^[0-9]{1,3}(\.[0-9]{1,3}){3}$'))
+      else ('DNS:' ~ wiki_app_fqdn) }}
+  delegate_to: localhost
+  run_once: true
+
 - name: If not exists, create self-signed SSL cert on CONTROLLER
   ansible.builtin.command: |
     openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
       -subj "/C=US/ST=MA/L=Boston/O=eQualityTechnology/CN={{ wiki_app_fqdn }}" \
+      -addext "subjectAltName={{ m_ssl_san }}" \
       -keyout {{ m_conf_secret_dir }}/{{ env }}/ssl/meza.key \
       -out {{ m_conf_secret_dir }}/{{ env }}/ssl/meza.crt
   when: not ssl_cert_stat_result.stat.exists
@@ -146,6 +162,14 @@
   changed_when: false
   delegate_to: localhost
   run_once: true
+
+- name: Ensure unencrypted SSL cert is available to be shared with host (e.g. for Docker containers like MCP)
+  ansible.builtin.copy:
+    content: "{{ decrypted_cert.stdout }}\n"
+    dest: "{{ m_app_dir }}/meza.crt"
+    mode: '0644'
+  # this task will be skipped in --check mode
+  when: not ansible_check_mode
 
 - name: Ensure cert and key assembled into into pem file
   ansible.builtin.copy:
