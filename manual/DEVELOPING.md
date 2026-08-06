@@ -100,6 +100,28 @@ git config --global user.email "you@example.org"
 git config --global color.ui true
 ```
 
+## Using VSCode
+With the vagrant VM mounting your code you can work in VSCode (or other IDE) right in your source checkout on your workstation (the 'host'). This works great if all you want to modify is Meza source. However, in order to
+modify other files - say MediaWiki core, or a Meza config repo, or live .deploy-meza files to try debugging,
+then you will want to use VSCode Remote Explorer to SSH to the VM.
+Use `vagrant ssh-config` from the source directory, and copy the output into your local ~/.ssh/config file.
+For example, you will see something like
+```
+Host app1
+  HostName 192.168.121.145
+  User vagrant
+  Port 22
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/greg/src/meza/.vagrant/machines/app1/libvirt/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+  PubkeyAcceptedKeyTypes +ssh-rsa
+  HostKeyAlgorithms +ssh-rsa
+```
+Once that is in your SSH config file, you'll see 'app1' as a menu option in the Remote Explorer.
+
 ## PATH, permissions, groups For The meza-ansible User
 
 When you deploy meza, it will automatically ensure that the service account 'meza-ansible' is setup appropriately.
