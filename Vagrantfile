@@ -327,6 +327,18 @@ Vagrant.configure("2") do |config|
       app1.vm.synced_folder ".", install_directory + "/meza",
         type: "nfs",
         nfs_udp: false
+      app1.vm.synced_folder "/home/greg/backups/uploads", "/opt/data-meza/uploads",
+        type: "rsync",
+        rsync__auto: true
+      app1.vm.synced_folder "/home/greg/src/meza-conf-public", "/opt/conf-meza/public",
+        type: "rsync",
+        rsync__auto: true
+      # We need to share our untrusted cert with Docker containers (e.g. ollama) on the host machine, required by MCP
+      # /opt/conf-meza/secret/vagrant/ssl/ is Ansible-vault encrypted,
+      # and "/etc/haproxy/certs/" is a combined .pem file - but we only want the certificate
+      # so we added a task in the HAProxy role to copy the decrypted cert to /opt/meza/meza.crt
+	  # which is already volume-mounted to the host machine
+	  # The crt is .gitignored because we don't need to version control it.
     elsif OS.windows?
       # On Windows, VirtualBox shared folders require explicit owner/group UID/GID.
       # meza-ansible and wheel are changed to UID/GID 10000 after they are created.
@@ -379,7 +391,7 @@ Vagrant.configure("2") do |config|
       fi
 
       # Create empty known_hosts file for Ansible roles that expect it
-	  # This was failing on Vagrant dev infrastructure and is probably just covering up other issues. Investigate later.
+      # This was failing on Vagrant dev infrastructure and is probably just covering up other issues. Investigate later.
       touch #{install_directory}/conf-meza/users/meza-ansible/.ssh/known_hosts
       chmod 644 #{install_directory}/conf-meza/users/meza-ansible/.ssh/known_hosts
       chown meza-ansible:meza-ansible #{install_directory}/conf-meza/users/meza-ansible/.ssh/known_hosts
