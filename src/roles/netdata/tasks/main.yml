@@ -23,7 +23,7 @@
 - name: Verify Netdata installer script integrity
   ansible.builtin.shell: |
     set -o pipefail
-    if [ "39321e7a8e05f0054f93df1824189abd" = "$(curl -Ss https://get.netdata.cloud/kickstart.sh | tee /tmp/netdata-kickstart.sh | md5sum | cut -d ' ' -f 1)" ]; then
+    if [ "abc541147e05940960461cc21e6d47e6" = "$(curl -Ss https://get.netdata.cloud/kickstart.sh | tee /tmp/netdata-kickstart.sh | md5sum | cut -d ' ' -f 1)" ]; then
       echo "OK, VALID: Netdata installer script integrity verified"
       exit 0
     else
