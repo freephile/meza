@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [4968e3aa](https://github.com/freephile/meza/commit/4968e3aa) (2026-08-24) Greg Rundlett: Make meza.local a convenient DNS name for Vagrant dev 
+  - Modified: `src/roles/haproxy/tasks/main.yml`
+
+* [c52a6ebc](https://github.com/freephile/meza/commit/c52a6ebc) (2026-08-06) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [e4dcbc57](https://github.com/freephile/meza/commit/e4dcbc57) (2026-08-05) Greg Rundlett: update the Netdata MD5 checksum 
   - Modified: `src/roles/netdata/tasks/main.yml`
 
