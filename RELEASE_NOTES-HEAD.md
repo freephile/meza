@@ -3,6 +3,20 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [a29d650b](https://github.com/freephile/meza/commit/a29d650b) (2026-09-21) Greg Rundlett: Fix vuln in SMW API https://github.com/advisories/GHSA-jr78-w6w5-m8f8
+Admin API is vulnerable, this fix can be backed out after upgrade.
+  - Modified: `src/roles/mediawiki/templates/LocalSettings.php.j2`
+
+* [1388a6a3](https://github.com/freephile/meza/commit/1388a6a3) (2026-09-21) Greg Rundlett: Drop rule that blocks empty User Agent Empty User Agent header can be legitimate, but unsophisticated tools
+So, allow them and monitor for bad traffic.
+  - Modified: `src/roles/haproxy/templates/haproxy.cfg.j2`
+
+* [d5a2a880](https://github.com/freephile/meza/commit/d5a2a880) (2026-08-24) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [4968e3aa](https://github.com/freephile/meza/commit/4968e3aa) (2026-08-24) Greg Rundlett: Make meza.local a convenient DNS name for Vagrant dev 
   - Modified: `src/roles/haproxy/tasks/main.yml`
 
