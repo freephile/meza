@@ -932,3 +932,27 @@ foreach ( glob( "$m_config_deploy_dir/public/postLocalSettings.d/*.php" ) as $fi
 foreach ( glob( "$m_config_deploy_dir/public/wikis/$wikiId/postLocalSettings.d/*.php" ) as $filename ) {
 	require_once $filename;
 }
+
+
+// close security hole for SMWAdmin functions in the API
+// https://github.com/SemanticMediaWiki/SemanticMediaWiki/commit/7c65baf617652e378b0dd4e52f94b7f6d9ce4d73
+// Could also be handled more directly with
+// https://github.com/SemanticMediaWiki/SemanticMediaWiki/security/advisories/GHSA-jr78-w6w5-m8f8
+// $wgExtensionFunctions[] = static function () {
+//      unset( $GLOBALS['wgAPIModules']['smwtask'] );
+// };
+
+$wgHooks['APIGetAllowedParams'][] = function ( &$module, &$params ) {
+    if ( $module->getModuleName() === 'smwtask' ) {
+        // Access the global WebRequest / User context
+        $user = RequestContext::getMain()->getUser();
+        if ( !$user->isAllowed( 'smw-admin' ) ) {
+            // Terminate the API execution with a 403 / Permission Denied error
+            throw new ApiUsageException(
+                null,
+                Status::newFatal( 'apierror-permissiondenied' )
+            );
+        }
+    }
+    return true;
+};
