@@ -2,25 +2,25 @@
 list:
   # AbuseFilter - Provides a way to filter edits and log them, as well as block users from making certain edits.
   - name: AbuseFilter
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/AbuseFilter
+    repo: https://github.com/wikimedia/mediawiki-extensions-AbuseFilter
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
 
   # AdminLinks - Defines Special:AdminLinks, to curate a short list of helpful links for wiki administrators
   - name: AdminLinks
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/AdminLinks
+    repo: https://github.com/wikimedia/mediawiki-extensions-AdminLinks
     version: "master"
     config: |
       $wgGroupPermissions['sysop']['adminlinks'] = true;
 
   # AdvancedSearch - Better Search capabilties
   - name: AdvancedSearch
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/AdvancedSearch
+    repo: https://github.com/wikimedia/mediawiki-extensions-AdvancedSearch
     version: "{{ mediawiki_default_branch }}"
 
   # Arrays - Creates an additional set of parser functions that operate on arrays.
   - name: Arrays
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Arrays
+    repo: https://github.com/wikimedia/mediawiki-extensions-Arrays
     version: "{{ mediawiki_default_branch }}"
 
   # Load Bootstrap and BootstrapComponents - for Chameleon skin etc.
@@ -41,7 +41,7 @@ list:
   # CategoryTree - Provides a <categorytree> tag to display a dynamic, expandable tree of subcategories and pages
   # Bundled extension
   - name: CategoryTree
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CategoryTree.git
+    repo: https://github.com/wikimedia/mediawiki-extensions-CategoryTree.git
     version: "{{ mediawiki_default_branch }}"
     config: |
       //  Loads the first level of the tree in a <categorytree> dynamically.
@@ -74,13 +74,13 @@ list:
 
   # CharInsert - Allows to create JavaScript links that when clicked, insert predefined text into the text box
   - name: CharInsert
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CharInsert
+    repo: https://github.com/wikimedia/mediawiki-extensions-CharInsert
     version: "{{ mediawiki_default_branch }}"
 
   # CheckUser - Extension to help wiki admins check if a user is sockpuppeting or otherwise abusing their account
   # Bundled extension
   - name: CheckUser
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CheckUser.git
+    repo: https://github.com/wikimedia/mediawiki-extensions-CheckUser.git
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['sysop']['checkuser'] = true;
@@ -91,7 +91,7 @@ list:
 
   # CirrusSearch - Implements searching for MediaWiki using Elasticsearch
   - name: CirrusSearch
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CirrusSearch
+    repo: https://github.com/wikimedia/mediawiki-extensions-CirrusSearch
     version: "{{ mediawiki_default_branch }}"
     config: |
       // CirrusSearch cluster(s) are defined based upon Ansible hosts file and thus
@@ -100,7 +100,7 @@ list:
 
   # Cite - Allows a user to create references as footnotes on a page.
   - name: Cite
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Cite
+    repo: https://github.com/wikimedia/mediawiki-extensions-Cite
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgCiteEnablePopups = true;
@@ -109,19 +109,19 @@ list:
   # provides pre-formatted citations in various citation styles for the current page.
   # Bundled extension
   - name: CiteThisPage
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CiteThisPage.git
+    repo: https://github.com/wikimedia/mediawiki-extensions-CiteThisPage.git
     version: "{{ mediawiki_default_branch }}"
 
   # CodeEditor - Extends the WikiEditor advanced editing toolbar with an embedded Ace editor widget, providing some
   # handy features for user/site JavaScript pages, CSS pages, JSON pages, and when extension Scribunto is also
   # installed, for Lua pages
   - name: CodeEditor
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CodeEditor
+    repo: https://github.com/wikimedia/mediawiki-extensions-CodeEditor
     version: "{{ mediawiki_default_branch }}"
 
   # CodeMirror - Provides syntax highlighting in MediaWiki's wikitext editor.
   - name: CodeMirror
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CodeMirror
+    repo: https://github.com/wikimedia/mediawiki-extensions-CodeMirror
     config: |
       // Enables use of CodeMirror by default but still allow users to disable it
       $wgDefaultUserOptions['usecodemirror'] = 1;
@@ -137,7 +137,7 @@ list:
   # ref. https://phabricator.wikimedia.org/T388462
   # On-wiki, we see that nothing happens when adding <comment-streams /> to a page
   - name: CommentStreams
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CommentStreams
+    repo: https://github.com/wikimedia/mediawiki-extensions-CommentStreams
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
@@ -154,7 +154,7 @@ list:
   # You can override the config in override.php if needed, like all other settings
   # Bundled extension
   - name: ConfirmEdit
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ConfirmEdit.git
+    repo: https://github.com/wikimedia/mediawiki-extensions-ConfirmEdit.git
     version: "{{ mediawiki_default_branch }}"
     config: |
       // Enable the SimpleCaptcha
@@ -197,7 +197,7 @@ list:
 
   # ContributionScores - Polls the wiki database to locate contributors with the highest contribution volume
   - name: ContributionScores
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ContributionScores
+    repo: https://github.com/wikimedia/mediawiki-extensions-ContributionScores
     version: "{{ mediawiki_default_branch }}"
     config: |
       // Exclude Bots from the reporting - Can be omitted.
@@ -520,30 +520,30 @@ list:
 
   # CreateUserPage - Check if user has a page and if not creates it with the content {{User}}
   - name: CreateUserPage
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CreateUserPage
+    repo: https://github.com/wikimedia/mediawiki-extensions-CreateUserPage
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgCreateUserPage_OnLogin = true;
 
   # CSS - Allows for custom CSS code in pages
   - name: CSS
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CSS
+    repo: https://github.com/wikimedia/mediawiki-extensions-CSS
     version: "{{ mediawiki_default_branch }}"
 
   #  # Dark Mode - Adds a toggleable dark mode for the MediaWiki user interface.
   #  - name: DarkMode
-  #    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DarkMode
+  #    repo: https://github.com/wikimedia/mediawiki-extensions-DarkMode
   #    version: "{{ mediawiki_default_branch }}"
 
   # DataTransfer - Allows users to both export and import data from and to the wiki, with export done in XML format and
   # import possible in both XML, CSV and some spreadsheet formats.
   - name: DataTransfer
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DataTransfer
+    repo: https://github.com/wikimedia/mediawiki-extensions-DataTransfer
     version: "master"
 
   # DeleteBatch - Adds a special page that allows users w rights to delete multiple pages easily
   - name: DeleteBatch
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DeleteBatch
+    repo: https://github.com/wikimedia/mediawiki-extensions-DeleteBatch
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['bureaucrat']['deletebatch'] = false;
@@ -551,19 +551,19 @@ list:
 
   # DiscussionTools - Tools for working with talk pages
   - name: DiscussionTools
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DiscussionTools
+    repo: https://github.com/wikimedia/mediawiki-extensions-DiscussionTools
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
 
   # DismissableSiteNotice - Allows users to close the sitenotice, using cookies
   - name: DismissableSiteNotice
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DismissableSiteNotice
+    repo: https://github.com/wikimedia/mediawiki-extensions-DismissableSiteNotice
     version: "{{ mediawiki_default_branch }}"
 
   # DisplayTitle - Allows a page's display title to be used as the default link text in links to the page - both links
   # from other pages as well as self-links on the page.
   - name: DisplayTitle
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DisplayTitle
+    repo: https://github.com/wikimedia/mediawiki-extensions-DisplayTitle
     version: "{{ mediawiki_default_branch }}"
 
   # # DynamicPageList4 - Provides a way to list pages dynamically based on certain criteria but requires REL1_44+ and thus is disabled by default for now.
@@ -575,7 +575,7 @@ list:
 
   # DynamicSidebar - Allows for custom sidebar based on user page or assigned group
   - name: DynamicSidebar
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/DynamicSidebar
+    repo: https://github.com/wikimedia/mediawiki-extensions-DynamicSidebar
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgDynamicSidebarUseUserpages = true;
@@ -584,25 +584,25 @@ list:
   # Echo - Provides an in-wiki notification system that can be used by other extensions
   # Bundled since 1.40
   - name: Echo
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Echo
+    repo: https://github.com/wikimedia/mediawiki-extensions-Echo
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgEchoEmailFooterAddress = $wgPasswordSender;
 
   # Elastica - Provides base elasticsearch functionality
   - name: Elastica
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Elastica
+    repo: https://github.com/wikimedia/mediawiki-extensions-Elastica
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
 
   # ExternalData - Allows MediaWiki pages to retrieve, filter, and format structured data from one or more sources.
   - name: ExternalData
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData
+    repo: https://github.com/wikimedia/mediawiki-extensions-ExternalData
     version: "master"
 
   # Flex Diagrams - Lets you create, and display,  BPMN, Gantt, and Mermaid diagrams
   - name: FlexDiagrams
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/FlexDiagrams
+    repo: https://github.com/wikimedia/mediawiki-extensions-FlexDiagrams
     version: "{{ mediawiki_default_branch }}"
 
   #  # FlexForm - Provides advanced HTML5 Form rendering for efficient data management.
@@ -614,7 +614,7 @@ list:
 
   # Flow - Provides threaded discussions on talk pages
   - name: Flow
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Flow
+    repo: https://github.com/wikimedia/mediawiki-extensions-Flow
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
@@ -648,7 +648,7 @@ list:
 
   # Gadgets
   - name: Gadgets
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Gadgets
+    repo: https://github.com/wikimedia/mediawiki-extensions-Gadgets
     version: "{{ mediawiki_default_branch }}"
     config: |
       // Supposedly these permissions are not granted to anyone so we need to
@@ -658,12 +658,12 @@ list:
 
   # HeaderFooter - Provides per-namespace and per-page header and footer inclusion.
   - name: HeaderFooter
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/HeaderFooter
+    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderFooter
     version: "{{ mediawiki_default_branch }}"
 
   # HeaderTabs - Transforms top-level HTML headings <H1> (wikitext single "=") into JavaScript-based tabs
   - name: HeaderTabs
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/HeaderTabs
+    repo: https://github.com/wikimedia/mediawiki-extensions-HeaderTabs
     version: "master"
     config: |
       $wgHeaderTabsEditTabLink = false;
@@ -683,25 +683,25 @@ list:
   #  # InlineComments - Adds the ability for viewers to add inline comments to a page, in a manner similar
   #  # to the annotations within software such as Google Docs
   #  - name: InlineComments
-  #    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/InlineComments
+  #    repo: https://github.com/wikimedia/mediawiki-extensions-InlineComments
   #    version: "{{ mediawiki_default_branch }}"
 
   # InputBox - Adds already created HTML forms to wiki pages.
   - name: InputBox
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/InputBox
+    repo: https://github.com/wikimedia/mediawiki-extensions-InputBox
     version: "{{ mediawiki_default_branch }}"
 
   # Interwiki - Adds the "Special:Interwiki" page to MediaWiki, to view and edit the interwiki table, and a log of any
   # actions made with it.
   - name: Interwiki
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Interwiki
+    repo: https://github.com/wikimedia/mediawiki-extensions-Interwiki
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgGroupPermissions['sysop']['interwiki'] = true;
 
   # LabeledSectionTransclusion - Allows for a more granular transclusion of wiki pages by 'headings' or 'sections'
   - name: LabeledSectionTransclusion
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/LabeledSectionTransclusion
+    repo: https://github.com/wikimedia/mediawiki-extensions-LabeledSectionTransclusion
     version: "{{ mediawiki_default_branch }}"
 
   # LinkTarget - Provides a way to define custom link targets for internal links
@@ -713,12 +713,12 @@ list:
 
   # Linter - Helps identify wikitext that will not be supported by the visual editor
   - name: Linter
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Linter
+    repo: https://github.com/wikimedia/mediawiki-extensions-Linter
     version: "{{ mediawiki_default_branch }}"
 
   # Lockdown - namespace level protection
   - name: Lockdown
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Lockdown
+    repo: https://github.com/wikimedia/mediawiki-extensions-Lockdown
     version: "{{ mediawiki_default_branch }}"
     config: |
       // handle web crawlers
@@ -728,7 +728,7 @@ list:
 
   # LoginNotify - Notifies users about suspicious login attempts
   - name: LoginNotify
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/LoginNotify
+    repo: https://github.com/wikimedia/mediawiki-extensions-LoginNotify
     version: "{{ mediawiki_default_branch }}"
 
   # Maps - Extension to visualize and work with geographical information
@@ -740,7 +740,7 @@ list:
 
   # Math - Allows to render mathematical formulas on wiki pages
   - name: Math
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Math
+    repo: https://github.com/wikimedia/mediawiki-extensions-Math
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
@@ -751,7 +751,7 @@ list:
   # MediaFunctions - Adds several parser functions to MediaWiki which provide access to properties and metadata of
   # various media files in both local and remote repositories
   - name: MediaFunctions
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/MediaFunctions
+    repo: https://github.com/wikimedia/mediawiki-extensions-MediaFunctions
     version: "{{ mediawiki_default_branch }}"
 
   # Mermaid - Allows for flow charts, gantt charts, and sequence diagrams in pages
@@ -773,12 +773,12 @@ list:
   # MultimediaViewer - Gives the user of a wiki a different interface for viewing full-size, or nearly full-size, images
   # in their browser.
   - name: MultimediaViewer
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/MultimediaViewer
+    repo: https://github.com/wikimedia/mediawiki-extensions-MultimediaViewer
     version: "{{ mediawiki_default_branch }}"
 
   # MyVariables - Makes things like CURRENTUSER availbale as magic words
   - name: MyVariables
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/MyVariables
+    repo: https://github.com/wikimedia/mediawiki-extensions-MyVariables
     version: "{{ mediawiki_default_branch }}"
 
   # Network - Allows for adding interactive network visualizations to your wiki pages
@@ -791,23 +791,23 @@ list:
   # Nuke - Allows administrators to mass delete pages
   # Bundled extension
   - name: Nuke
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Nuke.git
+    repo: https://github.com/wikimedia/mediawiki-extensions-Nuke.git
     version: "{{ mediawiki_default_branch }}"
 
   # NumerAlpha - Provides syntax to insert auto-incrementing numbers, letters, and roman numerals into pages
   - name: NumerAlpha
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/NumerAlpha
+    repo: https://github.com/wikimedia/mediawiki-extensions-NumerAlpha
     version: "{{ mediawiki_default_branch }}"
 
   # OATHAuth - Provides authentication using HMAC based one-time passwords
   - name: OATHAuth
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/OATHAuth
+    repo: https://github.com/wikimedia/mediawiki-extensions-OATHAuth
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
 
   # OpenLayers - makes the OpenLayer JS library availbale internally to mediawiki
   - name: OpenLayers
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/OpenLayers
+    repo: https://github.com/wikimedia/mediawiki-extensions-OpenLayers
     version: "{{ mediawiki_default_branch }}"
 
   # PageExchange - Allows for exporting and importing pages
@@ -819,7 +819,7 @@ list:
   # Requires MediaWiki 1.46+
   # https://github.com/freephile/meza/issues/239
   # - name: ParserMigration
-  #   repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ParserMigration
+  #   repo: https://github.com/wikimedia/mediawiki-extensions-ParserMigration
   #   version: "{{ mediawiki_default_branch }}"
   #   config: |
   #     $wgParserMigrationEnableParsoidArticlePages = true;
@@ -831,7 +831,7 @@ list:
   # FileExtensions is also found in conf-meza/base
   # Shell memory is also found in the conf-meza/overrides
   - name: PdfHandler
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/PdfHandler
+    repo: https://github.com/wikimedia/mediawiki-extensions-PdfHandler
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgPdfProcessor = '/bin/gs';
@@ -854,12 +854,12 @@ list:
 
   # PageImages - Collects information about images used on a page
   - name: PageImages
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/PageImages
+    repo: https://github.com/wikimedia/mediawiki-extensions-PageImages
     version: "{{ mediawiki_default_branch }}"
 
   # ParserFunctions - Enhances the wikitext parser with helpful functions, mostly related to logic and string-handling
   - name: ParserFunctions
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ParserFunctions
+    repo: https://github.com/wikimedia/mediawiki-extensions-ParserFunctions
     version: "{{ mediawiki_default_branch }}"
     config: |
       // Also enable StringFunctions, like len, pos, sub, replace, explode
@@ -869,30 +869,30 @@ list:
   # PipeEscape - Allows for pipe characters in parser function arguments (and template argument calls) avoid being
   # interpreted as an argument delimiter
   - name: PipeEscape
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/PipeEscape
+    repo: https://github.com/wikimedia/mediawiki-extensions-PipeEscape
     version: "{{ mediawiki_default_branch }}"
 
   # Poem - Adds a <poem> tag for 'pre-formatted' text that can also include wikitext markup
   # Bundled extension
   - name: Poem
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Poem
+    repo: https://github.com/wikimedia/mediawiki-extensions-Poem
     version: "{{ mediawiki_default_branch }}"
 
   # ReplaceText - Provides a special page, as well as a command-line script, to allow administrators to do a server-side
   # global string find-and-replace on both the text and titles of the wiki's content pages
   - name: ReplaceText
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/ReplaceText
+    repo: https://github.com/wikimedia/mediawiki-extensions-ReplaceText
     version: "{{ mediawiki_default_branch }}"
 
 
   # RevisionSlider - Adds a slider interface to the diff view, so that you can easily move between revisions.
   - name: RevisionSlider
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/RevisionSlider
+    repo: https://github.com/wikimedia/mediawiki-extensions-RevisionSlider
     version: "{{ mediawiki_default_branch }}"
 
   # Scribunto - Allows for embedding scripting languages in MediaWiki
   - name: Scribunto
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Scribunto
+    repo: https://github.com/wikimedia/mediawiki-extensions-Scribunto
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgScribuntoDefaultEngine = 'luastandalone';
@@ -901,7 +901,7 @@ list:
 
   # SecureLinkFixer - Automatically fixes URLs to use HTTPS when a site requires it
   - name: SecureLinkFixer
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SecureLinkFixer
+    repo: https://github.com/wikimedia/mediawiki-extensions-SecureLinkFixer
     version: "{{ mediawiki_default_branch }}"
 
   # SCQ - Provides a new query parser function that allows SMW to return multiple queries as a single result
@@ -1025,7 +1025,7 @@ list:
 
   # SpamBlacklist - Provides protection against URLs in a blacklist
   - name: SpamBlacklist
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SpamBlacklist
+    repo: https://github.com/wikimedia/mediawiki-extensions-SpamBlacklist
     version: "{{ mediawiki_default_branch }}"
 
   # SubPageList - Allows the display and count of subpages
@@ -1039,7 +1039,7 @@ list:
 
   #  # SubpageNavigation - shows a collapsible list of subpages on the header of each article, including empty articles, with subpages
   #  - name: SubpageNavigation
-  #    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SubpageNavigation
+  #    repo: https://github.com/wikimedia/mediawiki-extensions-SubpageNavigation
   #    version: master
   #    config: |
   #      $wgSubpageNavigationShowArticleHeader = false;
@@ -1050,7 +1050,7 @@ list:
   # AND the backend is Pygments not GeSHi
   # Bundled extension
   - name: SyntaxHighlight_GeSHi
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/SyntaxHighlight_GeSHi
+    repo: https://github.com/wikimedia/mediawiki-extensions-SyntaxHighlight_GeSHi
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
     config: |
@@ -1074,7 +1074,7 @@ list:
 
   # TemplateData - Adds templatedata tag and API which allow editors to define the VisualEditor's template interface
   - name: TemplateData
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/TemplateData
+    repo: https://github.com/wikimedia/mediawiki-extensions-TemplateData
     version: "{{ mediawiki_default_branch }}"
 
   # TemplateStyles - Allows templates to include CSS styles that are applied when the template is used on a page
@@ -1088,19 +1088,19 @@ list:
 
   # TextExtracts - Provides an API which allows to retrieve plain-text or limited HTML
   - name: TextExtracts
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/TextExtracts
+    repo: https://github.com/wikimedia/mediawiki-extensions-TextExtracts
     version: "{{ mediawiki_default_branch }}"
 
   # Thanks - Adds a quick way to give positive feedback for productive contributions to MediaWiki sites.
   - name: Thanks
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Thanks
+    repo: https://github.com/wikimedia/mediawiki-extensions-Thanks
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgThanksConfirmationRequired = false;
 
   # TitleBlacklist - Allows administrators to forbid the creation of pages and user accounts with specified titles
   - name: TitleBlacklist
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/TitleBlacklist
+    repo: https://github.com/wikimedia/mediawiki-extensions-TitleBlacklist
     version: "{{ mediawiki_default_branch }}"
 
   # #  # ULS - Allows users to select a language and configure its support in an easy way.
@@ -1120,22 +1120,22 @@ list:
 
   # UrlGetParameters - enables you to use and/or display URL GET parameters in wiki pages
   - name: UrlGetParameters
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/UrlGetParameters
+    repo: https://github.com/wikimedia/mediawiki-extensions-UrlGetParameters
     version: "{{ mediawiki_default_branch }}"
 
   # Variables - Allows variables to be defined in a page and used later in that same page or included templates,
   # change its value, possibly to a value given by an expression in terms of the old value, etc.
   - name: Variables
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Variables
+    repo: https://github.com/wikimedia/mediawiki-extensions-Variables
     version: "master"
 
   # VE4All - Allows for visual editor to be used in form pages
   - name: VEForAll
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/VEForAll
+    repo: https://github.com/wikimedia/mediawiki-extensions-VEForAll
     version: "master"
 
   - name: VisualEditor
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/VisualEditor
+    repo: https://github.com/wikimedia/mediawiki-extensions-VisualEditor
     version: "{{ mediawiki_default_branch }}"
     git_submodules: true
     config: |
@@ -1154,39 +1154,39 @@ list:
   # WatchAnalytics - Leverages the watchlist table to show statistics on how well-guarded an individual page and the
   # wiki as a whole is, as well as to invite users to watch and review neglected pages
   - name: WatchAnalytics
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WatchAnalytics
+    repo: https://github.com/wikimedia/mediawiki-extensions-WatchAnalytics
     version: "master"
     config: |
       $egPendingReviewsEmphasizeDays = 10;
 
   # Whitelist Pages - Allows site administrators to specify which pages are publicaly viewable
   - name: WhitelistPages
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WhitelistPages
+    repo: https://github.com/wikimedia/mediawiki-extensions-WhitelistPages
     version: "{{ mediawiki_default_branch }}"
 
   # WhoIsWatching - Allows to find out who is watching a particular page, and add others to watchlist for that page
   - name: WhoIsWatching
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WhoIsWatching
+    repo: https://github.com/wikimedia/mediawiki-extensions-WhoIsWatching
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgPageShowWatchingUsers = true;
 
   # WhosOnline - Provides a special page that shows who is (or has very recently been) logged-in
   - name: WhosOnline
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WhosOnline
+    repo: https://github.com/wikimedia/mediawiki-extensions-WhosOnline
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgWhosOnlineShowRealName = true;
 
   # Widgets - Allows the creation of raw HTML pages that can be embedded (similarly to templates) in normal wiki pages.
   - name: Widgets
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/Widgets
+    repo: https://github.com/wikimedia/mediawiki-extensions-Widgets
     version: "{{ mediawiki_default_branch }}"
     composer_merge: true
 
   # WikiEditor - Provides an improved interface (primarily a toolbar) for editing wikitext.
   - name: WikiEditor
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WikiEditor
+    repo: https://github.com/wikimedia/mediawiki-extensions-WikiEditor
     version: "{{ mediawiki_default_branch }}"
     config: |
       $wgDefaultUserOptions['usebetatoolbar'] = 1;
@@ -1197,7 +1197,7 @@ list:
 #  # WikiLove - Makes adding awards, gifts, and invitations to user talk pages as simple as clicking a few buttons.
 #  # documentation: https://www.mediawiki.org/wiki/Extension:WikiLove
 #  - name: WikiLove
-#    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/WikiLove
+#    repo: https://github.com/wikimedia/mediawiki-extensions-WikiLove
 #    version: "{{ mediawiki_default_branch }}"
 #    config: |
 #      $wgDefaultUserOptions['wikilove-enabled'] = 1;
@@ -1212,5 +1212,5 @@ list:
 
   # YouTube - Allows users to embed YouTube and Google Videos movies
   - name: YouTube
-    repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/YouTube
+    repo: https://github.com/wikimedia/mediawiki-extensions-YouTube
     version: "{{ mediawiki_default_branch }}"

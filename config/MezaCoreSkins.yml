@@ -89,7 +89,7 @@ list:
   # Skin: Timeless (MW Core) - strongly supports responsive web design
   # Documentation: https://www.mediawiki.org/wiki/Skin:Timeless
   - name: Timeless
-    repo: https://gerrit.wikimedia.org/r/mediawiki/skins/Timeless
+    repo: https://github.com/wikimedia/mediawiki-skins-Timeless
     version: "{{ mediawiki_default_branch }}"
     type: skins
 
