@@ -3,6 +3,15 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [2be1f42a](https://github.com/freephile/meza/commit/2be1f42a) (2026-10-20) Greg Rundlett: remote change from gerrit to github in a comment 
+  - Modified: `src/roles/init-controller-config/templates/MezaLocalExtensions.yml.j2`
+
+* [bffb2622](https://github.com/freephile/meza/commit/bffb2622) (2026-10-21) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [3a1e06c9](https://github.com/freephile/meza/commit/3a1e06c9) (2026-10-20) Greg Rundlett: switch Gerrit repo sources to GitHub 
   - Modified: `config/MezaCoreExtensions.yml`
   - Modified: `config/MezaCoreSkins.yml`
