@@ -3,6 +3,16 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [3a1e06c9](https://github.com/freephile/meza/commit/3a1e06c9) (2026-10-20) Greg Rundlett: switch Gerrit repo sources to GitHub 
+  - Modified: `config/MezaCoreExtensions.yml`
+  - Modified: `config/MezaCoreSkins.yml`
+
+* [07849b61](https://github.com/freephile/meza/commit/07849b61) (2026-10-02) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [2a142a75](https://github.com/freephile/meza/commit/2a142a75) (2026-10-02) Greg Rundlett: maps from 12.1.x to 15.x for security 
   - Modified: `config/MezaCoreExtensions.yml`
 
