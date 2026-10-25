@@ -3,6 +3,17 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [2a9404f2](https://github.com/freephile/meza/commit/2a9404f2) (2026-10-25) Greg Rundlett: use new 'php_version' variable switch to remi-8.2 for security fix
+The only role that uses this is the 'php' role.
+  - Modified: `config/defaults.yml`
+  - Modified: `src/roles/php/tasks/php-redhat8.yml`
+
+* [dc0bc269](https://github.com/freephile/meza/commit/dc0bc269) (2026-10-21) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [2be1f42a](https://github.com/freephile/meza/commit/2be1f42a) (2026-10-20) Greg Rundlett: remote change from gerrit to github in a comment 
   - Modified: `src/roles/init-controller-config/templates/MezaLocalExtensions.yml.j2`
 
