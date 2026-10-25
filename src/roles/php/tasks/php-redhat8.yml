@@ -22,10 +22,10 @@
 # surprisingly, Ansible dnf module doesn't work with 'module' command
 # https://www.reddit.com/r/ansible/comments/13xdt6h/enabling_dnf_modules_through_ansible/
 - name: If no version is installed, install the php stream default profile
-  shell: dnf -y module install php:remi-8.1
+  shell: dnf -y module install php:{{ php_version }}
 
-- name: Switch to php 8.1 if existing install is older version
-  shell: dnf -y module switch-to php:remi-8.1
+- name: Switch to {{ php_version }} if existing install is older version
+  shell: dnf -y module switch-to php:{{ php_version }}
 
 - name: Ensure PHP packages for Rocky/RHEL8 installed
   package:

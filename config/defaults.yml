@@ -258,7 +258,8 @@ mediawiki_default_branch: "REL1_43"
 overwrite_local_changes: true
 
 # PHP version
-php_ius_version: "php81"
+# php_ius_version is obsolete as a variable since we switched to an independent php role
+php_version: "remi-8.2"
 php_debian_version: "8.1"
 php_memory_limit: "128M"  # 128M is default
 
