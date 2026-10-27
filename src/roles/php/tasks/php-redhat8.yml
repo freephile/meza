@@ -21,11 +21,43 @@
 
 # surprisingly, Ansible dnf module doesn't work with 'module' command
 # https://www.reddit.com/r/ansible/comments/13xdt6h/enabling_dnf_modules_through_ansible/
-- name: If no version is installed, install the php stream default profile
-  shell: dnf -y module install php:{{ php_version }}
+- name: Get enabled PHP module stream
+  ansible.builtin.shell: set -o pipefail; dnf module list --enabled php 2>/dev/null | awk '$1=="php"{print $2}'
+  args:
+    executable: /bin/bash
+  register: php_enabled_stream
+  changed_when: false
+  failed_when: false
 
-- name: Switch to {{ php_version }} if existing install is older version
-  shell: dnf -y module switch-to php:{{ php_version }}
+- name: Reset PHP module if a different stream is enabled
+  ansible.builtin.command: dnf -y module reset php
+  when:
+    - php_enabled_stream.stdout | trim | length > 0
+    - php_enabled_stream.stdout | trim != php_version
+  register: php_reset
+  changed_when: true
+
+- name: Enable PHP module stream {{ php_version }}
+  ansible.builtin.command: dnf -y module enable php:{{ php_version }}
+  when: php_enabled_stream.stdout | trim != php_version
+  changed_when: true
+
+# Always track the latest 8.x release within the stream
+# 'dnf upgrade' only touches packages that are already installed, unlike
+# the dnf module with name 'php*' which would try to install every php package
+- name: Upgrade installed PHP packages to latest in stream
+  ansible.builtin.command: dnf -y upgrade --refresh php php-*
+  register: php_upgrade
+  changed_when: "'Nothing to do' not in php_upgrade.stdout"
+  notify:
+    - restart apache
+    - restart php-fpm
+
+- name: Remove stale memcached PECL extension after stream change  # noqa no-handler
+  ansible.builtin.file:
+    path: /etc/php.d/40-memcached.ini
+    state: absent
+  when: php_reset is changed
 
 - name: Ensure PHP packages for Rocky/RHEL8 installed
   package:
@@ -56,6 +88,7 @@
 - name: install libmemcached-devel
   dnf:
     name: libmemcached-devel
+    state: present
     enablerepo: devel
 
 # PHP memcached extension needed for SAML auth
