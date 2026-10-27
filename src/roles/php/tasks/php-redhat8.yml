@@ -105,7 +105,7 @@
 - name: Install memcached PECL packages
   shell: >
     printf 'no\nno\nno\nno\nno\nno\nno\nyes\nyes\n' |
-    pecl install memcached
+    pecl install -f memcached
   when: memcached_pecl_installed.stdout == ""
   notify:
     - restart apache
