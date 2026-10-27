@@ -93,25 +93,40 @@
 
 # PHP memcached extension needed for SAML auth
 - name: Ensure PEAR channel up-to-date
-  shell: pear channel-update pecl.php.net
+  ansible.builtin.command: pear channel-update pecl.php.net
+  changed_when: false
 
 - name: Check if memcached PECL extension is installed
-  shell: php -m | grep -i memcached
+  ansible.builtin.command: php -m
   register: memcached_pecl_installed
   changed_when: false
-  failed_when: false
+
+- name: Check if memcached is registered in PEAR
+  ansible.builtin.command: pecl list
+  register: memcached_pecl_list
+  changed_when: false
+
+- name: Uninstall registered memcached PECL package when it is not loaded
+  ansible.builtin.command: pecl uninstall memcached
+  when:
+    - memcached_pecl_installed.stdout is not search('(?im)^memcached$')
+    - memcached_pecl_list.stdout is search('(?m)^memcached\\s')
+  register: memcached_pecl_uninstall
+  changed_when: true
 
 # --configureoptions parameter is not supported in our version of pecl.
-- name: Install memcached PECL packages
-  shell: >
-    printf 'no\nno\nno\nno\nno\nno\nno\nyes\nyes\n' |
-    pecl install -f memcached
-  when: memcached_pecl_installed.stdout == ""
+- name: Install memcached PECL package
+  ansible.builtin.command: pecl install memcached
+  args:
+    stdin: "no\nno\nno\nno\nno\nno\nno\nyes\nyes\n"
+  when: memcached_pecl_installed.stdout is not search('(?im)^memcached$')
+  changed_when: true
   notify:
     - restart apache
     - restart php-fpm
 
-- template:
+- name: Configure memcached PECL extension
+  ansible.builtin.template:
     src: 40-memcached.ini.j2
     dest: /etc/php.d/40-memcached.ini
     owner: root
