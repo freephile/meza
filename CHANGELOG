@@ -1,3 +1,37 @@
+commit 41caa5a14c12a52f42aa0bd728a87db8e81f8544
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Oct 27 01:47:46 2026 +0000
+
+    Fix Ansible linting errors
+    
+    - line 95 Ensure PEAR channel up-to-date:
+    Uses shell where command may suffice; no changed-when condition
+    
+    - line 98 Ensure PEAR channel up-to-date:
+    Uses pipe without setting pipefail
+    
+    - line 105 Install memcached PECL packages:
+    Compares STDOUT to empty string; pipe without setting pipefail
+    
+    -  line 114 Template 40-memcached.ini.j2:
+    Template task has no name
+
+commit 260a8b3110c0093dc0073d74c2212dd37555125a
+Author: Greg Rundlett <greg.rundlett@gmail.com>
+Date:   Tue Oct 27 01:28:49 2026 +0000
+
+    Force pecl memcache so existing doesn't block
+
+commit c3adac8dedd2620954b127ec61e3836056ffe71c
+Author: GitHub Action <action@github.com>
+Date:   Tue Oct 27 00:26:59 2026 +0000
+
+    Auto-update CHANGELOG and release notes
+    
+    - Updated CHANGELOG with latest commits
+    - Generated RELEASE_NOTES-HEAD.md
+    - Automated by GitHub Actions
+
 commit c0e4a2d829307ee483e81ef6599277fc95c334a4
 Author: Greg Rundlett <greg.rundlett@gmail.com>
 Date:   Tue Oct 27 00:26:22 2026 +0000

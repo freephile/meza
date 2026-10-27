@@ -3,6 +3,25 @@
 ### Commits
 
 HEAD -> dev origin/dev
+* [41caa5a1](https://github.com/freephile/meza/commit/41caa5a1) (2026-10-27) Greg Rundlett: Fix Ansible linting errors - line 95 Ensure PEAR channel up-to-date:
+Uses shell where command may suffice; no changed-when condition
+- line 98 Ensure PEAR channel up-to-date:
+Uses pipe without setting pipefail
+- line 105 Install memcached PECL packages:
+Compares STDOUT to empty string; pipe without setting pipefail
+-  line 114 Template 40-memcached.ini.j2:
+Template task has no name
+  - Modified: `src/roles/php/tasks/php-redhat8.yml`
+
+* [260a8b31](https://github.com/freephile/meza/commit/260a8b31) (2026-10-27) Greg Rundlett: Force pecl memcache so existing doesn't block 
+  - Modified: `src/roles/php/tasks/php-redhat8.yml`
+
+* [c3adac8d](https://github.com/freephile/meza/commit/c3adac8d) (2026-10-27) GitHub Action: Auto-update CHANGELOG and release notes - Updated CHANGELOG with latest commits
+- Generated RELEASE_NOTES-HEAD.md
+- Automated by GitHub Actions
+  - Modified: `CHANGELOG`
+  - Modified: `RELEASE_NOTES-HEAD.md`
+
 * [c0e4a2d8](https://github.com/freephile/meza/commit/c0e4a2d8) (2026-10-27) Greg Rundlett: use new 'php_version' variable switch to remi-8.2 for security fix
 The only role that uses this is the 'php' role.
   - Modified: `src/roles/php/tasks/php-redhat8.yml`
